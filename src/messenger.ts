@@ -1,6 +1,7 @@
 import type { ProviderEntry } from "@wirecat/cli-core"
 import { environmentOf, type Messenger, openAppStore, ProfileTokenStore, recalledAccount } from "@wirecat/cli-core/cli"
 import { Pacer, pacePathFor } from "@wirecat/cli-core/sends"
+import { whoAmI } from "./commands/session.js"
 import { configuration, type SlackSettings, THREAD_WINDOW_DAYS } from "./config.js"
 import { PACE, type ServiceEnvironment, tokenOf } from "./context.js"
 import { IDENTITY, SERVICE, SKILL } from "./identity.js"
@@ -31,9 +32,12 @@ export const SLACK: Messenger = {
   provider: PROVIDER,
   name: SERVICE,
   resolveSettings: configuration.resolveSettings,
-  // Read without the keyring, which a listing of profiles must not open: `session start` remembers the account.
+  // Read without the keyring, which a listing of profiles must not open: `session start` remembers the account, and a
+  // token from SLACK_TOKEN signs every profile in.
   profileState: (profile, env) =>
-    recalledAccount(IDENTITY, PROVIDER, profile, env) === undefined ? "signed-out" : "signed-in",
+    env[`${IDENTITY.envPrefix}_TOKEN`] || recalledAccount(IDENTITY, PROVIDER, profile, env) !== undefined
+      ? "signed-in"
+      : "signed-out",
   history: "server",
   // A message id is `ts`, seconds with microseconds: not a whole number, so held stretches are keyed by time. Slack
   // recommends 200 a page and takes at most 999 (https://docs.slack.dev/reference/methods/conversations.history/).
@@ -170,16 +174,19 @@ export const SLACK: Messenger = {
       .catch(() => base.renderer.warn("could not record slack in the local store; other tools' search may skip it"))
     const { requestsPerMinute } = base.settings
     const rate = requestsPerMinute === undefined ? PACE : { ...PACE, perMinute: requestsPerMinute }
-    return slackAdapter({
-      slack: slackClient({
-        token,
-        events: options.events,
-        signal,
-        fetch,
-        pacer: new Pacer(pacePathFor(IDENTITY, profile, base.env), rate),
-      }),
+    const slack = slackClient({
       token,
-      self: remembered ? selfOf(remembered.account) : undefined,
+      events: options.events,
+      signal,
+      fetch,
+      pacer: new Pacer(pacePathFor(IDENTITY, profile, base.env), rate),
+    })
+    // A token from SLACK_TOKEN never went through `session start`, so nothing remembers whose it is.
+    const account = remembered?.account ?? (await whoAmI(slack)).id
+    return slackAdapter({
+      slack,
+      token,
+      self: selfOf(account),
       stored: options.stored,
       threadWindowDays:
         (base.settings as typeof base.settings & Partial<SlackSettings>).threadWindowDays ?? THREAD_WINDOW_DAYS,
