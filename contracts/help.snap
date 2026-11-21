@@ -1,4 +1,4 @@
-slack — a new WireCat CLI, started from cli-template
+slack — Your Slack workspace from the command line, for you and your AI agents
 
 Usage: slack <profile> <command> [options]
 Account commands start with your profile, a name you choose; none is ever assumed.

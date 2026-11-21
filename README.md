@@ -1,6 +1,8 @@
-# slack: Slack Web CLI for AI agents
+# slack: Slack CLI for AI agents
 
-A new WireCat CLI, started from cli-template. One tool for you and for Claude Code, Codex or any agent that speaks MCP.
+Read and search your Slack channels, DMs and threads from the terminal, and let Claude Code, Codex or any agent that
+speaks MCP do the same for you. slack signs in as you, with a Slack app you make in your own workspace, so it sees
+what you see and nothing more.
 
 <p align="center">
   <a href="https://github.com/WireCatLabs/slack-cli/blob/main/docs/index.md">Docs</a> ·

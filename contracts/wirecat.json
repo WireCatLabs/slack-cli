@@ -1,7 +1,7 @@
 {
   "wcat_manifest": 2,
   "name": "slack",
-  "description": "a new WireCat CLI, started from cli-template",
+  "description": "Your Slack workspace from the command line, for you and your AI agents",
   "docs_url": "https://github.com/WireCatLabs/slack-cli#readme",
   "package": "@wirecat/slack-cli",
   "bin": "wcat-slack",
@@ -2416,7 +2416,7 @@
     ]
   },
   "desktop": {
-    "tagline": "A new WireCat CLI, started from cli-template",
+    "tagline": "Read and search your Slack channels, DMs and threads",
     "profiles": {
       "args": [
         "session",
@@ -2460,7 +2460,7 @@
     ],
     "signIn": {
       "gives": "Lets your agent read and write your Slack workspace as you.",
-      "asks": "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from slack's manifest."
+      "asks": "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from the manifest slack gives."
     },
     "skill": {
       "status": [

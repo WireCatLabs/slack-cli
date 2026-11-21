@@ -1,6 +1,6 @@
 ---
 name: slack-cli
-description: Use slack, a WireCat CLI started from cli-template, from an agent — find a command, run it with the owner's profile, read JSON answers. Use when a task needs slack. Its api group reaches Slack Web.
+description: Use slack, the owner's Slack workspace from the command line, to read and search channels, DMs and threads and to call any Slack Web API method as the owner. Find a command, run it with the owner's profile, read JSON answers. Use when a task needs Slack.
 metadata:
   openclaw:
     requires:
