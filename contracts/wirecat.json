@@ -160,14 +160,30 @@
     {
       "path": [
         "account",
-        "sessions"
+        "sessions",
+        "list"
       ],
-      "summary": "devices and apps signed in to this account",
+      "summary": "every device and app logged in to this account; nothing is ended",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "account.sessions.list",
+      "entity": "account_session"
+    },
+    {
+      "path": [
+        "account",
+        "sessions",
+        "end"
+      ],
+      "summary": "log out every other device, your phone included; this one stays",
       "effects": {
         "remote": "write",
         "local": "write"
       },
-      "permission": "account.sessions"
+      "permission": "account.sessions.end",
+      "entity": "ended_account_sessions"
     },
     {
       "path": [
@@ -541,14 +557,72 @@
     {
       "path": [
         "chats",
-        "folders"
+        "folders",
+        "list"
       ],
-      "summary": "your chat folders",
+      "summary": "your chat folders, in the order the app shows them",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.folders.list",
+      "entity": "folder"
+    },
+    {
+      "path": [
+        "chats",
+        "folders",
+        "show"
+      ],
+      "summary": "one chat folder, with the names of the chats in it",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.folders.show",
+      "entity": "folder"
+    },
+    {
+      "path": [
+        "chats",
+        "folders",
+        "create"
+      ],
+      "summary": "create a chat folder",
       "effects": {
         "remote": "write",
         "local": "write"
       },
-      "permission": "chats.folders"
+      "permission": "chats.folders.create",
+      "entity": "chat_folder_change"
+    },
+    {
+      "path": [
+        "chats",
+        "folders",
+        "update"
+      ],
+      "summary": "rename a folder, or change which chats are in it",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.folders.update",
+      "entity": "chat_folder_change"
+    },
+    {
+      "path": [
+        "chats",
+        "folders",
+        "delete"
+      ],
+      "summary": "delete a folder; the chats in it stay",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.folders.delete",
+      "entity": "chat_folder_removal"
     },
     {
       "path": [
@@ -3424,6 +3498,16 @@
         "signed_in"
       ]
     },
+    "account_session": {
+      "fields": [
+        "current",
+        "client",
+        "device",
+        "location",
+        "last_active_at",
+        "created_at"
+      ]
+    },
     "chat": {
       "fields": [
         "id",
@@ -3484,6 +3568,18 @@
         "username",
         "requested_at",
         "about"
+      ]
+    },
+    "folder": {
+      "fields": [
+        "id",
+        "title",
+        "chat_ids",
+        "emoji",
+        "include",
+        "skip",
+        "excluded_chat_ids",
+        "pinned_chat_ids"
       ]
     },
     "contact": {

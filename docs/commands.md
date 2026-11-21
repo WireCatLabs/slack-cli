@@ -219,9 +219,39 @@ slack account update [options]
 
 where else this account is logged in — not `slack session`, which is this tool's own login
 
+#### `slack account sessions list`
+
+every device and app logged in to this account; nothing is ended
+
 ```sh
-slack account sessions
+slack account sessions list [query]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+**Returns:** account session — current, client, device, location, last_active_at, created_at; every field: slack commands info account sessions list
+
+**Example:** `slack personal account sessions list`
+
+#### `slack account sessions end`
+
+log out every other device, your phone included; this one stays
+
+**Changes something in the service.**
+
+```sh
+slack account sessions end [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--others` | every session but this one. |
+
+**Returns:** ended account sessions — operation_id, sessions; every field: slack commands info account sessions end
+
+**Example:** `slack personal account sessions end --others`
 
 ### `slack account remove`
 
@@ -797,9 +827,105 @@ slack chats admins remove <chat> <person>
 
 your chat folders
 
+#### `slack chats folders list`
+
+your chat folders, in the order the app shows them
+
 ```sh
-slack chats folders
+slack chats folders list [query]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: slack commands info chats folders list
+
+**Next usually:** `slack chats folders show <folder>`, `slack chats folders update <folder>`, `slack chats folders delete <folder>`
+
+**Example:** `slack personal chats folders list`
+
+#### `slack chats folders show`
+
+one chat folder, with the names of the chats in it
+
+```sh
+slack chats folders show <folder>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | required | the folder's id, or its title exactly. |
+
+**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: slack commands info chats folders show
+
+**Next usually:** `slack chats folders update <folder>`, `slack chats folders delete <folder>`
+
+**Example:** `slack personal chats folders show "Reading"`
+
+#### `slack chats folders create`
+
+create a chat folder
+
+**Changes something in the service.**
+
+```sh
+slack chats folders create <title> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `title` | required | the folder's name; the app may refuse a long one. |
+
+| Option | What it does |
+|---|---|
+| `--chat <chat>` | a chat to put in it, by id or name; repeat it for more. |
+
+**Returns:** chat folder change — operation_id, folder; every field: slack commands info chats folders create
+
+**Example:** `slack personal chats folders create "Reading" --chat "Book club"`
+
+#### `slack chats folders update`
+
+rename a folder, or change which chats are in it
+
+**Changes something in the service.**
+
+```sh
+slack chats folders update <folder> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | required | folder id, or its title exactly. |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | a new name. |
+| `--add <chat>` | put a chat in it; repeat it for more. |
+| `--remove <chat>` | take a chat out of it, and off its excluded and pinned lists; repeat it for more. |
+
+**Returns:** chat folder change — operation_id, folder; every field: slack commands info chats folders update
+
+**Example:** `slack personal chats folders update "Reading" --title "Books"`
+
+#### `slack chats folders delete`
+
+delete a folder; the chats in it stay
+
+**Changes something in the service.**
+
+```sh
+slack chats folders delete <folder>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | required | folder id, or its title exactly. |
+
+**Returns:** chat folder removal — operation_id, folder_id; every field: slack commands info chats folders delete
+
+**Example:** `slack personal chats folders delete "Reading"`
 
 ### `slack chats rules`
 

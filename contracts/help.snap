@@ -20,6 +20,8 @@ Works with:
   wordpress               WordPress posts and pages, searchable with your other WireCat data
   linear                  Linear issues and projects, searchable with your other WireCat data
 
-Next:         slack commands      every command, by section
-              slack help options  output, offline, timeouts, dry run
-For agents:   slack skill show    rules and the discovery loop
+Start here:   slack personal setup  (any profile name works)
+              slack account list    your profiles and their logged-in accounts
+Next:         slack commands        every command, by section
+              slack help options    output, offline, timeouts, dry run
+For agents:   slack skill show      rules and the discovery loop
