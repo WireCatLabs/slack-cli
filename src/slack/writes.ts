@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto"
 import { readFile } from "node:fs/promises"
 import { CliError } from "@wirecat/cli-base"
 import { type FetchLike, hostFetch } from "@wirecat/cli-base/http"
@@ -50,9 +51,24 @@ export interface SlackWritesOptions {
 
 const CONVERSATION_ID = /^[CDG][A-Z0-9]{2,}$/
 
+/** The mark a send carries, so a repeat of its send id finds it (https://docs.slack.dev/messaging/message-metadata/). */
+const SEND_MARK = "wirecat_send"
+
+const markOf = (sendId: string) => JSON.stringify({ event_type: SEND_MARK, event_payload: { send_id: sendId } })
+
+const sentWith = (sendId: string) => (wire: WireMessage) => {
+  const metadata = (wire as { metadata?: { event_type?: string; event_payload?: { send_id?: unknown } } }).metadata
+  return metadata?.event_type === SEND_MARK && metadata.event_payload?.send_id === sendId
+}
+
+const isSlackError = (error: unknown, code: string) =>
+  error instanceof CliError && (error.details as { slack_error?: unknown } | undefined)?.slack_error === code
+
 /** What Slack's write methods take: every one is `chat:write`, `reactions:write`, `pins:write` or `*:write`. */
 export const slackWrites = (options: SlackWritesOptions) => {
   const { slack } = options
+  // A send id this run made is a first try; any other is a repeat of a send whose outcome was unknown.
+  const minted = new Set<string>()
   const write = <T>(method: string, args: SlackArgs, answer: v.GenericSchema<unknown, T>) =>
     slack(method, args, answer, { writes: true })
 
@@ -124,6 +140,18 @@ export const slackWrites = (options: SlackWritesOptions) => {
     return found
   }
 
+  /** The copy an earlier try of this send id left, among the chat's or the thread's newest messages. */
+  const earlierCopy = async (chatId: string, sendId: string, thread: string | undefined) => {
+    const recent = thread
+      ? await slack(
+          "conversations.replies",
+          { channel: chatId, ts: thread, limit: 200, include_all_metadata: true },
+          historyAnswer,
+        )
+      : await slack("conversations.history", { channel: chatId, limit: 100, include_all_metadata: true }, historyAnswer)
+    return recent.messages.find(sentWith(sendId))
+  }
+
   const textOf = (text: string, formatting: SendOptions["formatting"]) =>
     formatting === undefined ? escaped(text) : mrkdwnOf(text, formatting)
 
@@ -159,10 +187,28 @@ export const slackWrites = (options: SlackWritesOptions) => {
   return {
     formatMarkdown: async (text: string) => parseMarkdownSpans(text),
 
+    newSendId: () => {
+      const id = randomUUID()
+      minted.add(id)
+      return id
+    },
+
     send: async (chatId: string, text: string, sending: SendOptions): Promise<Sent> => {
       refuseUnsendable(sending)
       const thread = await threadOf(chatId, sending)
       const body = textOf(text, sending.formatting)
+      const repeat = !minted.has(sending.sendId)
+      if (repeat && sending.attachments?.length)
+        throw new CliError(
+          "validation_error",
+          `${SERVICE} keeps no mark on a file message to find it by; read the chat, and if the file is not there, ` +
+            "send it again without --operation-id",
+        )
+      if (repeat) {
+        const earlier = await earlierCopy(chatId, sending.sendId, thread)
+        const [message] = earlier ? await options.mapped(chatId, [earlier]) : []
+        if (message) return { message, sendId: sending.sendId }
+      }
       if (sending.attachments?.length) {
         const files = []
         for (const one of sending.attachments) files.push(await upload(one))
@@ -190,6 +236,7 @@ export const slackWrites = (options: SlackWritesOptions) => {
           thread_ts: thread,
           // Plain text stays plain: `*` and `_` typed are not marks unless --md asked for them.
           mrkdwn: sending.formatting !== undefined,
+          metadata: markOf(sending.sendId),
           ...(sending.noPreview ? { unfurl_links: false, unfurl_media: false } : {}),
         },
         posted,
@@ -214,7 +261,12 @@ export const slackWrites = (options: SlackWritesOptions) => {
       return message
     },
 
-    delete: async (chatId: string, messageIds: string[]) => {
+    delete: async (chatId: string, messageIds: string[], deleting: { forEveryone: boolean }) => {
+      if (!deleting.forEveryone)
+        throw new CliError(
+          "validation_error",
+          `${SERVICE} deletes a message for everyone in the chat, never for you alone; add --for-everyone`,
+        )
       for (const ts of messageIds) await write("chat.delete", { channel: chatId, ts }, ok)
     },
 
@@ -232,7 +284,10 @@ export const slackWrites = (options: SlackWritesOptions) => {
         const name = emoji.trim().replace(/^:|:$/g, "")
         if (!/^[a-z0-9_+'-]+$/.test(name))
           throw new CliError("validation_error", "give the emoji's Slack name, such as thumbsup or :eyes:")
-        await write("reactions.add", { channel: chatId, timestamp: messageId, name }, ok)
+        // A repeat after an unknown outcome finds the reaction there: that is the outcome asked for.
+        await write("reactions.add", { channel: chatId, timestamp: messageId, name }, ok).catch((error: unknown) => {
+          if (!isSlackError(error, "already_reacted")) throw error
+        })
         return
       }
       const wire = await options.oneMessage(chatId, messageId)

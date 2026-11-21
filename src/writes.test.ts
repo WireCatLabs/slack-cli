@@ -29,7 +29,10 @@ describe("messages send", () => {
     const sent = await slackCli(service, "messages", "send", "general", "2 < 3 & *not bold*")
     expect(sent.code).toBe(0)
     expect(service.writes).toEqual([
-      { method: "chat.postMessage", args: { channel: GENERAL, text: "2 &lt; 3 &amp; *not bold*", mrkdwn: "false" } },
+      {
+        method: "chat.postMessage",
+        args: expect.objectContaining({ channel: GENERAL, text: "2 &lt; 3 &amp; *not bold*", mrkdwn: "false" }),
+      },
     ])
     expect(sent.json().item).toMatchObject({ message: { text: "2 < 3 & *not bold*", sender_is_me: true } })
   })
@@ -92,16 +95,32 @@ describe("messages send", () => {
     expect(service.calls.filter((one) => one.method === "chat.postMessage")).toHaveLength(1)
   })
 
-  it("**ends a send Slack never answers in outcome_unknown at --timeout**, never as a plain timeout", async () => {
+  it("**a repeat with the same --operation-id finds the copy Slack kept** and does not post a second", async () => {
     const service = slackOf()
-    const silentSend = {
-      fetch: (input: string | URL | Request, init?: RequestInit) =>
-        String(input).endsWith("/chat.postMessage") ? new Promise<Response>(() => {}) : service.fetch(input, init),
+    // Slack posts the message, and the answer never comes back.
+    const postsThenStalls = {
+      fetch: async (input: string | URL | Request, init?: RequestInit) => {
+        const answer = await service.fetch(input, init)
+        return String(input).endsWith("/chat.postMessage") ? new Promise<Response>(() => {}) : answer
+      },
     }
-    const ran = await runCli(["personal", "--timeout", "200ms", "messages", "send", "general", "Once", "--json"], {
-      service: silentSend,
+    const first = await runCli(["personal", "--timeout", "200ms", "messages", "send", "general", "Once", "--json"], {
+      service: postsThenStalls,
     })
-    expect(ran.json()).toMatchObject({ error: { code: "outcome_unknown" } })
+    const unknown = JSON.parse(first.err) as { error: { code: string; details: { operation_ids: string[] } } }
+    expect(unknown.error.code).toBe("outcome_unknown")
+    const [operation] = unknown.error.details.operation_ids
+    const again = await slackCli(service, "messages", "send", "general", "Once", "--operation-id", String(operation))
+    expect(again.code).toBe(0)
+    expect(service.writes.filter((one) => one.method === "chat.postMessage")).toHaveLength(1)
+    expect(service.workspace.messages[GENERAL]?.filter((one) => one.text === "Once")).toHaveLength(1)
+  })
+
+  it("**a repeat whose first try never reached Slack sends it once**", async () => {
+    const service = slackOf()
+    const sent = await slackCli(service, "messages", "send", "general", "Late", "--operation-id", "a-lost-send")
+    expect(sent.code).toBe(0)
+    expect(service.writes.filter((one) => one.method === "chat.postMessage")).toHaveLength(1)
   })
 
   it("**names the scope the app lacks** when Slack refuses a send for it", async () => {
@@ -113,12 +132,14 @@ describe("messages send", () => {
 })
 
 describe("changing a message", () => {
-  it("**edits and deletes the owner's own message**, and refuses another person's as Slack does", async () => {
+  it("**edits and deletes the owner's own message** for everyone only, and refuses to edit another person's", async () => {
     const service = slackOf()
     const edited = await slackCli(service, "messages", "edit", "general", ts(20), "Read it")
     expect(edited.json().item).toMatchObject({ message: { text: "Read it" } })
-    expect((await slackCli(service, "messages", "delete", "general", ts(20), "--yes")).code).toBe(0)
-    const others = await slackCli(service, "messages", "delete", "general", ts(10), "--yes")
+    const forMe = await slackCli(service, "messages", "delete", "general", ts(20), "--yes")
+    expect(forMe.json()).toMatchObject({ error: { code: "validation_error" } })
+    expect((await slackCli(service, "messages", "delete", "general", ts(20), "--for-everyone", "--yes")).code).toBe(0)
+    const others = await slackCli(service, "messages", "edit", "general", ts(10), "Not mine")
     expect(others.code).not.toBe(0)
     expect(service.writes.map((one) => one.method)).toEqual(["chat.update", "chat.delete"])
   })

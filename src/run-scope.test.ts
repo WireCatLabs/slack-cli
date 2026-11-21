@@ -9,7 +9,7 @@ import { API } from "./config.js"
 import { definition } from "./program.js"
 import { FAKE_TOKEN, fakeSlack } from "./testing/fake-slack.js"
 import { signedIn } from "./testing/harness.js"
-import { workspace } from "./testing/workspace.js"
+import { GENERAL, workspace } from "./testing/workspace.js"
 
 const READS: Record<string, readonly string[]> = {
   "account show": ["personal", "account", "show"],
@@ -34,17 +34,16 @@ const READS: Record<string, readonly string[]> = {
   "messages sync": ["personal", "messages", "sync", "general", "--pause", "1ms"],
 }
 
-// The silent fake stalls the chat lookup before anything is sent, and that is honestly a `timeout`; a write that
-// went out and got no answer is `outcome_unknown` in src/writes.test.ts.
-const WRITE_REASON = "a write; src/writes.test.ts runs it, and its stalled send under --timeout ends in outcome_unknown"
+// A silent fake stalls the chat lookup before anything is sent, and that is honestly a `timeout`; the writes run
+// against a fake that answers the reads and stalls the write itself.
+const WRITE_REASON = "a write; the writes' cases below run it against a fake whose writes never answer"
 
 const WRITES: Record<string, readonly string[]> = {
   "messages send": ["personal", "messages", "send", "general", "Hi"],
   "messages edit": ["personal", "messages", "edit", "general", "1700000020.000100", "Read it"],
-  "messages delete": ["personal", "messages", "delete", "general", "1700000020.000100", "--yes"],
+  "messages delete": ["personal", "messages", "delete", "general", "1700000020.000100", "--for-everyone", "--yes"],
   "messages pin": ["personal", "messages", "pin", "general", "1700000030.000100"],
   "messages unpin": ["personal", "messages", "unpin", "general", "1700000030.000100"],
-  "messages link": ["personal", "messages", "link", "general", "1700000030.000100"],
   "reactions add": ["personal", "reactions", "add", "general", "1700000010.000100", "tada"],
   "reactions remove": ["personal", "reactions", "remove", "general", "1700000040.000100"],
   "chats mark-read": ["personal", "chats", "mark-read", "general"],
@@ -121,50 +120,104 @@ const SHARED_REASON = "cli-core's shared messenger command, mounted unchanged; c
 
 const stdin = () => Object.assign(Readable.from([FAKE_TOKEN]), { isTTY: false })
 
+const FIRST: Record<string, readonly string[]> = {
+  "session start": ["personal", "session", "start"],
+  "session status": ["personal", "session", "status", "--check"],
+  doctor: ["personal", "doctor", "--online"],
+  ...READS,
+}
+
+const SKIP: Record<string, string> = {
+  "messages link":
+    "asks for the remembered account before connecting, which a first run on SLACK_TOKEN alone has not saved yet; " +
+    "src/writes.test.ts links a message",
+  ...Object.fromEntries(
+    API.manifest.operations.map((operation) => [
+      `api ${apiCommandPath(operation).join(" ")}`,
+      "cli-core's serviceApiCommand runs it in its run; src/api.test.ts sends each one",
+    ]),
+  ),
+  "mcp serve": "listens until stopped",
+  ...Object.fromEntries(NOT_SENT.map((path) => [path, UNREAD])),
+  ...Object.fromEntries(SHARED.map((path) => [path, SHARED_REASON])),
+  setup: "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
+  "setup run": "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
+  "setup apply": "src/setup/flow.test.ts runs its check",
+  "account list": "reads the remembered accounts, sends nothing",
+  "account update": UNREAD,
+  "account sessions list": UNREAD,
+  "account sessions end": UNREAD,
+  "account remove": "removes the token here; Slack has no sign-out the user token may call",
+  "contacts context": "reads the store; src/messenger.test.ts",
+  "contacts prepare": "reads the store; src/messenger.test.ts",
+  "contacts events": "reads the store; src/messenger.test.ts",
+  "contacts check": "reads the store; src/messenger.test.ts",
+  "contacts sync": "users.list, as contacts list sends",
+  "search all": "reads the store; src/messenger.test.ts searches after a sync",
+  "search messages": "reads the store; src/messenger.test.ts searches after a sync",
+  "search conversations": "reads the store; src/messenger.test.ts searches after a sync",
+}
+
+/** Slack's write methods: the silent fake of the writes answers everything else and never these. */
+const WRITE_METHODS = [
+  "chat.postMessage",
+  "chat.update",
+  "chat.delete",
+  "reactions.add",
+  "reactions.remove",
+  "pins.add",
+  "pins.remove",
+  "conversations.mark",
+  "conversations.join",
+  "conversations.leave",
+]
+
+const writesNeverAnswer = () => {
+  const { fetch } = fakeSlack({}, FAKE_TOKEN, workspace())
+  return (input: string | URL | Request, init?: RequestInit) =>
+    WRITE_METHODS.some((method) => String(input).endsWith(`/${method}`))
+      ? neverAnswers(input, init)
+      : fetch(input, init)
+}
+
+/** The workspace with one pinned message, so `messages unpin` has one to take off. */
+const pinnedWorkspace = () => {
+  const world = workspace()
+  const pinned = world.messages[GENERAL]?.find((one) => one.ts === "1700000030.000100")
+  if (pinned) pinned.pinned_to = [GENERAL]
+  return world
+}
+
+const answering = () => ({
+  keyring: signedIn(),
+  fetch: fakeSlack({}, FAKE_TOKEN, pinnedWorkspace()).fetch,
+  stdin: stdin(),
+  env: { SLACK_TOKEN: FAKE_TOKEN },
+})
+
 describe("each remote command runs inside cli-core's run", () => {
   const cases = runScopeCases({
     definition: definition(),
-    commands: {
-      "session start": ["personal", "session", "start"],
-      "session status": ["personal", "session", "status", "--check"],
-      doctor: ["personal", "doctor", "--online"],
-      ...READS,
-    },
-    skip: {
-      ...Object.fromEntries(
-        API.manifest.operations.map((operation) => [
-          `api ${apiCommandPath(operation).join(" ")}`,
-          "cli-core's serviceApiCommand runs it in its run; src/api.test.ts sends each one",
-        ]),
-      ),
-      "mcp serve": "listens until stopped",
-      ...Object.fromEntries(NOT_SENT.map((path) => [path, UNREAD])),
-      ...Object.fromEntries(Object.keys(WRITES).map((path) => [path, WRITE_REASON])),
-      ...Object.fromEntries(SHARED.map((path) => [path, SHARED_REASON])),
-      setup: "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
-      "setup run": "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
-      "setup apply": "src/setup/flow.test.ts runs its check",
-      "account list": "reads the remembered accounts, sends nothing",
-      "account update": UNREAD,
-      "account sessions list": UNREAD,
-      "account sessions end": UNREAD,
-      "account remove": "removes the token here; Slack has no sign-out the user token may call",
-      "contacts context": "reads the store; src/messenger.test.ts",
-      "contacts prepare": "reads the store; src/messenger.test.ts",
-      "contacts events": "reads the store; src/messenger.test.ts",
-      "contacts check": "reads the store; src/messenger.test.ts",
-      "contacts sync": "users.list, as contacts list sends",
-      "search all": "reads the store; src/messenger.test.ts searches after a sync",
-      "search messages": "reads the store; src/messenger.test.ts searches after a sync",
-      "search conversations": "reads the store; src/messenger.test.ts searches after a sync",
-    },
-    answering: () => ({
+    commands: FIRST,
+    skip: { ...SKIP, ...Object.fromEntries(Object.keys(WRITES).map((path) => [path, WRITE_REASON])) },
+    answering,
+    silent: () => ({ keyring: signedIn(), fetch: neverAnswers, stdin: stdin(), env: { SLACK_TOKEN: FAKE_TOKEN } }),
+  })
+  for (const one of cases) it(one.name, () => one.run())
+})
+
+describe("each write runs inside cli-core's run, and a write Slack never answers is outcome_unknown", () => {
+  const cases = runScopeCases({
+    definition: definition(),
+    commands: WRITES,
+    skip: { ...SKIP, ...Object.fromEntries(Object.keys(FIRST).map((path) => [path, "the reads' cases above"])) },
+    answering,
+    silent: () => ({
       keyring: signedIn(),
-      fetch: fakeSlack({}, FAKE_TOKEN, workspace()).fetch,
+      fetch: writesNeverAnswer(),
       stdin: stdin(),
       env: { SLACK_TOKEN: FAKE_TOKEN },
     }),
-    silent: () => ({ keyring: signedIn(), fetch: neverAnswers, stdin: stdin(), env: { SLACK_TOKEN: FAKE_TOKEN } }),
   })
   for (const one of cases) it(one.name, () => one.run())
 })

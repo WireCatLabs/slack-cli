@@ -89,7 +89,17 @@ const METHODS: Record<string, { takes: readonly string[]; needs?: readonly strin
   "users.list": { takes: ["cursor", "include_locale", "limit", "team_id"] },
   "conversations.list": { takes: ["cursor", "exclude_archived", "limit", "team_id", "types"] },
   "chat.postMessage": {
-    takes: ["channel", "text", "thread_ts", "reply_broadcast", "mrkdwn", "unfurl_links", "unfurl_media", "parse"],
+    takes: [
+      "channel",
+      "text",
+      "thread_ts",
+      "reply_broadcast",
+      "mrkdwn",
+      "unfurl_links",
+      "unfurl_media",
+      "parse",
+      "metadata",
+    ],
     needs: ["channel", "text"],
   },
   "chat.update": { takes: ["channel", "ts", "text", "parse", "link_names"], needs: ["channel", "ts"] },
@@ -138,6 +148,12 @@ const ALL_SCOPES = [
 ]
 
 const num = (ts: string) => Number(ts)
+
+/** A message's metadata only when the read asked for it (https://docs.slack.dev/messaging/message-metadata/). */
+const metadataIf =
+  (args: Record<string, string>) =>
+  ({ metadata, ...message }: FakeMessage) =>
+    args.include_all_metadata === "true" && metadata !== undefined ? { ...message, metadata } : message
 
 const window = (args: Record<string, string>) => {
   const inclusive = args.inclusive === "true" || args.inclusive === "1"
@@ -222,7 +238,6 @@ export const fakeSlack = (
   /** Every write Slack took, in order: the method and its arguments. */
   const writes: { method: string; args: Record<string, string> }[] = []
   const uploads = new Map<string, { name: string; bytes: string }>()
-  const pinned = new Set<string>()
   const read: Record<string, string> = {}
   const refuse = (why: string, error: string, extra: Record<string, unknown> = {}): Response => {
     refusals.push(why)
@@ -262,8 +277,7 @@ export const fakeSlack = (
       return Response.json({ ok: true, ...body })
     }
     if (method === "conversations.leave") {
-      if (!channel.members.includes(self))
-        return Response.json({ ok: false, not_in_channel: true, error: "not_in_channel" })
+      if (!channel.members.includes(self)) return Response.json({ ok: false, not_in_channel: true })
       channel.members = channel.members.filter((one) => one !== self)
       return done()
     }
@@ -287,6 +301,7 @@ export const fakeSlack = (
         ...(args.thread_ts ? { thread_ts: args.thread_ts } : {}),
         ...(args.reply_broadcast === "true" ? { subtype: "thread_broadcast" } : {}),
         ...(files ? { files } : {}),
+        ...(args.metadata ? { metadata: JSON.parse(args.metadata) } : {}),
       }
       all.push(message)
       if (method === "files.completeUploadExternal")
@@ -305,7 +320,6 @@ export const fakeSlack = (
       return done({ channel: channel.id, ts: target.ts, text: target.text })
     }
     if (method === "chat.delete") {
-      if (target.user !== self) return refuse("not mine", "cant_delete_message")
       workspace.messages[channel.id] = all.filter((one) => one !== target)
       return done({ channel: channel.id, ts: target.ts })
     }
@@ -324,14 +338,14 @@ export const fakeSlack = (
       target.reactions = reactions.filter((one) => one.count > 0)
       return done()
     }
-    const key = `${channel.id}/${target.ts}`
+    // Slack's message object lists where it is pinned in `pinned_to`.
+    const pinnedTo = Array.isArray(target.pinned_to) ? (target.pinned_to as string[]) : []
     if (method === "pins.add") {
-      if (pinned.has(key)) return refuse("again", "already_pinned")
-      pinned.add(key)
+      target.pinned_to = [...new Set([...pinnedTo, channel.id])]
       return done()
     }
-    if (!pinned.has(key)) return refuse("not pinned", "no_pin")
-    pinned.delete(key)
+    if (!pinnedTo.includes(channel.id)) return refuse("not pinned", "no_pin")
+    target.pinned_to = pinnedTo.filter((one) => one !== channel.id)
     return done()
   }
 
@@ -380,14 +394,14 @@ export const fakeSlack = (
       uploads.set(id, { name: args.filename ?? "", bytes: "" })
       return Response.json({ ok: true, upload_url: `https://files.slack.com/upload/v1/${id}`, file_id: id })
     }
+    // Without a channel the file stays private and no message is made (files.completeUploadExternal's page).
     if (method === "files.completeUploadExternal" && !args.channel_id)
-      return refuse("kept private", "invalid_arguments")
+      return Response.json({ ok: true, files: JSON.parse(args.files ?? "[]") })
     const channel = channelOf(args.channel ?? args.channel_id)
     if (!channel) return refuse(`no conversation ${args.channel ?? args.channel_id}`, "channel_not_found")
     if (method === "conversations.join") {
       if (!scopes().includes("channels:write"))
         return refuse("join without channels:write", "missing_scope", { needed: "channels:write" })
-      if (channel.kind !== "public") return refuse(`join ${channel.id}`, "method_not_supported_for_channel_type")
       if (!channel.members.includes(self)) channel.members.push(self)
       writes.push({ method, args })
       return Response.json({ ok: true, channel: conversationOf(channel, messagesOf(channel.id), true, true) })
@@ -420,7 +434,7 @@ export const fakeSlack = (
       const page = cursorPage(top, args, 100, 999)
       return Response.json({
         ok: true,
-        messages: page.shown,
+        messages: page.shown.map(metadataIf(args)),
         has_more: page.more,
         response_metadata: page.response_metadata,
       })
@@ -436,7 +450,7 @@ export const fakeSlack = (
     const page = cursorPage([withThread(root, all), ...replies], args, 10, 1000)
     return Response.json({
       ok: true,
-      messages: page.shown,
+      messages: page.shown.map(metadataIf(args)),
       has_more: page.more,
       response_metadata: page.response_metadata,
     })
