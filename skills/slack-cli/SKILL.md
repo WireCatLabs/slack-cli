@@ -81,6 +81,8 @@ for the owner**; ask which, unless the task says. The examples use `personal`.
   italic, strike, code, links, quotes); underline and spoilers are refused. `--reply-to <ts>` answers in that
   message's thread. `--file` uploads a file into the chat. A reaction is Slack's emoji name: `thumbsup` or `:eyes:`.
   `reactions remove` takes off the owner's reactions on the message. `chats join` takes a public channel.
+  `messages delete` needs `--for-everyone`: Slack deletes for everyone or not at all. A person with no DM yet cannot
+  be written to; tell the owner to open the DM in Slack first.
 
 ## Commands and output
 

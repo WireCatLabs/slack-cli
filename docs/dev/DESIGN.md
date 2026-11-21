@@ -92,10 +92,25 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   `mrkdwn: false`; `--md` is cli-core's Markdown spans written as mrkdwn, and a mark mrkdwn lacks is refused. A reply
   goes to its root's thread, since Slack threads are one level deep. `reactions remove` takes off every reaction of
   the owner on the message, as cli-core's `react(…, null)` means.
+- **A repeat is one copy:** Slack's `chat.postMessage` has no idempotency key, so a send carries its send id as
+  message metadata (`event_type: wirecat_send`). A send id this run did not make is a repeat: the adapter looks for
+  that mark among the chat's (or the thread's) newest messages with `include_all_metadata` and answers with the copy it
+  finds, else sends. A file message carries no mark, so a repeat of a file send is refused with a way forward.
+- **Deviations from cli-core's ports:**
+  - `delete` is for everyone only: Slack has no delete for one person, so a delete without `--for-everyone` is
+    refused, never widened.
+  - `react` adds; Slack keeps several reactions per person, so an emoji does not replace the owner's other ones. An
+    emoji is Slack's name for it (`thumbsup`, `:eyes:`); a Unicode emoji is refused, since Slack names each one.
+  - `pin --notify` changes nothing: Slack shows a pin in the channel either way.
+  - `chat.update` takes no `mrkdwn` switch, so a plain edit with `*x*` may show bold where a plain send would not.
 - **Not offered by cli-core's send:** `reply_broadcast` (a thread reply also shown in the channel) has no field in
-  `SendOptions`, so a reply stays in its thread. Opening a new DM (`conversations.open`) is not needed: a send goes to
-  a chat the list already has, and a person with no DM yet is not one. `--silent`, `--at-time`, `--send-as`, buttons,
-  spoilers and voice messages are refused by name.
+  `SendOptions`, so a reply stays in its thread. A send goes to a chat the list has; a person with no DM yet is
+  refused (`conversations.open` is not called). `--silent`, `--at-time`, `--send-as`, buttons, spoilers and voice
+  messages are refused by name.
+- **Not verified on a live workspace:** whether a user token's message metadata is kept and read back, and whether a
+  file message shows in the history right after `files.completeUploadExternal`; Slack may share it later, and then
+  a file send that worked answers with exit `14`. `messages link` asks for the remembered account before connecting,
+  so on `SLACK_TOKEN` alone it works only after one other command has saved the account.
 - **Hidden and refused:** what Slack has no primitive for is in `SLACK.never`. Sessions and folders are in `lacks`
   instead, since `never` would leave `account sessions` and `chats folders` in sight with nothing under them.
 
