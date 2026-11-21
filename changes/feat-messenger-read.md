@@ -11,3 +11,7 @@
   `thread_window_days` (14 by default) old. A message Slack stops showing is never marked deleted.
 - **`slack <profile> setup`** signs in step by step, with the same token checks as `session start`.
 - **Files** download from `files.slack.com` only, with the token in the header.
+- **Write to Slack with the messenger commands.** `messages send|edit|delete|pin|unpin|link`, `reactions add|remove`
+  and `chats mark-read|join|leave`. Text is sent as typed; `--md` turns Markdown into Slack's mrkdwn. `--reply-to`
+  answers in the thread, and `--file` uploads through Slack's external upload. A write with no answer is reported as
+  unknown and never sent twice.

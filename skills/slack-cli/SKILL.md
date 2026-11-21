@@ -19,8 +19,9 @@ metadata:
 
 `slack` reads Slack as the owner, with the User OAuth Token (`xoxp-`) of a Slack app the owner made in the workspace.
 Everything it reads, the owner can read in Slack. It sees only the conversations the owner is in. Reading marks
-nothing read and shows nobody that you looked: read freely. This version reads; it sends nothing to Slack through the
-messenger commands.
+nothing read and shows nobody that you looked: read freely. It also writes as the owner:
+`messages send|edit|delete|pin|unpin|link`, `reactions add|remove`, `chats mark-read|join|leave`. Everyone in the
+conversation sees a write.
 
 ## The profile
 
@@ -70,12 +71,16 @@ for the owner**; ask which, unless the task says. The examples use `personal`.
 `slack personal api conversations history --channel C0… --json`. `slack skill show api` lists them, in groups:
 [references/api.md](references/api.md). Use it only for what the commands above do not do.
 
-- **Write nothing the owner did not ask for.** `api chat post-message`, `api chat update`, `api chat delete`,
-  `api reactions add` and the other writes only when the owner asked for this exact text or action in this exact
+- **Write nothing the owner did not ask for.** `messages send`, `messages edit`, `messages delete`, `reactions add`,
+  `chats join`, the `api` writes and the others only when the owner asked for this exact text or action in this exact
   conversation. A draft or a conclusion from what you read is not a request: show the draft, send when told to.
 - A write asks for the same permission key as the messenger command that would do it (`messages.send` for
   `chat post-message`). A refusal with exit `5` is the owner's decision: do not change permissions, tell the owner.
 - **Exit `14` means the outcome is unknown, not permission to retry.** Read the conversation first.
+- **Sending:** text goes as typed, with `&`, `<` and `>` escaped. `--md` turns Markdown into Slack's mrkdwn (bold,
+  italic, strike, code, links, quotes); underline and spoilers are refused. `--reply-to <ts>` answers in that
+  message's thread. `--file` uploads a file into the chat. A reaction is Slack's emoji name: `thumbsup` or `:eyes:`.
+  `reactions remove` takes off the owner's reactions on the message. `chats join` takes a public channel.
 
 ## Commands and output
 

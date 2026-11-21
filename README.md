@@ -86,9 +86,13 @@ Read your workspace with the same commands as every WireCat messenger CLI:
   up to 14 days old (`thread_window_days`). `slack personal search all "invoice"` then searches it.
 - `slack personal chats events '#general'` shows who joined or left and what was renamed, from Slack's service
   messages. `slack personal contacts show anna` shows a person.
+- `slack personal messages send '#general' "Ship it"` sends as you. `--reply-to <ts>` answers in the thread, `--md`
+  turns Markdown into Slack's formatting, and `--file report.pdf` uploads a file. `messages edit`, `messages delete`,
+  `messages pin`, `messages link`, `reactions add` and `chats mark-read`, `chats join` and `chats leave` change what
+  you see in Slack and what others see.
 
-Slack does not say when a message was deleted, so a message saved by a sync stays saved. Sending, editing and
-reactions come in a later version; `slack personal api` reaches them now.
+Slack does not say when a message was deleted, so a message saved by a sync stays saved. A write with no answer from
+Slack exits with `14` and is never sent again by itself: read the chat before you repeat it.
 
 [docs/commands.md](docs/commands.md) lists every command, and `--help` after any of them shows its flags.
 

@@ -85,6 +85,17 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   `messages sync --all` reads every chat it lists. Archived channels are left out of the list
   (`exclude_archived`). No cheap source of last activity was found for a user token: `conversations.info` would cost a
   call per chat at the profile's pace.
+- **Writes** (`src/slack/writes.ts`): `chat.postMessage`, `chat.update`, `chat.delete`, `reactions.add|remove`,
+  `pins.add|remove`, `conversations.mark`, `chat.getPermalink`, `conversations.join|leave`, and a file through
+  `files.getUploadURLExternal`, a POST of the bytes to `files.slack.com` and `files.completeUploadExternal`. Every
+  write goes with `writes: true`: no answer is `outcome_unknown`, never retried. Plain text is escaped and sent with
+  `mrkdwn: false`; `--md` is cli-core's Markdown spans written as mrkdwn, and a mark mrkdwn lacks is refused. A reply
+  goes to its root's thread, since Slack threads are one level deep. `reactions remove` takes off every reaction of
+  the owner on the message, as cli-core's `react(…, null)` means.
+- **Not offered by cli-core's send:** `reply_broadcast` (a thread reply also shown in the channel) has no field in
+  `SendOptions`, so a reply stays in its thread. Opening a new DM (`conversations.open`) is not needed: a send goes to
+  a chat the list already has, and a person with no DM yet is not one. `--silent`, `--at-time`, `--send-as`, buttons,
+  spoilers and voice messages are refused by name.
 - **Hidden and refused:** what Slack has no primitive for is in `SLACK.never`. Sessions and folders are in `lacks`
   instead, since `never` would leave `account sessions` and `chats folders` in sight with nothing under them.
 
