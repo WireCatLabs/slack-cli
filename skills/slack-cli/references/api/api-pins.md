@@ -1,14 +1,35 @@
 <!-- Generated from the API manifest and the command tree by pnpm generate. Do not edit. -->
 
-# Slack Web API: pins
+# Slack API: pins
 
-## `slack api pins-list-list [options]`
+## `slack api pins add [options]`
 
-- What: pins\_list — read (GET /pins.list)
-- Call: `GET /pins.list`, effect: read
-- Sign-in: slackAuth (pins:read)
+- What: pins\_add — write (POST /pins.add)
+- Call: `POST /pins.add`, effect: write
+- Body: `PinsAddRequest`
 
 | Flag | Required | What |
 |---|---|---|
-| `--token <value>` | yes | Authentication token. Requires scope: \`pins:read\` |
+| `--body <json>` | no | the request body as JSON; - reads it from stdin |
+| `--body-file <path>` | no | the request body from a JSON file; - is stdin |
+
+## `slack api pins list [options]`
+
+- What: pins\_list — read (GET /pins.list)
+- Call: `GET /pins.list`, effect: read
+
+| Flag | Required | What |
+|---|---|---|
 | `--channel <value>` | yes | Channel to get pinned items for. |
+
+## `slack api pins remove [options]`
+
+- What: pins\_remove — destructive (POST /pins.remove)
+- Call: `POST /pins.remove`, effect: destructive
+- Permission keys: `messages.delete`
+- Body: `PinsRemoveRequest`
+
+| Flag | Required | What |
+|---|---|---|
+| `--body <json>` | no | the request body as JSON; - reads it from stdin |
+| `--body-file <path>` | no | the request body from a JSON file; - is stdin |

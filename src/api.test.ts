@@ -1,6 +1,6 @@
 import { mkdirSync, rmSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
-import { fakeApi, sampleOf } from "@wirecat/cli-base/codegen"
+import { apiCommandPath, fakeApi, sampleOf } from "@wirecat/cli-base/codegen"
 import { apiFlagOf, manifestBaseUrl, type ServiceApiManifest, sendsBytes } from "@wirecat/cli-core/cli"
 import { pacePathFor } from "@wirecat/cli-core/sends"
 import { afterEach, expect, it } from "vitest"
@@ -42,12 +42,15 @@ const fake = () =>
 const deleteKeys = [
   ...new Set(
     API.manifest.operations.flatMap((operation) =>
-      (operation.permissions ?? []).map((permission) => permission.key).filter((key) => key.endsWith(".delete")),
+      (operation.permissions ?? [])
+        .map((permission) => permission.key)
+        .filter((key) => key.endsWith(".delete") || key.endsWith(".share")),
     ),
   ),
 ]
 
 const argsOf = (operation: Operation) => [
+  ...apiCommandPath(operation),
   ...operation.parameters
     // A required parameter with a default is left out: the command sends the default itself.
     .filter((parameter) => parameter.required && parameter.schema.default === undefined)
@@ -56,7 +59,7 @@ const argsOf = (operation: Operation) => [
   ...(operation.request?.schema
     ? ["--body", JSON.stringify(sampleOf({ type: "ref", ref: operation.request.schema }, definitions))]
     : []),
-  ...(operation.effect === "destructive" ? ["--yes"] : []),
+  ...(operation.effect === "destructive" || operation.permissions?.length ? ["--yes"] : []),
 ]
 
 it("the spec offers operations", () => {
@@ -66,20 +69,22 @@ it("the spec offers operations", () => {
 it("api show describes an operation from the generated files, without calling the service", async () => {
   const [operation] = API.manifest.operations
   const service = fake()
-  const shown = await runCli(["personal", "api", "show", String(operation?.command), "--json"], { service })
+  const shown = await runCli(["personal", "api", "show", apiCommandPath(operation as Operation).join(" "), "--json"], {
+    service,
+  })
   expect(shown.code, shown.err).toBe(0)
   expect(shown.json().item).toMatchObject({ operation: { id: operation?.id } })
   expect(service.calls).toEqual([])
 })
 
 // One test each, so a large API stays inside the per-test timeout and a failure names its operation.
-it.each(API.manifest.operations.map((operation) => [operation.command, operation] as const))(
+it.each(API.manifest.operations.map((operation) => [apiCommandPath(operation).join(" "), operation] as const))(
   "sends %s as the spec describes it",
   async (_, operation) => {
     writeFileSync(upload, new Uint8Array([0x89, 0x50, 0x4e, 0x47]))
     withPermissions({ api: "allow", ...Object.fromEntries(deleteKeys.map((key) => [key, "allow"])) })
     const service = fake()
-    const ran = await runCli(["personal", "api", operation.command, ...argsOf(operation), "--json"], { service })
+    const ran = await runCli(["personal", "api", ...argsOf(operation), "--json"], { service })
     expect(ran.code, ran.err).toBe(0)
     expect(service.refusals).toEqual([])
     expect(service.calls).toHaveLength(1)
@@ -96,9 +101,46 @@ it.runIf(destructive.length > 0)(
     withPermissions({ api: "allow", ...Object.fromEntries(deleteKeys.map((key) => [key, "deny"])) })
     const service = fake()
     for (const operation of destructive) {
-      const ran = await runCli(["personal", "api", operation.command, ...argsOf(operation), "--json"], { service })
+      const ran = await runCli(["personal", "api", ...argsOf(operation), "--json"], { service })
       expect(ran.json()).toMatchObject({ error: { code: "permission_error" } })
     }
     expect(service.calls).toEqual([])
   },
 )
+
+it("signs every call in with the Bearer header and never sends a token parameter", async () => {
+  const service = fake()
+  const ran = await runCli(["personal", "api", "conversations", "history", "--channel", "C0SYNTH01", "--json"], {
+    service,
+  })
+  expect(ran.code, ran.err).toBe(0)
+  expect(service.refusals).toEqual([])
+  expect(service.calls[0]?.headers.get("authorization")).toBe(`Bearer ${FAKE_TOKEN}`)
+  expect(service.calls[0]?.url.searchParams.has("token")).toBe(false)
+  expect(API.manifest.operations.flatMap((operation) => operation.parameters.map((one) => one.name))).not.toContain(
+    "token",
+  )
+})
+
+it("sends a write as JSON, which cli-core can send, and leaves out the form-only ones with the reason", async () => {
+  withPermissions({ api: "allow" })
+  const service = fake()
+  const ran = await runCli(
+    ["personal", "api", "chat", "post-message", "--body", '{"channel":"C0SYNTH01","text":"hi"}', "--json"],
+    { service },
+  )
+  expect(ran.code, ran.err).toBe(0)
+  expect(service.calls[0]?.headers.get("content-type")).toContain("application/json")
+  expect(API.excluded.map((one) => one.id)).toEqual(expect.arrayContaining(["files_upload", "oauth_v2_access"]))
+})
+
+it("asks by the messenger's own key before a Slack delete", async () => {
+  withPermissions({ api: "allow", "messages.delete": "deny" })
+  const service = fake()
+  const ran = await runCli(
+    ["personal", "api", "chat", "delete", "--body", '{"channel":"C0SYNTH01","ts":"1700000000.000100"}', "--yes"],
+    { service },
+  )
+  expect(ran.code).not.toBe(0)
+  expect(service.calls).toEqual([])
+})

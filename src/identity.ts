@@ -2,7 +2,7 @@ import type { ManifestIdentity } from "@wirecat/cli-base/wcat/manifest"
 import type { AppIdentity } from "@wirecat/cli-core/cli"
 import { VERSION } from "./version.js"
 
-export const SERVICE = "Slack Web"
+export const SERVICE = "Slack"
 
 export const PACKAGE = "@wirecat/slack-cli"
 

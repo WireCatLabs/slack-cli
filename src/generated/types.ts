@@ -39,7 +39,7 @@ export type DefsOkTrue = true
 
 export type DefsOptionalAppId = string
 
-export type DefsPinnedInfo = Record<string, unknown>
+export type DefsPinnedInfo = { [key: string]: unknown }
 
 export type DefsReminderId = string
 
@@ -62,12 +62,12 @@ export type ObjsBotProfile = {
     image_36: string
     image_48: string
     image_72: string
-  }
+  } & { [key: string]: unknown }
   id: DefsBotId
   name: string
   team_id: DefsTeam
   updated: number
-}
+} & { [key: string]: unknown }
 
 export type ObjsChannel = {
   accepted_user?: DefsUserId
@@ -101,16 +101,16 @@ export type ObjsChannel = {
     creator: DefsTopicPurposeCreator
     last_set: number
     value: string
-  }
+  } & { [key: string]: unknown }
   topic: {
     creator: DefsTopicPurposeCreator
     last_set: number
     value: string
-  }
+  } & { [key: string]: unknown }
   unlinked?: number
   unread_count?: number
   unread_count_display?: number
-}
+} & { [key: string]: unknown }
 
 export type ObjsComment = {
   comment: string
@@ -124,12 +124,12 @@ export type ObjsComment = {
   reactions?: Array<ObjsReaction>
   timestamp: number
   user: DefsUserId
-}
+} & { [key: string]: unknown }
 
 export type ObjsComments = Array<unknown>
 
 export type ObjsConversation = Array<
-  | {
+  | ({
       accepted_user?: DefsUserId
       connected_team_ids?: Array<DefsWorkspaceId>
       conversation_host_id?: DefsWorkspaceId
@@ -138,7 +138,7 @@ export type ObjsConversation = Array<
       display_counts?: {
         display_counts: number
         guest_counts: number
-      }
+      } & { [key: string]: unknown }
       enterprise_id?: DefsEnterpriseId
       has_pins?: boolean
       id: DefsChannel
@@ -181,28 +181,30 @@ export type ObjsConversation = Array<
         creator: DefsTopicPurposeCreator
         last_set: number
         value: string
-      }
+      } & { [key: string]: unknown }
       shared_team_ids?: Array<DefsTeam>
-      shares?: Array<{
-        accepted_user?: DefsUserId
-        is_active: boolean
-        team: ObjsTeam
-        user: DefsUserId
-      }>
+      shares?: Array<
+        {
+          accepted_user?: DefsUserId
+          is_active: boolean
+          team: ObjsTeam
+          user: DefsUserId
+        } & { [key: string]: unknown }
+      >
       timezone_count?: number
       topic: {
         creator: DefsTopicPurposeCreator
         last_set: number
         value: string
-      }
+      } & { [key: string]: unknown }
       unlinked?: number
       unread_count?: number
       unread_count_display?: number
       use_case?: string
       user?: DefsUserId
       version?: number
-    }
-  | {
+    } & { [key: string]: unknown })
+  | ({
       accepted_user?: DefsUserId
       connected_team_ids?: Array<DefsTeam>
       conversation_host_id?: DefsWorkspaceId
@@ -211,7 +213,7 @@ export type ObjsConversation = Array<
       display_counts?: {
         display_counts: number
         guest_counts: number
-      }
+      } & { [key: string]: unknown }
       id: DefsChannel
       internal_team_ids?: Array<DefsTeam>
       is_archived: boolean
@@ -249,27 +251,29 @@ export type ObjsConversation = Array<
         creator: DefsTopicPurposeCreator
         last_set: number
         value: string
-      }
+      } & { [key: string]: unknown }
       shared_team_ids?: Array<DefsTeam>
-      shares?: Array<{
-        accepted_user?: DefsUserId
-        is_active: boolean
-        team: ObjsTeam
-        user: DefsUserId
-      }>
+      shares?: Array<
+        {
+          accepted_user?: DefsUserId
+          is_active: boolean
+          team: ObjsTeam
+          user: DefsUserId
+        } & { [key: string]: unknown }
+      >
       timezone_count?: number
       topic: {
         creator: DefsTopicPurposeCreator
         last_set: number
         value: string
-      }
+      } & { [key: string]: unknown }
       unlinked?: number
       unread_count?: number
       unread_count_display?: number
       user?: DefsUserId
       version?: number
-    }
-  | {
+    } & { [key: string]: unknown })
+  | ({
       created: number
       has_pins?: boolean
       id: DefsDmId
@@ -287,18 +291,20 @@ export type ObjsConversation = Array<
       parent_conversation?: Array<DefsChannel | null>
       pin_count?: number
       priority: number
-      shares?: Array<{
-        date_create: number
-        id: DefsTeam
-        is_active: boolean
-        name: string
-        team: ObjsTeam
-      }>
+      shares?: Array<
+        {
+          date_create: number
+          id: DefsTeam
+          is_active: boolean
+          name: string
+          team: ObjsTeam
+        } & { [key: string]: unknown }
+      >
       unread_count?: number
       unread_count_display?: number
       user: DefsUserId
       version?: number
-    }
+    } & { [key: string]: unknown })
 >
 
 export type ObjsEnterpriseUser = {
@@ -308,7 +314,7 @@ export type ObjsEnterpriseUser = {
   is_admin: boolean
   is_owner: boolean
   teams: Array<DefsTeam>
-}
+} & { [key: string]: unknown }
 
 export type ObjsExternalOrgMigrations = {
   current: Array<{
@@ -356,9 +362,9 @@ export type ObjsFile = {
   public_url_shared?: boolean
   reactions?: Array<ObjsReaction>
   shares?: {
-    private?: Record<string, unknown>
-    public?: Record<string, unknown>
-  }
+    private?: { [key: string]: unknown }
+    public?: { [key: string]: unknown }
+  } & { [key: string]: unknown }
   size?: number
   source_team?: DefsTeam
   state?: string
@@ -392,7 +398,7 @@ export type ObjsFile = {
   user?: string
   user_team?: DefsTeam
   username?: string
-}
+} & { [key: string]: unknown }
 
 export type ObjsIcon = {
   image_102?: string
@@ -406,14 +412,16 @@ export type ObjsIcon = {
 }
 
 export type ObjsMessage = {
-  attachments?: Array<{
-    fallback?: string
-    id: number
-    image_bytes?: number
-    image_height?: number
-    image_url?: string
-    image_width?: number
-  }>
+  attachments?: Array<
+    {
+      fallback?: string
+      id: number
+      image_bytes?: number
+      image_height?: number
+      image_url?: string
+      image_width?: number
+    } & { [key: string]: unknown }
+  >
   blocks?: Blocks
   bot_id?: Array<DefsBotId | null>
   bot_profile?: ObjsBotProfile
@@ -425,7 +433,7 @@ export type ObjsMessage = {
   icons?: {
     emoji?: string
     image_64?: string
-  }
+  } & { [key: string]: unknown }
   inviter?: DefsUserId
   is_delayed_message?: boolean
   is_intro?: boolean
@@ -457,7 +465,7 @@ export type ObjsMessage = {
   user_profile?: ObjsUserProfileShort
   user_team?: DefsWorkspaceId
   username?: string
-}
+} & { [key: string]: unknown }
 
 export type ObjsPaging = {
   count?: number
@@ -466,7 +474,7 @@ export type ObjsPaging = {
   per_page?: number
   spill?: number
   total: number
-}
+} & { [key: string]: unknown }
 
 export type ObjsPrimaryOwner = {
   email: string
@@ -487,28 +495,19 @@ export type ObjsReminder = {
   text: string
   time?: number
   user: DefsUserId
-}
+} & { [key: string]: unknown }
 
 export type ObjsResources = {
   excluded_ids?: Array<Array<DefsChannel | DefsTeam>>
   ids: Array<Array<DefsChannel | DefsTeam>>
   wildcard?: boolean
-}
+} & { [key: string]: unknown }
 
-export type ObjsResponseMetadata = Array<
-  | {
-      next_cursor: string
-    }
-  | {
-      messages: Array<string>
-      warnings: Array<"method_deprecated">
-    }
-  | {
-      messages: Array<string>
-      next_cursor: string
-      warnings: Array<"method_deprecated">
-    }
->
+export type ObjsResponseMetadata = {
+  next_cursor?: string
+  messages?: Array<string>
+  warnings?: Array<string>
+}
 
 export type ObjsScopes = Array<string>
 
@@ -532,12 +531,12 @@ export type ObjsSubteam = {
   prefs: {
     channels: Array<DefsChannelId>
     groups: Array<DefsGroupId>
-  }
+  } & { [key: string]: unknown }
   team_id: DefsTeam
   updated_by: DefsUserId
   user_count?: number
   users?: Array<DefsUserId>
-}
+} & { [key: string]: unknown }
 
 export type ObjsTeam = {
   archived?: boolean
@@ -573,7 +572,7 @@ export type ObjsTeam = {
     name?: string
     type?: string
   }
-}
+} & { [key: string]: unknown }
 
 export type ObjsTeamProfileField = {
   field_name?: string | null
@@ -585,17 +584,17 @@ export type ObjsTeamProfileField = {
   ordering: number
   possible_values?: Array<string> | null
   type: "text" | "date" | "link" | "mailto" | "options_list" | "user"
-}
+} & { [key: string]: unknown }
 
 export type ObjsTeamProfileFieldOption = {
   is_custom?: boolean | null
   is_multiple_entry?: boolean | null
   is_protected?: boolean | null
   is_scim?: boolean | null
-}
+} & { [key: string]: unknown }
 
 export type ObjsUser = Array<
-  | {
+  | ({
       color?: string
       deleted?: boolean
       enterprise_user?: ObjsEnterpriseUser
@@ -621,14 +620,14 @@ export type ObjsUser = Array<
       team_id?: DefsWorkspaceId
       team_profile?: {
         fields: Array<ObjsTeamProfileField>
-      }
+      } & { [key: string]: unknown }
       two_factor_type?: string
       tz?: Array<string | null>
       tz_label?: string
       tz_offset?: number
       updated: number
-    }
-  | {
+    } & { [key: string]: unknown })
+  | ({
       /** refercing to bug: https://jira.tinyspeck.com/browse/EVALUE-1559 */
       color?: string
       deleted?: boolean
@@ -653,14 +652,14 @@ export type ObjsUser = Array<
       team_id?: DefsWorkspaceId
       team_profile?: {
         fields: Array<ObjsTeamProfileField>
-      }
+      } & { [key: string]: unknown }
       teams?: Array<DefsWorkspaceId>
       two_factor_type?: string
       tz?: Array<string | null>
       tz_label?: string
       tz_offset?: number
       updated: number
-    }
+    } & { [key: string]: unknown })
 >
 
 export type ObjsUserProfile = {
@@ -708,7 +707,7 @@ export type ObjsUserProfile = {
   updated?: number
   user_id?: string
   username?: string | null
-}
+} & { [key: string]: unknown }
 
 export type ObjsUserProfileShort = {
   avatar_hash: string
@@ -722,7 +721,7 @@ export type ObjsUserProfileShort = {
   real_name: string
   real_name_normalized?: string
   team: DefsWorkspaceId
-}
+} & { [key: string]: unknown }
 
 export type AdminAppsApproveRequest = {
   /** The id of the app to approve. */
@@ -773,7 +772,7 @@ export type AdminConversationsArchiveRequest = {
 /** Schema for successful response of admin.conversations.archive */
 export type AdminConversationsArchiveResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsConvertToPrivateRequest = {
   /** The channel to convert to private. */
@@ -783,7 +782,7 @@ export type AdminConversationsConvertToPrivateRequest = {
 /** Schema for successful response of admin.conversations.convertToPrivate */
 export type AdminConversationsConvertToPrivateResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsCreateRequest = {
   /** Name of the public or private channel to create. */
@@ -802,7 +801,7 @@ export type AdminConversationsCreateRequest = {
 export type AdminConversationsCreateResponse = {
   channel_id?: DefsChannelId
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsDeleteRequest = {
   /** The channel to delete. */
@@ -812,7 +811,7 @@ export type AdminConversationsDeleteRequest = {
 /** Schema for successful response of admin.conversations.delete */
 export type AdminConversationsDeleteResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsDisconnectSharedRequest = {
   /** The channel to be disconnected from some workspaces. */
@@ -824,7 +823,7 @@ export type AdminConversationsDisconnectSharedRequest = {
 /** Schema for successful response of admin.conversations.disconnectShared */
 export type AdminConversationsDisconnectSharedResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** This method either only returns a brief _OK_ response or a verbose schema is not available for this method. */
 export type AdminConversationsEkmListOriginalConnectedChannelInfoResponse = {
@@ -844,16 +843,16 @@ export type AdminConversationsGetConversationPrefsResponse = {
       user?: Array<string>
     }
   }
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response of admin.conversations.getTeams */
 export type AdminConversationsGetTeamsResponse = {
   ok: DefsOkTrue
   response_metadata?: {
     next_cursor: string
-  }
+  } & { [key: string]: unknown }
   team_ids: Array<DefsTeam>
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsInviteRequest = {
   /** The users to invite. */
@@ -865,7 +864,7 @@ export type AdminConversationsInviteRequest = {
 /** Schema for successful response of admin.conversations.invite */
 export type AdminConversationsInviteResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsRenameRequest = {
   /** The channel to rename. */
@@ -876,11 +875,9 @@ export type AdminConversationsRenameRequest = {
 /** Schema for successful response of admin.conversations.rename */
 export type AdminConversationsRenameResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsRestrictAccessAddGroupRequest = {
-  /** Authentication token. Requires scope: `admin.conversations:write` */
-  token: string
   /** The workspace where the channel exists. This argument is required for channels only tied to one workspace, and optional for channels that are shared across an organization. */
   team_id?: string
   /** The [IDP Group](https://slack.com/help/articles/115001435788-Connect-identity-provider-groups-to-your-Enterprise-Grid-org) ID to be an allowlist for the private channel. */
@@ -900,8 +897,6 @@ export type AdminConversationsRestrictAccessListGroupsResponse = {
 } & { [key: string]: unknown }
 
 export type AdminConversationsRestrictAccessRemoveGroupRequest = {
-  /** Authentication token. Requires scope: `admin.conversations:write` */
-  token: string
   /** The workspace where the channel exists. This argument is required for channels only tied to one workspace, and optional for channels that are shared across an organization. */
   team_id: string
   /** The [IDP Group](https://slack.com/help/articles/115001435788-Connect-identity-provider-groups-to-your-Enterprise-Grid-org) ID to remove from the private channel. */
@@ -919,7 +914,7 @@ export type AdminConversationsRestrictAccessRemoveGroupResponse = {
 export type AdminConversationsSearchResponse = {
   channels: Array<ObjsChannel>
   next_cursor: string
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsSetConversationPrefsRequest = {
   /** The channel to set the prefs for */
@@ -931,7 +926,7 @@ export type AdminConversationsSetConversationPrefsRequest = {
 /** Schema for successful response of admin.conversations.setConversationPrefs */
 export type AdminConversationsSetConversationPrefsResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type AdminConversationsSetTeamsRequest = {
   /** The encoded `channel_id` to add or remove to workspaces. */
@@ -957,11 +952,9 @@ export type AdminConversationsUnarchiveRequest = {
 /** Schema for successful response of admin.conversations.unarchive */
 export type AdminConversationsUnarchiveResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type AdminEmojiAddRequest = {
-  /** Authentication token. Requires scope: `admin.teams:write` */
-  token: string
   /** The name of the emoji to be removed. Colons (`:myemoji:`) around the value are not required, although they may be included. */
   name: string
   /** The URL of a file to use as an image for the emoji. Square images under 128KB and with transparent backgrounds work best. */
@@ -974,8 +967,6 @@ export type AdminEmojiAddResponse = {
 } & { [key: string]: unknown }
 
 export type AdminEmojiAddAliasRequest = {
-  /** Authentication token. Requires scope: `admin.teams:write` */
-  token: string
   /** The name of the emoji to be aliased. Colons (`:myemoji:`) around the value are not required, although they may be included. */
   name: string
   /** The alias of the emoji. */
@@ -993,8 +984,6 @@ export type AdminEmojiListResponse = {
 } & { [key: string]: unknown }
 
 export type AdminEmojiRemoveRequest = {
-  /** Authentication token. Requires scope: `admin.teams:write` */
-  token: string
   /** The name of the emoji to be removed. Colons (`:myemoji:`) around the value are not required, although they may be included. */
   name: string
 }
@@ -1005,8 +994,6 @@ export type AdminEmojiRemoveResponse = {
 } & { [key: string]: unknown }
 
 export type AdminEmojiRenameRequest = {
-  /** Authentication token. Requires scope: `admin.teams:write` */
-  token: string
   /** The name of the emoji to be renamed. Colons (`:myemoji:`) around the value are not required, although they may be included. */
   name: string
   /** The new name of the emoji. */
@@ -1094,8 +1081,6 @@ export type AdminTeamsSettingsInfoResponse = {
 } & { [key: string]: unknown }
 
 export type AdminTeamsSettingsSetDefaultChannelsRequest = {
-  /** Authentication token. Requires scope: `admin.teams:write` */
-  token: string
   /** ID for the workspace to set the default channel for. */
   team_id: string
   /** An array of channel IDs. */
@@ -1132,8 +1117,6 @@ export type AdminTeamsSettingsSetDiscoverabilityResponse = {
 } & { [key: string]: unknown }
 
 export type AdminTeamsSettingsSetIconRequest = {
-  /** Authentication token. Requires scope: `admin.teams:write` */
-  token: string
   /** Image URL for the icon */
   image_url: string
   /** ID for the workspace to set the icon for. */
@@ -1377,12 +1360,12 @@ export type AppsPermissionsInfoResponse = {
     }
   }
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from apps.permissions.request method */
 export type AppsPermissionsRequestResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response apps.permissions.resources.list method */
 export type AppsPermissionsResourcesListResponse = {
@@ -1393,7 +1376,7 @@ export type AppsPermissionsResourcesListResponse = {
   }>
   response_metadata?: {
     next_cursor: string
-  }
+  } & { [key: string]: unknown }
 } & { [key: string]: unknown }
 
 /** Schema for successful response api.permissions.scopes.list method */
@@ -1423,13 +1406,13 @@ export type AppsPermissionsUsersRequestResponse = {
 /** Schema for successful response from apps.uninstall method */
 export type AppsUninstallResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from auth.revoke method */
 export type AuthRevokeResponse = {
   ok: DefsOkTrue
   revoked: boolean
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response auth.test method */
 export type AuthTestResponse = {
@@ -1441,7 +1424,7 @@ export type AuthTestResponse = {
   url: string
   user: string
   user_id: DefsUserId
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from bots.info method */
 export type BotsInfoResponse = {
@@ -1452,14 +1435,14 @@ export type BotsInfoResponse = {
       image_36: string
       image_48: string
       image_72: string
-    }
+    } & { [key: string]: unknown }
     id: DefsBotId
     name: string
     updated: number
     user_id?: DefsUserId
-  }
+  } & { [key: string]: unknown }
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type CallsAddRequest = {
   /** An ID supplied by the 3rd-party Call provider. It must be unique across all Calls from that service. */
@@ -1544,7 +1527,7 @@ export type CallsUpdateResponse = {
 
 export type ChatDeleteRequest = {
   /** Timestamp of the message to be deleted. */
-  ts?: number
+  ts?: string
   /** Channel containing the message to be deleted. */
   channel?: string
   /** Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope. */
@@ -1556,7 +1539,7 @@ export type ChatDeleteResponse = {
   channel: DefsChannel
   ok: DefsOkTrue
   ts: DefsTs
-}
+} & { [key: string]: unknown }
 
 export type ChatDeleteScheduledMessageRequest = {
   /** Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope. */
@@ -1570,14 +1553,14 @@ export type ChatDeleteScheduledMessageRequest = {
 /** Schema for successful response from chat.deleteScheduledMessage method */
 export type ChatDeleteScheduledMessageResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response chat.getPermalink */
 export type ChatGetPermalinkResponse = {
   channel: DefsChannel
   ok: DefsOkTrue
   permalink: string
-}
+} & { [key: string]: unknown }
 
 export type ChatMeMessageRequest = {
   /** Channel to send message to. Can be a public channel, private group or IM channel. Can be an encoded ID, or a name. */
@@ -1591,7 +1574,7 @@ export type ChatMeMessageResponse = {
   channel?: DefsChannel
   ok: DefsOkTrue
   ts?: DefsTs
-}
+} & { [key: string]: unknown }
 
 export type ChatPostEphemeralRequest = {
   /** Pass true to post the message as the authed user. Defaults to true if the chat:write:bot scope is not included. Otherwise, defaults to false. */
@@ -1624,7 +1607,7 @@ export type ChatPostEphemeralRequest = {
 export type ChatPostEphemeralResponse = {
   message_ts: DefsTs
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ChatPostMessageRequest = {
   /** Pass true to post the message as the authed user, instead of as a bot. Defaults to false. See [authorship](#authorship) below. */
@@ -1665,7 +1648,7 @@ export type ChatPostMessageResponse = {
   message: ObjsMessage
   ok: DefsOkTrue
   ts: DefsTs
-}
+} & { [key: string]: unknown }
 
 export type ChatScheduleMessageRequest = {
   /** Channel, private group, or DM channel to send message to. Can be an encoded ID, or a name. See [below](#channels) for more details. */
@@ -1689,7 +1672,7 @@ export type ChatScheduleMessageRequest = {
   /** Pass false to disable unfurling of media content. */
   unfurl_media?: boolean
   /** Provide another message's `ts` value to make this message a reply. Avoid using a reply's `ts` value; use its parent instead. */
-  thread_ts?: number
+  thread_ts?: string
   /** Used in conjunction with `thread_ts` and indicates whether reply should be made visible to everyone in the channel or conversation. Defaults to `false`. */
   reply_broadcast?: boolean
 }
@@ -1705,26 +1688,28 @@ export type ChatScheduleMessageResponse = {
     type: string
     user: DefsUserId
     username?: string
-  }
+  } & { [key: string]: unknown }
   ok: DefsOkTrue
   post_at: number
   scheduled_message_id: string
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from chat.scheduledMessages.list method */
 export type ChatScheduledMessagesListResponse = {
   ok: DefsOkTrue
   response_metadata: {
     next_cursor: string
-  }
-  scheduled_messages: Array<{
-    channel_id: DefsChannelId
-    date_created: number
-    id: string
-    post_at: number
-    text?: string
-  }>
-}
+  } & { [key: string]: unknown }
+  scheduled_messages: Array<
+    {
+      channel_id: DefsChannelId
+      date_created: number
+      id: string
+      post_at: number
+      text?: string
+    } & { [key: string]: unknown }
+  >
+} & { [key: string]: unknown }
 
 export type ChatUnfurlRequest = {
   /** Channel ID of the message */
@@ -1744,7 +1729,7 @@ export type ChatUnfurlRequest = {
 /** Schema for successful response from chat.unfurl method */
 export type ChatUnfurlResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ChatUpdateRequest = {
   /** Pass true to update the message as the authed user. [Bot users](/bot-users) in this context are considered authed users. */
@@ -1776,7 +1761,7 @@ export type ChatUpdateResponse = {
   ok: DefsOkTrue
   text: string
   ts: string
-}
+} & { [key: string]: unknown }
 
 export type ConversationsArchiveRequest = {
   /** ID of conversation to archive */
@@ -1786,7 +1771,7 @@ export type ConversationsArchiveRequest = {
 /** Schema for successful response conversations.archive method */
 export type ConversationsArchiveResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ConversationsCloseRequest = {
   /** Conversation to close. */
@@ -1798,7 +1783,7 @@ export type ConversationsCloseResponse = {
   already_closed?: boolean
   no_op?: boolean
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ConversationsCreateRequest = {
   /** Name of the public or private channel to create */
@@ -1811,7 +1796,7 @@ export type ConversationsCreateRequest = {
 export type ConversationsCreateResponse = {
   channel: ObjsConversation
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from conversations.history method */
 export type ConversationsHistoryResponse = {
@@ -1821,13 +1806,16 @@ export type ConversationsHistoryResponse = {
   messages: Array<ObjsMessage>
   ok: DefsOkTrue
   pin_count: number
-}
+  response_metadata?: {
+    next_cursor?: string
+  }
+} & { [key: string]: unknown }
 
 /** Schema for successful response conversations.info */
 export type ConversationsInfoResponse = {
   channel: ObjsConversation
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ConversationsInviteRequest = {
   /** The ID of the public or private channel to invite user(s) to. */
@@ -1840,7 +1828,7 @@ export type ConversationsInviteRequest = {
 export type ConversationsInviteResponse = {
   channel: ObjsConversation
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ConversationsJoinRequest = {
   /** ID of conversation to join */
@@ -1855,7 +1843,7 @@ export type ConversationsJoinResponse = {
     warnings?: Array<string>
   }
   warning?: string
-}
+} & { [key: string]: unknown }
 
 export type ConversationsKickRequest = {
   /** ID of conversation to remove user from. */
@@ -1867,7 +1855,7 @@ export type ConversationsKickRequest = {
 /** Schema for successful response conversations.kick method */
 export type ConversationsKickResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ConversationsLeaveRequest = {
   /** Conversation to leave */
@@ -1878,7 +1866,7 @@ export type ConversationsLeaveRequest = {
 export type ConversationsLeaveResponse = {
   not_in_channel?: true
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from conversations.list method */
 export type ConversationsListResponse = {
@@ -1886,20 +1874,20 @@ export type ConversationsListResponse = {
   ok: DefsOkTrue
   response_metadata?: {
     next_cursor: string
-  }
-}
+  } & { [key: string]: unknown }
+} & { [key: string]: unknown }
 
 export type ConversationsMarkRequest = {
   /** Channel or conversation to set the read cursor for. */
   channel?: string
   /** Unique identifier of message you want marked as most recently seen in this conversation. */
-  ts?: number
+  ts?: string
 }
 
 /** Schema for successful response conversations.mark method */
 export type ConversationsMarkResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response conversations.members method */
 export type ConversationsMembersResponse = {
@@ -1907,8 +1895,8 @@ export type ConversationsMembersResponse = {
   ok: DefsOkTrue
   response_metadata: {
     next_cursor: string
-  }
-}
+  } & { [key: string]: unknown }
+} & { [key: string]: unknown }
 
 export type ConversationsOpenRequest = {
   /** Resume a conversation by supplying an `im` or `mpim`'s ID. Or provide the `users` field instead. */
@@ -1924,7 +1912,7 @@ export type ConversationsOpenResponse = {
   already_open?: boolean
   channel: Array<
     | ObjsConversation
-    | {
+    | ({
         created?: string
         id: DefsDmId
         is_im?: boolean
@@ -1934,11 +1922,11 @@ export type ConversationsOpenResponse = {
         unread_count?: number
         unread_count_display?: number
         user?: DefsUserId
-      }
+      } & { [key: string]: unknown })
   >
   no_op?: boolean
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ConversationsRenameRequest = {
   /** ID of conversation to rename */
@@ -1951,14 +1939,14 @@ export type ConversationsRenameRequest = {
 export type ConversationsRenameResponse = {
   channel: ObjsConversation
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from conversations.replies method */
 export type ConversationsRepliesResponse = {
   has_more?: boolean
   messages: Array<
     Array<
-      | {
+      | ({
           last_read?: DefsTs
           latest_reply?: DefsTs
           reply_count: number
@@ -1975,8 +1963,8 @@ export type ConversationsRepliesResponse = {
           user: DefsUserId
           user_profile?: ObjsUserProfileShort
           user_team?: DefsTeam
-        }
-      | {
+        } & { [key: string]: unknown })
+      | ({
           is_starred?: boolean
           parent_user_id: DefsUserId
           source_team?: DefsTeam
@@ -1988,11 +1976,14 @@ export type ConversationsRepliesResponse = {
           user: DefsUserId
           user_profile?: ObjsUserProfileShort
           user_team?: DefsTeam
-        }
+        } & { [key: string]: unknown })
     >
   >
   ok: DefsOkTrue
-}
+  response_metadata?: {
+    next_cursor?: string
+  }
+} & { [key: string]: unknown }
 
 export type ConversationsSetPurposeRequest = {
   /** Conversation to set the purpose of */
@@ -2005,7 +1996,7 @@ export type ConversationsSetPurposeRequest = {
 export type ConversationsSetPurposeResponse = {
   channel: ObjsConversation
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ConversationsSetTopicRequest = {
   /** Conversation to set the topic of */
@@ -2018,7 +2009,7 @@ export type ConversationsSetTopicRequest = {
 export type ConversationsSetTopicResponse = {
   channel: ObjsConversation
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ConversationsUnarchiveRequest = {
   /** ID of conversation to unarchive */
@@ -2028,17 +2019,17 @@ export type ConversationsUnarchiveRequest = {
 /** Schema for successful response from conversations.unarchive method */
 export type ConversationsUnarchiveResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from dialog.open method */
 export type DialogOpenResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from dnd.endDnd method */
 export type DndEndDndResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from dnd.endSnooze method */
 export type DndEndSnoozeResponse = {
@@ -2047,7 +2038,7 @@ export type DndEndSnoozeResponse = {
   next_dnd_start_ts: number
   ok: DefsOkTrue
   snooze_enabled: boolean
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from dnd.info method */
 export type DndInfoResponse = {
@@ -2058,11 +2049,9 @@ export type DndInfoResponse = {
   snooze_enabled?: boolean
   snooze_endtime?: number
   snooze_remaining?: number
-}
+} & { [key: string]: unknown }
 
 export type DndSetSnoozeRequest = {
-  /** Authentication token. Requires scope: `dnd:write` */
-  token: string
   /** Number of minutes, from now, to snooze until. */
   num_minutes: string
 }
@@ -2073,7 +2062,7 @@ export type DndSetSnoozeResponse = {
   snooze_enabled: boolean
   snooze_endtime: number
   snooze_remaining: number
-}
+} & { [key: string]: unknown }
 
 /** This method either only returns a brief _OK_ response or a verbose schema is not available for this method. */
 export type DndTeamInfoResponse = {
@@ -2095,7 +2084,7 @@ export type FilesCommentsDeleteRequest = {
 /** Schema for successful response files.comments.delete method */
 export type FilesCommentsDeleteResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type FilesDeleteRequest = {
   /** ID of file to delete. */
@@ -2105,7 +2094,7 @@ export type FilesDeleteRequest = {
 /** Schema for successful response files.delete method */
 export type FilesDeleteResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from files.info method */
 export type FilesInfoResponse = {
@@ -2116,18 +2105,16 @@ export type FilesInfoResponse = {
   ok: DefsOkTrue
   paging?: ObjsPaging
   response_metadata?: ObjsResponseMetadata
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from files.list method */
 export type FilesListResponse = {
   files: Array<ObjsFile>
   ok: DefsOkTrue
   paging: ObjsPaging
-}
+} & { [key: string]: unknown }
 
 export type FilesRemoteAddRequest = {
-  /** Authentication token. Requires scope: `remote_files:write` */
-  token?: string
   /** Creator defined GUID for the file. */
   external_id?: string
   /** Title of the file being shared. */
@@ -2158,8 +2145,6 @@ export type FilesRemoteListResponse = {
 } & { [key: string]: unknown }
 
 export type FilesRemoteRemoveRequest = {
-  /** Authentication token. Requires scope: `remote_files:write` */
-  token?: string
   /** Specify a file by providing its ID. */
   file?: string
   /** Creator defined GUID for the file. */
@@ -2177,8 +2162,6 @@ export type FilesRemoteShareResponse = {
 } & { [key: string]: unknown }
 
 export type FilesRemoteUpdateRequest = {
-  /** Authentication token. Requires scope: `remote_files:write` */
-  token?: string
   /** Specify a file by providing its ID. */
   file?: string
   /** Creator defined GUID for the file. */
@@ -2209,7 +2192,7 @@ export type FilesRevokePublicURLRequest = {
 export type FilesRevokePublicURLResponse = {
   file: ObjsFile
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type FilesSharedPublicURLRequest = {
   /** File to share */
@@ -2220,11 +2203,9 @@ export type FilesSharedPublicURLRequest = {
 export type FilesSharedPublicURLResponse = {
   file: ObjsFile
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type FilesUploadRequest = {
-  /** Authentication token. Requires scope: `files:write:user` */
-  token?: string
   /** File contents via `multipart/form-data`. If omitting this parameter, you must submit `content`. */
   file?: string
   /** File contents via a POST variable. If omitting this parameter, you must provide a `file`. */
@@ -2240,14 +2221,14 @@ export type FilesUploadRequest = {
   /** Comma-separated list of channel names or IDs where the file will be shared. */
   channels?: string
   /** Provide another message's `ts` value to upload this file as a reply. Never use a reply's `ts` value; use its parent instead. */
-  thread_ts?: number
+  thread_ts?: string
 }
 
 /** Schema for successful response files.upload method */
 export type FilesUploadResponse = {
   file: ObjsFile
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from migration.exchange method */
 export type MigrationExchangeResponse = {
@@ -2261,16 +2242,19 @@ export type MigrationExchangeResponse = {
 /** This method either only returns a brief _OK_ response or a verbose schema is not available for this method. */
 export type OauthAccessResponse = {
   ok: DefsOkTrue
+  access_token?: string
 } & { [key: string]: unknown }
 
 /** This method either only returns a brief _OK_ response or a verbose schema is not available for this method. */
 export type OauthTokenResponse = {
   ok: DefsOkTrue
+  access_token?: string
 } & { [key: string]: unknown }
 
 /** This method either only returns a brief _OK_ response or a verbose schema is not available for this method. */
 export type OauthV2AccessResponse = {
   ok: DefsOkTrue
+  access_token?: string
 } & { [key: string]: unknown }
 
 export type PinsAddRequest = {
@@ -2283,32 +2267,32 @@ export type PinsAddRequest = {
 /** Schema for successful response from pins.add method */
 export type PinsAddResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from pins.list method */
 export type PinsListResponse = Array<
-  | {
+  | ({
       items: Array<
-        | {
+        | ({
             created?: number
             created_by?: DefsUserId
             file?: ObjsFile
             type?: "file"
-          }
-        | {
+          } & { [key: string]: unknown })
+        | ({
             channel?: DefsChannel
             created?: number
             created_by?: DefsUserId
             message?: ObjsMessage
             type?: "message"
-          }
+          } & { [key: string]: unknown })
       >
       ok: DefsOkTrue
-    }
-  | {
+    } & { [key: string]: unknown })
+  | ({
       count: number
       ok: DefsOkTrue
-    }
+    } & { [key: string]: unknown })
 >
 
 export type PinsRemoveRequest = {
@@ -2321,7 +2305,7 @@ export type PinsRemoveRequest = {
 /** Schema for successful response from pins.remove method */
 export type PinsRemoveResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type ReactionsAddRequest = {
   /** Channel where the message to add reaction to was posted. */
@@ -2335,7 +2319,7 @@ export type ReactionsAddRequest = {
 /** Schema for successful response from reactions.add method */
 export type ReactionsAddResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from reactions.get method */
 export type ReactionsGetResponse = Record<string, unknown>
@@ -2344,26 +2328,26 @@ export type ReactionsGetResponse = Record<string, unknown>
 export type ReactionsListResponse = {
   items: Array<
     Array<
-      | {
+      | ({
           channel: DefsChannel
           message: ObjsMessage
           type: "message"
-        }
-      | {
+        } & { [key: string]: unknown })
+      | ({
           file: ObjsFile
           type: "file"
-        }
-      | {
+        } & { [key: string]: unknown })
+      | ({
           comment: ObjsComment
           file: ObjsFile
           type: "file_comment"
-        }
+        } & { [key: string]: unknown })
     >
   >
   ok: DefsOkTrue
   paging?: ObjsPaging
   response_metadata?: ObjsResponseMetadata
-}
+} & { [key: string]: unknown }
 
 export type ReactionsRemoveRequest = {
   /** Reaction (emoji) name. */
@@ -2381,7 +2365,7 @@ export type ReactionsRemoveRequest = {
 /** Schema for successful response from reactions.remove method */
 export type ReactionsRemoveResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type RemindersAddRequest = {
   /** The content of the reminder */
@@ -2396,7 +2380,7 @@ export type RemindersAddRequest = {
 export type RemindersAddResponse = {
   ok: DefsOkTrue
   reminder: ObjsReminder
-}
+} & { [key: string]: unknown }
 
 export type RemindersCompleteRequest = {
   /** The ID of the reminder to be marked as complete */
@@ -2406,7 +2390,7 @@ export type RemindersCompleteRequest = {
 /** Schema for successful response from reminders.complete method */
 export type RemindersCompleteResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type RemindersDeleteRequest = {
   /** The ID of the reminder */
@@ -2416,19 +2400,19 @@ export type RemindersDeleteRequest = {
 /** Schema for successful response from reminders.delete method */
 export type RemindersDeleteResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from reminders.info method */
 export type RemindersInfoResponse = {
   ok: DefsOkTrue
   reminder: ObjsReminder
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from reminders.list method */
 export type RemindersListResponse = {
   ok: DefsOkTrue
   reminders: Array<ObjsReminder>
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from rtm.connect method */
 export type RtmConnectResponse = {
@@ -2436,14 +2420,14 @@ export type RtmConnectResponse = {
   self: {
     id: DefsUserId
     name: string
-  }
+  } & { [key: string]: unknown }
   team: {
     domain: string
     id: DefsTeam
     name: string
-  }
+  } & { [key: string]: unknown }
   url: string
-}
+} & { [key: string]: unknown }
 
 /** This method either only returns a brief _OK_ response or a verbose schema is not available for this method. */
 export type SearchMessagesResponse = {
@@ -2464,49 +2448,52 @@ export type StarsAddRequest = {
 /** Schema for successful response from stars.add method */
 export type StarsAddResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from stars.list method */
 export type StarsListResponse = {
   items: Array<
     Array<
-      | {
+      | ({
           channel: DefsChannel
           date_create: number
           message: ObjsMessage
           type: "message"
-        }
-      | {
+        } & { [key: string]: unknown })
+      | ({
           date_create: number
           file: ObjsFile
           type: "file"
-        }
-      | {
+        } & { [key: string]: unknown })
+      | ({
           comment: ObjsComment
           date_create: number
           file: ObjsFile
           type: "file_comment"
-        }
-      | {
+        } & { [key: string]: unknown })
+      | ({
           channel: DefsChannel
           date_create: number
           type: "channel"
-        }
-      | {
+        } & { [key: string]: unknown })
+      | ({
           channel: DefsDmId
           date_create: number
           type: "im"
-        }
-      | {
+        } & { [key: string]: unknown })
+      | ({
           channel: DefsGroupId
           date_create: number
           type: "group"
-        }
+        } & { [key: string]: unknown })
     >
   >
   ok: DefsOkTrue
   paging?: ObjsPaging
-}
+  response_metadata?: {
+    next_cursor?: string
+  }
+} & { [key: string]: unknown }
 
 export type StarsRemoveRequest = {
   /** Channel to remove star from, or channel where the message to remove star from was posted (used with `timestamp`). */
@@ -2522,25 +2509,27 @@ export type StarsRemoveRequest = {
 /** Schema for successful response from stars.remove method */
 export type StarsRemoveResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from team.accessLogs method */
 export type TeamAccessLogsResponse = {
-  logins: Array<{
-    count: number
-    country: string | null
-    date_first: number
-    date_last: number
-    ip: string | null
-    isp: string | null
-    region: string | null
-    user_agent: string
-    user_id: DefsUserId
-    username: string
-  }>
+  logins: Array<
+    {
+      count: number
+      country: string | null
+      date_first: number
+      date_last: number
+      ip: string | null
+      isp: string | null
+      region: string | null
+      user_agent: string
+      user_id: DefsUserId
+      username: string
+    } & { [key: string]: unknown }
+  >
   ok: DefsOkTrue
   paging: ObjsPaging
-}
+} & { [key: string]: unknown }
 
 /** This method either only returns a brief _OK_ response or a verbose schema is not available for this method. */
 export type TeamBillableInfoResponse = {
@@ -2551,34 +2540,36 @@ export type TeamBillableInfoResponse = {
 export type TeamInfoResponse = {
   ok: DefsOkTrue
   team: ObjsTeam
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from team.integrationLogs method */
 export type TeamIntegrationLogsResponse = {
-  logs: Array<{
-    admin_app_id?: DefsAppId
-    app_id: DefsAppId
-    app_type: string
-    change_type: string
-    channel?: DefsChannel
-    date: string
-    scope: string
-    service_id?: string
-    service_type?: string
-    user_id: DefsUserId
-    user_name: string
-  }>
+  logs: Array<
+    {
+      admin_app_id?: DefsAppId
+      app_id: DefsAppId
+      app_type: string
+      change_type: string
+      channel?: DefsChannel
+      date: string
+      scope: string
+      service_id?: string
+      service_type?: string
+      user_id: DefsUserId
+      user_name: string
+    } & { [key: string]: unknown }
+  >
   ok: DefsOkTrue
   paging: ObjsPaging
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from team.profile.get method */
 export type TeamProfileGetResponse = {
   ok: DefsOkTrue
   profile: {
     fields: Array<ObjsTeamProfileField>
-  }
-}
+  } & { [key: string]: unknown }
+} & { [key: string]: unknown }
 
 export type UsergroupsCreateRequest = {
   /** A comma separated string of encoded channel IDs for which the User Group uses as a default. */
@@ -2597,7 +2588,7 @@ export type UsergroupsCreateRequest = {
 export type UsergroupsCreateResponse = {
   ok: DefsOkTrue
   usergroup: ObjsSubteam
-}
+} & { [key: string]: unknown }
 
 export type UsergroupsDisableRequest = {
   /** Include the number of users in the User Group. */
@@ -2610,7 +2601,7 @@ export type UsergroupsDisableRequest = {
 export type UsergroupsDisableResponse = {
   ok: DefsOkTrue
   usergroup: ObjsSubteam
-}
+} & { [key: string]: unknown }
 
 export type UsergroupsEnableRequest = {
   /** Include the number of users in the User Group. */
@@ -2623,13 +2614,13 @@ export type UsergroupsEnableRequest = {
 export type UsergroupsEnableResponse = {
   ok: DefsOkTrue
   usergroup: ObjsSubteam
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from usergroups.list method */
 export type UsergroupsListResponse = {
   ok: DefsOkTrue
   usergroups: Array<ObjsSubteam>
-}
+} & { [key: string]: unknown }
 
 export type UsergroupsUpdateRequest = {
   /** A mention handle. Must be unique among channels, users and User Groups. */
@@ -2650,13 +2641,13 @@ export type UsergroupsUpdateRequest = {
 export type UsergroupsUpdateResponse = {
   ok: DefsOkTrue
   usergroup: ObjsSubteam
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from usergroups.users.list method */
 export type UsergroupsUsersListResponse = {
   ok: DefsOkTrue
   users: Array<DefsUserId>
-}
+} & { [key: string]: unknown }
 
 export type UsergroupsUsersUpdateRequest = {
   /** Include the number of users in the User Group. */
@@ -2671,7 +2662,7 @@ export type UsergroupsUsersUpdateRequest = {
 export type UsergroupsUsersUpdateResponse = {
   ok: DefsOkTrue
   usergroup: ObjsSubteam
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from users.conversations method. Returned conversation objects do not include `num_members` or `is_member` */
 export type UsersConversationsResponse = {
@@ -2679,18 +2670,15 @@ export type UsersConversationsResponse = {
   ok: DefsOkTrue
   response_metadata?: {
     next_cursor: string
-  }
+  } & { [key: string]: unknown }
 } & { [key: string]: unknown }
 
-export type UsersDeletePhotoRequest = {
-  /** Authentication token. Requires scope: `users.profile:write` */
-  token: string
-}
+export type UsersDeletePhotoRequest = Record<string, unknown>
 
 /** Schema for successful response from users.deletePhoto method */
 export type UsersDeletePhotoResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** Generated from users.getPresence with shasum e7251aec575d8863f9e0eb38663ae9dc26655f65 */
 export type UsersGetPresenceResponse = {
@@ -2705,32 +2693,32 @@ export type UsersGetPresenceResponse = {
 
 /** Schema for successful response from users.identity method */
 export type UsersIdentityResponse = Array<
-  | {
+  | ({
       ok: DefsOkTrue
       team: {
         id: DefsTeam
-      }
+      } & { [key: string]: unknown }
       user: {
         id: DefsUserId
         name: string
-      }
-    }
-  | {
+      } & { [key: string]: unknown }
+    } & { [key: string]: unknown })
+  | ({
       ok: DefsOkTrue
       team: {
         id: DefsTeam
-      }
+      } & { [key: string]: unknown }
       user: {
         email: string
         id: DefsUserId
         name: string
-      }
-    }
-  | {
+      } & { [key: string]: unknown }
+    } & { [key: string]: unknown })
+  | ({
       ok: DefsOkTrue
       team: {
         id: DefsTeam
-      }
+      } & { [key: string]: unknown }
       user: {
         id: DefsUserId
         image_192: string
@@ -2740,9 +2728,9 @@ export type UsersIdentityResponse = Array<
         image_512: string
         image_72: string
         name: string
-      }
-    }
-  | {
+      } & { [key: string]: unknown }
+    } & { [key: string]: unknown })
+  | ({
       ok: DefsOkTrue
       team: {
         domain: string
@@ -2756,12 +2744,12 @@ export type UsersIdentityResponse = Array<
         image_88: string
         image_default: boolean
         name: string
-      }
+      } & { [key: string]: unknown }
       user: {
         id: DefsUserId
         name: string
-      }
-    }
+      } & { [key: string]: unknown }
+    } & { [key: string]: unknown })
 >
 
 /** Schema for successful response from users.info method */
@@ -2776,7 +2764,7 @@ export type UsersListResponse = {
   members: Array<ObjsUser>
   ok: DefsOkTrue
   response_metadata?: ObjsResponseMetadata
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from users.lookupByEmail method */
 export type UsersLookupByEmailResponse = {
@@ -2788,7 +2776,7 @@ export type UsersLookupByEmailResponse = {
 export type UsersProfileGetResponse = {
   ok: DefsOkTrue
   profile: ObjsUserProfile
-}
+} & { [key: string]: unknown }
 
 export type UsersProfileSetRequest = {
   /** Name of a single key to set. Usable only if `profile` is not passed. */
@@ -2807,16 +2795,14 @@ export type UsersProfileSetResponse = {
   ok: DefsOkTrue
   profile: ObjsUserProfile
   username: string
-}
+} & { [key: string]: unknown }
 
 /** Schema for successful response from users.setActive method */
 export type UsersSetActiveResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 export type UsersSetPhotoRequest = {
-  /** Authentication token. Requires scope: `users.profile:write` */
-  token: string
   /** Width/height of crop box (always square) */
   crop_w?: string
   /** X coordinate of top-left corner of crop box */
@@ -2840,8 +2826,8 @@ export type UsersSetPhotoResponse = {
     image_512: string
     image_72: string
     image_original: string
-  }
-}
+  } & { [key: string]: unknown }
+} & { [key: string]: unknown }
 
 export type UsersSetPresenceRequest = {
   /** Either `auto` or `away` */
@@ -2851,7 +2837,7 @@ export type UsersSetPresenceRequest = {
 /** Schema for successful response from users.setPresence method */
 export type UsersSetPresenceResponse = {
   ok: DefsOkTrue
-}
+} & { [key: string]: unknown }
 
 /** This method either only returns a brief _OK_ response or a verbose schema is not available for this method. */
 export type ViewsOpenResponse = {

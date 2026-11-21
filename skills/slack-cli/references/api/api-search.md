@@ -1,16 +1,14 @@
 <!-- Generated from the API manifest and the command tree by pnpm generate. Do not edit. -->
 
-# Slack Web API: search
+# Slack API: search
 
-## `slack api search-messages-list [options]`
+## `slack api search-messages [options]`
 
 - What: search\_messages — read (GET /search.messages)
 - Call: `GET /search.messages`, effect: read
-- Sign-in: slackAuth (search:read)
 
 | Flag | Required | What |
 |---|---|---|
-| `--token <value>` | yes | Authentication token. Requires scope: \`search:read\` |
 | `--count <value>` | no | Pass the number of results you want per "page". Maximum of \`100\`. |
 | `--highlight <value>` | no | Pass a value of \`true\` to enable query highlight markers (see below). |
 | `--page <value>` | no | page |

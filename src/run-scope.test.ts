@@ -1,4 +1,5 @@
 import { Readable } from "node:stream"
+import { apiCommandPath } from "@wirecat/cli-base/codegen"
 import { neverAnswers, runScopeCases } from "@wirecat/cli-core/testing"
 import { describe, it } from "vitest"
 import { API } from "./config.js"
@@ -23,7 +24,7 @@ describe("each remote command runs inside cli-core's run", () => {
     skip: {
       ...Object.fromEntries(
         API.manifest.operations.map((operation) => [
-          `api ${operation.command}`,
+          `api ${apiCommandPath(operation).join(" ")}`,
           "cli-core's serviceApiCommand runs it in its run; src/api.test.ts sends each one",
         ]),
       ),

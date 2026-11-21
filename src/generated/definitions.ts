@@ -84,6 +84,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     type: "object",
     properties: {},
     required: [],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   DefsReminderId: {
     type: "string",
@@ -137,6 +140,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["image_36", "image_48", "image_72"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       id: {
         type: "ref",
@@ -154,6 +160,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["id", "deleted", "name", "updated", "app_id", "icons", "team_id"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsChannel: {
     type: "object",
@@ -281,6 +290,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["value", "creator", "last_set"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       topic: {
         type: "object",
@@ -297,6 +309,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["value", "creator", "last_set"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       unlinked: {
         type: "integer",
@@ -323,6 +338,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       "topic",
       "purpose",
     ],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsComment: {
     type: "object",
@@ -373,6 +391,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["id", "created", "timestamp", "user", "is_intro", "comment"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsComments: {
     type: "array",
@@ -423,6 +444,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["display_counts", "guest_counts"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             enterprise_id: {
               type: "ref",
@@ -597,6 +621,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["value", "creator", "last_set"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             shared_team_ids: {
               type: "array",
@@ -629,6 +656,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["team", "user", "is_active"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               minItems: 0,
               uniqueItems: true,
@@ -651,6 +681,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["value", "creator", "last_set"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             unlinked: {
               type: "integer",
@@ -690,6 +723,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             "topic",
             "purpose",
           ],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
         {
           type: "object",
@@ -729,6 +765,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["display_counts", "guest_counts"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             id: {
               type: "ref",
@@ -887,6 +926,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["value", "creator", "last_set"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             shared_team_ids: {
               type: "array",
@@ -919,6 +961,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["team", "user", "is_active"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               minItems: 0,
               uniqueItems: true,
@@ -941,6 +986,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["value", "creator", "last_set"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             unlinked: {
               type: "integer",
@@ -977,6 +1025,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             "topic",
             "purpose",
           ],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
         {
           type: "object",
@@ -1068,6 +1119,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["id", "name", "team", "date_create", "is_active"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               minItems: 0,
               uniqueItems: true,
@@ -1087,6 +1141,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             },
           },
           required: ["id", "created", "is_im", "is_org_shared", "user", "priority"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
       ],
     },
@@ -1122,6 +1179,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["id", "enterprise_id", "enterprise_name", "is_admin", "is_owner", "teams"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsExternalOrgMigrations: {
     type: "object",
@@ -1292,14 +1352,23 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             type: "object",
             properties: {},
             required: [],
+            additionalProperties: {
+              type: "unknown",
+            },
           },
           public: {
             type: "object",
             properties: {},
             required: [],
+            additionalProperties: {
+              type: "unknown",
+            },
           },
         },
         required: [],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       size: {
         type: "integer",
@@ -1404,6 +1473,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: [],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsIcon: {
     type: "object",
@@ -1463,8 +1535,11 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             },
           },
           required: ["id"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
-        minItems: 1,
+        minItems: 0,
         uniqueItems: true,
       },
       blocks: {
@@ -1503,7 +1578,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           type: "ref",
           ref: "objs_file",
         },
-        minItems: 1,
+        minItems: 0,
         uniqueItems: true,
       },
       icons: {
@@ -1517,6 +1592,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: [],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       inviter: {
         type: "ref",
@@ -1578,7 +1656,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           type: "ref",
           ref: "defs_user_id",
         },
-        minItems: 1,
+        minItems: 0,
         uniqueItems: true,
       },
       reply_users_count: {
@@ -1638,6 +1716,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["text", "type", "ts"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsPaging: {
     type: "object",
@@ -1662,6 +1743,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["page", "total"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsPrimaryOwner: {
     type: "object",
@@ -1726,6 +1810,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["id", "creator", "user", "text", "recurring"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsResources: {
     type: "object",
@@ -1773,64 +1860,30 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ids"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsResponseMetadata: {
-    type: "array",
-    items: {
-      type: "union",
-      of: [
-        {
-          type: "object",
-          properties: {
-            next_cursor: {
-              type: "string",
-            },
-          },
-          required: ["next_cursor"],
+    type: "object",
+    properties: {
+      next_cursor: {
+        type: "string",
+      },
+      messages: {
+        type: "array",
+        items: {
+          type: "string",
         },
-        {
-          type: "object",
-          properties: {
-            messages: {
-              type: "array",
-              items: {
-                type: "string",
-              },
-            },
-            warnings: {
-              type: "array",
-              items: {
-                type: "string",
-                enum: ["method_deprecated"],
-              },
-            },
-          },
-          required: ["messages", "warnings"],
+      },
+      warnings: {
+        type: "array",
+        items: {
+          type: "string",
         },
-        {
-          type: "object",
-          properties: {
-            messages: {
-              type: "array",
-              items: {
-                type: "string",
-              },
-            },
-            next_cursor: {
-              type: "string",
-            },
-            warnings: {
-              type: "array",
-              items: {
-                type: "string",
-                enum: ["method_deprecated"],
-              },
-            },
-          },
-          required: ["messages", "warnings", "next_cursor"],
-        },
-      ],
+      },
     },
+    required: [],
   },
   ObjsScopes: {
     type: "array",
@@ -1920,6 +1973,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["channels", "groups"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       team_id: {
         type: "ref",
@@ -1960,6 +2016,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       "deleted_by",
       "prefs",
     ],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsTeam: {
     type: "object",
@@ -2077,6 +2136,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["id", "name", "domain", "email_domain", "icon"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsTeamProfileField: {
     type: "object",
@@ -2122,6 +2184,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["id", "ordering", "label", "hint", "type"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsTeamProfileFieldOption: {
     type: "object",
@@ -2144,6 +2209,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: [],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsUser: {
     type: "array",
@@ -2238,11 +2306,14 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                     type: "ref",
                     ref: "objs_team_profile_field",
                   },
-                  minItems: 1,
+                  minItems: 0,
                   uniqueItems: true,
                 },
               },
               required: ["fields"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             two_factor_type: {
               type: "string",
@@ -2265,6 +2336,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             },
           },
           required: ["id", "name", "profile", "is_bot", "updated", "is_app_user"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
         {
           description: "enterprise user",
@@ -2348,11 +2422,14 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                     type: "ref",
                     ref: "objs_team_profile_field",
                   },
-                  minItems: 1,
+                  minItems: 0,
                   uniqueItems: true,
                 },
               },
               required: ["fields"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             teams: {
               type: "array",
@@ -2360,7 +2437,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 type: "ref",
                 ref: "defs_workspace_id",
               },
-              minItems: 1,
+              minItems: 0,
               uniqueItems: true,
             },
             two_factor_type: {
@@ -2384,6 +2461,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             },
           },
           required: ["id", "name", "profile", "is_bot", "updated", "is_app_user"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
       ],
     },
@@ -2575,6 +2655,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       "status_emoji",
       "fields",
     ],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ObjsUserProfileShort: {
     type: "object",
@@ -2626,6 +2709,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       "is_restricted",
       "is_ultra_restricted",
     ],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminAppsApproveRequest: {
     type: "object",
@@ -2756,6 +2842,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsConvertToPrivateRequest: {
     type: "object",
@@ -2777,6 +2866,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsCreateRequest: {
     type: "object",
@@ -2820,6 +2912,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsDeleteRequest: {
     type: "object",
@@ -2841,6 +2936,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsDisconnectSharedRequest: {
     type: "object",
@@ -2866,6 +2964,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsEkmListOriginalConnectedChannelInfoResponse: {
     description:
@@ -2934,6 +3035,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsGetTeamsResponse: {
     description: "Schema for successful response of admin.conversations.getTeams",
@@ -2951,6 +3055,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["next_cursor"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       team_ids: {
         type: "array",
@@ -2961,6 +3068,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "team_ids"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsInviteRequest: {
     type: "object",
@@ -2986,6 +3096,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsRenameRequest: {
     type: "object",
@@ -3010,14 +3123,13 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsRestrictAccessAddGroupRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-        type: "string",
-      },
       team_id: {
         description:
           "The workspace where the channel exists. This argument is required for channels only tied to one workspace, and optional for channels that are shared across an organization.",
@@ -3033,7 +3145,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
     },
-    required: ["token", "group_id", "channel_id"],
+    required: ["group_id", "channel_id"],
   },
   AdminConversationsRestrictAccessAddGroupResponse: {
     description:
@@ -3068,10 +3180,6 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   AdminConversationsRestrictAccessRemoveGroupRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-        type: "string",
-      },
       team_id: {
         description:
           "The workspace where the channel exists. This argument is required for channels only tied to one workspace, and optional for channels that are shared across an organization.",
@@ -3087,7 +3195,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
     },
-    required: ["token", "team_id", "group_id", "channel_id"],
+    required: ["team_id", "group_id", "channel_id"],
   },
   AdminConversationsRestrictAccessRemoveGroupResponse: {
     description:
@@ -3120,6 +3228,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["channels", "next_cursor"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsSetConversationPrefsRequest: {
     type: "object",
@@ -3145,6 +3256,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminConversationsSetTeamsRequest: {
     type: "object",
@@ -3205,14 +3319,13 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AdminEmojiAddRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-        type: "string",
-      },
       name: {
         description:
           "The name of the emoji to be removed. Colons (`:myemoji:`) around the value are not required, although they may be included.",
@@ -3224,7 +3337,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
     },
-    required: ["token", "name", "url"],
+    required: ["name", "url"],
   },
   AdminEmojiAddResponse: {
     description:
@@ -3244,10 +3357,6 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   AdminEmojiAddAliasRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-        type: "string",
-      },
       name: {
         description:
           "The name of the emoji to be aliased. Colons (`:myemoji:`) around the value are not required, although they may be included.",
@@ -3258,7 +3367,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
     },
-    required: ["token", "name", "alias_for"],
+    required: ["name", "alias_for"],
   },
   AdminEmojiAddAliasResponse: {
     description:
@@ -3293,17 +3402,13 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   AdminEmojiRemoveRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-        type: "string",
-      },
       name: {
         description:
           "The name of the emoji to be removed. Colons (`:myemoji:`) around the value are not required, although they may be included.",
         type: "string",
       },
     },
-    required: ["token", "name"],
+    required: ["name"],
   },
   AdminEmojiRemoveResponse: {
     description:
@@ -3323,10 +3428,6 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   AdminEmojiRenameRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-        type: "string",
-      },
       name: {
         description:
           "The name of the emoji to be renamed. Colons (`:myemoji:`) around the value are not required, although they may be included.",
@@ -3337,7 +3438,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
     },
-    required: ["token", "name", "new_name"],
+    required: ["name", "new_name"],
   },
   AdminEmojiRenameResponse: {
     description:
@@ -3558,10 +3659,6 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   AdminTeamsSettingsSetDefaultChannelsRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-        type: "string",
-      },
       team_id: {
         description: "ID for the workspace to set the default channel for.",
         type: "string",
@@ -3571,7 +3668,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
     },
-    required: ["token", "team_id", "channel_ids"],
+    required: ["team_id", "channel_ids"],
   },
   AdminTeamsSettingsSetDefaultChannelsResponse: {
     description:
@@ -3650,10 +3747,6 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   AdminTeamsSettingsSetIconRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-        type: "string",
-      },
       image_url: {
         description: "Image URL for the icon",
         type: "string",
@@ -3663,7 +3756,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
     },
-    required: ["token", "image_url", "team_id"],
+    required: ["image_url", "team_id"],
   },
   AdminTeamsSettingsSetIconResponse: {
     description:
@@ -4275,6 +4368,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "info"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AppsPermissionsRequestResponse: {
     description: "Schema for successful response from apps.permissions.request method",
@@ -4286,6 +4382,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AppsPermissionsResourcesListResponse: {
     description: "Schema for successful response apps.permissions.resources.list method",
@@ -4318,6 +4417,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["next_cursor"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
     },
     required: ["ok", "resources"],
@@ -4416,6 +4518,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AuthRevokeResponse: {
     description: "Schema for successful response from auth.revoke method",
@@ -4430,6 +4535,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "revoked"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   AuthTestResponse: {
     description: "Schema for successful response auth.test method",
@@ -4465,6 +4573,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "url", "team", "user", "team_id", "user_id"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   BotsInfoResponse: {
     description: "Schema for successful response from bots.info method",
@@ -4494,6 +4605,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
               },
             },
             required: ["image_36", "image_48", "image_72"],
+            additionalProperties: {
+              type: "unknown",
+            },
           },
           id: {
             type: "ref",
@@ -4511,6 +4625,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["id", "deleted", "name", "updated", "app_id", "icons"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       ok: {
         type: "ref",
@@ -4518,6 +4635,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "bot"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   CallsAddRequest: {
     type: "object",
@@ -4724,7 +4844,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     properties: {
       ts: {
         description: "Timestamp of the message to be deleted.",
-        type: "number",
+        type: "string",
       },
       channel: {
         description: "Channel containing the message to be deleted.",
@@ -4756,6 +4876,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel", "ts"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatDeleteScheduledMessageRequest: {
     type: "object",
@@ -4786,6 +4909,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatGetPermalinkResponse: {
     description: "Schema for successful response chat.getPermalink",
@@ -4804,6 +4930,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel", "permalink"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatMeMessageRequest: {
     type: "object",
@@ -4838,6 +4967,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatPostEphemeralRequest: {
     type: "object",
@@ -4914,6 +5046,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "message_ts"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatPostMessageRequest: {
     type: "object",
@@ -5011,6 +5146,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel", "ts", "message"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatScheduleMessageRequest: {
     type: "object",
@@ -5062,7 +5200,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       thread_ts: {
         description:
           "Provide another message's `ts` value to make this message a reply. Avoid using a reply's `ts` value; use its parent instead.",
-        type: "number",
+        type: "string",
       },
       reply_broadcast: {
         description:
@@ -5110,6 +5248,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["type", "text", "bot_id", "user", "team"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       ok: {
         type: "ref",
@@ -5124,6 +5265,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel", "post_at", "scheduled_message_id", "message"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatScheduledMessagesListResponse: {
     description: "Schema for successful response from chat.scheduledMessages.list method",
@@ -5141,6 +5285,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["next_cursor"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       scheduled_messages: {
         type: "array",
@@ -5166,10 +5313,16 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             },
           },
           required: ["id", "channel_id", "post_at", "date_created"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
       },
     },
     required: ["ok", "scheduled_messages", "response_metadata"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatUnfurlRequest: {
     type: "object",
@@ -5215,6 +5368,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ChatUpdateRequest: {
     type: "object",
@@ -5301,6 +5457,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel", "ts", "text", "message"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsArchiveRequest: {
     type: "object",
@@ -5322,6 +5481,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsCloseRequest: {
     type: "object",
@@ -5349,6 +5511,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsCreateRequest: {
     type: "object",
@@ -5378,6 +5543,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsHistoryResponse: {
     description: "Schema for successful response from conversations.history method",
@@ -5402,7 +5570,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           type: "ref",
           ref: "objs_message",
         },
-        minItems: 1,
+        minItems: 0,
         uniqueItems: true,
       },
       ok: {
@@ -5412,8 +5580,20 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       pin_count: {
         type: "integer",
       },
+      response_metadata: {
+        type: "object",
+        properties: {
+          next_cursor: {
+            type: "string",
+          },
+        },
+        required: [],
+      },
     },
     required: ["ok", "messages", "has_more", "pin_count", "channel_actions_ts", "channel_actions_count"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsInfoResponse: {
     description: "Schema for successful response conversations.info",
@@ -5429,6 +5609,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsInviteRequest: {
     type: "object",
@@ -5458,6 +5641,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsJoinRequest: {
     type: "object",
@@ -5489,7 +5675,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             items: {
               type: "string",
             },
-            minItems: 1,
+            minItems: 0,
             uniqueItems: true,
           },
         },
@@ -5500,6 +5686,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsKickRequest: {
     type: "object",
@@ -5525,6 +5714,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsLeaveRequest: {
     type: "object",
@@ -5550,6 +5742,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsListResponse: {
     description: "Schema for successful response from conversations.list method",
@@ -5575,9 +5770,15 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["next_cursor"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
     },
     required: ["ok", "channels"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsMarkRequest: {
     type: "object",
@@ -5588,7 +5789,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       ts: {
         description: "Unique identifier of message you want marked as most recently seen in this conversation.",
-        type: "number",
+        type: "string",
       },
     },
     required: [],
@@ -5603,6 +5804,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsMembersResponse: {
     description: "Schema for successful response conversations.members method",
@@ -5614,7 +5818,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           type: "ref",
           ref: "defs_user_id",
         },
-        minItems: 1,
+        minItems: 0,
         uniqueItems: true,
       },
       ok: {
@@ -5629,9 +5833,15 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["next_cursor"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
     },
     required: ["ok", "members", "response_metadata"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsOpenRequest: {
     type: "object",
@@ -5704,6 +5914,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["id"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
           ],
         },
@@ -5717,6 +5930,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsRenameRequest: {
     type: "object",
@@ -5746,6 +5962,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsRepliesResponse: {
     description: "Schema for successful response from conversations.replies method",
@@ -5828,6 +6047,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "user", "text", "thread_ts", "reply_count", "subscribed", "ts"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               {
                 type: "object",
@@ -5875,6 +6097,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "user", "text", "thread_ts", "parent_user_id", "ts"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
             ],
           },
@@ -5884,8 +6109,20 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "ref",
         ref: "defs_ok_true",
       },
+      response_metadata: {
+        type: "object",
+        properties: {
+          next_cursor: {
+            type: "string",
+          },
+        },
+        required: [],
+      },
     },
     required: ["ok", "messages"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsSetPurposeRequest: {
     type: "object",
@@ -5915,6 +6152,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsSetTopicRequest: {
     type: "object",
@@ -5944,6 +6184,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "channel"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ConversationsUnarchiveRequest: {
     type: "object",
@@ -5965,6 +6208,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   DialogOpenResponse: {
     description: "Schema for successful response from dialog.open method",
@@ -5976,6 +6222,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   DndEndDndResponse: {
     description: "Schema for successful response from dnd.endDnd method",
@@ -5987,6 +6236,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   DndEndSnoozeResponse: {
     description: "Schema for successful response from dnd.endSnooze method",
@@ -6010,6 +6262,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "dnd_enabled", "next_dnd_start_ts", "next_dnd_end_ts", "snooze_enabled"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   DndInfoResponse: {
     description: "Schema for successful response from dnd.info method",
@@ -6039,20 +6294,19 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "dnd_enabled", "next_dnd_start_ts", "next_dnd_end_ts"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   DndSetSnoozeRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `dnd:write`",
-        type: "string",
-      },
       num_minutes: {
         description: "Number of minutes, from now, to snooze until.",
         type: "string",
       },
     },
-    required: ["token", "num_minutes"],
+    required: ["num_minutes"],
   },
   DndSetSnoozeResponse: {
     description: "Schema for successful response from dnd.setSnooze method",
@@ -6073,6 +6327,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "snooze_enabled", "snooze_endtime", "snooze_remaining"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   DndTeamInfoResponse: {
     description:
@@ -6128,6 +6385,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   FilesDeleteRequest: {
     type: "object",
@@ -6149,6 +6409,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   FilesInfoResponse: {
     description: "Schema for successful response from files.info method",
@@ -6183,6 +6446,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "file", "comments"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   FilesListResponse: {
     description: "Schema for successful response from files.list method",
@@ -6207,14 +6473,13 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "files", "paging"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   FilesRemoteAddRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `remote_files:write`",
-        type: "string",
-      },
       external_id: {
         description: "Creator defined GUID for the file.",
         type: "string",
@@ -6291,10 +6556,6 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   FilesRemoteRemoveRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `remote_files:write`",
-        type: "string",
-      },
       file: {
         description: "Specify a file by providing its ID.",
         type: "string",
@@ -6339,10 +6600,6 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   FilesRemoteUpdateRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `remote_files:write`",
-        type: "string",
-      },
       file: {
         description: "Specify a file by providing its ID.",
         type: "string",
@@ -6413,6 +6670,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "file"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   FilesSharedPublicURLRequest: {
     type: "object",
@@ -6438,14 +6698,13 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "file"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   FilesUploadRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `files:write:user`",
-        type: "string",
-      },
       file: {
         description: "File contents via `multipart/form-data`. If omitting this parameter, you must submit `content`.",
         type: "string",
@@ -6477,7 +6736,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       thread_ts: {
         description:
           "Provide another message's `ts` value to upload this file as a reply. Never use a reply's `ts` value; use its parent instead.",
-        type: "number",
+        type: "string",
       },
     },
     required: [],
@@ -6496,6 +6755,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "file"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   MigrationExchangeResponse: {
     description: "Schema for successful response from migration.exchange method",
@@ -6541,6 +6803,10 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "ref",
         ref: "defs_ok_true",
       },
+      access_token: {
+        type: "string",
+        sensitive: true,
+      },
     },
     required: ["ok"],
     additionalProperties: {
@@ -6556,6 +6822,10 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "ref",
         ref: "defs_ok_true",
       },
+      access_token: {
+        type: "string",
+        sensitive: true,
+      },
     },
     required: ["ok"],
     additionalProperties: {
@@ -6570,6 +6840,10 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       ok: {
         type: "ref",
         ref: "defs_ok_true",
+      },
+      access_token: {
+        type: "string",
+        sensitive: true,
       },
     },
     required: ["ok"],
@@ -6601,6 +6875,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   PinsListResponse: {
     description: "Schema for successful response from pins.list method",
@@ -6636,6 +6913,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                       },
                     },
                     required: [],
+                    additionalProperties: {
+                      type: "unknown",
+                    },
                   },
                   {
                     type: "object",
@@ -6661,6 +6941,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                       },
                     },
                     required: [],
+                    additionalProperties: {
+                      type: "unknown",
+                    },
                   },
                 ],
               },
@@ -6672,6 +6955,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             },
           },
           required: ["ok", "items"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
         {
           type: "object",
@@ -6685,6 +6971,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             },
           },
           required: ["ok", "count"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
       ],
     },
@@ -6713,6 +7002,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ReactionsAddRequest: {
     type: "object",
@@ -6742,6 +7034,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ReactionsGetResponse: {
     description: "Schema for successful response from reactions.get method",
@@ -6777,6 +7072,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "channel", "message"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               {
                 type: "object",
@@ -6791,6 +7089,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "file"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               {
                 type: "object",
@@ -6809,6 +7110,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "file", "comment"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
             ],
           },
@@ -6828,6 +7132,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "items"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ReactionsRemoveRequest: {
     type: "object",
@@ -6865,6 +7172,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   RemindersAddRequest: {
     type: "object",
@@ -6900,6 +7210,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "reminder"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   RemindersCompleteRequest: {
     type: "object",
@@ -6921,6 +7234,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   RemindersDeleteRequest: {
     type: "object",
@@ -6942,6 +7258,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   RemindersInfoResponse: {
     description: "Schema for successful response from reminders.info method",
@@ -6957,6 +7276,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "reminder"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   RemindersListResponse: {
     description: "Schema for successful response from reminders.list method",
@@ -6975,6 +7297,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "reminders"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   RtmConnectResponse: {
     description: "Schema for successful response from rtm.connect method",
@@ -6996,6 +7321,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["id", "name"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       team: {
         type: "object",
@@ -7012,12 +7340,19 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["id", "name", "domain"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
       url: {
         type: "string",
+        sensitive: true,
       },
     },
     required: ["ok", "url", "team", "self"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   SearchMessagesResponse: {
     description:
@@ -7067,6 +7402,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   StarsListResponse: {
     description: "Schema for successful response from stars.list method",
@@ -7099,6 +7437,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "channel", "message", "date_create"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               {
                 type: "object",
@@ -7116,6 +7457,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "file", "date_create"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               {
                 type: "object",
@@ -7137,6 +7481,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "file", "comment", "date_create"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               {
                 type: "object",
@@ -7154,6 +7501,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "channel", "date_create"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               {
                 type: "object",
@@ -7171,6 +7521,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "channel", "date_create"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
               {
                 type: "object",
@@ -7188,6 +7541,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                   },
                 },
                 required: ["type", "channel", "date_create"],
+                additionalProperties: {
+                  type: "unknown",
+                },
               },
             ],
           },
@@ -7201,8 +7557,20 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "ref",
         ref: "objs_paging",
       },
+      response_metadata: {
+        type: "object",
+        properties: {
+          next_cursor: {
+            type: "string",
+          },
+        },
+        required: [],
+      },
     },
     required: ["ok", "items"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   StarsRemoveRequest: {
     type: "object",
@@ -7237,6 +7605,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   TeamAccessLogsResponse: {
     description: "Schema for successful response from team.accessLogs method",
@@ -7295,8 +7666,11 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             "country",
             "region",
           ],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
-        minItems: 1,
+        minItems: 0,
         uniqueItems: true,
       },
       ok: {
@@ -7309,6 +7683,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "logins", "paging"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   TeamBillableInfoResponse: {
     description:
@@ -7339,6 +7716,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "team"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   TeamIntegrationLogsResponse: {
     description: "Schema for successful response from team.integrationLogs method",
@@ -7388,8 +7768,11 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
             },
           },
           required: ["user_id", "user_name", "date", "change_type", "app_type", "app_id", "scope"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
-        minItems: 1,
+        minItems: 0,
         uniqueItems: true,
       },
       ok: {
@@ -7402,6 +7785,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "logs", "paging"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   TeamProfileGetResponse: {
     description: "Schema for successful response from team.profile.get method",
@@ -7424,9 +7810,15 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["fields"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
     },
     required: ["ok", "profile"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsergroupsCreateRequest: {
     type: "object",
@@ -7468,6 +7860,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "usergroup"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsergroupsDisableRequest: {
     type: "object",
@@ -7497,6 +7892,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "usergroup"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsergroupsEnableRequest: {
     type: "object",
@@ -7526,6 +7924,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "usergroup"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsergroupsListResponse: {
     description: "Schema for successful response from usergroups.list method",
@@ -7544,6 +7945,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "usergroups"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsergroupsUpdateRequest: {
     type: "object",
@@ -7589,6 +7993,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "usergroup"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsergroupsUsersListResponse: {
     description: "Schema for successful response from usergroups.users.list method",
@@ -7607,6 +8014,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "users"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsergroupsUsersUpdateRequest: {
     type: "object",
@@ -7641,6 +8051,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "usergroup"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsersConversationsResponse: {
     description:
@@ -7667,6 +8080,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           },
         },
         required: ["next_cursor"],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
     },
     required: ["ok", "channels"],
@@ -7676,13 +8092,8 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   },
   UsersDeletePhotoRequest: {
     type: "object",
-    properties: {
-      token: {
-        description: "Authentication token. Requires scope: `users.profile:write`",
-        type: "string",
-      },
-    },
-    required: ["token"],
+    properties: {},
+    required: [],
   },
   UsersDeletePhotoResponse: {
     description: "Schema for successful response from users.deletePhoto method",
@@ -7694,6 +8105,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsersGetPresenceResponse: {
     description: "Generated from users.getPresence with shasum e7251aec575d8863f9e0eb38663ae9dc26655f65",
@@ -7750,6 +8164,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["id"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             user: {
               type: "object",
@@ -7763,9 +8180,15 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["name", "id"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
           },
           required: ["ok", "user", "team"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
         {
           description: "Schema for 'identity.basic,identity.email' scopes",
@@ -7784,6 +8207,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["id"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             user: {
               type: "object",
@@ -7800,9 +8226,15 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["name", "id", "email"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
           },
           required: ["ok", "user", "team"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
         {
           description: "Schema for 'identity.basic,identity.avatar' scopes",
@@ -7821,6 +8253,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["id"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             user: {
               type: "object",
@@ -7852,9 +8287,15 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["name", "id", "image_24", "image_32", "image_48", "image_72", "image_192", "image_512"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
           },
           required: ["ok", "user", "team"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
         {
           description: "Schema for 'identity.basic,identity.team' scopes",
@@ -7915,6 +8356,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 "image_230",
                 "image_default",
               ],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
             user: {
               type: "object",
@@ -7928,9 +8372,15 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
                 },
               },
               required: ["name", "id"],
+              additionalProperties: {
+                type: "unknown",
+              },
             },
           },
           required: ["ok", "user", "team"],
+          additionalProperties: {
+            type: "unknown",
+          },
         },
       ],
     },
@@ -7966,7 +8416,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           type: "ref",
           ref: "objs_user",
         },
-        minItems: 1,
+        minItems: 0,
         uniqueItems: true,
       },
       ok: {
@@ -7979,6 +8429,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "members", "cache_ts"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsersLookupByEmailResponse: {
     description: "Schema for successful response from users.lookupByEmail method",
@@ -8012,6 +8465,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "profile"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsersProfileSetRequest: {
     type: "object",
@@ -8056,6 +8512,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok", "username", "profile"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsersSetActiveResponse: {
     description: "Schema for successful response from users.setActive method",
@@ -8067,14 +8526,13 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsersSetPhotoRequest: {
     type: "object",
     properties: {
-      token: {
-        description: "Authentication token. Requires scope: `users.profile:write`",
-        type: "string",
-      },
       crop_w: {
         description: "Width/height of crop box (always square)",
         type: "string",
@@ -8092,7 +8550,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
     },
-    required: ["token"],
+    required: [],
   },
   UsersSetPhotoResponse: {
     description: "Schema for successful response from users.setPhoto method",
@@ -8145,9 +8603,15 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
           "image_original",
           "avatar_hash",
         ],
+        additionalProperties: {
+          type: "unknown",
+        },
       },
     },
     required: ["ok", "profile"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   UsersSetPresenceRequest: {
     type: "object",
@@ -8169,6 +8633,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
     },
     required: ["ok"],
+    additionalProperties: {
+      type: "unknown",
+    },
   },
   ViewsOpenResponse: {
     description:

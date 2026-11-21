@@ -2,12 +2,13 @@
 // Source: spec/slack/, checked against provenance.json
 // Run: pnpm generate
 
-import type { ApiServer, ManifestOperation, SecurityScheme } from "@wirecat/cli-base/codegen"
+import type { ApiServer, ManifestOperation, SecurityRequirement, SecurityScheme } from "@wirecat/cli-base/codegen"
 
 export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_apps_approve",
     command: "admin-apps-approve",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -16,27 +17,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Approve an app for installation on a workspace.",
     tags: ["admin.apps", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.apps:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.apps:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminAppsApproveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -45,7 +30,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_apps_approved_list",
-    command: "admin-apps-approved-list-list",
+    command: "admin-apps-approved-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -54,21 +40,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List approved apps for an org or workspace.",
     tags: ["admin.apps.approved", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.apps:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.apps:read`",
-      },
       {
         name: "limit",
         in: "query",
@@ -111,7 +83,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_apps_requests_list",
-    command: "admin-apps-requests-list-list",
+    command: "admin-apps-requests-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -120,21 +93,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List app requests for a team/workspace.",
     tags: ["admin.apps.requests", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.apps:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.apps:read`",
-      },
       {
         name: "limit",
         in: "query",
@@ -170,6 +129,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_apps_restrict",
     command: "admin-apps-restrict",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -178,27 +138,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Restrict an app for installation on a workspace.",
     tags: ["admin.apps", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.apps:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.apps:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminAppsRestrictRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -207,7 +151,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_apps_restricted_list",
-    command: "admin-apps-restricted-list-list",
+    command: "admin-apps-restricted-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -216,21 +161,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List restricted apps for an org or workspace.",
     tags: ["admin.apps.restricted", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.apps:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.apps:read`",
-      },
       {
         name: "limit",
         in: "query",
@@ -274,35 +205,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_archive",
     command: "admin-conversations-archive",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
       path: "/admin.conversations.archive",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Archive a public or private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["admin.conversations:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsArchiveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -312,6 +233,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_convertToPrivate",
     command: "admin-conversations-convert-to-private",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -320,27 +242,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Convert a public channel to a private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsConvertToPrivateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -350,6 +256,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_create",
     command: "admin-conversations-create",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -358,27 +265,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Create a public or private channel-based conversation.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsCreateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -388,35 +279,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_delete",
     command: "admin-conversations-delete",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
       path: "/admin.conversations.delete",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Delete a public or private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["admin.conversations:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsDeleteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -426,6 +307,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_disconnectShared",
     command: "admin-conversations-disconnect-shared",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -434,27 +316,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Disconnect a connected channel from one or more workspaces.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsDisconnectSharedRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -463,7 +329,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_conversations_ekm_listOriginalConnectedChannelInfo",
-    command: "admin-conversations-ekm-list-original-connected-channel-info-list",
+    command: "admin-conversations-ekm-list-original-connected-channel-info",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -473,21 +340,7 @@ export const operations: readonly ManifestOperation[] = [
     description:
       "List all disconnected channels—i.e., channels that were once connected to other workspaces and then disconnected—and the corresponding original channel IDs for key revocation with EKM.",
     tags: ["admin.conversations.ekm", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:read`",
-      },
       {
         name: "channel_ids",
         in: "query",
@@ -532,7 +385,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_conversations_getConversationPrefs",
-    command: "admin-conversations-get-conversation-prefs-list",
+    command: "admin-conversations-get-conversation-prefs",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -541,21 +395,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Get conversation preferences for a public or private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:read`",
-      },
       {
         name: "channel_id",
         in: "query",
@@ -573,7 +413,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_conversations_getTeams",
-    command: "admin-conversations-get-teams-list",
+    command: "admin-conversations-get-teams",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -582,11 +423,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Get all the workspaces a given public or private channel is connected to within this Enterprise org.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:read"],
-      },
-    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -601,15 +437,6 @@ export const operations: readonly ManifestOperation[] = [
       },
     },
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:read`",
-      },
       {
         name: "channel_id",
         in: "query",
@@ -646,6 +473,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_invite",
     command: "admin-conversations-invite",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -654,27 +482,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Invite a user to a public or private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsInviteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -684,6 +496,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_rename",
     command: "admin-conversations-rename",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -692,27 +505,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Rename a public or private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsRenameRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -722,6 +519,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_restrictAccess_addGroup",
     command: "admin-conversations-restrict-access-add-group",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -730,11 +528,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Add an allowlist of IDP groups for accessing a channel",
     tags: ["admin.conversations.restrictAccess", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -749,7 +542,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_conversations_restrictAccess_listGroups",
-    command: "admin-conversations-restrict-access-list-groups-list",
+    command: "admin-conversations-restrict-access-list-groups",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -758,21 +552,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all IDP Groups linked to a channel",
     tags: ["admin.conversations.restrictAccess", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:read`",
-      },
       {
         name: "channel_id",
         in: "query",
@@ -800,17 +580,18 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_restrictAccess_removeGroup",
     command: "admin-conversations-restrict-access-remove-group",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
       path: "/admin.conversations.restrictAccess.removeGroup",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Remove a linked IDP group linked from a private channel",
     tags: ["admin.conversations.restrictAccess", "admin"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["admin.conversations:write"],
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -827,7 +608,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_conversations_search",
-    command: "admin-conversations-search-list",
+    command: "admin-conversations-search",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -836,11 +618,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Search for public or private channels in an Enterprise organization.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:read"],
-      },
-    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -855,15 +632,6 @@ export const operations: readonly ManifestOperation[] = [
       },
     },
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:read`",
-      },
       {
         name: "team_ids",
         in: "query",
@@ -939,6 +707,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_setConversationPrefs",
     command: "admin-conversations-set-conversation-prefs",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -947,27 +716,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set the posting permissions for a public or private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsSetConversationPrefsRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -977,6 +730,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_setTeams",
     command: "admin-conversations-set-teams",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -985,27 +739,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set the workspaces in an Enterprise grid org that connect to a public or private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsSetTeamsRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1015,6 +753,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_conversations_unarchive",
     command: "admin-conversations-unarchive",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1023,27 +762,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Unarchive a public or private channel.",
     tags: ["admin.conversations", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.conversations:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminConversationsUnarchiveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1053,6 +776,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_emoji_add",
     command: "admin-emoji-add",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1061,11 +785,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Add an emoji.",
     tags: ["admin.emoji", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -1081,6 +800,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_emoji_addAlias",
     command: "admin-emoji-add-alias",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1089,11 +809,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Add an emoji alias.",
     tags: ["admin.emoji", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -1108,7 +823,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_emoji_list",
-    command: "admin-emoji-list-list",
+    command: "admin-emoji-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1117,21 +833,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List emoji for an Enterprise Grid organization.",
     tags: ["admin.emoji", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:read`",
-      },
       {
         name: "cursor",
         in: "query",
@@ -1159,17 +861,18 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_emoji_remove",
     command: "admin-emoji-remove",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
       path: "/admin.emoji.remove",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Remove an emoji across an Enterprise Grid organization",
     tags: ["admin.emoji", "admin"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["admin.teams:write"],
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -1187,6 +890,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_emoji_rename",
     command: "admin-emoji-rename",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1195,11 +899,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Rename an emoji.",
     tags: ["admin.emoji", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -1215,6 +914,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_inviteRequests_approve",
     command: "admin-invite-requests-approve",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1223,27 +923,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Approve a workspace invite request.",
     tags: ["admin.inviteRequests", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.invites:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.invites:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminInviteRequestsApproveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1252,7 +936,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_inviteRequests_approved_list",
-    command: "admin-invite-requests-approved-list-list",
+    command: "admin-invite-requests-approved-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1261,21 +946,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all approved workspace invite requests.",
     tags: ["admin.inviteRequests.approved", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.invites:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.invites:read`",
-      },
       {
         name: "team_id",
         in: "query",
@@ -1312,7 +983,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_inviteRequests_denied_list",
-    command: "admin-invite-requests-denied-list-list",
+    command: "admin-invite-requests-denied-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1321,21 +993,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all denied workspace invite requests.",
     tags: ["admin.inviteRequests.denied", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.invites:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.invites:read`",
-      },
       {
         name: "team_id",
         in: "query",
@@ -1373,6 +1031,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_inviteRequests_deny",
     command: "admin-invite-requests-deny",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1381,27 +1040,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Deny a workspace invite request.",
     tags: ["admin.inviteRequests", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.invites:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.invites:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminInviteRequestsDenyRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1410,7 +1053,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_inviteRequests_list",
-    command: "admin-invite-requests-list-list",
+    command: "admin-invite-requests-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1419,21 +1063,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all pending workspace invite requests.",
     tags: ["admin.inviteRequests", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.invites:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.invites:read`",
-      },
       {
         name: "team_id",
         in: "query",
@@ -1470,7 +1100,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_teams_admins_list",
-    command: "admin-teams-admins-list-list",
+    command: "admin-teams-admins-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1479,21 +1110,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all of the admins on a given workspace.",
     tags: ["admin.teams.admins", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:read`",
-      },
       {
         name: "limit",
         in: "query",
@@ -1529,6 +1146,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_teams_create",
     command: "admin-teams-create",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1537,27 +1155,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Create an Enterprise team.",
     tags: ["admin.teams", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminTeamsCreateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1566,7 +1168,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_teams_list",
-    command: "admin-teams-list-list",
+    command: "admin-teams-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1575,21 +1178,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all teams on an Enterprise organization",
     tags: ["admin.teams", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:read`",
-      },
       {
         name: "limit",
         in: "query",
@@ -1616,7 +1205,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_teams_owners_list",
-    command: "admin-teams-owners-list-list",
+    command: "admin-teams-owners-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1625,21 +1215,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all of the owners on a given workspace.",
     tags: ["admin.teams.owners", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:read`",
-      },
       {
         name: "team_id",
         in: "query",
@@ -1674,7 +1250,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_teams_settings_info",
-    command: "admin-teams-settings-info-list",
+    command: "admin-teams-settings-info",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1683,21 +1260,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Fetch information about settings in a workspace",
     tags: ["admin.teams.settings", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:read`",
-      },
       {
         name: "team_id",
         in: "query",
@@ -1715,6 +1278,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_teams_settings_setDefaultChannels",
     command: "admin-teams-settings-set-default-channels",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1723,11 +1287,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set the default channels of a workspace.",
     tags: ["admin.teams.settings", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -1743,6 +1302,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_teams_settings_setDescription",
     command: "admin-teams-settings-set-description",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1751,27 +1311,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set the description of a given workspace.",
     tags: ["admin.teams.settings", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminTeamsSettingsSetDescriptionRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1781,6 +1325,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_teams_settings_setDiscoverability",
     command: "admin-teams-settings-set-discoverability",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1789,27 +1334,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "An API method that allows admins to set the discoverability of a given workspace",
     tags: ["admin.teams.settings", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminTeamsSettingsSetDiscoverabilityRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1819,6 +1348,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_teams_settings_setIcon",
     command: "admin-teams-settings-set-icon",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1827,11 +1357,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sets the icon of a workspace.",
     tags: ["admin.teams.settings", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -1847,6 +1372,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_teams_settings_setName",
     command: "admin-teams-settings-set-name",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1855,27 +1381,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set the name of a given workspace.",
     tags: ["admin.teams.settings", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminTeamsSettingsSetNameRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1885,6 +1395,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_usergroups_addChannels",
     command: "admin-usergroups-add-channels",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1893,27 +1404,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Add one or more default channels to an IDP group.",
     tags: ["admin.usergroups", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.usergroups:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.usergroups:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsergroupsAddChannelsRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1923,6 +1418,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_usergroups_addTeams",
     command: "admin-usergroups-add-teams",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -1931,27 +1427,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Associate one or more default workspaces with an organization-wide IDP group.",
     tags: ["admin.usergroups", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.teams:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.teams:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsergroupsAddTeamsRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -1960,7 +1440,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_usergroups_listChannels",
-    command: "admin-usergroups-list-channels-list",
+    command: "admin-usergroups-list-channels",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -1969,21 +1450,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List the channels linked to an org-level IDP group (user group).",
     tags: ["admin.usergroups", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.usergroups:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.usergroups:read`",
-      },
       {
         name: "usergroup_id",
         in: "query",
@@ -2020,35 +1487,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_usergroups_removeChannels",
     command: "admin-usergroups-remove-channels",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
       path: "/admin.usergroups.removeChannels",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Remove one or more default channels from an org-level IDP group (user group).",
     tags: ["admin.usergroups", "admin"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["admin.usergroups:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.usergroups:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsergroupsRemoveChannelsRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2058,6 +1515,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_assign",
     command: "admin-users-assign",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -2066,27 +1524,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Add an Enterprise user to a workspace.",
     tags: ["admin.users", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.users:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersAssignRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2096,6 +1538,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_invite",
     command: "admin-users-invite",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -2104,27 +1547,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Invite a user to a workspace.",
     tags: ["admin.users", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.users:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersInviteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2133,7 +1560,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "admin_users_list",
-    command: "admin-users-list-list",
+    command: "admin-users-list",
+    group: "admin",
     binding: {
       kind: "http",
       method: "GET",
@@ -2142,21 +1570,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List users on a workspace",
     tags: ["admin.users", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.users:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:read`",
-      },
       {
         name: "team_id",
         in: "query",
@@ -2193,35 +1607,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_remove",
     command: "admin-users-remove",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
       path: "/admin.users.remove",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Remove a user from a workspace.",
     tags: ["admin.users", "admin"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["admin.users:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersRemoveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2231,35 +1635,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_session_invalidate",
     command: "admin-users-session-invalidate",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
       path: "/admin.users.session.invalidate",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Invalidate a single session for a user by session_id",
     tags: ["admin.users.session", "admin"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["admin.users:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersSessionInvalidateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2269,35 +1663,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_session_reset",
     command: "admin-users-session-reset",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
       path: "/admin.users.session.reset",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Wipes all valid sessions on all devices for a given user",
     tags: ["admin.users.session", "admin"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["admin.users:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersSessionResetRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2307,6 +1691,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_setAdmin",
     command: "admin-users-set-admin",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -2315,27 +1700,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set an existing guest, regular user, or owner to be an admin user.",
     tags: ["admin.users", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.users:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersSetAdminRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2345,6 +1714,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_setExpiration",
     command: "admin-users-set-expiration",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -2353,27 +1723,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set an expiration for a guest user",
     tags: ["admin.users", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.users:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersSetExpirationRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2383,6 +1737,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_setOwner",
     command: "admin-users-set-owner",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -2391,27 +1746,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set an existing guest, regular user, or admin user to be a workspace owner.",
     tags: ["admin.users", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.users:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersSetOwnerRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2421,6 +1760,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "admin_users_setRegular",
     command: "admin-users-set-regular",
+    group: "admin",
     binding: {
       kind: "http",
       method: "POST",
@@ -2429,27 +1769,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set an existing guest user, admin user, or owner to be a regular user.",
     tags: ["admin.users", "admin"],
-    security: [
-      {
-        slackAuth: ["admin.users:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin.users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "AdminUsersSetRegularRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -2458,7 +1782,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "api_test",
-    command: "api-test-list",
+    command: "api-test",
     binding: {
       kind: "http",
       method: "GET",
@@ -2467,11 +1791,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Checks API calling code.",
     tags: ["api"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
       {
         name: "error",
@@ -2499,7 +1818,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "apps_event_authorizations_list",
-    command: "apps-event-authorizations-list-list",
+    command: "apps-event-authorizations-list",
+    group: "apps",
     binding: {
       kind: "http",
       method: "GET",
@@ -2509,21 +1829,7 @@ export const operations: readonly ManifestOperation[] = [
     description:
       "Get a list of authorizations for the given event context. Each authorization represents an app installation that the event is visible to.",
     tags: ["apps.event.authorizations", "apps"],
-    security: [
-      {
-        slackAuth: ["authorizations:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `authorizations:read`",
-      },
       {
         name: "event_context",
         in: "query",
@@ -2556,7 +1862,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "apps_permissions_info",
-    command: "apps-permissions-info-list",
+    command: "apps-permissions-info",
+    group: "apps",
     binding: {
       kind: "http",
       method: "GET",
@@ -2565,22 +1872,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Returns list of permissions this app has on a team.",
     tags: ["apps.permissions", "apps"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "AppsPermissionsInfoResponse",
@@ -2588,7 +1880,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "apps_permissions_request",
-    command: "apps-permissions-request-list",
+    command: "apps-permissions-request",
+    group: "apps",
     binding: {
       kind: "http",
       method: "GET",
@@ -2597,21 +1890,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Allows an app to request additional scopes",
     tags: ["apps.permissions", "apps"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "scopes",
         in: "query",
@@ -2638,7 +1917,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "apps_permissions_resources_list",
-    command: "apps-permissions-resources-list-list",
+    command: "apps-permissions-resources-list",
+    group: "apps",
     binding: {
       kind: "http",
       method: "GET",
@@ -2647,11 +1927,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Returns list of resource grants this app has on a team.",
     tags: ["apps.permissions.resources", "apps"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -2666,15 +1941,6 @@ export const operations: readonly ManifestOperation[] = [
       },
     },
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "cursor",
         in: "query",
@@ -2702,7 +1968,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "apps_permissions_scopes_list",
-    command: "apps-permissions-scopes-list-list",
+    command: "apps-permissions-scopes-list",
+    group: "apps",
     binding: {
       kind: "http",
       method: "GET",
@@ -2711,22 +1978,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Returns list of scopes this app has on a team.",
     tags: ["apps.permissions.scopes", "apps"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "AppsPermissionsScopesListResponse",
@@ -2734,7 +1986,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "apps_permissions_users_list",
-    command: "apps-permissions-users-list-list",
+    command: "apps-permissions-users-list",
+    group: "apps",
     binding: {
       kind: "http",
       method: "GET",
@@ -2743,21 +1996,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Returns list of user grants and corresponding scopes this app has on a team.",
     tags: ["apps.permissions.users", "apps"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "cursor",
         in: "query",
@@ -2785,7 +2024,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "apps_permissions_users_request",
-    command: "apps-permissions-users-request-list",
+    command: "apps-permissions-users-request",
+    group: "apps",
     binding: {
       kind: "http",
       method: "GET",
@@ -2794,21 +2034,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Enables an app to trigger a permissions modal to grant an app access to a user access scope.",
     tags: ["apps.permissions.users", "apps"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "scopes",
         in: "query",
@@ -2844,30 +2070,22 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "apps_uninstall",
-    command: "apps-uninstall-list",
+    command: "apps-uninstall",
+    group: "apps",
     binding: {
       kind: "http",
       method: "GET",
       path: "/apps.uninstall",
     },
-    effect: "read",
+    effect: "destructive",
     description: "Uninstalls your app from a workspace.",
     tags: ["apps"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["none"],
+        key: "slack.delete",
       },
     ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "client_id",
         in: "query",
@@ -2894,30 +2112,22 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "auth_revoke",
-    command: "auth-revoke-list",
+    command: "auth-revoke",
+    group: "auth",
     binding: {
       kind: "http",
       method: "GET",
       path: "/auth.revoke",
     },
-    effect: "read",
+    effect: "destructive",
     description: "Revokes a token.",
     tags: ["auth"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["none"],
+        key: "slack.delete",
       },
     ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "test",
         in: "query",
@@ -2936,7 +2146,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "auth_test",
-    command: "auth-test-list",
+    command: "auth-test",
+    group: "auth",
     binding: {
       kind: "http",
       method: "GET",
@@ -2945,22 +2156,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Checks authentication & identity.",
     tags: ["auth"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "AuthTestResponse",
@@ -2968,7 +2164,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "bots_info",
-    command: "bots-info-list",
+    command: "bots-info",
     binding: {
       kind: "http",
       method: "GET",
@@ -2977,21 +2173,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets information about a bot user.",
     tags: ["bots"],
-    security: [
-      {
-        slackAuth: ["users:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users:read`",
-      },
       {
         name: "bot",
         in: "query",
@@ -3010,6 +2192,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "calls_add",
     command: "calls-add",
+    group: "calls",
     binding: {
       kind: "http",
       method: "POST",
@@ -3018,27 +2201,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Registers a new Call.",
     tags: ["calls"],
-    security: [
-      {
-        slackAuth: ["calls:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `calls:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "CallsAddRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3048,6 +2215,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "calls_end",
     command: "calls-end",
+    group: "calls",
     binding: {
       kind: "http",
       method: "POST",
@@ -3056,27 +2224,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Ends a Call.",
     tags: ["calls"],
-    security: [
-      {
-        slackAuth: ["calls:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `calls:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "CallsEndRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3085,7 +2237,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "calls_info",
-    command: "calls-info-list",
+    command: "calls-info",
+    group: "calls",
     binding: {
       kind: "http",
       method: "GET",
@@ -3094,21 +2247,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Returns information about a Call.",
     tags: ["calls"],
-    security: [
-      {
-        slackAuth: ["calls:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `calls:read`",
-      },
       {
         name: "id",
         in: "query",
@@ -3127,6 +2266,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "calls_participants_add",
     command: "calls-participants-add",
+    group: "calls",
     binding: {
       kind: "http",
       method: "POST",
@@ -3135,27 +2275,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Registers new participants added to a Call.",
     tags: ["calls.participants", "calls"],
-    security: [
-      {
-        slackAuth: ["calls:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `calls:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "CallsParticipantsAddRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3165,35 +2289,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "calls_participants_remove",
     command: "calls-participants-remove",
+    group: "calls",
     binding: {
       kind: "http",
       method: "POST",
       path: "/calls.participants.remove",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Registers participants removed from a Call.",
     tags: ["calls.participants", "calls"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["calls:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `calls:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "CallsParticipantsRemoveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3203,6 +2317,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "calls_update",
     command: "calls-update",
+    group: "calls",
     binding: {
       kind: "http",
       method: "POST",
@@ -3211,27 +2326,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Updates information about a Call.",
     tags: ["calls"],
-    security: [
-      {
-        slackAuth: ["calls:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `calls:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "CallsUpdateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3241,35 +2340,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "chat_delete",
     command: "chat-delete",
+    group: "chat",
     binding: {
       kind: "http",
       method: "POST",
       path: "/chat.delete",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Deletes a message.",
     tags: ["chat"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["chat:write:user", "chat:write:bot"],
+        key: "messages.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `chat:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ChatDeleteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3279,35 +2368,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "chat_deleteScheduledMessage",
     command: "chat-delete-scheduled-message",
+    group: "chat",
     binding: {
       kind: "http",
       method: "POST",
       path: "/chat.deleteScheduledMessage",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Deletes a pending scheduled message from the queue.",
     tags: ["chat"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["chat:write:user", "chat:write:bot"],
+        key: "messages.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `chat:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ChatDeleteScheduledMessageRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3316,7 +2395,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "chat_getPermalink",
-    command: "chat-get-permalink-list",
+    command: "chat-get-permalink",
+    group: "chat",
     binding: {
       kind: "http",
       method: "GET",
@@ -3325,21 +2405,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieve a permalink URL for a specific extant message",
     tags: ["chat"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "channel",
         in: "query",
@@ -3367,6 +2433,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "chat_meMessage",
     command: "chat-me-message",
+    group: "chat",
     binding: {
       kind: "http",
       method: "POST",
@@ -3375,27 +2442,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Share a me message into a channel.",
     tags: ["chat"],
-    security: [
-      {
-        slackAuth: ["chat:write:user", "chat:write:bot"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `chat:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ChatMeMessageRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3405,6 +2456,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "chat_postEphemeral",
     command: "chat-post-ephemeral",
+    group: "chat",
     binding: {
       kind: "http",
       method: "POST",
@@ -3413,27 +2465,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sends an ephemeral message to a user in a channel.",
     tags: ["chat"],
-    security: [
-      {
-        slackAuth: ["chat:write:user", "chat:write:bot"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `chat:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ChatPostEphemeralRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3443,6 +2479,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "chat_postMessage",
     command: "chat-post-message",
+    group: "chat",
     binding: {
       kind: "http",
       method: "POST",
@@ -3451,27 +2488,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sends a message to a channel.",
     tags: ["chat"],
-    security: [
-      {
-        slackAuth: ["chat:write:user", "chat:write:bot"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `chat:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ChatPostMessageRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3481,6 +2502,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "chat_scheduleMessage",
     command: "chat-schedule-message",
+    group: "chat",
     binding: {
       kind: "http",
       method: "POST",
@@ -3489,27 +2511,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Schedules a message to be sent to a channel.",
     tags: ["chat"],
-    security: [
-      {
-        slackAuth: ["chat:write:user", "chat:write:bot"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `chat:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ChatScheduleMessageRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3518,7 +2524,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "chat_scheduledMessages_list",
-    command: "chat-scheduled-messages-list-list",
+    command: "chat-scheduled-messages-list",
+    group: "chat",
     binding: {
       kind: "http",
       method: "GET",
@@ -3527,11 +2534,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Returns a list of scheduled messages.",
     tags: ["chat.scheduledMessages", "chat"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -3547,15 +2549,6 @@ export const operations: readonly ManifestOperation[] = [
     },
     parameters: [
       {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
-      {
         name: "channel",
         in: "query",
         required: false,
@@ -3569,7 +2562,7 @@ export const operations: readonly ManifestOperation[] = [
         in: "query",
         required: false,
         schema: {
-          type: "number",
+          type: "string",
         },
         description: "A UNIX timestamp of the latest value in the time range",
       },
@@ -3578,7 +2571,7 @@ export const operations: readonly ManifestOperation[] = [
         in: "query",
         required: false,
         schema: {
-          type: "number",
+          type: "string",
         },
         description: "A UNIX timestamp of the oldest value in the time range",
       },
@@ -3610,6 +2603,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "chat_unfurl",
     command: "chat-unfurl",
+    group: "chat",
     binding: {
       kind: "http",
       method: "POST",
@@ -3618,27 +2612,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Provide custom unfurl behavior for user-posted URLs",
     tags: ["chat"],
-    security: [
-      {
-        slackAuth: ["links:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `links:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ChatUnfurlRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3648,6 +2626,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "chat_update",
     command: "chat-update",
+    group: "chat",
     binding: {
       kind: "http",
       method: "POST",
@@ -3656,27 +2635,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Updates a message.",
     tags: ["chat"],
-    security: [
-      {
-        slackAuth: ["chat:write:user", "chat:write:bot"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `chat:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ChatUpdateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3686,35 +2649,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_archive",
     command: "conversations-archive",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
       path: "/conversations.archive",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Archives a conversation.",
     tags: ["conversations"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
+        key: "chats.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsArchiveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3724,6 +2677,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_close",
     command: "conversations-close",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -3732,27 +2686,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Closes a direct message or multi-person direct message.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsCloseRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3762,6 +2700,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_create",
     command: "conversations-create",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -3770,27 +2709,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Initiates a public or private channel-based conversation",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsCreateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3799,7 +2722,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "conversations_history",
-    command: "conversations-history-list",
+    command: "conversations-history",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "GET",
@@ -3808,25 +2732,24 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Fetches a conversation's history of messages and events.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:history", "groups:history", "im:history", "mpim:history"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
+    pagination: {
+      style: "cursor",
+      cursor: {
         in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:history`",
+        name: "cursor",
       },
+      next: "response_metadata.next_cursor",
+      items: "messages",
+      limit: {
+        in: "query",
+        name: "limit",
+      },
+    },
+    parameters: [
       {
         name: "channel",
         in: "query",
-        required: false,
+        required: true,
         schema: {
           type: "string",
         },
@@ -3837,7 +2760,7 @@ export const operations: readonly ManifestOperation[] = [
         in: "query",
         required: false,
         schema: {
-          type: "number",
+          type: "string",
         },
         description: "End of time range of messages to include in results.",
       },
@@ -3846,7 +2769,7 @@ export const operations: readonly ManifestOperation[] = [
         in: "query",
         required: false,
         schema: {
-          type: "number",
+          type: "string",
         },
         description: "Start of time range of messages to include in results.",
       },
@@ -3888,7 +2811,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "conversations_info",
-    command: "conversations-info-list",
+    command: "conversations-info",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "GET",
@@ -3897,25 +2821,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieve information about a conversation.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:read", "groups:read", "im:read", "mpim:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:read`",
-      },
       {
         name: "channel",
         in: "query",
-        required: false,
+        required: true,
         schema: {
           type: "string",
         },
@@ -3948,6 +2858,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_invite",
     command: "conversations-invite",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -3956,27 +2867,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Invites users to a channel.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsInviteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -3986,6 +2881,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_join",
     command: "conversations-join",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -3994,27 +2890,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Joins an existing conversation.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `channels:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsJoinRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4024,35 +2904,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_kick",
     command: "conversations-kick",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
       path: "/conversations.kick",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Removes a user from a conversation.",
     tags: ["conversations"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
+        key: "chats.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsKickRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4062,35 +2932,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_leave",
     command: "conversations-leave",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
       path: "/conversations.leave",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Leaves a conversation.",
     tags: ["conversations"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
+        key: "chats.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsLeaveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4099,7 +2959,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "conversations_list",
-    command: "conversations-list-list",
+    command: "conversations-list",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "GET",
@@ -4108,11 +2969,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists all channels in a Slack team.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:read", "groups:read", "im:read", "mpim:read"],
-      },
-    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -4127,15 +2983,6 @@ export const operations: readonly ManifestOperation[] = [
       },
     },
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:read`",
-      },
       {
         name: "exclude_archived",
         in: "query",
@@ -4184,6 +3031,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_mark",
     command: "conversations-mark",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -4192,27 +3040,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sets the read cursor in a channel.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsMarkRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4221,7 +3053,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "conversations_members",
-    command: "conversations-members-list",
+    command: "conversations-members",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "GET",
@@ -4230,11 +3063,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieve members of a conversation.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:read", "groups:read", "im:read", "mpim:read"],
-      },
-    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -4250,18 +3078,9 @@ export const operations: readonly ManifestOperation[] = [
     },
     parameters: [
       {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:read`",
-      },
-      {
         name: "channel",
         in: "query",
-        required: false,
+        required: true,
         schema: {
           type: "string",
         },
@@ -4296,6 +3115,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_open",
     command: "conversations-open",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -4304,27 +3124,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Opens or resumes a direct message or multi-person direct message.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsOpenRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4334,6 +3138,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_rename",
     command: "conversations-rename",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -4342,27 +3147,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Renames a conversation.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsRenameRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4371,7 +3160,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "conversations_replies",
-    command: "conversations-replies-list",
+    command: "conversations-replies",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "GET",
@@ -4380,25 +3170,24 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieve a thread of messages posted to a conversation",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:history", "groups:history", "im:history", "mpim:history"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
+    pagination: {
+      style: "cursor",
+      cursor: {
         in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:history`",
+        name: "cursor",
       },
+      next: "response_metadata.next_cursor",
+      items: "messages",
+      limit: {
+        in: "query",
+        name: "limit",
+      },
+    },
+    parameters: [
       {
         name: "channel",
         in: "query",
-        required: false,
+        required: true,
         schema: {
           type: "string",
         },
@@ -4407,9 +3196,9 @@ export const operations: readonly ManifestOperation[] = [
       {
         name: "ts",
         in: "query",
-        required: false,
+        required: true,
         schema: {
-          type: "number",
+          type: "string",
         },
         description:
           "Unique identifier of a thread's parent message. `ts` must be the timestamp of an existing message with 0 or more replies. If there are no replies then just the single message referenced by `ts` will return - it is just an ordinary, unthreaded message.",
@@ -4419,7 +3208,7 @@ export const operations: readonly ManifestOperation[] = [
         in: "query",
         required: false,
         schema: {
-          type: "number",
+          type: "string",
         },
         description: "End of time range of messages to include in results.",
       },
@@ -4428,7 +3217,7 @@ export const operations: readonly ManifestOperation[] = [
         in: "query",
         required: false,
         schema: {
-          type: "number",
+          type: "string",
         },
         description: "Start of time range of messages to include in results.",
       },
@@ -4471,6 +3260,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_setPurpose",
     command: "conversations-set-purpose",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -4479,27 +3269,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sets the purpose for a conversation.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsSetPurposeRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4509,6 +3283,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_setTopic",
     command: "conversations-set-topic",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -4517,27 +3292,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sets the topic for a conversation.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsSetTopicRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4547,6 +3306,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "conversations_unarchive",
     command: "conversations-unarchive",
+    group: "conversations",
     binding: {
       kind: "http",
       method: "POST",
@@ -4555,27 +3315,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Reverses conversation archival.",
     tags: ["conversations"],
-    security: [
-      {
-        slackAuth: ["channels:write", "groups:write", "im:write", "mpim:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ConversationsUnarchiveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4584,7 +3328,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "dialog_open",
-    command: "dialog-open-list",
+    command: "dialog-open",
     binding: {
       kind: "http",
       method: "GET",
@@ -4593,21 +3337,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Open a dialog with a user",
     tags: ["dialog"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "dialog",
         in: "query",
@@ -4635,6 +3365,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "dnd_endDnd",
     command: "dnd-end-dnd",
+    group: "dnd",
     binding: {
       kind: "http",
       method: "POST",
@@ -4643,22 +3374,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Ends the current user's Do Not Disturb session immediately.",
     tags: ["dnd"],
-    security: [
-      {
-        slackAuth: ["dnd:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `dnd:write`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "DndEndDndResponse",
@@ -4667,6 +3383,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "dnd_endSnooze",
     command: "dnd-end-snooze",
+    group: "dnd",
     binding: {
       kind: "http",
       method: "POST",
@@ -4675,22 +3392,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Ends the current user's snooze mode immediately.",
     tags: ["dnd"],
-    security: [
-      {
-        slackAuth: ["dnd:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `dnd:write`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "DndEndSnoozeResponse",
@@ -4698,7 +3400,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "dnd_info",
-    command: "dnd-info-list",
+    command: "dnd-info",
+    group: "dnd",
     binding: {
       kind: "http",
       method: "GET",
@@ -4707,21 +3410,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieves a user's current Do Not Disturb status.",
     tags: ["dnd"],
-    security: [
-      {
-        slackAuth: ["dnd:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `dnd:read`",
-      },
       {
         name: "user",
         in: "query",
@@ -4740,6 +3429,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "dnd_setSnooze",
     command: "dnd-set-snooze",
+    group: "dnd",
     binding: {
       kind: "http",
       method: "POST",
@@ -4748,11 +3438,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Turns on Do Not Disturb mode for the current user, or changes its duration.",
     tags: ["dnd"],
-    security: [
-      {
-        slackAuth: ["dnd:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -4767,7 +3452,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "dnd_teamInfo",
-    command: "dnd-team-info-list",
+    command: "dnd-team-info",
+    group: "dnd",
     binding: {
       kind: "http",
       method: "GET",
@@ -4776,21 +3462,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieves the Do Not Disturb status for up to 50 users on a team.",
     tags: ["dnd"],
-    security: [
-      {
-        slackAuth: ["dnd:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `dnd:read`",
-      },
       {
         name: "users",
         in: "query",
@@ -4808,7 +3480,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "emoji_list",
-    command: "emoji-list-list",
+    command: "emoji-list",
     binding: {
       kind: "http",
       method: "GET",
@@ -4817,22 +3489,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists custom emoji for a team.",
     tags: ["emoji"],
-    security: [
-      {
-        slackAuth: ["emoji:read"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `emoji:read`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "EmojiListResponse",
@@ -4841,35 +3498,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "files_comments_delete",
     command: "files-comments-delete",
+    group: "files",
     binding: {
       kind: "http",
       method: "POST",
       path: "/files.comments.delete",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Deletes an existing comment on a file.",
     tags: ["files.comments", "files"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["files:write:user"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `files:write:user`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "FilesCommentsDeleteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4879,35 +3526,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "files_delete",
     command: "files-delete",
+    group: "files",
     binding: {
       kind: "http",
       method: "POST",
       path: "/files.delete",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Deletes a file.",
     tags: ["files"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["files:write:user"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `files:write:user`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "FilesDeleteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -4916,7 +3553,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "files_info",
-    command: "files-info-list",
+    command: "files-info",
+    group: "files",
     binding: {
       kind: "http",
       method: "GET",
@@ -4925,21 +3563,19 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets information about a file.",
     tags: ["files"],
-    security: [
-      {
-        slackAuth: ["files:read"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
+    pagination: {
+      style: "cursor",
+      cursor: {
         in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `files:read`",
+        name: "cursor",
       },
+      next: "response_metadata.next_cursor",
+      limit: {
+        in: "query",
+        name: "limit",
+      },
+    },
+    parameters: [
       {
         name: "file",
         in: "query",
@@ -4993,7 +3629,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "files_list",
-    command: "files-list-list",
+    command: "files-list",
+    group: "files",
     binding: {
       kind: "http",
       method: "GET",
@@ -5002,21 +3639,20 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List for a team, in a channel, or from a user with applied filters.",
     tags: ["files"],
-    security: [
-      {
-        slackAuth: ["files:read"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
+    pagination: {
+      style: "page",
+      page: {
         in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `files:read`",
+        name: "page",
       },
+      limit: {
+        in: "query",
+        name: "count",
+      },
+      items: "files",
+      start: 1,
+    },
+    parameters: [
       {
         name: "user",
         in: "query",
@@ -5098,6 +3734,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "files_remote_add",
     command: "files-remote-add",
+    group: "files",
     binding: {
       kind: "http",
       method: "POST",
@@ -5106,11 +3743,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Adds a file from a remote service",
     tags: ["files.remote", "files"],
-    security: [
-      {
-        slackAuth: ["remote_files:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -5125,7 +3757,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "files_remote_info",
-    command: "files-remote-info-list",
+    command: "files-remote-info",
+    group: "files",
     binding: {
       kind: "http",
       method: "GET",
@@ -5134,21 +3767,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieve information about a remote file added to Slack",
     tags: ["files.remote", "files"],
-    security: [
-      {
-        slackAuth: ["remote_files:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `remote_files:read`",
-      },
       {
         name: "file",
         in: "query",
@@ -5175,7 +3794,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "files_remote_list",
-    command: "files-remote-list-list",
+    command: "files-remote-list",
+    group: "files",
     binding: {
       kind: "http",
       method: "GET",
@@ -5184,21 +3804,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieve information about a remote file added to Slack",
     tags: ["files.remote", "files"],
-    security: [
-      {
-        slackAuth: ["remote_files:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `remote_files:read`",
-      },
       {
         name: "channel",
         in: "query",
@@ -5254,17 +3860,18 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "files_remote_remove",
     command: "files-remote-remove",
+    group: "files",
     binding: {
       kind: "http",
       method: "POST",
       path: "/files.remote.remove",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Remove a remote file.",
     tags: ["files.remote", "files"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["remote_files:write"],
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -5281,7 +3888,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "files_remote_share",
-    command: "files-remote-share-list",
+    command: "files-remote-share",
+    group: "files",
     binding: {
       kind: "http",
       method: "GET",
@@ -5290,21 +3898,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Share a remote file into a channel.",
     tags: ["files.remote", "files"],
-    security: [
-      {
-        slackAuth: ["remote_files:share"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `remote_files:share`",
-      },
       {
         name: "file",
         in: "query",
@@ -5343,6 +3937,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "files_remote_update",
     command: "files-remote-update",
+    group: "files",
     binding: {
       kind: "http",
       method: "POST",
@@ -5351,11 +3946,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Updates an existing remote file.",
     tags: ["files.remote", "files"],
-    security: [
-      {
-        slackAuth: ["remote_files:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -5371,35 +3961,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "files_revokePublicURL",
     command: "files-revoke-public-url",
+    group: "files",
     binding: {
       kind: "http",
       method: "POST",
       path: "/files.revokePublicURL",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Revokes public/external sharing access for a file",
     tags: ["files"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["files:write:user"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `files:write:user`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "FilesRevokePublicURLRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -5409,6 +3989,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "files_sharedPublicURL",
     command: "files-shared-public-url",
+    group: "files",
     binding: {
       kind: "http",
       method: "POST",
@@ -5417,27 +3998,16 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Enables a file for public/external sharing.",
     tags: ["files"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["files:write:user"],
+        key: "slack.share",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `files:write:user`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "FilesSharedPublicURLRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -5447,6 +4017,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "files_upload",
     command: "files-upload",
+    group: "files",
     binding: {
       kind: "http",
       method: "POST",
@@ -5455,11 +4026,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Uploads or creates a file.",
     tags: ["files"],
-    security: [
-      {
-        slackAuth: ["files:write:user"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -5474,7 +4040,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "migration_exchange",
-    command: "migration-exchange-list",
+    command: "migration-exchange",
     binding: {
       kind: "http",
       method: "GET",
@@ -5483,21 +4049,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "For Enterprise Grid workspaces, map local user IDs to global user IDs",
     tags: ["migration"],
-    security: [
-      {
-        slackAuth: ["tokens.basic"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `tokens.basic`",
-      },
       {
         name: "users",
         in: "query",
@@ -5534,7 +4086,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "oauth_access",
-    command: "oauth-access-list",
+    command: "oauth-access",
+    group: "oauth",
     binding: {
       kind: "http",
       method: "GET",
@@ -5543,11 +4096,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Exchanges a temporary OAuth verifier code for an access token.",
     tags: ["oauth"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
       {
         name: "client_id",
@@ -5599,11 +4147,13 @@ export const operations: readonly ManifestOperation[] = [
     response: {
       confidence: "contract",
       schema: "OauthAccessResponse",
+      sensitive: true,
     },
   },
   {
     id: "oauth_token",
-    command: "oauth-token-list",
+    command: "oauth-token",
+    group: "oauth",
     binding: {
       kind: "http",
       method: "GET",
@@ -5612,11 +4162,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Exchanges a temporary OAuth verifier code for a workspace token.",
     tags: ["oauth"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
       {
         name: "client_id",
@@ -5667,11 +4212,13 @@ export const operations: readonly ManifestOperation[] = [
     response: {
       confidence: "contract",
       schema: "OauthTokenResponse",
+      sensitive: true,
     },
   },
   {
     id: "oauth_v2_access",
-    command: "oauth-v2-access-list",
+    command: "oauth-v2-access",
+    group: "oauth",
     binding: {
       kind: "http",
       method: "GET",
@@ -5680,11 +4227,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Exchanges a temporary OAuth verifier code for an access token.",
     tags: ["oauth.v2", "oauth"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
       {
         name: "client_id",
@@ -5726,11 +4268,13 @@ export const operations: readonly ManifestOperation[] = [
     response: {
       confidence: "contract",
       schema: "OauthV2AccessResponse",
+      sensitive: true,
     },
   },
   {
     id: "pins_add",
     command: "pins-add",
+    group: "pins",
     binding: {
       kind: "http",
       method: "POST",
@@ -5739,27 +4283,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Pins an item to a channel.",
     tags: ["pins"],
-    security: [
-      {
-        slackAuth: ["pins:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `pins:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "PinsAddRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -5768,7 +4296,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "pins_list",
-    command: "pins-list-list",
+    command: "pins-list",
+    group: "pins",
     binding: {
       kind: "http",
       method: "GET",
@@ -5777,21 +4306,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists items pinned to a channel.",
     tags: ["pins"],
-    security: [
-      {
-        slackAuth: ["pins:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `pins:read`",
-      },
       {
         name: "channel",
         in: "query",
@@ -5810,35 +4325,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "pins_remove",
     command: "pins-remove",
+    group: "pins",
     binding: {
       kind: "http",
       method: "POST",
       path: "/pins.remove",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Un-pins an item from a channel.",
     tags: ["pins"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["pins:write"],
+        key: "messages.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `pins:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "PinsRemoveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -5848,6 +4353,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "reactions_add",
     command: "reactions-add",
+    group: "reactions",
     binding: {
       kind: "http",
       method: "POST",
@@ -5856,27 +4362,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Adds a reaction to an item.",
     tags: ["reactions"],
-    security: [
-      {
-        slackAuth: ["reactions:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reactions:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ReactionsAddRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -5885,7 +4375,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "reactions_get",
-    command: "reactions-get-list",
+    command: "reactions-get",
+    group: "reactions",
     binding: {
       kind: "http",
       method: "GET",
@@ -5894,21 +4385,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets reactions for an item.",
     tags: ["reactions"],
-    security: [
-      {
-        slackAuth: ["reactions:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reactions:read`",
-      },
       {
         name: "channel",
         in: "query",
@@ -5962,7 +4439,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "reactions_list",
-    command: "reactions-list-list",
+    command: "reactions-list",
+    group: "reactions",
     binding: {
       kind: "http",
       method: "GET",
@@ -5971,33 +4449,20 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists reactions made by a user.",
     tags: ["reactions"],
-    security: [
-      {
-        slackAuth: ["reactions:read"],
-      },
-    ],
     pagination: {
-      style: "page",
-      page: {
+      style: "cursor",
+      cursor: {
         in: "query",
-        name: "page",
+        name: "cursor",
       },
+      next: "response_metadata.next_cursor",
+      items: "items",
       limit: {
         in: "query",
         name: "limit",
       },
-      items: "items",
     },
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reactions:read`",
-      },
       {
         name: "user",
         in: "query",
@@ -6061,35 +4526,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "reactions_remove",
     command: "reactions-remove",
+    group: "reactions",
     binding: {
       kind: "http",
       method: "POST",
       path: "/reactions.remove",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Removes a reaction from an item.",
     tags: ["reactions"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["reactions:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reactions:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "ReactionsRemoveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6099,6 +4554,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "reminders_add",
     command: "reminders-add",
+    group: "reminders",
     binding: {
       kind: "http",
       method: "POST",
@@ -6107,27 +4563,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Creates a reminder.",
     tags: ["reminders"],
-    security: [
-      {
-        slackAuth: ["reminders:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reminders:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "RemindersAddRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6137,6 +4577,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "reminders_complete",
     command: "reminders-complete",
+    group: "reminders",
     binding: {
       kind: "http",
       method: "POST",
@@ -6145,27 +4586,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Marks a reminder as complete.",
     tags: ["reminders"],
-    security: [
-      {
-        slackAuth: ["reminders:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reminders:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "RemindersCompleteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6175,35 +4600,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "reminders_delete",
     command: "reminders-delete",
+    group: "reminders",
     binding: {
       kind: "http",
       method: "POST",
       path: "/reminders.delete",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Deletes a reminder.",
     tags: ["reminders"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["reminders:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reminders:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "RemindersDeleteRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6212,7 +4627,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "reminders_info",
-    command: "reminders-info-list",
+    command: "reminders-info",
+    group: "reminders",
     binding: {
       kind: "http",
       method: "GET",
@@ -6221,21 +4637,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets information about a reminder.",
     tags: ["reminders"],
-    security: [
-      {
-        slackAuth: ["reminders:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reminders:read`",
-      },
       {
         name: "reminder",
         in: "query",
@@ -6253,7 +4655,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "reminders_list",
-    command: "reminders-list-list",
+    command: "reminders-list",
+    group: "reminders",
     binding: {
       kind: "http",
       method: "GET",
@@ -6262,22 +4665,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists all reminders created by or for a given user.",
     tags: ["reminders"],
-    security: [
-      {
-        slackAuth: ["reminders:read"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `reminders:read`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "RemindersListResponse",
@@ -6285,7 +4673,7 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "rtm_connect",
-    command: "rtm-connect-list",
+    command: "rtm-connect",
     binding: {
       kind: "http",
       method: "GET",
@@ -6294,21 +4682,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Starts a Real Time Messaging session.",
     tags: ["rtm"],
-    security: [
-      {
-        slackAuth: ["rtm:stream"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `rtm:stream`",
-      },
       {
         name: "batch_presence_aware",
         in: "query",
@@ -6333,11 +4707,12 @@ export const operations: readonly ManifestOperation[] = [
     response: {
       confidence: "contract",
       schema: "RtmConnectResponse",
+      sensitive: true,
     },
   },
   {
     id: "search_messages",
-    command: "search-messages-list",
+    command: "search-messages",
     binding: {
       kind: "http",
       method: "GET",
@@ -6346,21 +4721,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Searches for messages matching a query.",
     tags: ["search"],
-    security: [
-      {
-        slackAuth: ["search:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `search:read`",
-      },
       {
         name: "count",
         in: "query",
@@ -6423,6 +4784,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "stars_add",
     command: "stars-add",
+    group: "stars",
     binding: {
       kind: "http",
       method: "POST",
@@ -6431,27 +4793,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Adds a star to an item.",
     tags: ["stars"],
-    security: [
-      {
-        slackAuth: ["stars:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `stars:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "StarsAddRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6460,7 +4806,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "stars_list",
-    command: "stars-list-list",
+    command: "stars-list",
+    group: "stars",
     binding: {
       kind: "http",
       method: "GET",
@@ -6469,21 +4816,20 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists stars for a user.",
     tags: ["stars"],
-    security: [
-      {
-        slackAuth: ["stars:read"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
+    pagination: {
+      style: "cursor",
+      cursor: {
         in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `stars:read`",
+        name: "cursor",
       },
+      next: "response_metadata.next_cursor",
+      items: "items",
+      limit: {
+        in: "query",
+        name: "limit",
+      },
+    },
+    parameters: [
       {
         name: "count",
         in: "query",
@@ -6529,35 +4875,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "stars_remove",
     command: "stars-remove",
+    group: "stars",
     binding: {
       kind: "http",
       method: "POST",
       path: "/stars.remove",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Removes a star from an item.",
     tags: ["stars"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["stars:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `stars:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "StarsRemoveRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6566,7 +4902,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "team_accessLogs",
-    command: "team-access-logs-list",
+    command: "team-access-logs",
+    group: "team",
     binding: {
       kind: "http",
       method: "GET",
@@ -6575,21 +4912,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets the access logs for the current team.",
     tags: ["team"],
-    security: [
-      {
-        slackAuth: ["admin"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin`",
-      },
       {
         name: "before",
         in: "query",
@@ -6623,7 +4946,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "team_billableInfo",
-    command: "team-billable-info-list",
+    command: "team-billable-info",
+    group: "team",
     binding: {
       kind: "http",
       method: "GET",
@@ -6632,21 +4956,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets billable users information for the current team.",
     tags: ["team"],
-    security: [
-      {
-        slackAuth: ["admin"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin`",
-      },
       {
         name: "user",
         in: "query",
@@ -6664,7 +4974,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "team_info",
-    command: "team-info-list",
+    command: "team-info",
+    group: "team",
     binding: {
       kind: "http",
       method: "GET",
@@ -6673,21 +4984,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets information about the current team.",
     tags: ["team"],
-    security: [
-      {
-        slackAuth: ["team:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `team:read`",
-      },
       {
         name: "team",
         in: "query",
@@ -6706,7 +5003,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "team_integrationLogs",
-    command: "team-integration-logs-list",
+    command: "team-integration-logs",
+    group: "team",
     binding: {
       kind: "http",
       method: "GET",
@@ -6715,21 +5013,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets the integration logs for the current team.",
     tags: ["team"],
-    security: [
-      {
-        slackAuth: ["admin"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `admin`",
-      },
       {
         name: "app_id",
         in: "query",
@@ -6790,7 +5074,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "team_profile_get",
-    command: "team-profile-get-list",
+    command: "team-profile-get",
+    group: "team",
     binding: {
       kind: "http",
       method: "GET",
@@ -6799,21 +5084,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieve a team's profile.",
     tags: ["team.profile", "team"],
-    security: [
-      {
-        slackAuth: ["users.profile:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users.profile:read`",
-      },
       {
         name: "visibility",
         in: "query",
@@ -6832,6 +5103,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "usergroups_create",
     command: "usergroups-create",
+    group: "usergroups",
     binding: {
       kind: "http",
       method: "POST",
@@ -6840,27 +5112,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Create a User Group",
     tags: ["usergroups"],
-    security: [
-      {
-        slackAuth: ["usergroups:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `usergroups:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "UsergroupsCreateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6870,35 +5126,25 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "usergroups_disable",
     command: "usergroups-disable",
+    group: "usergroups",
     binding: {
       kind: "http",
       method: "POST",
       path: "/usergroups.disable",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Disable an existing User Group",
     tags: ["usergroups"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["usergroups:write"],
+        key: "slack.delete",
       },
     ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `usergroups:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "UsergroupsDisableRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6908,6 +5154,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "usergroups_enable",
     command: "usergroups-enable",
+    group: "usergroups",
     binding: {
       kind: "http",
       method: "POST",
@@ -6916,27 +5163,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Enable a User Group",
     tags: ["usergroups"],
-    security: [
-      {
-        slackAuth: ["usergroups:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `usergroups:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "UsergroupsEnableRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -6945,7 +5176,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "usergroups_list",
-    command: "usergroups-list-list",
+    command: "usergroups-list",
+    group: "usergroups",
     binding: {
       kind: "http",
       method: "GET",
@@ -6954,11 +5186,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all User Groups for a team",
     tags: ["usergroups"],
-    security: [
-      {
-        slackAuth: ["usergroups:read"],
-      },
-    ],
     parameters: [
       {
         name: "include_users",
@@ -6968,15 +5195,6 @@ export const operations: readonly ManifestOperation[] = [
           type: "boolean",
         },
         description: "Include the list of users for each User Group.",
-      },
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `usergroups:read`",
       },
       {
         name: "include_count",
@@ -7005,6 +5223,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "usergroups_update",
     command: "usergroups-update",
+    group: "usergroups",
     binding: {
       kind: "http",
       method: "POST",
@@ -7013,27 +5232,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Update an existing User Group",
     tags: ["usergroups"],
-    security: [
-      {
-        slackAuth: ["usergroups:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `usergroups:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "UsergroupsUpdateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -7042,7 +5245,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "usergroups_users_list",
-    command: "usergroups-users-list-list",
+    command: "usergroups-users-list",
+    group: "usergroups",
     binding: {
       kind: "http",
       method: "GET",
@@ -7051,21 +5255,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List all users in a User Group",
     tags: ["usergroups.users", "usergroups"],
-    security: [
-      {
-        slackAuth: ["usergroups:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `usergroups:read`",
-      },
       {
         name: "include_disabled",
         in: "query",
@@ -7093,6 +5283,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "usergroups_users_update",
     command: "usergroups-users-update",
+    group: "usergroups",
     binding: {
       kind: "http",
       method: "POST",
@@ -7101,27 +5292,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Update the list of users for a User Group",
     tags: ["usergroups.users", "usergroups"],
-    security: [
-      {
-        slackAuth: ["usergroups:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `usergroups:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "UsergroupsUsersUpdateRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -7130,7 +5305,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "users_conversations",
-    command: "users-conversations-list",
+    command: "users-conversations",
+    group: "users",
     binding: {
       kind: "http",
       method: "GET",
@@ -7139,11 +5315,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List conversations the calling user may access.",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["channels:read", "groups:read", "im:read", "mpim:read"],
-      },
-    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -7158,15 +5329,6 @@ export const operations: readonly ManifestOperation[] = [
       },
     },
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `conversations:read`",
-      },
       {
         name: "user",
         in: "query",
@@ -7225,17 +5387,18 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "users_deletePhoto",
     command: "users-delete-photo",
+    group: "users",
     binding: {
       kind: "http",
       method: "POST",
       path: "/users.deletePhoto",
     },
-    effect: "write",
+    effect: "destructive",
     description: "Delete the user profile photo",
     tags: ["users"],
-    security: [
+    permissions: [
       {
-        slackAuth: ["users.profile:write"],
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -7252,7 +5415,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "users_getPresence",
-    command: "users-get-presence-list",
+    command: "users-get-presence",
+    group: "users",
     binding: {
       kind: "http",
       method: "GET",
@@ -7261,21 +5425,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets user presence information.",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["users:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users:read`",
-      },
       {
         name: "user",
         in: "query",
@@ -7293,7 +5443,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "users_identity",
-    command: "users-identity-list",
+    command: "users-identity",
+    group: "users",
     binding: {
       kind: "http",
       method: "GET",
@@ -7302,22 +5453,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Get a user's identity.",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["identity.basic"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `identity.basic`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "UsersIdentityResponse",
@@ -7325,7 +5461,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "users_info",
-    command: "users-info-list",
+    command: "users-info",
+    group: "users",
     binding: {
       kind: "http",
       method: "GET",
@@ -7334,21 +5471,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets information about a user.",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["users:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users:read`",
-      },
       {
         name: "include_locale",
         in: "query",
@@ -7375,7 +5498,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "users_list",
-    command: "users-list-list",
+    command: "users-list",
+    group: "users",
     binding: {
       kind: "http",
       method: "GET",
@@ -7384,21 +5508,20 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists all users in a Slack team.",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["users:read"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
+    pagination: {
+      style: "cursor",
+      cursor: {
         in: "query",
-        required: false,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users:read`",
+        name: "cursor",
       },
+      next: "response_metadata.next_cursor",
+      items: "members",
+      limit: {
+        in: "query",
+        name: "limit",
+      },
+    },
+    parameters: [
       {
         name: "limit",
         in: "query",
@@ -7436,7 +5559,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "users_lookupByEmail",
-    command: "users-lookup-by-email-list",
+    command: "users-lookup-by-email",
+    group: "users",
     binding: {
       kind: "http",
       method: "GET",
@@ -7445,21 +5569,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Find a user with an email address.",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["users:read.email"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users:read.email`",
-      },
       {
         name: "email",
         in: "query",
@@ -7477,7 +5587,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "users_profile_get",
-    command: "users-profile-get-list",
+    command: "users-profile-get",
+    group: "users",
     binding: {
       kind: "http",
       method: "GET",
@@ -7486,21 +5597,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieves a user's profile information.",
     tags: ["users.profile", "users"],
-    security: [
-      {
-        slackAuth: ["users.profile:read"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "query",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users.profile:read`",
-      },
       {
         name: "include_labels",
         in: "query",
@@ -7528,6 +5625,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "users_profile_set",
     command: "users-profile-set",
+    group: "users",
     binding: {
       kind: "http",
       method: "POST",
@@ -7536,27 +5634,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set the profile information for a user.",
     tags: ["users.profile", "users"],
-    security: [
-      {
-        slackAuth: ["users.profile:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users.profile:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "UsersProfileSetRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -7566,6 +5648,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "users_setActive",
     command: "users-set-active",
+    group: "users",
     binding: {
       kind: "http",
       method: "POST",
@@ -7574,22 +5657,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Marked a user as active. Deprecated and non-functional.",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["users:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users:write`",
-      },
-    ],
+    parameters: [],
     response: {
       confidence: "contract",
       schema: "UsersSetActiveResponse",
@@ -7598,6 +5666,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "users_setPhoto",
     command: "users-set-photo",
+    group: "users",
     binding: {
       kind: "http",
       method: "POST",
@@ -7606,11 +5675,6 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Set the user profile photo",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["users.profile:write"],
-      },
-    ],
     parameters: [],
     request: {
       required: false,
@@ -7626,6 +5690,7 @@ export const operations: readonly ManifestOperation[] = [
   {
     id: "users_setPresence",
     command: "users-set-presence",
+    group: "users",
     binding: {
       kind: "http",
       method: "POST",
@@ -7634,27 +5699,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Manually sets user presence.",
     tags: ["users"],
-    security: [
-      {
-        slackAuth: ["users:write"],
-      },
-    ],
-    parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `users:write`",
-      },
-    ],
+    parameters: [],
     request: {
       required: false,
       confidence: "contract",
       schema: "UsersSetPresenceRequest",
-      contentType: "application/x-www-form-urlencoded",
     },
     response: {
       confidence: "contract",
@@ -7663,7 +5712,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "views_open",
-    command: "views-open-list",
+    command: "views-open",
+    group: "views",
     binding: {
       kind: "http",
       method: "GET",
@@ -7672,21 +5722,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Open a view for a user.",
     tags: ["views"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "trigger_id",
         in: "query",
@@ -7713,7 +5749,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "views_publish",
-    command: "views-publish-list",
+    command: "views-publish",
+    group: "views",
     binding: {
       kind: "http",
       method: "GET",
@@ -7722,21 +5759,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Publish a static view for a User.",
     tags: ["views"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "user_id",
         in: "query",
@@ -7772,7 +5795,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "views_push",
-    command: "views-push-list",
+    command: "views-push",
+    group: "views",
     binding: {
       kind: "http",
       method: "GET",
@@ -7781,21 +5805,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Push a view onto the stack of a root view.",
     tags: ["views"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "trigger_id",
         in: "query",
@@ -7822,7 +5832,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "views_update",
-    command: "views-update-list",
+    command: "views-update",
+    group: "views",
     binding: {
       kind: "http",
       method: "GET",
@@ -7831,21 +5842,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Update an existing view.",
     tags: ["views"],
-    security: [
-      {
-        slackAuth: ["none"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `none`",
-      },
       {
         name: "view_id",
         in: "query",
@@ -7891,7 +5888,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "workflows_stepCompleted",
-    command: "workflows-step-completed-list",
+    command: "workflows-step-completed",
+    group: "workflows",
     binding: {
       kind: "http",
       method: "GET",
@@ -7900,21 +5898,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Indicate that an app's step in a workflow completed execution.",
     tags: ["workflows"],
-    security: [
-      {
-        slackAuth: ["workflow.steps:execute"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `workflow.steps:execute`",
-      },
       {
         name: "workflow_step_execute_id",
         in: "query",
@@ -7942,7 +5926,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "workflows_stepFailed",
-    command: "workflows-step-failed-list",
+    command: "workflows-step-failed",
+    group: "workflows",
     binding: {
       kind: "http",
       method: "GET",
@@ -7951,21 +5936,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Indicate that an app's step in a workflow failed to execute.",
     tags: ["workflows"],
-    security: [
-      {
-        slackAuth: ["workflow.steps:execute"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `workflow.steps:execute`",
-      },
       {
         name: "workflow_step_execute_id",
         in: "query",
@@ -7993,7 +5964,8 @@ export const operations: readonly ManifestOperation[] = [
   },
   {
     id: "workflows_updateStep",
-    command: "workflows-update-step-list",
+    command: "workflows-update-step",
+    group: "workflows",
     binding: {
       kind: "http",
       method: "GET",
@@ -8002,21 +5974,7 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Update the configuration for a workflow extension step.",
     tags: ["workflows"],
-    security: [
-      {
-        slackAuth: ["workflow.steps:execute"],
-      },
-    ],
     parameters: [
-      {
-        name: "token",
-        in: "header",
-        required: true,
-        schema: {
-          type: "string",
-        },
-        description: "Authentication token. Requires scope: `workflow.steps:execute`",
-      },
       {
         name: "workflow_step_edit_id",
         in: "query",
@@ -8081,82 +6039,14 @@ export const servers: readonly ApiServer[] = [
 ]
 
 export const securitySchemes: Readonly<Record<string, SecurityScheme>> = {
-  slackAuth: {
-    type: "oauth2",
-    flows: {
-      authorizationCode: {
-        authorizationUrl: "https://slack.com/oauth/authorize",
-        tokenUrl: "https://slack.com/api/oauth.access",
-        scopes: {
-          admin: "admin",
-          "admin.apps:read": "admin.apps:read",
-          "admin.apps:write": "admin.apps:write",
-          "admin.conversations:read": "admin.conversations:read",
-          "admin.conversations:write": "admin.conversations:write",
-          "admin.invites:read": "admin.invites:read",
-          "admin.invites:write": "admin.invites:write",
-          "admin.teams:read": "admin.teams:read",
-          "admin.teams:write": "admin.teams:write",
-          "admin.usergroups:read": "admin.usergroups:read",
-          "admin.usergroups:write": "admin.usergroups:write",
-          "admin.users:read": "admin.users:read",
-          "admin.users:write": "admin.users:write",
-          "authorizations:read": "authorizations:read",
-          bot: "Bot user scope",
-          "calls:read": "calls:read",
-          "calls:write": "calls:write",
-          "channels:history": "channels:history",
-          "channels:manage": "channels:manage",
-          "channels:read": "channels:read",
-          "channels:write": "channels:write",
-          "chat:write": "chat:write",
-          "chat:write:bot": "Author messages as a bot",
-          "chat:write:user": "Author messages as a user",
-          "conversations:history": "conversations:history",
-          "conversations:read": "conversations:read",
-          "conversations:write": "conversations:write",
-          "dnd:read": "dnd:read",
-          "dnd:write": "dnd:write",
-          "emoji:read": "emoji:read",
-          "files:read": "files:read",
-          "files:write:user": "files:write:user",
-          "groups:history": "groups:history",
-          "groups:read": "groups:read",
-          "groups:write": "groups:write",
-          "identity.basic": "identity.basic",
-          "im:history": "im:history",
-          "im:read": "im:read",
-          "im:write": "im:write",
-          "links:write": "links:write",
-          "mpim:history": "mpim:history",
-          "mpim:read": "mpim:read",
-          "mpim:write": "mpim:write",
-          none: "No scope required",
-          "pins:read": "pins:read",
-          "pins:write": "pins:write",
-          "reactions:read": "reactions:read",
-          "reactions:write": "reactions:write",
-          "reminders:read": "reminders:read",
-          "reminders:write": "reminders:write",
-          "remote_files:read": "remote_files:read",
-          "remote_files:share": "remote_files:share",
-          "remote_files:write": "remote_files:write",
-          "rtm:stream": "rtm:stream",
-          "search:read": "search:read",
-          "stars:read": "stars:read",
-          "stars:write": "stars:write",
-          "team:read": "team:read",
-          "tokens.basic": "tokens.basic",
-          "usergroups:read": "usergroups:read",
-          "usergroups:write": "usergroups:write",
-          "users.profile:read": "users.profile:read",
-          "users.profile:write": "users.profile:write",
-          "users:read": "users:read",
-          "users:read.email": "users:read.email",
-          "users:write": "users:write",
-          "workflow.steps:execute": "workflow.steps:execute",
-        },
-      },
-    },
+  bearer: {
+    type: "http",
+    scheme: "bearer",
   },
 }
+
+export const security: readonly SecurityRequirement[] = [
+  {
+    bearer: [],
+  },
+]
