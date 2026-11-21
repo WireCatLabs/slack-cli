@@ -1,3 +1,4 @@
+import { CliError } from "@wirecat/cli-base"
 import * as v from "valibot"
 import { expect, it } from "vitest"
 import { FAKE_TOKEN, fakeSlack } from "../testing/fake-slack.js"
@@ -22,19 +23,40 @@ it("POSTs a form with the token only in the Bearer header, and refuses a redirec
   expect(String(sent[0]?.body)).not.toContain(FAKE_TOKEN)
 })
 
-// Slack's error codes: https://docs.slack.dev/reference/methods/auth.test/ and each method's "Errors".
+const METHOD = "https://docs.slack.dev/reference/methods/"
+
+// Each code as the method page that lists it under "Errors".
 it.each([
-  ["invalid_auth", false, "authentication_error"],
-  ["token_revoked", false, "authentication_error"],
-  ["account_inactive", false, "authentication_error"],
-  ["missing_scope", false, "permission_error"],
-  ["ratelimited", false, "rate_limited"],
-  ["channel_not_found", false, "not_found"],
-  ["invalid_cursor", false, "validation_error"],
-  ["internal_error", false, "provider_unavailable"],
-  ["internal_error", true, "outcome_unknown"],
-  ["is_archived", true, "provider_error"],
-])("Slack's %s (a write: %s) is %s", (error, writes, code) => {
+  ["invalid_auth", false, "authentication_error", `${METHOD}auth.test/`],
+  ["not_authed", false, "authentication_error", `${METHOD}auth.test/`],
+  ["token_revoked", false, "authentication_error", `${METHOD}auth.test/`],
+  ["token_expired", false, "authentication_error", `${METHOD}auth.test/`],
+  ["account_inactive", false, "authentication_error", `${METHOD}auth.test/`],
+  ["missing_scope", false, "permission_error", `${METHOD}auth.test/`],
+  ["not_allowed_token_type", false, "permission_error", `${METHOD}auth.test/`],
+  ["no_permission", false, "permission_error", `${METHOD}auth.test/`],
+  ["restricted_action", false, "permission_error", `${METHOD}conversations.history/`],
+  ["ratelimited", false, "rate_limited", `${METHOD}auth.test/`],
+  ["channel_not_found", false, "not_found", `${METHOD}chat.postMessage/`],
+  ["user_not_found", false, "not_found", `${METHOD}users.info/`],
+  ["message_not_found", false, "not_found", `${METHOD}chat.delete/`],
+  ["thread_not_found", false, "not_found", `${METHOD}conversations.replies/`],
+  ["file_not_found", false, "not_found", `${METHOD}files.info/`],
+  ["not_in_channel", false, "not_found", `${METHOD}chat.postMessage/`],
+  ["invalid_arguments", false, "validation_error", `${METHOD}auth.test/`],
+  ["invalid_arg_name", false, "validation_error", `${METHOD}auth.test/`],
+  ["invalid_array_arg", false, "validation_error", `${METHOD}auth.test/`],
+  ["invalid_cursor", false, "validation_error", `${METHOD}conversations.list/`],
+  ["invalid_ts_latest", false, "validation_error", `${METHOD}conversations.history/`],
+  ["invalid_ts_oldest", false, "validation_error", `${METHOD}conversations.history/`],
+  ["bad_timestamp", false, "validation_error", `${METHOD}reactions.add/`],
+  ["fatal_error", false, "provider_unavailable", `${METHOD}auth.test/`],
+  ["internal_error", false, "provider_unavailable", `${METHOD}auth.test/`],
+  ["service_unavailable", false, "provider_unavailable", `${METHOD}auth.test/`],
+  ["request_timeout", false, "provider_unavailable", `${METHOD}auth.test/`],
+  ["internal_error", true, "outcome_unknown", `${METHOD}auth.test/`],
+  ["is_archived", true, "provider_error", `${METHOD}reactions.add/`],
+])("Slack's %s (a write: %s) is %s, as %s lists it", (error, writes, code) => {
   expect(slackFailure(error, writes).code).toBe(code)
 })
 
@@ -83,12 +105,32 @@ it("an answer without the documented fields is invalid_response; one that is not
   })
 })
 
-it("HTTP failures: a 5xx read may be retried, a 5xx write is outcome_unknown", async () => {
-  const down = async () => new Response("", { status: 503 })
+it("a 5xx is sent once: a read says it may be retried later, a write is outcome_unknown", async () => {
+  let sent = 0
+  const down = async () => {
+    sent++
+    return new Response("", { status: 503 })
+  }
   const call = (writes: boolean) =>
     slackClient({ token: FAKE_TOKEN, fetch: down })("auth.test", {}, anything, { writes })
   await expect(call(false)).rejects.toMatchObject({ code: "provider_unavailable", details: { retryable: true } })
   await expect(call(true)).rejects.toMatchObject({ code: "outcome_unknown", details: { retryable: false } })
+  expect(sent).toBe(2)
+})
+
+it("a write refused before it was sent keeps its own error, never outcome_unknown", async () => {
+  const undeclared = new CliError("configuration_error", "not a host this CLI declares", { sent: false })
+  const refusing = async () => Promise.reject(undeclared)
+  await expect(
+    slackClient({ token: FAKE_TOKEN, fetch: refusing })("chat.postMessage", {}, anything, { writes: true }),
+  ).rejects.toMatchObject({ code: "configuration_error" })
+  const overBudget = new CliError("rate_limited", "the pace needs a longer wait", { sent: false })
+  const pacer = { reserve: async () => Promise.reject(overBudget), holdFor: async () => {} }
+  const slack = fakeSlack()
+  await expect(
+    slackClient({ token: FAKE_TOKEN, fetch: slack.fetch, pacer })("chat.postMessage", {}, anything, { writes: true }),
+  ).rejects.toMatchObject({ code: "rate_limited" })
+  expect(slack.calls).toEqual([])
 })
 
 it("no answer: a read is a network error, a stopped read is cancelled, a write is outcome_unknown", async () => {

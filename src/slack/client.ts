@@ -40,7 +40,15 @@ const NOT_FOUND = new Set([
   "file_not_found",
   "not_in_channel",
 ])
-const INPUT = new Set(["invalid_arguments", "invalid_arg_name", "invalid_array_arg", "invalid_cursor", "invalid_ts"])
+const INPUT = new Set([
+  "invalid_arguments",
+  "invalid_arg_name",
+  "invalid_array_arg",
+  "invalid_cursor",
+  "invalid_ts_latest",
+  "invalid_ts_oldest",
+  "bad_timestamp",
+])
 const UNAVAILABLE = new Set(["fatal_error", "internal_error", "service_unavailable", "request_timeout"])
 
 const failureAnswer = v.looseObject({
@@ -148,6 +156,7 @@ export const slackClient = (options: SlackClientOptions) => {
         ...(options.signal ? { signal: options.signal } : {}),
       })
     } catch (error) {
+      if (isCliError(error) && error.details.sent === false) return fail(error)
       if (writes)
         return fail(
           new CliError("outcome_unknown", `${SERVICE} did not answer a write; check before repeating it`, {
