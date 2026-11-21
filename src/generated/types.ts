@@ -89,7 +89,7 @@ export type ObjsChannel = {
   is_shared: boolean
   is_thread_only?: boolean
   last_read?: DefsTs
-  latest?: Array<ObjsMessage | null>
+  latest?: ObjsMessage | null
   members: Array<DefsUserId>
   name: string
   name_normalized: string
@@ -128,7 +128,7 @@ export type ObjsComment = {
 
 export type ObjsComments = Array<unknown>
 
-export type ObjsConversation = Array<
+export type ObjsConversation =
   | ({
       accepted_user?: DefsUserId
       connected_team_ids?: Array<DefsWorkspaceId>
@@ -166,12 +166,12 @@ export type ObjsConversation = Array<
       is_starred?: boolean
       is_thread_only?: boolean
       last_read?: DefsTs
-      latest?: Array<ObjsMessage | null>
+      latest?: ObjsMessage | null
       members?: Array<DefsUserId>
       name: string
       name_normalized: string
       num_members?: number
-      parent_conversation?: Array<DefsChannel | null>
+      parent_conversation?: DefsChannel | null
       pending_connected_team_ids?: Array<DefsTeam>
       pending_shared?: Array<DefsTeam>
       pin_count?: number
@@ -236,12 +236,12 @@ export type ObjsConversation = Array<
       is_starred?: boolean
       is_thread_only?: boolean
       last_read?: DefsTs
-      latest?: Array<ObjsMessage | null>
+      latest?: ObjsMessage | null
       members?: Array<DefsUserId>
       name: string
       name_normalized: string
       num_members?: number
-      parent_conversation?: Array<DefsChannel | null>
+      parent_conversation?: DefsChannel | null
       pending_connected_team_ids?: Array<DefsTeam>
       pending_shared?: Array<DefsTeam>
       pin_count?: number
@@ -287,8 +287,8 @@ export type ObjsConversation = Array<
       is_starred?: boolean
       is_user_deleted?: boolean
       last_read?: DefsTs
-      latest?: Array<ObjsMessage | null>
-      parent_conversation?: Array<DefsChannel | null>
+      latest?: ObjsMessage | null
+      parent_conversation?: DefsChannel | null
       pin_count?: number
       priority: number
       shares?: Array<
@@ -305,7 +305,6 @@ export type ObjsConversation = Array<
       user: DefsUserId
       version?: number
     } & { [key: string]: unknown })
->
 
 export type ObjsEnterpriseUser = {
   enterprise_id: DefsEnterpriseId
@@ -423,7 +422,7 @@ export type ObjsMessage = {
     } & { [key: string]: unknown }
   >
   blocks?: Blocks
-  bot_id?: Array<DefsBotId | null>
+  bot_id?: DefsBotId | null
   bot_profile?: ObjsBotProfile
   client_msg_id?: string
   comment?: ObjsComment
@@ -498,8 +497,8 @@ export type ObjsReminder = {
 } & { [key: string]: unknown }
 
 export type ObjsResources = {
-  excluded_ids?: Array<Array<DefsChannel | DefsTeam>>
-  ids: Array<Array<DefsChannel | DefsTeam>>
+  excluded_ids?: Array<DefsChannel | DefsTeam>
+  ids: Array<DefsChannel | DefsTeam>
   wildcard?: boolean
 } & { [key: string]: unknown }
 
@@ -513,13 +512,13 @@ export type ObjsScopes = Array<string>
 
 export type ObjsSubteam = {
   auto_provision: boolean
-  auto_type: Array<"owner" | "admin" | null>
+  auto_type: "owner" | "admin" | null
   channel_count?: number
   created_by: DefsUserId
   date_create: number
   date_delete: number
   date_update: number
-  deleted_by: Array<DefsUserId | null>
+  deleted_by: DefsUserId | null
   description: string
   enterprise_subteam_id: string
   handle: string
@@ -545,7 +544,7 @@ export type ObjsTeam = {
   date_create?: number
   deleted?: boolean
   description?: string | null
-  discoverable?: Array<string | null>
+  discoverable?: string | null
   domain: string
   email_domain: string
   enterprise_id?: DefsEnterpriseId
@@ -580,7 +579,7 @@ export type ObjsTeamProfileField = {
   id: string
   is_hidden?: boolean
   label: string
-  options?: Array<ObjsTeamProfileFieldOption | null>
+  options?: ObjsTeamProfileFieldOption | null
   ordering: number
   possible_values?: Array<string> | null
   type: "text" | "date" | "link" | "mailto" | "options_list" | "user"
@@ -593,7 +592,7 @@ export type ObjsTeamProfileFieldOption = {
   is_scim?: boolean | null
 } & { [key: string]: unknown }
 
-export type ObjsUser = Array<
+export type ObjsUser =
   | ({
       color?: string
       deleted?: boolean
@@ -622,7 +621,7 @@ export type ObjsUser = Array<
         fields: Array<ObjsTeamProfileField>
       } & { [key: string]: unknown }
       two_factor_type?: string
-      tz?: Array<string | null>
+      tz?: string | null
       tz_label?: string
       tz_offset?: number
       updated: number
@@ -655,12 +654,11 @@ export type ObjsUser = Array<
       } & { [key: string]: unknown }
       teams?: Array<DefsWorkspaceId>
       two_factor_type?: string
-      tz?: Array<string | null>
+      tz?: string | null
       tz_label?: string
       tz_offset?: number
       updated: number
     } & { [key: string]: unknown })
->
 
 export type ObjsUserProfile = {
   always_active?: boolean
@@ -1801,7 +1799,7 @@ export type ConversationsCreateResponse = {
 /** Schema for successful response from conversations.history method */
 export type ConversationsHistoryResponse = {
   channel_actions_count: number
-  channel_actions_ts: Array<number | null>
+  channel_actions_ts: number | null
   has_more: boolean
   messages: Array<ObjsMessage>
   ok: DefsOkTrue
@@ -1910,7 +1908,7 @@ export type ConversationsOpenRequest = {
 /** Schema for successful response from conversations.open method when opening channels, ims, mpims */
 export type ConversationsOpenResponse = {
   already_open?: boolean
-  channel: Array<
+  channel:
     | ObjsConversation
     | ({
         created?: string
@@ -1923,7 +1921,6 @@ export type ConversationsOpenResponse = {
         unread_count_display?: number
         user?: DefsUserId
       } & { [key: string]: unknown })
-  >
   no_op?: boolean
   ok: DefsOkTrue
 } & { [key: string]: unknown }
@@ -1945,39 +1942,37 @@ export type ConversationsRenameResponse = {
 export type ConversationsRepliesResponse = {
   has_more?: boolean
   messages: Array<
-    Array<
-      | ({
-          last_read?: DefsTs
-          latest_reply?: DefsTs
-          reply_count: number
-          reply_users?: Array<DefsUserId>
-          reply_users_count?: number
-          source_team?: DefsTeam
-          subscribed: boolean
-          team?: DefsTeam
-          text: string
-          thread_ts: DefsTs
-          ts: DefsTs
-          type: string
-          unread_count?: number
-          user: DefsUserId
-          user_profile?: ObjsUserProfileShort
-          user_team?: DefsTeam
-        } & { [key: string]: unknown })
-      | ({
-          is_starred?: boolean
-          parent_user_id: DefsUserId
-          source_team?: DefsTeam
-          team?: DefsTeam
-          text: string
-          thread_ts: DefsTs
-          ts: DefsTs
-          type: string
-          user: DefsUserId
-          user_profile?: ObjsUserProfileShort
-          user_team?: DefsTeam
-        } & { [key: string]: unknown })
-    >
+    | ({
+        last_read?: DefsTs
+        latest_reply?: DefsTs
+        reply_count: number
+        reply_users?: Array<DefsUserId>
+        reply_users_count?: number
+        source_team?: DefsTeam
+        subscribed: boolean
+        team?: DefsTeam
+        text: string
+        thread_ts: DefsTs
+        ts: DefsTs
+        type: string
+        unread_count?: number
+        user: DefsUserId
+        user_profile?: ObjsUserProfileShort
+        user_team?: DefsTeam
+      } & { [key: string]: unknown })
+    | ({
+        is_starred?: boolean
+        parent_user_id: DefsUserId
+        source_team?: DefsTeam
+        team?: DefsTeam
+        text: string
+        thread_ts: DefsTs
+        ts: DefsTs
+        type: string
+        user: DefsUserId
+        user_profile?: ObjsUserProfileShort
+        user_team?: DefsTeam
+      } & { [key: string]: unknown })
   >
   ok: DefsOkTrue
   response_metadata?: {
@@ -2270,7 +2265,7 @@ export type PinsAddResponse = {
 } & { [key: string]: unknown }
 
 /** Schema for successful response from pins.list method */
-export type PinsListResponse = Array<
+export type PinsListResponse =
   | ({
       items: Array<
         | ({
@@ -2293,7 +2288,6 @@ export type PinsListResponse = Array<
       count: number
       ok: DefsOkTrue
     } & { [key: string]: unknown })
->
 
 export type PinsRemoveRequest = {
   /** Channel where the item is pinned to. */
@@ -2322,27 +2316,42 @@ export type ReactionsAddResponse = {
 } & { [key: string]: unknown }
 
 /** Schema for successful response from reactions.get method */
-export type ReactionsGetResponse = Record<string, unknown>
+export type ReactionsGetResponse =
+  | ({
+      channel: DefsChannel
+      message: ObjsMessage
+      ok: DefsOkTrue
+      type: "message"
+    } & { [key: string]: unknown })
+  | ({
+      file: ObjsFile
+      ok: DefsOkTrue
+      type: "file"
+    } & { [key: string]: unknown })
+  | ({
+      comment: ObjsComment
+      file: ObjsFile
+      ok: DefsOkTrue
+      type: "file_comment"
+    } & { [key: string]: unknown })
 
 /** Schema for successful response from reactions.list method */
 export type ReactionsListResponse = {
   items: Array<
-    Array<
-      | ({
-          channel: DefsChannel
-          message: ObjsMessage
-          type: "message"
-        } & { [key: string]: unknown })
-      | ({
-          file: ObjsFile
-          type: "file"
-        } & { [key: string]: unknown })
-      | ({
-          comment: ObjsComment
-          file: ObjsFile
-          type: "file_comment"
-        } & { [key: string]: unknown })
-    >
+    | ({
+        channel: DefsChannel
+        message: ObjsMessage
+        type: "message"
+      } & { [key: string]: unknown })
+    | ({
+        file: ObjsFile
+        type: "file"
+      } & { [key: string]: unknown })
+    | ({
+        comment: ObjsComment
+        file: ObjsFile
+        type: "file_comment"
+      } & { [key: string]: unknown })
   >
   ok: DefsOkTrue
   paging?: ObjsPaging
@@ -2453,40 +2462,38 @@ export type StarsAddResponse = {
 /** Schema for successful response from stars.list method */
 export type StarsListResponse = {
   items: Array<
-    Array<
-      | ({
-          channel: DefsChannel
-          date_create: number
-          message: ObjsMessage
-          type: "message"
-        } & { [key: string]: unknown })
-      | ({
-          date_create: number
-          file: ObjsFile
-          type: "file"
-        } & { [key: string]: unknown })
-      | ({
-          comment: ObjsComment
-          date_create: number
-          file: ObjsFile
-          type: "file_comment"
-        } & { [key: string]: unknown })
-      | ({
-          channel: DefsChannel
-          date_create: number
-          type: "channel"
-        } & { [key: string]: unknown })
-      | ({
-          channel: DefsDmId
-          date_create: number
-          type: "im"
-        } & { [key: string]: unknown })
-      | ({
-          channel: DefsGroupId
-          date_create: number
-          type: "group"
-        } & { [key: string]: unknown })
-    >
+    | ({
+        channel: DefsChannel
+        date_create: number
+        message: ObjsMessage
+        type: "message"
+      } & { [key: string]: unknown })
+    | ({
+        date_create: number
+        file: ObjsFile
+        type: "file"
+      } & { [key: string]: unknown })
+    | ({
+        comment: ObjsComment
+        date_create: number
+        file: ObjsFile
+        type: "file_comment"
+      } & { [key: string]: unknown })
+    | ({
+        channel: DefsChannel
+        date_create: number
+        type: "channel"
+      } & { [key: string]: unknown })
+    | ({
+        channel: DefsDmId
+        date_create: number
+        type: "im"
+      } & { [key: string]: unknown })
+    | ({
+        channel: DefsGroupId
+        date_create: number
+        type: "group"
+      } & { [key: string]: unknown })
   >
   ok: DefsOkTrue
   paging?: ObjsPaging
@@ -2692,7 +2699,7 @@ export type UsersGetPresenceResponse = {
 } & { [key: string]: unknown }
 
 /** Schema for successful response from users.identity method */
-export type UsersIdentityResponse = Array<
+export type UsersIdentityResponse =
   | ({
       ok: DefsOkTrue
       team: {
@@ -2750,7 +2757,6 @@ export type UsersIdentityResponse = Array<
         name: string
       } & { [key: string]: unknown }
     } & { [key: string]: unknown })
->
 
 /** Schema for successful response from users.info method */
 export type UsersInfoResponse = {

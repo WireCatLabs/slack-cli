@@ -120,7 +120,7 @@ export const ObjsChannel: v.GenericSchema<unknown, T.ObjsChannel> = v.objectWith
     is_shared: v.boolean(),
     is_thread_only: v.optional(v.boolean()),
     last_read: v.optional(v.lazy(() => DefsTs)),
-    latest: v.optional(v.array(v.nullable(v.lazy(() => ObjsMessage)))),
+    latest: v.optional(v.nullable(v.lazy(() => ObjsMessage))),
     members: v.pipe(
       v.array(v.lazy(() => DefsUserId)),
       v.minLength(0),
@@ -186,328 +186,326 @@ export const ObjsComment: v.GenericSchema<unknown, T.ObjsComment> = v.objectWith
 
 export const ObjsComments: v.GenericSchema<unknown, T.ObjsComments> = v.array(v.unknown())
 
-export const ObjsConversation: v.GenericSchema<unknown, T.ObjsConversation> = v.array(
-  v.union([
-    v.objectWithRest(
-      {
-        accepted_user: v.optional(v.lazy(() => DefsUserId)),
-        connected_team_ids: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsWorkspaceId)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
+export const ObjsConversation: v.GenericSchema<unknown, T.ObjsConversation> = v.union([
+  v.objectWithRest(
+    {
+      accepted_user: v.optional(v.lazy(() => DefsUserId)),
+      connected_team_ids: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsWorkspaceId)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        conversation_host_id: v.optional(v.lazy(() => DefsWorkspaceId)),
-        created: integer(),
-        creator: v.lazy(() => DefsUserId),
-        display_counts: v.optional(
-          v.objectWithRest(
-            {
-              display_counts: integer(),
-              guest_counts: integer(),
-            },
-            v.unknown(),
-          ),
-        ),
-        enterprise_id: v.optional(v.lazy(() => DefsEnterpriseId)),
-        has_pins: v.optional(v.boolean()),
-        id: v.lazy(() => DefsChannel),
-        internal_team_ids: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
-        ),
-        is_archived: v.boolean(),
-        is_channel: v.boolean(),
-        is_ext_shared: v.optional(v.boolean()),
-        is_frozen: v.optional(v.boolean()),
-        is_general: v.boolean(),
-        is_global_shared: v.optional(v.boolean()),
-        is_group: v.boolean(),
-        is_im: v.boolean(),
-        is_member: v.optional(v.boolean()),
-        is_moved: v.optional(integer()),
-        is_mpim: v.literal(false),
-        is_non_threadable: v.optional(v.boolean()),
-        is_open: v.optional(v.boolean()),
-        is_org_default: v.optional(v.boolean()),
-        is_org_mandatory: v.optional(v.boolean()),
-        is_org_shared: v.boolean(),
-        is_pending_ext_shared: v.optional(v.boolean()),
-        is_private: v.boolean(),
-        is_read_only: v.optional(v.boolean()),
-        is_shared: v.boolean(),
-        is_starred: v.optional(v.boolean()),
-        is_thread_only: v.optional(v.boolean()),
-        last_read: v.optional(v.lazy(() => DefsTs)),
-        latest: v.optional(v.array(v.nullable(v.lazy(() => ObjsMessage)))),
-        members: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsUserId)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
-        ),
-        name: v.string(),
-        name_normalized: v.string(),
-        num_members: v.optional(integer()),
-        parent_conversation: v.optional(v.array(v.nullable(v.lazy(() => DefsChannel)))),
-        pending_connected_team_ids: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
-        ),
-        pending_shared: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
-        ),
-        pin_count: v.optional(integer()),
-        previous_names: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsChannelName)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
-        ),
-        priority: v.optional(number()),
-        purpose: v.objectWithRest(
+      ),
+      conversation_host_id: v.optional(v.lazy(() => DefsWorkspaceId)),
+      created: integer(),
+      creator: v.lazy(() => DefsUserId),
+      display_counts: v.optional(
+        v.objectWithRest(
           {
-            creator: v.lazy(() => DefsTopicPurposeCreator),
-            last_set: integer(),
-            value: v.string(),
+            display_counts: integer(),
+            guest_counts: integer(),
           },
           v.unknown(),
         ),
-        shared_team_ids: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
+      ),
+      enterprise_id: v.optional(v.lazy(() => DefsEnterpriseId)),
+      has_pins: v.optional(v.boolean()),
+      id: v.lazy(() => DefsChannel),
+      internal_team_ids: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        shares: v.optional(
-          v.pipe(
-            v.array(
-              v.objectWithRest(
-                {
-                  accepted_user: v.optional(v.lazy(() => DefsUserId)),
-                  is_active: v.boolean(),
-                  team: v.lazy(() => ObjsTeam),
-                  user: v.lazy(() => DefsUserId),
-                },
-                v.unknown(),
-              ),
+      ),
+      is_archived: v.boolean(),
+      is_channel: v.boolean(),
+      is_ext_shared: v.optional(v.boolean()),
+      is_frozen: v.optional(v.boolean()),
+      is_general: v.boolean(),
+      is_global_shared: v.optional(v.boolean()),
+      is_group: v.boolean(),
+      is_im: v.boolean(),
+      is_member: v.optional(v.boolean()),
+      is_moved: v.optional(integer()),
+      is_mpim: v.literal(false),
+      is_non_threadable: v.optional(v.boolean()),
+      is_open: v.optional(v.boolean()),
+      is_org_default: v.optional(v.boolean()),
+      is_org_mandatory: v.optional(v.boolean()),
+      is_org_shared: v.boolean(),
+      is_pending_ext_shared: v.optional(v.boolean()),
+      is_private: v.boolean(),
+      is_read_only: v.optional(v.boolean()),
+      is_shared: v.boolean(),
+      is_starred: v.optional(v.boolean()),
+      is_thread_only: v.optional(v.boolean()),
+      last_read: v.optional(v.lazy(() => DefsTs)),
+      latest: v.optional(v.nullable(v.lazy(() => ObjsMessage))),
+      members: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsUserId)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
+        ),
+      ),
+      name: v.string(),
+      name_normalized: v.string(),
+      num_members: v.optional(integer()),
+      parent_conversation: v.optional(v.nullable(v.lazy(() => DefsChannel))),
+      pending_connected_team_ids: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
+        ),
+      ),
+      pending_shared: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
+        ),
+      ),
+      pin_count: v.optional(integer()),
+      previous_names: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsChannelName)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
+        ),
+      ),
+      priority: v.optional(number()),
+      purpose: v.objectWithRest(
+        {
+          creator: v.lazy(() => DefsTopicPurposeCreator),
+          last_set: integer(),
+          value: v.string(),
+        },
+        v.unknown(),
+      ),
+      shared_team_ids: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
+        ),
+      ),
+      shares: v.optional(
+        v.pipe(
+          v.array(
+            v.objectWithRest(
+              {
+                accepted_user: v.optional(v.lazy(() => DefsUserId)),
+                is_active: v.boolean(),
+                team: v.lazy(() => ObjsTeam),
+                user: v.lazy(() => DefsUserId),
+              },
+              v.unknown(),
             ),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
           ),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        timezone_count: v.optional(integer()),
-        topic: v.objectWithRest(
+      ),
+      timezone_count: v.optional(integer()),
+      topic: v.objectWithRest(
+        {
+          creator: v.lazy(() => DefsTopicPurposeCreator),
+          last_set: integer(),
+          value: v.string(),
+        },
+        v.unknown(),
+      ),
+      unlinked: v.optional(integer()),
+      unread_count: v.optional(integer()),
+      unread_count_display: v.optional(integer()),
+      use_case: v.optional(v.string()),
+      user: v.optional(v.lazy(() => DefsUserId)),
+      version: v.optional(integer()),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      accepted_user: v.optional(v.lazy(() => DefsUserId)),
+      connected_team_ids: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
+        ),
+      ),
+      conversation_host_id: v.optional(v.lazy(() => DefsWorkspaceId)),
+      created: integer(),
+      creator: v.lazy(() => DefsUserId),
+      display_counts: v.optional(
+        v.objectWithRest(
           {
-            creator: v.lazy(() => DefsTopicPurposeCreator),
-            last_set: integer(),
-            value: v.string(),
+            display_counts: integer(),
+            guest_counts: integer(),
           },
           v.unknown(),
         ),
-        unlinked: v.optional(integer()),
-        unread_count: v.optional(integer()),
-        unread_count_display: v.optional(integer()),
-        use_case: v.optional(v.string()),
-        user: v.optional(v.lazy(() => DefsUserId)),
-        version: v.optional(integer()),
-      },
-      v.unknown(),
-    ),
-    v.objectWithRest(
-      {
-        accepted_user: v.optional(v.lazy(() => DefsUserId)),
-        connected_team_ids: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
+      ),
+      id: v.lazy(() => DefsChannel),
+      internal_team_ids: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        conversation_host_id: v.optional(v.lazy(() => DefsWorkspaceId)),
-        created: integer(),
-        creator: v.lazy(() => DefsUserId),
-        display_counts: v.optional(
-          v.objectWithRest(
-            {
-              display_counts: integer(),
-              guest_counts: integer(),
-            },
-            v.unknown(),
-          ),
+      ),
+      is_archived: v.boolean(),
+      is_channel: v.boolean(),
+      is_ext_shared: v.optional(v.boolean()),
+      is_frozen: v.optional(v.boolean()),
+      is_general: v.boolean(),
+      is_group: v.boolean(),
+      is_im: v.boolean(),
+      is_member: v.optional(v.boolean()),
+      is_moved: v.optional(integer()),
+      is_mpim: v.literal(true),
+      is_non_threadable: v.optional(v.boolean()),
+      is_open: v.optional(v.boolean()),
+      is_org_shared: v.boolean(),
+      is_pending_ext_shared: v.optional(v.boolean()),
+      is_private: v.boolean(),
+      is_read_only: v.optional(v.boolean()),
+      is_shared: v.boolean(),
+      is_starred: v.optional(v.boolean()),
+      is_thread_only: v.optional(v.boolean()),
+      last_read: v.optional(v.lazy(() => DefsTs)),
+      latest: v.optional(v.nullable(v.lazy(() => ObjsMessage))),
+      members: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsUserId)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        id: v.lazy(() => DefsChannel),
-        internal_team_ids: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
+      ),
+      name: v.string(),
+      name_normalized: v.string(),
+      num_members: v.optional(integer()),
+      parent_conversation: v.optional(v.nullable(v.lazy(() => DefsChannel))),
+      pending_connected_team_ids: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        is_archived: v.boolean(),
-        is_channel: v.boolean(),
-        is_ext_shared: v.optional(v.boolean()),
-        is_frozen: v.optional(v.boolean()),
-        is_general: v.boolean(),
-        is_group: v.boolean(),
-        is_im: v.boolean(),
-        is_member: v.optional(v.boolean()),
-        is_moved: v.optional(integer()),
-        is_mpim: v.literal(true),
-        is_non_threadable: v.optional(v.boolean()),
-        is_open: v.optional(v.boolean()),
-        is_org_shared: v.boolean(),
-        is_pending_ext_shared: v.optional(v.boolean()),
-        is_private: v.boolean(),
-        is_read_only: v.optional(v.boolean()),
-        is_shared: v.boolean(),
-        is_starred: v.optional(v.boolean()),
-        is_thread_only: v.optional(v.boolean()),
-        last_read: v.optional(v.lazy(() => DefsTs)),
-        latest: v.optional(v.array(v.nullable(v.lazy(() => ObjsMessage)))),
-        members: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsUserId)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
+      ),
+      pending_shared: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        name: v.string(),
-        name_normalized: v.string(),
-        num_members: v.optional(integer()),
-        parent_conversation: v.optional(v.array(v.nullable(v.lazy(() => DefsChannel)))),
-        pending_connected_team_ids: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
+      ),
+      pin_count: v.optional(integer()),
+      previous_names: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsChannelName)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        pending_shared: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
+      ),
+      priority: v.optional(number()),
+      purpose: v.objectWithRest(
+        {
+          creator: v.lazy(() => DefsTopicPurposeCreator),
+          last_set: integer(),
+          value: v.string(),
+        },
+        v.unknown(),
+      ),
+      shared_team_ids: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsTeam)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        pin_count: v.optional(integer()),
-        previous_names: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsChannelName)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
-        ),
-        priority: v.optional(number()),
-        purpose: v.objectWithRest(
-          {
-            creator: v.lazy(() => DefsTopicPurposeCreator),
-            last_set: integer(),
-            value: v.string(),
-          },
-          v.unknown(),
-        ),
-        shared_team_ids: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsTeam)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
-        ),
-        shares: v.optional(
-          v.pipe(
-            v.array(
-              v.objectWithRest(
-                {
-                  accepted_user: v.optional(v.lazy(() => DefsUserId)),
-                  is_active: v.boolean(),
-                  team: v.lazy(() => ObjsTeam),
-                  user: v.lazy(() => DefsUserId),
-                },
-                v.unknown(),
-              ),
+      ),
+      shares: v.optional(
+        v.pipe(
+          v.array(
+            v.objectWithRest(
+              {
+                accepted_user: v.optional(v.lazy(() => DefsUserId)),
+                is_active: v.boolean(),
+                team: v.lazy(() => ObjsTeam),
+                user: v.lazy(() => DefsUserId),
+              },
+              v.unknown(),
             ),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
           ),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        timezone_count: v.optional(integer()),
-        topic: v.objectWithRest(
-          {
-            creator: v.lazy(() => DefsTopicPurposeCreator),
-            last_set: integer(),
-            value: v.string(),
-          },
-          v.unknown(),
-        ),
-        unlinked: v.optional(integer()),
-        unread_count: v.optional(integer()),
-        unread_count_display: v.optional(integer()),
-        user: v.optional(v.lazy(() => DefsUserId)),
-        version: v.optional(integer()),
-      },
-      v.unknown(),
-    ),
-    v.objectWithRest(
-      {
-        created: integer(),
-        has_pins: v.optional(v.boolean()),
-        id: v.lazy(() => DefsDmId),
-        is_archived: v.optional(v.boolean()),
-        is_ext_shared: v.optional(v.boolean()),
-        is_frozen: v.optional(v.boolean()),
-        is_im: v.boolean(),
-        is_open: v.optional(v.boolean()),
-        is_org_shared: v.boolean(),
-        is_shared: v.optional(v.boolean()),
-        is_starred: v.optional(v.boolean()),
-        is_user_deleted: v.optional(v.boolean()),
-        last_read: v.optional(v.lazy(() => DefsTs)),
-        latest: v.optional(v.array(v.nullable(v.lazy(() => ObjsMessage)))),
-        parent_conversation: v.optional(v.array(v.nullable(v.lazy(() => DefsChannel)))),
-        pin_count: v.optional(integer()),
-        priority: number(),
-        shares: v.optional(
-          v.pipe(
-            v.array(
-              v.objectWithRest(
-                {
-                  date_create: integer(),
-                  id: v.lazy(() => DefsTeam),
-                  is_active: v.boolean(),
-                  name: v.string(),
-                  team: v.lazy(() => ObjsTeam),
-                },
-                v.unknown(),
-              ),
+      ),
+      timezone_count: v.optional(integer()),
+      topic: v.objectWithRest(
+        {
+          creator: v.lazy(() => DefsTopicPurposeCreator),
+          last_set: integer(),
+          value: v.string(),
+        },
+        v.unknown(),
+      ),
+      unlinked: v.optional(integer()),
+      unread_count: v.optional(integer()),
+      unread_count_display: v.optional(integer()),
+      user: v.optional(v.lazy(() => DefsUserId)),
+      version: v.optional(integer()),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      created: integer(),
+      has_pins: v.optional(v.boolean()),
+      id: v.lazy(() => DefsDmId),
+      is_archived: v.optional(v.boolean()),
+      is_ext_shared: v.optional(v.boolean()),
+      is_frozen: v.optional(v.boolean()),
+      is_im: v.boolean(),
+      is_open: v.optional(v.boolean()),
+      is_org_shared: v.boolean(),
+      is_shared: v.optional(v.boolean()),
+      is_starred: v.optional(v.boolean()),
+      is_user_deleted: v.optional(v.boolean()),
+      last_read: v.optional(v.lazy(() => DefsTs)),
+      latest: v.optional(v.nullable(v.lazy(() => ObjsMessage))),
+      parent_conversation: v.optional(v.nullable(v.lazy(() => DefsChannel))),
+      pin_count: v.optional(integer()),
+      priority: number(),
+      shares: v.optional(
+        v.pipe(
+          v.array(
+            v.objectWithRest(
+              {
+                date_create: integer(),
+                id: v.lazy(() => DefsTeam),
+                is_active: v.boolean(),
+                name: v.string(),
+                team: v.lazy(() => ObjsTeam),
+              },
+              v.unknown(),
             ),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
           ),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        unread_count: v.optional(integer()),
-        unread_count_display: v.optional(integer()),
-        user: v.lazy(() => DefsUserId),
-        version: v.optional(integer()),
-      },
-      v.unknown(),
-    ),
-  ]),
-)
+      ),
+      unread_count: v.optional(integer()),
+      unread_count_display: v.optional(integer()),
+      user: v.lazy(() => DefsUserId),
+      version: v.optional(integer()),
+    },
+    v.unknown(),
+  ),
+])
 
 export const ObjsEnterpriseUser: v.GenericSchema<unknown, T.ObjsEnterpriseUser> = v.objectWithRest(
   {
@@ -666,7 +664,7 @@ export const ObjsMessage: v.GenericSchema<unknown, T.ObjsMessage> = v.objectWith
       ),
     ),
     blocks: v.optional(v.lazy(() => Blocks)),
-    bot_id: v.optional(v.array(v.nullable(v.lazy(() => DefsBotId)))),
+    bot_id: v.optional(v.nullable(v.lazy(() => DefsBotId))),
     bot_profile: v.optional(v.lazy(() => ObjsBotProfile)),
     client_msg_id: v.optional(v.string()),
     comment: v.optional(v.lazy(() => ObjsComment)),
@@ -770,8 +768,8 @@ export const ObjsReminder: v.GenericSchema<unknown, T.ObjsReminder> = v.objectWi
 
 export const ObjsResources: v.GenericSchema<unknown, T.ObjsResources> = v.objectWithRest(
   {
-    excluded_ids: v.optional(v.array(v.array(v.union([v.lazy(() => DefsChannel), v.lazy(() => DefsTeam)])))),
-    ids: v.array(v.array(v.union([v.lazy(() => DefsChannel), v.lazy(() => DefsTeam)]))),
+    excluded_ids: v.optional(v.array(v.union([v.lazy(() => DefsChannel), v.lazy(() => DefsTeam)]))),
+    ids: v.array(v.union([v.lazy(() => DefsChannel), v.lazy(() => DefsTeam)])),
     wildcard: v.optional(v.boolean()),
   },
   v.unknown(),
@@ -788,13 +786,13 @@ export const ObjsScopes: v.GenericSchema<unknown, T.ObjsScopes> = v.array(v.stri
 export const ObjsSubteam: v.GenericSchema<unknown, T.ObjsSubteam> = v.objectWithRest(
   {
     auto_provision: v.boolean(),
-    auto_type: v.array(v.nullable(v.picklist(["owner", "admin"]))),
+    auto_type: v.nullable(v.picklist(["owner", "admin"])),
     channel_count: v.optional(integer()),
     created_by: v.lazy(() => DefsUserId),
     date_create: integer(),
     date_delete: integer(),
     date_update: integer(),
-    deleted_by: v.array(v.nullable(v.lazy(() => DefsUserId))),
+    deleted_by: v.nullable(v.lazy(() => DefsUserId)),
     description: v.string(),
     enterprise_subteam_id: v.string(),
     handle: v.string(),
@@ -826,7 +824,7 @@ export const ObjsTeam: v.GenericSchema<unknown, T.ObjsTeam> = v.objectWithRest(
     date_create: v.optional(integer()),
     deleted: v.optional(v.boolean()),
     description: v.optional(v.nullable(v.string())),
-    discoverable: v.optional(v.array(v.nullable(v.string()))),
+    discoverable: v.optional(v.nullable(v.string())),
     domain: v.string(),
     email_domain: v.string(),
     enterprise_id: v.optional(v.lazy(() => DefsEnterpriseId)),
@@ -866,7 +864,7 @@ export const ObjsTeamProfileField: v.GenericSchema<unknown, T.ObjsTeamProfileFie
     id: v.pipe(v.string(), v.regex(/^X[a-zA-Z0-9]{9,}$/)),
     is_hidden: v.optional(v.boolean()),
     label: v.string(),
-    options: v.optional(v.array(v.nullable(v.lazy(() => ObjsTeamProfileFieldOption)))),
+    options: v.optional(v.nullable(v.lazy(() => ObjsTeamProfileFieldOption))),
     ordering: number(),
     possible_values: v.optional(v.nullable(v.array(v.string()))),
     type: v.picklist(["text", "date", "link", "mailto", "options_list", "user"]),
@@ -884,105 +882,103 @@ export const ObjsTeamProfileFieldOption: v.GenericSchema<unknown, T.ObjsTeamProf
   v.unknown(),
 )
 
-export const ObjsUser: v.GenericSchema<unknown, T.ObjsUser> = v.array(
-  v.union([
-    v.objectWithRest(
-      {
-        color: v.optional(v.pipe(v.string(), v.regex(/^[a-fA-F0-9]{6}$/))),
-        deleted: v.optional(v.boolean()),
-        enterprise_user: v.optional(v.lazy(() => ObjsEnterpriseUser)),
-        has_2fa: v.optional(v.boolean()),
-        id: v.lazy(() => DefsUserId),
-        is_admin: v.optional(v.boolean()),
-        is_app_user: v.boolean(),
-        is_bot: v.boolean(),
-        is_external: v.optional(v.boolean()),
-        is_forgotten: v.optional(v.boolean()),
-        is_invited_user: v.optional(v.boolean()),
-        is_owner: v.optional(v.boolean()),
-        is_primary_owner: v.optional(v.boolean()),
-        is_restricted: v.optional(v.boolean()),
-        is_stranger: v.optional(v.boolean()),
-        is_ultra_restricted: v.optional(v.boolean()),
-        locale: v.optional(v.string()),
-        name: v.string(),
-        presence: v.optional(v.string()),
-        profile: v.lazy(() => ObjsUserProfile),
-        real_name: v.optional(v.string()),
-        team: v.optional(v.lazy(() => DefsWorkspaceId)),
-        team_id: v.optional(v.lazy(() => DefsWorkspaceId)),
-        team_profile: v.optional(
-          v.objectWithRest(
-            {
-              fields: v.pipe(
-                v.array(v.lazy(() => ObjsTeamProfileField)),
-                v.minLength(0),
-                v.check((items) => unique(items), "items must be unique"),
-              ),
-            },
-            v.unknown(),
-          ),
+export const ObjsUser: v.GenericSchema<unknown, T.ObjsUser> = v.union([
+  v.objectWithRest(
+    {
+      color: v.optional(v.pipe(v.string(), v.regex(/^[a-fA-F0-9]{6}$/))),
+      deleted: v.optional(v.boolean()),
+      enterprise_user: v.optional(v.lazy(() => ObjsEnterpriseUser)),
+      has_2fa: v.optional(v.boolean()),
+      id: v.lazy(() => DefsUserId),
+      is_admin: v.optional(v.boolean()),
+      is_app_user: v.boolean(),
+      is_bot: v.boolean(),
+      is_external: v.optional(v.boolean()),
+      is_forgotten: v.optional(v.boolean()),
+      is_invited_user: v.optional(v.boolean()),
+      is_owner: v.optional(v.boolean()),
+      is_primary_owner: v.optional(v.boolean()),
+      is_restricted: v.optional(v.boolean()),
+      is_stranger: v.optional(v.boolean()),
+      is_ultra_restricted: v.optional(v.boolean()),
+      locale: v.optional(v.string()),
+      name: v.string(),
+      presence: v.optional(v.string()),
+      profile: v.lazy(() => ObjsUserProfile),
+      real_name: v.optional(v.string()),
+      team: v.optional(v.lazy(() => DefsWorkspaceId)),
+      team_id: v.optional(v.lazy(() => DefsWorkspaceId)),
+      team_profile: v.optional(
+        v.objectWithRest(
+          {
+            fields: v.pipe(
+              v.array(v.lazy(() => ObjsTeamProfileField)),
+              v.minLength(0),
+              v.check((items) => unique(items), "items must be unique"),
+            ),
+          },
+          v.unknown(),
         ),
-        two_factor_type: v.optional(v.string()),
-        tz: v.optional(v.array(v.nullable(v.string()))),
-        tz_label: v.optional(v.string()),
-        tz_offset: v.optional(number()),
-        updated: number(),
-      },
-      v.unknown(),
-    ),
-    v.objectWithRest(
-      {
-        color: v.optional(v.pipe(v.string(), v.regex(/^([a-fA-F0-9]{6})?$/))),
-        deleted: v.optional(v.boolean()),
-        enterprise_user: v.optional(v.lazy(() => ObjsEnterpriseUser)),
-        has_2fa: v.optional(v.boolean()),
-        id: v.lazy(() => DefsUserId),
-        is_admin: v.optional(v.boolean()),
-        is_app_user: v.boolean(),
-        is_bot: v.boolean(),
-        is_external: v.optional(v.boolean()),
-        is_forgotten: v.optional(v.boolean()),
-        is_owner: v.optional(v.boolean()),
-        is_primary_owner: v.optional(v.boolean()),
-        is_restricted: v.optional(v.boolean()),
-        is_stranger: v.optional(v.boolean()),
-        is_ultra_restricted: v.optional(v.boolean()),
-        locale: v.optional(v.string()),
-        name: v.string(),
-        presence: v.optional(v.string()),
-        profile: v.lazy(() => ObjsUserProfile),
-        real_name: v.optional(v.string()),
-        team_id: v.optional(v.lazy(() => DefsWorkspaceId)),
-        team_profile: v.optional(
-          v.objectWithRest(
-            {
-              fields: v.pipe(
-                v.array(v.lazy(() => ObjsTeamProfileField)),
-                v.minLength(0),
-                v.check((items) => unique(items), "items must be unique"),
-              ),
-            },
-            v.unknown(),
-          ),
+      ),
+      two_factor_type: v.optional(v.string()),
+      tz: v.optional(v.nullable(v.string())),
+      tz_label: v.optional(v.string()),
+      tz_offset: v.optional(number()),
+      updated: number(),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      color: v.optional(v.pipe(v.string(), v.regex(/^([a-fA-F0-9]{6})?$/))),
+      deleted: v.optional(v.boolean()),
+      enterprise_user: v.optional(v.lazy(() => ObjsEnterpriseUser)),
+      has_2fa: v.optional(v.boolean()),
+      id: v.lazy(() => DefsUserId),
+      is_admin: v.optional(v.boolean()),
+      is_app_user: v.boolean(),
+      is_bot: v.boolean(),
+      is_external: v.optional(v.boolean()),
+      is_forgotten: v.optional(v.boolean()),
+      is_owner: v.optional(v.boolean()),
+      is_primary_owner: v.optional(v.boolean()),
+      is_restricted: v.optional(v.boolean()),
+      is_stranger: v.optional(v.boolean()),
+      is_ultra_restricted: v.optional(v.boolean()),
+      locale: v.optional(v.string()),
+      name: v.string(),
+      presence: v.optional(v.string()),
+      profile: v.lazy(() => ObjsUserProfile),
+      real_name: v.optional(v.string()),
+      team_id: v.optional(v.lazy(() => DefsWorkspaceId)),
+      team_profile: v.optional(
+        v.objectWithRest(
+          {
+            fields: v.pipe(
+              v.array(v.lazy(() => ObjsTeamProfileField)),
+              v.minLength(0),
+              v.check((items) => unique(items), "items must be unique"),
+            ),
+          },
+          v.unknown(),
         ),
-        teams: v.optional(
-          v.pipe(
-            v.array(v.lazy(() => DefsWorkspaceId)),
-            v.minLength(0),
-            v.check((items) => unique(items), "items must be unique"),
-          ),
+      ),
+      teams: v.optional(
+        v.pipe(
+          v.array(v.lazy(() => DefsWorkspaceId)),
+          v.minLength(0),
+          v.check((items) => unique(items), "items must be unique"),
         ),
-        two_factor_type: v.optional(v.string()),
-        tz: v.optional(v.array(v.nullable(v.string()))),
-        tz_label: v.optional(v.string()),
-        tz_offset: v.optional(number()),
-        updated: number(),
-      },
-      v.unknown(),
-    ),
-  ]),
-)
+      ),
+      two_factor_type: v.optional(v.string()),
+      tz: v.optional(v.nullable(v.string())),
+      tz_label: v.optional(v.string()),
+      tz_offset: v.optional(number()),
+      updated: number(),
+    },
+    v.unknown(),
+  ),
+])
 
 export const ObjsUserProfile: v.GenericSchema<unknown, T.ObjsUserProfile> = v.objectWithRest(
   {
@@ -2281,7 +2277,7 @@ export const ConversationsCreateResponse: v.GenericSchema<unknown, T.Conversatio
 export const ConversationsHistoryResponse: v.GenericSchema<unknown, T.ConversationsHistoryResponse> = v.objectWithRest(
   {
     channel_actions_count: integer(),
-    channel_actions_ts: v.array(v.nullable(integer())),
+    channel_actions_ts: v.nullable(integer()),
     has_more: v.boolean(),
     messages: v.pipe(
       v.array(v.lazy(() => ObjsMessage)),
@@ -2426,25 +2422,23 @@ export const ConversationsOpenRequest: v.GenericSchema<unknown, T.ConversationsO
 export const ConversationsOpenResponse: v.GenericSchema<unknown, T.ConversationsOpenResponse> = v.objectWithRest(
   {
     already_open: v.optional(v.boolean()),
-    channel: v.array(
-      v.union([
-        v.lazy(() => ObjsConversation),
-        v.objectWithRest(
-          {
-            created: v.optional(v.string()),
-            id: v.lazy(() => DefsDmId),
-            is_im: v.optional(v.boolean()),
-            is_open: v.optional(v.boolean()),
-            last_read: v.optional(v.lazy(() => DefsTs)),
-            latest: v.optional(v.lazy(() => ObjsMessage)),
-            unread_count: v.optional(number()),
-            unread_count_display: v.optional(number()),
-            user: v.optional(v.lazy(() => DefsUserId)),
-          },
-          v.unknown(),
-        ),
-      ]),
-    ),
+    channel: v.union([
+      v.lazy(() => ObjsConversation),
+      v.objectWithRest(
+        {
+          created: v.optional(v.string()),
+          id: v.lazy(() => DefsDmId),
+          is_im: v.optional(v.boolean()),
+          is_open: v.optional(v.boolean()),
+          last_read: v.optional(v.lazy(() => DefsTs)),
+          latest: v.optional(v.lazy(() => ObjsMessage)),
+          unread_count: v.optional(number()),
+          unread_count_display: v.optional(number()),
+          user: v.optional(v.lazy(() => DefsUserId)),
+        },
+        v.unknown(),
+      ),
+    ]),
     no_op: v.optional(v.boolean()),
     ok: v.lazy(() => DefsOkTrue),
   },
@@ -2468,52 +2462,50 @@ export const ConversationsRepliesResponse: v.GenericSchema<unknown, T.Conversati
   {
     has_more: v.optional(v.boolean()),
     messages: v.array(
-      v.array(
-        v.union([
-          v.objectWithRest(
-            {
-              last_read: v.optional(v.lazy(() => DefsTs)),
-              latest_reply: v.optional(v.lazy(() => DefsTs)),
-              reply_count: integer(),
-              reply_users: v.optional(
-                v.pipe(
-                  v.array(v.lazy(() => DefsUserId)),
-                  v.check((items) => unique(items), "items must be unique"),
-                ),
+      v.union([
+        v.objectWithRest(
+          {
+            last_read: v.optional(v.lazy(() => DefsTs)),
+            latest_reply: v.optional(v.lazy(() => DefsTs)),
+            reply_count: integer(),
+            reply_users: v.optional(
+              v.pipe(
+                v.array(v.lazy(() => DefsUserId)),
+                v.check((items) => unique(items), "items must be unique"),
               ),
-              reply_users_count: v.optional(integer()),
-              source_team: v.optional(v.lazy(() => DefsTeam)),
-              subscribed: v.boolean(),
-              team: v.optional(v.lazy(() => DefsTeam)),
-              text: v.string(),
-              thread_ts: v.lazy(() => DefsTs),
-              ts: v.lazy(() => DefsTs),
-              type: v.string(),
-              unread_count: v.optional(integer()),
-              user: v.lazy(() => DefsUserId),
-              user_profile: v.optional(v.lazy(() => ObjsUserProfileShort)),
-              user_team: v.optional(v.lazy(() => DefsTeam)),
-            },
-            v.unknown(),
-          ),
-          v.objectWithRest(
-            {
-              is_starred: v.optional(v.boolean()),
-              parent_user_id: v.lazy(() => DefsUserId),
-              source_team: v.optional(v.lazy(() => DefsTeam)),
-              team: v.optional(v.lazy(() => DefsTeam)),
-              text: v.string(),
-              thread_ts: v.lazy(() => DefsTs),
-              ts: v.lazy(() => DefsTs),
-              type: v.string(),
-              user: v.lazy(() => DefsUserId),
-              user_profile: v.optional(v.lazy(() => ObjsUserProfileShort)),
-              user_team: v.optional(v.lazy(() => DefsTeam)),
-            },
-            v.unknown(),
-          ),
-        ]),
-      ),
+            ),
+            reply_users_count: v.optional(integer()),
+            source_team: v.optional(v.lazy(() => DefsTeam)),
+            subscribed: v.boolean(),
+            team: v.optional(v.lazy(() => DefsTeam)),
+            text: v.string(),
+            thread_ts: v.lazy(() => DefsTs),
+            ts: v.lazy(() => DefsTs),
+            type: v.string(),
+            unread_count: v.optional(integer()),
+            user: v.lazy(() => DefsUserId),
+            user_profile: v.optional(v.lazy(() => ObjsUserProfileShort)),
+            user_team: v.optional(v.lazy(() => DefsTeam)),
+          },
+          v.unknown(),
+        ),
+        v.objectWithRest(
+          {
+            is_starred: v.optional(v.boolean()),
+            parent_user_id: v.lazy(() => DefsUserId),
+            source_team: v.optional(v.lazy(() => DefsTeam)),
+            team: v.optional(v.lazy(() => DefsTeam)),
+            text: v.string(),
+            thread_ts: v.lazy(() => DefsTs),
+            ts: v.lazy(() => DefsTs),
+            type: v.string(),
+            user: v.lazy(() => DefsUserId),
+            user_profile: v.optional(v.lazy(() => ObjsUserProfileShort)),
+            user_team: v.optional(v.lazy(() => DefsTeam)),
+          },
+          v.unknown(),
+        ),
+      ]),
     ),
     ok: v.lazy(() => DefsOkTrue),
     response_metadata: v.optional(
@@ -2838,49 +2830,47 @@ export const PinsAddResponse: v.GenericSchema<unknown, T.PinsAddResponse> = v.ob
   v.unknown(),
 )
 
-export const PinsListResponse: v.GenericSchema<unknown, T.PinsListResponse> = v.array(
-  v.union([
-    v.objectWithRest(
-      {
-        items: v.pipe(
-          v.array(
-            v.union([
-              v.objectWithRest(
-                {
-                  created: v.optional(integer()),
-                  created_by: v.optional(v.lazy(() => DefsUserId)),
-                  file: v.optional(v.lazy(() => ObjsFile)),
-                  type: v.optional(v.picklist(["file"])),
-                },
-                v.unknown(),
-              ),
-              v.objectWithRest(
-                {
-                  channel: v.optional(v.lazy(() => DefsChannel)),
-                  created: v.optional(integer()),
-                  created_by: v.optional(v.lazy(() => DefsUserId)),
-                  message: v.optional(v.lazy(() => ObjsMessage)),
-                  type: v.optional(v.picklist(["message"])),
-                },
-                v.unknown(),
-              ),
-            ]),
-          ),
-          v.check((items) => unique(items), "items must be unique"),
+export const PinsListResponse: v.GenericSchema<unknown, T.PinsListResponse> = v.union([
+  v.objectWithRest(
+    {
+      items: v.pipe(
+        v.array(
+          v.union([
+            v.objectWithRest(
+              {
+                created: v.optional(integer()),
+                created_by: v.optional(v.lazy(() => DefsUserId)),
+                file: v.optional(v.lazy(() => ObjsFile)),
+                type: v.optional(v.picklist(["file"])),
+              },
+              v.unknown(),
+            ),
+            v.objectWithRest(
+              {
+                channel: v.optional(v.lazy(() => DefsChannel)),
+                created: v.optional(integer()),
+                created_by: v.optional(v.lazy(() => DefsUserId)),
+                message: v.optional(v.lazy(() => ObjsMessage)),
+                type: v.optional(v.picklist(["message"])),
+              },
+              v.unknown(),
+            ),
+          ]),
         ),
-        ok: v.lazy(() => DefsOkTrue),
-      },
-      v.unknown(),
-    ),
-    v.objectWithRest(
-      {
-        count: integer(),
-        ok: v.lazy(() => DefsOkTrue),
-      },
-      v.unknown(),
-    ),
-  ]),
-)
+        v.check((items) => unique(items), "items must be unique"),
+      ),
+      ok: v.lazy(() => DefsOkTrue),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      count: integer(),
+      ok: v.lazy(() => DefsOkTrue),
+    },
+    v.unknown(),
+  ),
+])
 
 export const PinsRemoveRequest: v.GenericSchema<unknown, T.PinsRemoveRequest> = v.looseObject({
   channel: v.string(),
@@ -2907,38 +2897,63 @@ export const ReactionsAddResponse: v.GenericSchema<unknown, T.ReactionsAddRespon
   v.unknown(),
 )
 
-export const ReactionsGetResponse: v.GenericSchema<unknown, T.ReactionsGetResponse> = v.looseObject({})
+export const ReactionsGetResponse: v.GenericSchema<unknown, T.ReactionsGetResponse> = v.union([
+  v.objectWithRest(
+    {
+      channel: v.lazy(() => DefsChannel),
+      message: v.lazy(() => ObjsMessage),
+      ok: v.lazy(() => DefsOkTrue),
+      type: v.picklist(["message"]),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      file: v.lazy(() => ObjsFile),
+      ok: v.lazy(() => DefsOkTrue),
+      type: v.picklist(["file"]),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      comment: v.lazy(() => ObjsComment),
+      file: v.lazy(() => ObjsFile),
+      ok: v.lazy(() => DefsOkTrue),
+      type: v.picklist(["file_comment"]),
+    },
+    v.unknown(),
+  ),
+])
 
 export const ReactionsListResponse: v.GenericSchema<unknown, T.ReactionsListResponse> = v.objectWithRest(
   {
     items: v.array(
-      v.array(
-        v.union([
-          v.objectWithRest(
-            {
-              channel: v.lazy(() => DefsChannel),
-              message: v.lazy(() => ObjsMessage),
-              type: v.picklist(["message"]),
-            },
-            v.unknown(),
-          ),
-          v.objectWithRest(
-            {
-              file: v.lazy(() => ObjsFile),
-              type: v.picklist(["file"]),
-            },
-            v.unknown(),
-          ),
-          v.objectWithRest(
-            {
-              comment: v.lazy(() => ObjsComment),
-              file: v.lazy(() => ObjsFile),
-              type: v.picklist(["file_comment"]),
-            },
-            v.unknown(),
-          ),
-        ]),
-      ),
+      v.union([
+        v.objectWithRest(
+          {
+            channel: v.lazy(() => DefsChannel),
+            message: v.lazy(() => ObjsMessage),
+            type: v.picklist(["message"]),
+          },
+          v.unknown(),
+        ),
+        v.objectWithRest(
+          {
+            file: v.lazy(() => ObjsFile),
+            type: v.picklist(["file"]),
+          },
+          v.unknown(),
+        ),
+        v.objectWithRest(
+          {
+            comment: v.lazy(() => ObjsComment),
+            file: v.lazy(() => ObjsFile),
+            type: v.picklist(["file_comment"]),
+          },
+          v.unknown(),
+        ),
+      ]),
     ),
     ok: v.lazy(() => DefsOkTrue),
     paging: v.optional(v.lazy(() => ObjsPaging)),
@@ -3061,60 +3076,58 @@ export const StarsAddResponse: v.GenericSchema<unknown, T.StarsAddResponse> = v.
 export const StarsListResponse: v.GenericSchema<unknown, T.StarsListResponse> = v.objectWithRest(
   {
     items: v.array(
-      v.array(
-        v.union([
-          v.objectWithRest(
-            {
-              channel: v.lazy(() => DefsChannel),
-              date_create: integer(),
-              message: v.lazy(() => ObjsMessage),
-              type: v.picklist(["message"]),
-            },
-            v.unknown(),
-          ),
-          v.objectWithRest(
-            {
-              date_create: integer(),
-              file: v.lazy(() => ObjsFile),
-              type: v.picklist(["file"]),
-            },
-            v.unknown(),
-          ),
-          v.objectWithRest(
-            {
-              comment: v.lazy(() => ObjsComment),
-              date_create: integer(),
-              file: v.lazy(() => ObjsFile),
-              type: v.picklist(["file_comment"]),
-            },
-            v.unknown(),
-          ),
-          v.objectWithRest(
-            {
-              channel: v.lazy(() => DefsChannel),
-              date_create: integer(),
-              type: v.picklist(["channel"]),
-            },
-            v.unknown(),
-          ),
-          v.objectWithRest(
-            {
-              channel: v.lazy(() => DefsDmId),
-              date_create: integer(),
-              type: v.picklist(["im"]),
-            },
-            v.unknown(),
-          ),
-          v.objectWithRest(
-            {
-              channel: v.lazy(() => DefsGroupId),
-              date_create: integer(),
-              type: v.picklist(["group"]),
-            },
-            v.unknown(),
-          ),
-        ]),
-      ),
+      v.union([
+        v.objectWithRest(
+          {
+            channel: v.lazy(() => DefsChannel),
+            date_create: integer(),
+            message: v.lazy(() => ObjsMessage),
+            type: v.picklist(["message"]),
+          },
+          v.unknown(),
+        ),
+        v.objectWithRest(
+          {
+            date_create: integer(),
+            file: v.lazy(() => ObjsFile),
+            type: v.picklist(["file"]),
+          },
+          v.unknown(),
+        ),
+        v.objectWithRest(
+          {
+            comment: v.lazy(() => ObjsComment),
+            date_create: integer(),
+            file: v.lazy(() => ObjsFile),
+            type: v.picklist(["file_comment"]),
+          },
+          v.unknown(),
+        ),
+        v.objectWithRest(
+          {
+            channel: v.lazy(() => DefsChannel),
+            date_create: integer(),
+            type: v.picklist(["channel"]),
+          },
+          v.unknown(),
+        ),
+        v.objectWithRest(
+          {
+            channel: v.lazy(() => DefsDmId),
+            date_create: integer(),
+            type: v.picklist(["im"]),
+          },
+          v.unknown(),
+        ),
+        v.objectWithRest(
+          {
+            channel: v.lazy(() => DefsGroupId),
+            date_create: integer(),
+            type: v.picklist(["group"]),
+          },
+          v.unknown(),
+        ),
+      ]),
     ),
     ok: v.lazy(() => DefsOkTrue),
     paging: v.optional(v.lazy(() => ObjsPaging)),
@@ -3362,103 +3375,101 @@ export const UsersGetPresenceResponse: v.GenericSchema<unknown, T.UsersGetPresen
   v.unknown(),
 )
 
-export const UsersIdentityResponse: v.GenericSchema<unknown, T.UsersIdentityResponse> = v.array(
-  v.union([
-    v.objectWithRest(
-      {
-        ok: v.lazy(() => DefsOkTrue),
-        team: v.objectWithRest(
-          {
-            id: v.lazy(() => DefsTeam),
-          },
-          v.unknown(),
-        ),
-        user: v.objectWithRest(
-          {
-            id: v.lazy(() => DefsUserId),
-            name: v.string(),
-          },
-          v.unknown(),
-        ),
-      },
-      v.unknown(),
-    ),
-    v.objectWithRest(
-      {
-        ok: v.lazy(() => DefsOkTrue),
-        team: v.objectWithRest(
-          {
-            id: v.lazy(() => DefsTeam),
-          },
-          v.unknown(),
-        ),
-        user: v.objectWithRest(
-          {
-            email: v.string(),
-            id: v.lazy(() => DefsUserId),
-            name: v.string(),
-          },
-          v.unknown(),
-        ),
-      },
-      v.unknown(),
-    ),
-    v.objectWithRest(
-      {
-        ok: v.lazy(() => DefsOkTrue),
-        team: v.objectWithRest(
-          {
-            id: v.lazy(() => DefsTeam),
-          },
-          v.unknown(),
-        ),
-        user: v.objectWithRest(
-          {
-            id: v.lazy(() => DefsUserId),
-            image_192: v.string(),
-            image_24: v.string(),
-            image_32: v.string(),
-            image_48: v.string(),
-            image_512: v.string(),
-            image_72: v.string(),
-            name: v.string(),
-          },
-          v.unknown(),
-        ),
-      },
-      v.unknown(),
-    ),
-    v.objectWithRest(
-      {
-        ok: v.lazy(() => DefsOkTrue),
-        team: v.objectWithRest(
-          {
-            domain: v.string(),
-            id: v.lazy(() => DefsTeam),
-            image_102: v.string(),
-            image_132: v.string(),
-            image_230: v.string(),
-            image_34: v.string(),
-            image_44: v.string(),
-            image_68: v.string(),
-            image_88: v.string(),
-            image_default: v.boolean(),
-            name: v.string(),
-          },
-          v.unknown(),
-        ),
-        user: v.objectWithRest(
-          {
-            id: v.lazy(() => DefsUserId),
-            name: v.string(),
-          },
-          v.unknown(),
-        ),
-      },
-      v.unknown(),
-    ),
-  ]),
-)
+export const UsersIdentityResponse: v.GenericSchema<unknown, T.UsersIdentityResponse> = v.union([
+  v.objectWithRest(
+    {
+      ok: v.lazy(() => DefsOkTrue),
+      team: v.objectWithRest(
+        {
+          id: v.lazy(() => DefsTeam),
+        },
+        v.unknown(),
+      ),
+      user: v.objectWithRest(
+        {
+          id: v.lazy(() => DefsUserId),
+          name: v.string(),
+        },
+        v.unknown(),
+      ),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      ok: v.lazy(() => DefsOkTrue),
+      team: v.objectWithRest(
+        {
+          id: v.lazy(() => DefsTeam),
+        },
+        v.unknown(),
+      ),
+      user: v.objectWithRest(
+        {
+          email: v.string(),
+          id: v.lazy(() => DefsUserId),
+          name: v.string(),
+        },
+        v.unknown(),
+      ),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      ok: v.lazy(() => DefsOkTrue),
+      team: v.objectWithRest(
+        {
+          id: v.lazy(() => DefsTeam),
+        },
+        v.unknown(),
+      ),
+      user: v.objectWithRest(
+        {
+          id: v.lazy(() => DefsUserId),
+          image_192: v.string(),
+          image_24: v.string(),
+          image_32: v.string(),
+          image_48: v.string(),
+          image_512: v.string(),
+          image_72: v.string(),
+          name: v.string(),
+        },
+        v.unknown(),
+      ),
+    },
+    v.unknown(),
+  ),
+  v.objectWithRest(
+    {
+      ok: v.lazy(() => DefsOkTrue),
+      team: v.objectWithRest(
+        {
+          domain: v.string(),
+          id: v.lazy(() => DefsTeam),
+          image_102: v.string(),
+          image_132: v.string(),
+          image_230: v.string(),
+          image_34: v.string(),
+          image_44: v.string(),
+          image_68: v.string(),
+          image_88: v.string(),
+          image_default: v.boolean(),
+          name: v.string(),
+        },
+        v.unknown(),
+      ),
+      user: v.objectWithRest(
+        {
+          id: v.lazy(() => DefsUserId),
+          name: v.string(),
+        },
+        v.unknown(),
+      ),
+    },
+    v.unknown(),
+  ),
+])
 
 export const UsersInfoResponse: v.GenericSchema<unknown, T.UsersInfoResponse> = v.objectWithRest(
   {

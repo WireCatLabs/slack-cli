@@ -229,12 +229,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         ref: "defs_ts",
       },
       latest: {
-        type: "array",
-        items: {
-          type: "ref",
-          ref: "objs_message",
-          nullable: true,
-        },
+        type: "ref",
+        ref: "objs_message",
+        nullable: true,
       },
       members: {
         type: "array",
@@ -402,751 +399,730 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     },
   },
   ObjsConversation: {
-    type: "array",
-    items: {
-      type: "union",
-      of: [
-        {
-          type: "object",
-          properties: {
-            accepted_user: {
-              type: "ref",
-              ref: "defs_user_id",
-            },
-            connected_team_ids: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_workspace_id",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            conversation_host_id: {
+    type: "union",
+    of: [
+      {
+        type: "object",
+        properties: {
+          accepted_user: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          connected_team_ids: {
+            type: "array",
+            items: {
               type: "ref",
               ref: "defs_workspace_id",
             },
-            created: {
-              type: "integer",
-            },
-            creator: {
-              type: "ref",
-              ref: "defs_user_id",
-            },
-            display_counts: {
-              type: "object",
-              properties: {
-                display_counts: {
-                  type: "integer",
-                },
-                guest_counts: {
-                  type: "integer",
-                },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          conversation_host_id: {
+            type: "ref",
+            ref: "defs_workspace_id",
+          },
+          created: {
+            type: "integer",
+          },
+          creator: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          display_counts: {
+            type: "object",
+            properties: {
+              display_counts: {
+                type: "integer",
               },
-              required: ["display_counts", "guest_counts"],
-              additionalProperties: {
-                type: "unknown",
-              },
-            },
-            enterprise_id: {
-              type: "ref",
-              ref: "defs_enterprise_id",
-            },
-            has_pins: {
-              type: "boolean",
-            },
-            id: {
-              type: "ref",
-              ref: "defs_channel",
-            },
-            internal_team_ids: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            is_archived: {
-              type: "boolean",
-            },
-            is_channel: {
-              type: "boolean",
-            },
-            is_ext_shared: {
-              type: "boolean",
-            },
-            is_frozen: {
-              type: "boolean",
-            },
-            is_general: {
-              type: "boolean",
-            },
-            is_global_shared: {
-              type: "boolean",
-            },
-            is_group: {
-              type: "boolean",
-            },
-            is_im: {
-              type: "boolean",
-            },
-            is_member: {
-              type: "boolean",
-            },
-            is_moved: {
-              type: "integer",
-            },
-            is_mpim: {
-              type: "boolean",
-              enum: [false],
-            },
-            is_non_threadable: {
-              type: "boolean",
-            },
-            is_open: {
-              type: "boolean",
-            },
-            is_org_default: {
-              type: "boolean",
-            },
-            is_org_mandatory: {
-              type: "boolean",
-            },
-            is_org_shared: {
-              type: "boolean",
-            },
-            is_pending_ext_shared: {
-              type: "boolean",
-            },
-            is_private: {
-              type: "boolean",
-            },
-            is_read_only: {
-              type: "boolean",
-            },
-            is_shared: {
-              type: "boolean",
-            },
-            is_starred: {
-              type: "boolean",
-            },
-            is_thread_only: {
-              type: "boolean",
-            },
-            last_read: {
-              type: "ref",
-              ref: "defs_ts",
-            },
-            latest: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "objs_message",
-                nullable: true,
+              guest_counts: {
+                type: "integer",
               },
             },
-            members: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_user_id",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            name: {
-              type: "string",
-            },
-            name_normalized: {
-              type: "string",
-            },
-            num_members: {
-              type: "integer",
-            },
-            parent_conversation: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_channel",
-                nullable: true,
-              },
-            },
-            pending_connected_team_ids: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            pending_shared: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            pin_count: {
-              type: "integer",
-            },
-            previous_names: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_channel_name",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            priority: {
-              type: "number",
-            },
-            purpose: {
-              type: "object",
-              properties: {
-                creator: {
-                  type: "ref",
-                  ref: "defs_topic_purpose_creator",
-                },
-                last_set: {
-                  type: "integer",
-                },
-                value: {
-                  type: "string",
-                },
-              },
-              required: ["value", "creator", "last_set"],
-              additionalProperties: {
-                type: "unknown",
-              },
-            },
-            shared_team_ids: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            shares: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  accepted_user: {
-                    type: "ref",
-                    ref: "defs_user_id",
-                  },
-                  is_active: {
-                    type: "boolean",
-                  },
-                  team: {
-                    type: "ref",
-                    ref: "objs_team",
-                  },
-                  user: {
-                    type: "ref",
-                    ref: "defs_user_id",
-                  },
-                },
-                required: ["team", "user", "is_active"],
-                additionalProperties: {
-                  type: "unknown",
-                },
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            timezone_count: {
-              type: "integer",
-            },
-            topic: {
-              type: "object",
-              properties: {
-                creator: {
-                  type: "ref",
-                  ref: "defs_topic_purpose_creator",
-                },
-                last_set: {
-                  type: "integer",
-                },
-                value: {
-                  type: "string",
-                },
-              },
-              required: ["value", "creator", "last_set"],
-              additionalProperties: {
-                type: "unknown",
-              },
-            },
-            unlinked: {
-              type: "integer",
-            },
-            unread_count: {
-              type: "integer",
-            },
-            unread_count_display: {
-              type: "integer",
-            },
-            use_case: {
-              type: "string",
-            },
-            user: {
-              type: "ref",
-              ref: "defs_user_id",
-            },
-            version: {
-              type: "integer",
+            required: ["display_counts", "guest_counts"],
+            additionalProperties: {
+              type: "unknown",
             },
           },
-          required: [
-            "id",
-            "name",
-            "created",
-            "creator",
-            "is_archived",
-            "is_channel",
-            "is_general",
-            "is_mpim",
-            "is_group",
-            "is_org_shared",
-            "is_im",
-            "is_shared",
-            "is_private",
-            "name_normalized",
-            "topic",
-            "purpose",
-          ],
-          additionalProperties: {
-            type: "unknown",
+          enterprise_id: {
+            type: "ref",
+            ref: "defs_enterprise_id",
+          },
+          has_pins: {
+            type: "boolean",
+          },
+          id: {
+            type: "ref",
+            ref: "defs_channel",
+          },
+          internal_team_ids: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_team",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          is_archived: {
+            type: "boolean",
+          },
+          is_channel: {
+            type: "boolean",
+          },
+          is_ext_shared: {
+            type: "boolean",
+          },
+          is_frozen: {
+            type: "boolean",
+          },
+          is_general: {
+            type: "boolean",
+          },
+          is_global_shared: {
+            type: "boolean",
+          },
+          is_group: {
+            type: "boolean",
+          },
+          is_im: {
+            type: "boolean",
+          },
+          is_member: {
+            type: "boolean",
+          },
+          is_moved: {
+            type: "integer",
+          },
+          is_mpim: {
+            type: "boolean",
+            enum: [false],
+          },
+          is_non_threadable: {
+            type: "boolean",
+          },
+          is_open: {
+            type: "boolean",
+          },
+          is_org_default: {
+            type: "boolean",
+          },
+          is_org_mandatory: {
+            type: "boolean",
+          },
+          is_org_shared: {
+            type: "boolean",
+          },
+          is_pending_ext_shared: {
+            type: "boolean",
+          },
+          is_private: {
+            type: "boolean",
+          },
+          is_read_only: {
+            type: "boolean",
+          },
+          is_shared: {
+            type: "boolean",
+          },
+          is_starred: {
+            type: "boolean",
+          },
+          is_thread_only: {
+            type: "boolean",
+          },
+          last_read: {
+            type: "ref",
+            ref: "defs_ts",
+          },
+          latest: {
+            type: "ref",
+            ref: "objs_message",
+            nullable: true,
+          },
+          members: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_user_id",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          name: {
+            type: "string",
+          },
+          name_normalized: {
+            type: "string",
+          },
+          num_members: {
+            type: "integer",
+          },
+          parent_conversation: {
+            type: "ref",
+            ref: "defs_channel",
+            nullable: true,
+          },
+          pending_connected_team_ids: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_team",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          pending_shared: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_team",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          pin_count: {
+            type: "integer",
+          },
+          previous_names: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_channel_name",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          priority: {
+            type: "number",
+          },
+          purpose: {
+            type: "object",
+            properties: {
+              creator: {
+                type: "ref",
+                ref: "defs_topic_purpose_creator",
+              },
+              last_set: {
+                type: "integer",
+              },
+              value: {
+                type: "string",
+              },
+            },
+            required: ["value", "creator", "last_set"],
+            additionalProperties: {
+              type: "unknown",
+            },
+          },
+          shared_team_ids: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_team",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          shares: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                accepted_user: {
+                  type: "ref",
+                  ref: "defs_user_id",
+                },
+                is_active: {
+                  type: "boolean",
+                },
+                team: {
+                  type: "ref",
+                  ref: "objs_team",
+                },
+                user: {
+                  type: "ref",
+                  ref: "defs_user_id",
+                },
+              },
+              required: ["team", "user", "is_active"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          timezone_count: {
+            type: "integer",
+          },
+          topic: {
+            type: "object",
+            properties: {
+              creator: {
+                type: "ref",
+                ref: "defs_topic_purpose_creator",
+              },
+              last_set: {
+                type: "integer",
+              },
+              value: {
+                type: "string",
+              },
+            },
+            required: ["value", "creator", "last_set"],
+            additionalProperties: {
+              type: "unknown",
+            },
+          },
+          unlinked: {
+            type: "integer",
+          },
+          unread_count: {
+            type: "integer",
+          },
+          unread_count_display: {
+            type: "integer",
+          },
+          use_case: {
+            type: "string",
+          },
+          user: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          version: {
+            type: "integer",
           },
         },
-        {
-          type: "object",
-          properties: {
-            accepted_user: {
+        required: [
+          "id",
+          "name",
+          "created",
+          "creator",
+          "is_archived",
+          "is_channel",
+          "is_general",
+          "is_mpim",
+          "is_group",
+          "is_org_shared",
+          "is_im",
+          "is_shared",
+          "is_private",
+          "name_normalized",
+          "topic",
+          "purpose",
+        ],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        type: "object",
+        properties: {
+          accepted_user: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          connected_team_ids: {
+            type: "array",
+            items: {
               type: "ref",
-              ref: "defs_user_id",
+              ref: "defs_team",
             },
-            connected_team_ids: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
+            minItems: 0,
+            uniqueItems: true,
+          },
+          conversation_host_id: {
+            type: "ref",
+            ref: "defs_workspace_id",
+          },
+          created: {
+            type: "integer",
+          },
+          creator: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          display_counts: {
+            type: "object",
+            properties: {
+              display_counts: {
+                type: "integer",
               },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            conversation_host_id: {
-              type: "ref",
-              ref: "defs_workspace_id",
-            },
-            created: {
-              type: "integer",
-            },
-            creator: {
-              type: "ref",
-              ref: "defs_user_id",
-            },
-            display_counts: {
-              type: "object",
-              properties: {
-                display_counts: {
-                  type: "integer",
-                },
-                guest_counts: {
-                  type: "integer",
-                },
-              },
-              required: ["display_counts", "guest_counts"],
-              additionalProperties: {
-                type: "unknown",
+              guest_counts: {
+                type: "integer",
               },
             },
-            id: {
-              type: "ref",
-              ref: "defs_channel",
-            },
-            internal_team_ids: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            is_archived: {
-              type: "boolean",
-            },
-            is_channel: {
-              type: "boolean",
-            },
-            is_ext_shared: {
-              type: "boolean",
-            },
-            is_frozen: {
-              type: "boolean",
-            },
-            is_general: {
-              type: "boolean",
-            },
-            is_group: {
-              type: "boolean",
-            },
-            is_im: {
-              type: "boolean",
-            },
-            is_member: {
-              type: "boolean",
-            },
-            is_moved: {
-              type: "integer",
-            },
-            is_mpim: {
-              type: "boolean",
-              enum: [true],
-            },
-            is_non_threadable: {
-              type: "boolean",
-            },
-            is_open: {
-              type: "boolean",
-            },
-            is_org_shared: {
-              type: "boolean",
-            },
-            is_pending_ext_shared: {
-              type: "boolean",
-            },
-            is_private: {
-              type: "boolean",
-            },
-            is_read_only: {
-              type: "boolean",
-            },
-            is_shared: {
-              type: "boolean",
-            },
-            is_starred: {
-              type: "boolean",
-            },
-            is_thread_only: {
-              type: "boolean",
-            },
-            last_read: {
-              type: "ref",
-              ref: "defs_ts",
-            },
-            latest: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "objs_message",
-                nullable: true,
-              },
-            },
-            members: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_user_id",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            name: {
-              type: "string",
-            },
-            name_normalized: {
-              type: "string",
-            },
-            num_members: {
-              type: "integer",
-            },
-            parent_conversation: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_channel",
-                nullable: true,
-              },
-            },
-            pending_connected_team_ids: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            pending_shared: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            pin_count: {
-              type: "integer",
-            },
-            previous_names: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_channel_name",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            priority: {
-              type: "number",
-            },
-            purpose: {
-              type: "object",
-              properties: {
-                creator: {
-                  type: "ref",
-                  ref: "defs_topic_purpose_creator",
-                },
-                last_set: {
-                  type: "integer",
-                },
-                value: {
-                  type: "string",
-                },
-              },
-              required: ["value", "creator", "last_set"],
-              additionalProperties: {
-                type: "unknown",
-              },
-            },
-            shared_team_ids: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_team",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            shares: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  accepted_user: {
-                    type: "ref",
-                    ref: "defs_user_id",
-                  },
-                  is_active: {
-                    type: "boolean",
-                  },
-                  team: {
-                    type: "ref",
-                    ref: "objs_team",
-                  },
-                  user: {
-                    type: "ref",
-                    ref: "defs_user_id",
-                  },
-                },
-                required: ["team", "user", "is_active"],
-                additionalProperties: {
-                  type: "unknown",
-                },
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            timezone_count: {
-              type: "integer",
-            },
-            topic: {
-              type: "object",
-              properties: {
-                creator: {
-                  type: "ref",
-                  ref: "defs_topic_purpose_creator",
-                },
-                last_set: {
-                  type: "integer",
-                },
-                value: {
-                  type: "string",
-                },
-              },
-              required: ["value", "creator", "last_set"],
-              additionalProperties: {
-                type: "unknown",
-              },
-            },
-            unlinked: {
-              type: "integer",
-            },
-            unread_count: {
-              type: "integer",
-            },
-            unread_count_display: {
-              type: "integer",
-            },
-            user: {
-              type: "ref",
-              ref: "defs_user_id",
-            },
-            version: {
-              type: "integer",
+            required: ["display_counts", "guest_counts"],
+            additionalProperties: {
+              type: "unknown",
             },
           },
-          required: [
-            "id",
-            "name",
-            "created",
-            "creator",
-            "is_archived",
-            "is_channel",
-            "is_general",
-            "is_mpim",
-            "is_group",
-            "is_org_shared",
-            "is_im",
-            "is_shared",
-            "is_private",
-            "name_normalized",
-            "topic",
-            "purpose",
-          ],
-          additionalProperties: {
-            type: "unknown",
+          id: {
+            type: "ref",
+            ref: "defs_channel",
+          },
+          internal_team_ids: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_team",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          is_archived: {
+            type: "boolean",
+          },
+          is_channel: {
+            type: "boolean",
+          },
+          is_ext_shared: {
+            type: "boolean",
+          },
+          is_frozen: {
+            type: "boolean",
+          },
+          is_general: {
+            type: "boolean",
+          },
+          is_group: {
+            type: "boolean",
+          },
+          is_im: {
+            type: "boolean",
+          },
+          is_member: {
+            type: "boolean",
+          },
+          is_moved: {
+            type: "integer",
+          },
+          is_mpim: {
+            type: "boolean",
+            enum: [true],
+          },
+          is_non_threadable: {
+            type: "boolean",
+          },
+          is_open: {
+            type: "boolean",
+          },
+          is_org_shared: {
+            type: "boolean",
+          },
+          is_pending_ext_shared: {
+            type: "boolean",
+          },
+          is_private: {
+            type: "boolean",
+          },
+          is_read_only: {
+            type: "boolean",
+          },
+          is_shared: {
+            type: "boolean",
+          },
+          is_starred: {
+            type: "boolean",
+          },
+          is_thread_only: {
+            type: "boolean",
+          },
+          last_read: {
+            type: "ref",
+            ref: "defs_ts",
+          },
+          latest: {
+            type: "ref",
+            ref: "objs_message",
+            nullable: true,
+          },
+          members: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_user_id",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          name: {
+            type: "string",
+          },
+          name_normalized: {
+            type: "string",
+          },
+          num_members: {
+            type: "integer",
+          },
+          parent_conversation: {
+            type: "ref",
+            ref: "defs_channel",
+            nullable: true,
+          },
+          pending_connected_team_ids: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_team",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          pending_shared: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_team",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          pin_count: {
+            type: "integer",
+          },
+          previous_names: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_channel_name",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          priority: {
+            type: "number",
+          },
+          purpose: {
+            type: "object",
+            properties: {
+              creator: {
+                type: "ref",
+                ref: "defs_topic_purpose_creator",
+              },
+              last_set: {
+                type: "integer",
+              },
+              value: {
+                type: "string",
+              },
+            },
+            required: ["value", "creator", "last_set"],
+            additionalProperties: {
+              type: "unknown",
+            },
+          },
+          shared_team_ids: {
+            type: "array",
+            items: {
+              type: "ref",
+              ref: "defs_team",
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          shares: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                accepted_user: {
+                  type: "ref",
+                  ref: "defs_user_id",
+                },
+                is_active: {
+                  type: "boolean",
+                },
+                team: {
+                  type: "ref",
+                  ref: "objs_team",
+                },
+                user: {
+                  type: "ref",
+                  ref: "defs_user_id",
+                },
+              },
+              required: ["team", "user", "is_active"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          timezone_count: {
+            type: "integer",
+          },
+          topic: {
+            type: "object",
+            properties: {
+              creator: {
+                type: "ref",
+                ref: "defs_topic_purpose_creator",
+              },
+              last_set: {
+                type: "integer",
+              },
+              value: {
+                type: "string",
+              },
+            },
+            required: ["value", "creator", "last_set"],
+            additionalProperties: {
+              type: "unknown",
+            },
+          },
+          unlinked: {
+            type: "integer",
+          },
+          unread_count: {
+            type: "integer",
+          },
+          unread_count_display: {
+            type: "integer",
+          },
+          user: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          version: {
+            type: "integer",
           },
         },
-        {
-          type: "object",
-          properties: {
-            created: {
-              type: "integer",
-            },
-            has_pins: {
-              type: "boolean",
-            },
-            id: {
-              type: "ref",
-              ref: "defs_dm_id",
-            },
-            is_archived: {
-              type: "boolean",
-            },
-            is_ext_shared: {
-              type: "boolean",
-            },
-            is_frozen: {
-              type: "boolean",
-            },
-            is_im: {
-              type: "boolean",
-            },
-            is_open: {
-              type: "boolean",
-            },
-            is_org_shared: {
-              type: "boolean",
-            },
-            is_shared: {
-              type: "boolean",
-            },
-            is_starred: {
-              type: "boolean",
-            },
-            is_user_deleted: {
-              type: "boolean",
-            },
-            last_read: {
-              type: "ref",
-              ref: "defs_ts",
-            },
-            latest: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "objs_message",
-                nullable: true,
-              },
-            },
-            parent_conversation: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_channel",
-                nullable: true,
-              },
-            },
-            pin_count: {
-              type: "integer",
-            },
-            priority: {
-              type: "number",
-            },
-            shares: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  date_create: {
-                    type: "integer",
-                  },
-                  id: {
-                    type: "ref",
-                    ref: "defs_team",
-                  },
-                  is_active: {
-                    type: "boolean",
-                  },
-                  name: {
-                    type: "string",
-                  },
-                  team: {
-                    type: "ref",
-                    ref: "objs_team",
-                  },
-                },
-                required: ["id", "name", "team", "date_create", "is_active"],
-                additionalProperties: {
-                  type: "unknown",
-                },
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            unread_count: {
-              type: "integer",
-            },
-            unread_count_display: {
-              type: "integer",
-            },
-            user: {
-              type: "ref",
-              ref: "defs_user_id",
-            },
-            version: {
-              type: "integer",
-            },
+        required: [
+          "id",
+          "name",
+          "created",
+          "creator",
+          "is_archived",
+          "is_channel",
+          "is_general",
+          "is_mpim",
+          "is_group",
+          "is_org_shared",
+          "is_im",
+          "is_shared",
+          "is_private",
+          "name_normalized",
+          "topic",
+          "purpose",
+        ],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        type: "object",
+        properties: {
+          created: {
+            type: "integer",
           },
-          required: ["id", "created", "is_im", "is_org_shared", "user", "priority"],
-          additionalProperties: {
-            type: "unknown",
+          has_pins: {
+            type: "boolean",
+          },
+          id: {
+            type: "ref",
+            ref: "defs_dm_id",
+          },
+          is_archived: {
+            type: "boolean",
+          },
+          is_ext_shared: {
+            type: "boolean",
+          },
+          is_frozen: {
+            type: "boolean",
+          },
+          is_im: {
+            type: "boolean",
+          },
+          is_open: {
+            type: "boolean",
+          },
+          is_org_shared: {
+            type: "boolean",
+          },
+          is_shared: {
+            type: "boolean",
+          },
+          is_starred: {
+            type: "boolean",
+          },
+          is_user_deleted: {
+            type: "boolean",
+          },
+          last_read: {
+            type: "ref",
+            ref: "defs_ts",
+          },
+          latest: {
+            type: "ref",
+            ref: "objs_message",
+            nullable: true,
+          },
+          parent_conversation: {
+            type: "ref",
+            ref: "defs_channel",
+            nullable: true,
+          },
+          pin_count: {
+            type: "integer",
+          },
+          priority: {
+            type: "number",
+          },
+          shares: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                date_create: {
+                  type: "integer",
+                },
+                id: {
+                  type: "ref",
+                  ref: "defs_team",
+                },
+                is_active: {
+                  type: "boolean",
+                },
+                name: {
+                  type: "string",
+                },
+                team: {
+                  type: "ref",
+                  ref: "objs_team",
+                },
+              },
+              required: ["id", "name", "team", "date_create", "is_active"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            minItems: 0,
+            uniqueItems: true,
+          },
+          unread_count: {
+            type: "integer",
+          },
+          unread_count_display: {
+            type: "integer",
+          },
+          user: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          version: {
+            type: "integer",
           },
         },
-      ],
-    },
+        required: ["id", "created", "is_im", "is_org_shared", "user", "priority"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+    ],
   },
   ObjsEnterpriseUser: {
     type: "object",
@@ -1547,12 +1523,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         ref: "blocks",
       },
       bot_id: {
-        type: "array",
-        items: {
-          type: "ref",
-          ref: "defs_bot_id",
-          nullable: true,
-        },
+        type: "ref",
+        ref: "defs_bot_id",
+        nullable: true,
       },
       bot_profile: {
         type: "ref",
@@ -1820,39 +1793,33 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       excluded_ids: {
         type: "array",
         items: {
-          type: "array",
-          items: {
-            type: "union",
-            of: [
-              {
-                type: "ref",
-                ref: "defs_channel",
-              },
-              {
-                type: "ref",
-                ref: "defs_team",
-              },
-            ],
-          },
+          type: "union",
+          of: [
+            {
+              type: "ref",
+              ref: "defs_channel",
+            },
+            {
+              type: "ref",
+              ref: "defs_team",
+            },
+          ],
         },
       },
       ids: {
         type: "array",
         items: {
-          type: "array",
-          items: {
-            type: "union",
-            of: [
-              {
-                type: "ref",
-                ref: "defs_channel",
-              },
-              {
-                type: "ref",
-                ref: "defs_team",
-              },
-            ],
-          },
+          type: "union",
+          of: [
+            {
+              type: "ref",
+              ref: "defs_channel",
+            },
+            {
+              type: "ref",
+              ref: "defs_team",
+            },
+          ],
         },
       },
       wildcard: {
@@ -1898,12 +1865,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "boolean",
       },
       auto_type: {
-        type: "array",
-        items: {
-          type: "string",
-          enum: ["owner", "admin"],
-          nullable: true,
-        },
+        type: "string",
+        enum: ["owner", "admin"],
+        nullable: true,
       },
       channel_count: {
         type: "integer",
@@ -1922,12 +1886,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "integer",
       },
       deleted_by: {
-        type: "array",
-        items: {
-          type: "ref",
-          ref: "defs_user_id",
-          nullable: true,
-        },
+        type: "ref",
+        ref: "defs_user_id",
+        nullable: true,
       },
       description: {
         type: "string",
@@ -2043,11 +2004,8 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
       discoverable: {
-        type: "array",
-        items: {
-          type: "string",
-          nullable: true,
-        },
+        type: "string",
+        nullable: true,
       },
       domain: {
         type: "string",
@@ -2161,12 +2119,9 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
       options: {
-        type: "array",
-        items: {
-          type: "ref",
-          ref: "objs_team_profile_field_option",
-          nullable: true,
-        },
+        type: "ref",
+        ref: "objs_team_profile_field_option",
+        nullable: true,
       },
       ordering: {
         type: "number",
@@ -2214,259 +2169,250 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     },
   },
   ObjsUser: {
-    type: "array",
-    items: {
-      type: "union",
-      of: [
-        {
-          description: "user object for non enterprise type",
-          type: "object",
-          properties: {
-            color: {
-              type: "string",
-              pattern: "^[a-fA-F0-9]{6}$",
-            },
-            deleted: {
-              type: "boolean",
-            },
-            enterprise_user: {
-              type: "ref",
-              ref: "objs_enterprise_user",
-            },
-            has_2fa: {
-              type: "boolean",
-            },
-            id: {
-              type: "ref",
-              ref: "defs_user_id",
-            },
-            is_admin: {
-              type: "boolean",
-            },
-            is_app_user: {
-              type: "boolean",
-            },
-            is_bot: {
-              type: "boolean",
-            },
-            is_external: {
-              type: "boolean",
-            },
-            is_forgotten: {
-              type: "boolean",
-            },
-            is_invited_user: {
-              type: "boolean",
-            },
-            is_owner: {
-              type: "boolean",
-            },
-            is_primary_owner: {
-              type: "boolean",
-            },
-            is_restricted: {
-              type: "boolean",
-            },
-            is_stranger: {
-              type: "boolean",
-            },
-            is_ultra_restricted: {
-              type: "boolean",
-            },
-            locale: {
-              type: "string",
-            },
-            name: {
-              type: "string",
-            },
-            presence: {
-              type: "string",
-            },
-            profile: {
-              type: "ref",
-              ref: "objs_user_profile",
-            },
-            real_name: {
-              type: "string",
-            },
-            team: {
-              type: "ref",
-              ref: "defs_workspace_id",
-            },
-            team_id: {
-              type: "ref",
-              ref: "defs_workspace_id",
-            },
-            team_profile: {
-              type: "object",
-              properties: {
-                fields: {
-                  type: "array",
-                  items: {
-                    type: "ref",
-                    ref: "objs_team_profile_field",
-                  },
-                  minItems: 0,
-                  uniqueItems: true,
+    type: "union",
+    of: [
+      {
+        description: "user object for non enterprise type",
+        type: "object",
+        properties: {
+          color: {
+            type: "string",
+            pattern: "^[a-fA-F0-9]{6}$",
+          },
+          deleted: {
+            type: "boolean",
+          },
+          enterprise_user: {
+            type: "ref",
+            ref: "objs_enterprise_user",
+          },
+          has_2fa: {
+            type: "boolean",
+          },
+          id: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          is_admin: {
+            type: "boolean",
+          },
+          is_app_user: {
+            type: "boolean",
+          },
+          is_bot: {
+            type: "boolean",
+          },
+          is_external: {
+            type: "boolean",
+          },
+          is_forgotten: {
+            type: "boolean",
+          },
+          is_invited_user: {
+            type: "boolean",
+          },
+          is_owner: {
+            type: "boolean",
+          },
+          is_primary_owner: {
+            type: "boolean",
+          },
+          is_restricted: {
+            type: "boolean",
+          },
+          is_stranger: {
+            type: "boolean",
+          },
+          is_ultra_restricted: {
+            type: "boolean",
+          },
+          locale: {
+            type: "string",
+          },
+          name: {
+            type: "string",
+          },
+          presence: {
+            type: "string",
+          },
+          profile: {
+            type: "ref",
+            ref: "objs_user_profile",
+          },
+          real_name: {
+            type: "string",
+          },
+          team: {
+            type: "ref",
+            ref: "defs_workspace_id",
+          },
+          team_id: {
+            type: "ref",
+            ref: "defs_workspace_id",
+          },
+          team_profile: {
+            type: "object",
+            properties: {
+              fields: {
+                type: "array",
+                items: {
+                  type: "ref",
+                  ref: "objs_team_profile_field",
                 },
-              },
-              required: ["fields"],
-              additionalProperties: {
-                type: "unknown",
+                minItems: 0,
+                uniqueItems: true,
               },
             },
-            two_factor_type: {
-              type: "string",
-            },
-            tz: {
-              type: "array",
-              items: {
-                type: "string",
-                nullable: true,
-              },
-            },
-            tz_label: {
-              type: "string",
-            },
-            tz_offset: {
-              type: "number",
-            },
-            updated: {
-              type: "number",
+            required: ["fields"],
+            additionalProperties: {
+              type: "unknown",
             },
           },
-          required: ["id", "name", "profile", "is_bot", "updated", "is_app_user"],
-          additionalProperties: {
-            type: "unknown",
+          two_factor_type: {
+            type: "string",
+          },
+          tz: {
+            type: "string",
+            nullable: true,
+          },
+          tz_label: {
+            type: "string",
+          },
+          tz_offset: {
+            type: "number",
+          },
+          updated: {
+            type: "number",
           },
         },
-        {
-          description: "enterprise user",
-          type: "object",
-          properties: {
-            color: {
-              description: "refercing to bug: https://jira.tinyspeck.com/browse/EVALUE-1559",
-              type: "string",
-              pattern: "^([a-fA-F0-9]{6})?$",
+        required: ["id", "name", "profile", "is_bot", "updated", "is_app_user"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        description: "enterprise user",
+        type: "object",
+        properties: {
+          color: {
+            description: "refercing to bug: https://jira.tinyspeck.com/browse/EVALUE-1559",
+            type: "string",
+            pattern: "^([a-fA-F0-9]{6})?$",
+          },
+          deleted: {
+            type: "boolean",
+          },
+          enterprise_user: {
+            type: "ref",
+            ref: "objs_enterprise_user",
+          },
+          has_2fa: {
+            type: "boolean",
+          },
+          id: {
+            type: "ref",
+            ref: "defs_user_id",
+          },
+          is_admin: {
+            type: "boolean",
+          },
+          is_app_user: {
+            type: "boolean",
+          },
+          is_bot: {
+            type: "boolean",
+          },
+          is_external: {
+            type: "boolean",
+          },
+          is_forgotten: {
+            type: "boolean",
+          },
+          is_owner: {
+            type: "boolean",
+          },
+          is_primary_owner: {
+            type: "boolean",
+          },
+          is_restricted: {
+            type: "boolean",
+          },
+          is_stranger: {
+            type: "boolean",
+          },
+          is_ultra_restricted: {
+            type: "boolean",
+          },
+          locale: {
+            type: "string",
+          },
+          name: {
+            type: "string",
+          },
+          presence: {
+            type: "string",
+          },
+          profile: {
+            type: "ref",
+            ref: "objs_user_profile",
+          },
+          real_name: {
+            type: "string",
+          },
+          team_id: {
+            type: "ref",
+            ref: "defs_workspace_id",
+          },
+          team_profile: {
+            type: "object",
+            properties: {
+              fields: {
+                type: "array",
+                items: {
+                  type: "ref",
+                  ref: "objs_team_profile_field",
+                },
+                minItems: 0,
+                uniqueItems: true,
+              },
             },
-            deleted: {
-              type: "boolean",
+            required: ["fields"],
+            additionalProperties: {
+              type: "unknown",
             },
-            enterprise_user: {
-              type: "ref",
-              ref: "objs_enterprise_user",
-            },
-            has_2fa: {
-              type: "boolean",
-            },
-            id: {
-              type: "ref",
-              ref: "defs_user_id",
-            },
-            is_admin: {
-              type: "boolean",
-            },
-            is_app_user: {
-              type: "boolean",
-            },
-            is_bot: {
-              type: "boolean",
-            },
-            is_external: {
-              type: "boolean",
-            },
-            is_forgotten: {
-              type: "boolean",
-            },
-            is_owner: {
-              type: "boolean",
-            },
-            is_primary_owner: {
-              type: "boolean",
-            },
-            is_restricted: {
-              type: "boolean",
-            },
-            is_stranger: {
-              type: "boolean",
-            },
-            is_ultra_restricted: {
-              type: "boolean",
-            },
-            locale: {
-              type: "string",
-            },
-            name: {
-              type: "string",
-            },
-            presence: {
-              type: "string",
-            },
-            profile: {
-              type: "ref",
-              ref: "objs_user_profile",
-            },
-            real_name: {
-              type: "string",
-            },
-            team_id: {
+          },
+          teams: {
+            type: "array",
+            items: {
               type: "ref",
               ref: "defs_workspace_id",
             },
-            team_profile: {
-              type: "object",
-              properties: {
-                fields: {
-                  type: "array",
-                  items: {
-                    type: "ref",
-                    ref: "objs_team_profile_field",
-                  },
-                  minItems: 0,
-                  uniqueItems: true,
-                },
-              },
-              required: ["fields"],
-              additionalProperties: {
-                type: "unknown",
-              },
-            },
-            teams: {
-              type: "array",
-              items: {
-                type: "ref",
-                ref: "defs_workspace_id",
-              },
-              minItems: 0,
-              uniqueItems: true,
-            },
-            two_factor_type: {
-              type: "string",
-            },
-            tz: {
-              type: "array",
-              items: {
-                type: "string",
-                nullable: true,
-              },
-            },
-            tz_label: {
-              type: "string",
-            },
-            tz_offset: {
-              type: "number",
-            },
-            updated: {
-              type: "number",
-            },
+            minItems: 0,
+            uniqueItems: true,
           },
-          required: ["id", "name", "profile", "is_bot", "updated", "is_app_user"],
-          additionalProperties: {
-            type: "unknown",
+          two_factor_type: {
+            type: "string",
+          },
+          tz: {
+            type: "string",
+            nullable: true,
+          },
+          tz_label: {
+            type: "string",
+          },
+          tz_offset: {
+            type: "number",
+          },
+          updated: {
+            type: "number",
           },
         },
-      ],
-    },
+        required: ["id", "name", "profile", "is_bot", "updated", "is_app_user"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+    ],
   },
   ObjsUserProfile: {
     type: "object",
@@ -5556,11 +5502,8 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "integer",
       },
       channel_actions_ts: {
-        type: "array",
-        items: {
-          type: "integer",
-          nullable: true,
-        },
+        type: "integer",
+        nullable: true,
       },
       has_more: {
         type: "boolean",
@@ -5871,56 +5814,53 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "boolean",
       },
       channel: {
-        type: "array",
-        items: {
-          type: "union",
-          of: [
-            {
-              type: "ref",
-              ref: "objs_conversation",
-            },
-            {
-              type: "object",
-              properties: {
-                created: {
-                  type: "string",
-                },
-                id: {
-                  type: "ref",
-                  ref: "defs_dm_id",
-                },
-                is_im: {
-                  type: "boolean",
-                },
-                is_open: {
-                  type: "boolean",
-                },
-                last_read: {
-                  type: "ref",
-                  ref: "defs_ts",
-                },
-                latest: {
-                  type: "ref",
-                  ref: "objs_message",
-                },
-                unread_count: {
-                  type: "number",
-                },
-                unread_count_display: {
-                  type: "number",
-                },
-                user: {
-                  type: "ref",
-                  ref: "defs_user_id",
-                },
+        type: "union",
+        of: [
+          {
+            type: "ref",
+            ref: "objs_conversation",
+          },
+          {
+            type: "object",
+            properties: {
+              created: {
+                type: "string",
               },
-              required: ["id"],
-              additionalProperties: {
-                type: "unknown",
+              id: {
+                type: "ref",
+                ref: "defs_dm_id",
+              },
+              is_im: {
+                type: "boolean",
+              },
+              is_open: {
+                type: "boolean",
+              },
+              last_read: {
+                type: "ref",
+                ref: "defs_ts",
+              },
+              latest: {
+                type: "ref",
+                ref: "objs_message",
+              },
+              unread_count: {
+                type: "number",
+              },
+              unread_count_display: {
+                type: "number",
+              },
+              user: {
+                type: "ref",
+                ref: "defs_user_id",
               },
             },
-          ],
-        },
+            required: ["id"],
+            additionalProperties: {
+              type: "unknown",
+            },
+          },
+        ],
       },
       no_op: {
         type: "boolean",
@@ -5977,133 +5917,130 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       messages: {
         type: "array",
         items: {
-          type: "array",
-          items: {
-            type: "union",
-            of: [
-              {
-                type: "object",
-                properties: {
-                  last_read: {
-                    type: "ref",
-                    ref: "defs_ts",
-                  },
-                  latest_reply: {
-                    type: "ref",
-                    ref: "defs_ts",
-                  },
-                  reply_count: {
-                    type: "integer",
-                  },
-                  reply_users: {
-                    type: "array",
-                    items: {
-                      type: "ref",
-                      ref: "defs_user_id",
-                    },
-                    uniqueItems: true,
-                  },
-                  reply_users_count: {
-                    type: "integer",
-                  },
-                  source_team: {
-                    type: "ref",
-                    ref: "defs_team",
-                  },
-                  subscribed: {
-                    type: "boolean",
-                  },
-                  team: {
-                    type: "ref",
-                    ref: "defs_team",
-                  },
-                  text: {
-                    type: "string",
-                  },
-                  thread_ts: {
-                    type: "ref",
-                    ref: "defs_ts",
-                  },
-                  ts: {
-                    type: "ref",
-                    ref: "defs_ts",
-                  },
-                  type: {
-                    type: "string",
-                  },
-                  unread_count: {
-                    type: "integer",
-                  },
-                  user: {
+          type: "union",
+          of: [
+            {
+              type: "object",
+              properties: {
+                last_read: {
+                  type: "ref",
+                  ref: "defs_ts",
+                },
+                latest_reply: {
+                  type: "ref",
+                  ref: "defs_ts",
+                },
+                reply_count: {
+                  type: "integer",
+                },
+                reply_users: {
+                  type: "array",
+                  items: {
                     type: "ref",
                     ref: "defs_user_id",
                   },
-                  user_profile: {
-                    type: "ref",
-                    ref: "objs_user_profile_short",
-                  },
-                  user_team: {
-                    type: "ref",
-                    ref: "defs_team",
-                  },
+                  uniqueItems: true,
                 },
-                required: ["type", "user", "text", "thread_ts", "reply_count", "subscribed", "ts"],
-                additionalProperties: {
-                  type: "unknown",
+                reply_users_count: {
+                  type: "integer",
+                },
+                source_team: {
+                  type: "ref",
+                  ref: "defs_team",
+                },
+                subscribed: {
+                  type: "boolean",
+                },
+                team: {
+                  type: "ref",
+                  ref: "defs_team",
+                },
+                text: {
+                  type: "string",
+                },
+                thread_ts: {
+                  type: "ref",
+                  ref: "defs_ts",
+                },
+                ts: {
+                  type: "ref",
+                  ref: "defs_ts",
+                },
+                type: {
+                  type: "string",
+                },
+                unread_count: {
+                  type: "integer",
+                },
+                user: {
+                  type: "ref",
+                  ref: "defs_user_id",
+                },
+                user_profile: {
+                  type: "ref",
+                  ref: "objs_user_profile_short",
+                },
+                user_team: {
+                  type: "ref",
+                  ref: "defs_team",
                 },
               },
-              {
-                type: "object",
-                properties: {
-                  is_starred: {
-                    type: "boolean",
-                  },
-                  parent_user_id: {
-                    type: "ref",
-                    ref: "defs_user_id",
-                  },
-                  source_team: {
-                    type: "ref",
-                    ref: "defs_team",
-                  },
-                  team: {
-                    type: "ref",
-                    ref: "defs_team",
-                  },
-                  text: {
-                    type: "string",
-                  },
-                  thread_ts: {
-                    type: "ref",
-                    ref: "defs_ts",
-                  },
-                  ts: {
-                    type: "ref",
-                    ref: "defs_ts",
-                  },
-                  type: {
-                    type: "string",
-                  },
-                  user: {
-                    type: "ref",
-                    ref: "defs_user_id",
-                  },
-                  user_profile: {
-                    type: "ref",
-                    ref: "objs_user_profile_short",
-                  },
-                  user_team: {
-                    type: "ref",
-                    ref: "defs_team",
-                  },
+              required: ["type", "user", "text", "thread_ts", "reply_count", "subscribed", "ts"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            {
+              type: "object",
+              properties: {
+                is_starred: {
+                  type: "boolean",
                 },
-                required: ["type", "user", "text", "thread_ts", "parent_user_id", "ts"],
-                additionalProperties: {
-                  type: "unknown",
+                parent_user_id: {
+                  type: "ref",
+                  ref: "defs_user_id",
+                },
+                source_team: {
+                  type: "ref",
+                  ref: "defs_team",
+                },
+                team: {
+                  type: "ref",
+                  ref: "defs_team",
+                },
+                text: {
+                  type: "string",
+                },
+                thread_ts: {
+                  type: "ref",
+                  ref: "defs_ts",
+                },
+                ts: {
+                  type: "ref",
+                  ref: "defs_ts",
+                },
+                type: {
+                  type: "string",
+                },
+                user: {
+                  type: "ref",
+                  ref: "defs_user_id",
+                },
+                user_profile: {
+                  type: "ref",
+                  ref: "objs_user_profile_short",
+                },
+                user_team: {
+                  type: "ref",
+                  ref: "defs_team",
                 },
               },
-            ],
-          },
+              required: ["type", "user", "text", "thread_ts", "parent_user_id", "ts"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+          ],
         },
       },
       ok: {
@@ -6882,102 +6819,99 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   },
   PinsListResponse: {
     description: "Schema for successful response from pins.list method",
-    type: "array",
-    items: {
-      type: "union",
-      of: [
-        {
-          type: "object",
-          properties: {
+    type: "union",
+    of: [
+      {
+        type: "object",
+        properties: {
+          items: {
+            type: "array",
             items: {
-              type: "array",
-              items: {
-                type: "union",
-                of: [
-                  {
-                    type: "object",
-                    properties: {
-                      created: {
-                        type: "integer",
-                      },
-                      created_by: {
-                        type: "ref",
-                        ref: "defs_user_id",
-                      },
-                      file: {
-                        type: "ref",
-                        ref: "objs_file",
-                      },
-                      type: {
-                        type: "string",
-                        enum: ["file"],
-                      },
+              type: "union",
+              of: [
+                {
+                  type: "object",
+                  properties: {
+                    created: {
+                      type: "integer",
                     },
-                    required: [],
-                    additionalProperties: {
-                      type: "unknown",
+                    created_by: {
+                      type: "ref",
+                      ref: "defs_user_id",
+                    },
+                    file: {
+                      type: "ref",
+                      ref: "objs_file",
+                    },
+                    type: {
+                      type: "string",
+                      enum: ["file"],
                     },
                   },
-                  {
-                    type: "object",
-                    properties: {
-                      channel: {
-                        type: "ref",
-                        ref: "defs_channel",
-                      },
-                      created: {
-                        type: "integer",
-                      },
-                      created_by: {
-                        type: "ref",
-                        ref: "defs_user_id",
-                      },
-                      message: {
-                        type: "ref",
-                        ref: "objs_message",
-                      },
-                      type: {
-                        type: "string",
-                        enum: ["message"],
-                      },
+                  required: [],
+                  additionalProperties: {
+                    type: "unknown",
+                  },
+                },
+                {
+                  type: "object",
+                  properties: {
+                    channel: {
+                      type: "ref",
+                      ref: "defs_channel",
                     },
-                    required: [],
-                    additionalProperties: {
-                      type: "unknown",
+                    created: {
+                      type: "integer",
+                    },
+                    created_by: {
+                      type: "ref",
+                      ref: "defs_user_id",
+                    },
+                    message: {
+                      type: "ref",
+                      ref: "objs_message",
+                    },
+                    type: {
+                      type: "string",
+                      enum: ["message"],
                     },
                   },
-                ],
-              },
-              uniqueItems: true,
+                  required: [],
+                  additionalProperties: {
+                    type: "unknown",
+                  },
+                },
+              ],
             },
-            ok: {
-              type: "ref",
-              ref: "defs_ok_true",
-            },
+            uniqueItems: true,
           },
-          required: ["ok", "items"],
-          additionalProperties: {
-            type: "unknown",
-          },
-        },
-        {
-          type: "object",
-          properties: {
-            count: {
-              type: "integer",
-            },
-            ok: {
-              type: "ref",
-              ref: "defs_ok_true",
-            },
-          },
-          required: ["ok", "count"],
-          additionalProperties: {
-            type: "unknown",
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
           },
         },
-      ],
-    },
+        required: ["ok", "items"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        type: "object",
+        properties: {
+          count: {
+            type: "integer",
+          },
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
+          },
+        },
+        required: ["ok", "count"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+    ],
   },
   PinsRemoveRequest: {
     type: "object",
@@ -7041,9 +6975,80 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   },
   ReactionsGetResponse: {
     description: "Schema for successful response from reactions.get method",
-    type: "object",
-    properties: {},
-    required: [],
+    type: "union",
+    of: [
+      {
+        type: "object",
+        properties: {
+          channel: {
+            type: "ref",
+            ref: "defs_channel",
+          },
+          message: {
+            type: "ref",
+            ref: "objs_message",
+          },
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
+          },
+          type: {
+            type: "string",
+            enum: ["message"],
+          },
+        },
+        required: ["ok", "type", "channel", "message"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        type: "object",
+        properties: {
+          file: {
+            type: "ref",
+            ref: "objs_file",
+          },
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
+          },
+          type: {
+            type: "string",
+            enum: ["file"],
+          },
+        },
+        required: ["ok", "type", "file"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        type: "object",
+        properties: {
+          comment: {
+            type: "ref",
+            ref: "objs_comment",
+          },
+          file: {
+            type: "ref",
+            ref: "objs_file",
+          },
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
+          },
+          type: {
+            type: "string",
+            enum: ["file_comment"],
+          },
+        },
+        required: ["ok", "type", "file", "comment"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+    ],
   },
   ReactionsListResponse: {
     description: "Schema for successful response from reactions.list method",
@@ -7052,71 +7057,68 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       items: {
         type: "array",
         items: {
-          type: "array",
-          items: {
-            type: "union",
-            of: [
-              {
-                type: "object",
-                properties: {
-                  channel: {
-                    type: "ref",
-                    ref: "defs_channel",
-                  },
-                  message: {
-                    type: "ref",
-                    ref: "objs_message",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["message"],
-                  },
+          type: "union",
+          of: [
+            {
+              type: "object",
+              properties: {
+                channel: {
+                  type: "ref",
+                  ref: "defs_channel",
                 },
-                required: ["type", "channel", "message"],
-                additionalProperties: {
-                  type: "unknown",
+                message: {
+                  type: "ref",
+                  ref: "objs_message",
+                },
+                type: {
+                  type: "string",
+                  enum: ["message"],
                 },
               },
-              {
-                type: "object",
-                properties: {
-                  file: {
-                    type: "ref",
-                    ref: "objs_file",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["file"],
-                  },
+              required: ["type", "channel", "message"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            {
+              type: "object",
+              properties: {
+                file: {
+                  type: "ref",
+                  ref: "objs_file",
                 },
-                required: ["type", "file"],
-                additionalProperties: {
-                  type: "unknown",
+                type: {
+                  type: "string",
+                  enum: ["file"],
                 },
               },
-              {
-                type: "object",
-                properties: {
-                  comment: {
-                    type: "ref",
-                    ref: "objs_comment",
-                  },
-                  file: {
-                    type: "ref",
-                    ref: "objs_file",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["file_comment"],
-                  },
+              required: ["type", "file"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            {
+              type: "object",
+              properties: {
+                comment: {
+                  type: "ref",
+                  ref: "objs_comment",
                 },
-                required: ["type", "file", "comment"],
-                additionalProperties: {
-                  type: "unknown",
+                file: {
+                  type: "ref",
+                  ref: "objs_file",
+                },
+                type: {
+                  type: "string",
+                  enum: ["file_comment"],
                 },
               },
-            ],
-          },
+              required: ["type", "file", "comment"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+          ],
         },
       },
       ok: {
@@ -7414,140 +7416,137 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       items: {
         type: "array",
         items: {
-          type: "array",
-          items: {
-            type: "union",
-            of: [
-              {
-                type: "object",
-                properties: {
-                  channel: {
-                    type: "ref",
-                    ref: "defs_channel",
-                  },
-                  date_create: {
-                    type: "integer",
-                  },
-                  message: {
-                    type: "ref",
-                    ref: "objs_message",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["message"],
-                  },
+          type: "union",
+          of: [
+            {
+              type: "object",
+              properties: {
+                channel: {
+                  type: "ref",
+                  ref: "defs_channel",
                 },
-                required: ["type", "channel", "message", "date_create"],
-                additionalProperties: {
-                  type: "unknown",
+                date_create: {
+                  type: "integer",
+                },
+                message: {
+                  type: "ref",
+                  ref: "objs_message",
+                },
+                type: {
+                  type: "string",
+                  enum: ["message"],
                 },
               },
-              {
-                type: "object",
-                properties: {
-                  date_create: {
-                    type: "integer",
-                  },
-                  file: {
-                    type: "ref",
-                    ref: "objs_file",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["file"],
-                  },
+              required: ["type", "channel", "message", "date_create"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            {
+              type: "object",
+              properties: {
+                date_create: {
+                  type: "integer",
                 },
-                required: ["type", "file", "date_create"],
-                additionalProperties: {
-                  type: "unknown",
+                file: {
+                  type: "ref",
+                  ref: "objs_file",
+                },
+                type: {
+                  type: "string",
+                  enum: ["file"],
                 },
               },
-              {
-                type: "object",
-                properties: {
-                  comment: {
-                    type: "ref",
-                    ref: "objs_comment",
-                  },
-                  date_create: {
-                    type: "integer",
-                  },
-                  file: {
-                    type: "ref",
-                    ref: "objs_file",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["file_comment"],
-                  },
+              required: ["type", "file", "date_create"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            {
+              type: "object",
+              properties: {
+                comment: {
+                  type: "ref",
+                  ref: "objs_comment",
                 },
-                required: ["type", "file", "comment", "date_create"],
-                additionalProperties: {
-                  type: "unknown",
+                date_create: {
+                  type: "integer",
+                },
+                file: {
+                  type: "ref",
+                  ref: "objs_file",
+                },
+                type: {
+                  type: "string",
+                  enum: ["file_comment"],
                 },
               },
-              {
-                type: "object",
-                properties: {
-                  channel: {
-                    type: "ref",
-                    ref: "defs_channel",
-                  },
-                  date_create: {
-                    type: "integer",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["channel"],
-                  },
+              required: ["type", "file", "comment", "date_create"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            {
+              type: "object",
+              properties: {
+                channel: {
+                  type: "ref",
+                  ref: "defs_channel",
                 },
-                required: ["type", "channel", "date_create"],
-                additionalProperties: {
-                  type: "unknown",
+                date_create: {
+                  type: "integer",
+                },
+                type: {
+                  type: "string",
+                  enum: ["channel"],
                 },
               },
-              {
-                type: "object",
-                properties: {
-                  channel: {
-                    type: "ref",
-                    ref: "defs_dm_id",
-                  },
-                  date_create: {
-                    type: "integer",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["im"],
-                  },
+              required: ["type", "channel", "date_create"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            {
+              type: "object",
+              properties: {
+                channel: {
+                  type: "ref",
+                  ref: "defs_dm_id",
                 },
-                required: ["type", "channel", "date_create"],
-                additionalProperties: {
-                  type: "unknown",
+                date_create: {
+                  type: "integer",
+                },
+                type: {
+                  type: "string",
+                  enum: ["im"],
                 },
               },
-              {
-                type: "object",
-                properties: {
-                  channel: {
-                    type: "ref",
-                    ref: "defs_group_id",
-                  },
-                  date_create: {
-                    type: "integer",
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["group"],
-                  },
+              required: ["type", "channel", "date_create"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+            {
+              type: "object",
+              properties: {
+                channel: {
+                  type: "ref",
+                  ref: "defs_group_id",
                 },
-                required: ["type", "channel", "date_create"],
-                additionalProperties: {
-                  type: "unknown",
+                date_create: {
+                  type: "integer",
+                },
+                type: {
+                  type: "string",
+                  enum: ["group"],
                 },
               },
-            ],
-          },
+              required: ["type", "channel", "date_create"],
+              additionalProperties: {
+                type: "unknown",
+              },
+            },
+          ],
         },
       },
       ok: {
@@ -8144,247 +8143,244 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
   },
   UsersIdentityResponse: {
     description: "Schema for successful response from users.identity method",
-    type: "array",
-    items: {
-      type: "union",
-      of: [
-        {
-          description: "Schema for 'identity.basic' scope",
-          type: "object",
-          properties: {
-            ok: {
-              type: "ref",
-              ref: "defs_ok_true",
-            },
-            team: {
-              type: "object",
-              properties: {
-                id: {
-                  type: "ref",
-                  ref: "defs_team",
-                },
-              },
-              required: ["id"],
-              additionalProperties: {
-                type: "unknown",
+    type: "union",
+    of: [
+      {
+        description: "Schema for 'identity.basic' scope",
+        type: "object",
+        properties: {
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
+          },
+          team: {
+            type: "object",
+            properties: {
+              id: {
+                type: "ref",
+                ref: "defs_team",
               },
             },
-            user: {
-              type: "object",
-              properties: {
-                id: {
-                  type: "ref",
-                  ref: "defs_user_id",
-                },
-                name: {
-                  type: "string",
-                },
-              },
-              required: ["name", "id"],
-              additionalProperties: {
-                type: "unknown",
-              },
+            required: ["id"],
+            additionalProperties: {
+              type: "unknown",
             },
           },
-          required: ["ok", "user", "team"],
-          additionalProperties: {
-            type: "unknown",
+          user: {
+            type: "object",
+            properties: {
+              id: {
+                type: "ref",
+                ref: "defs_user_id",
+              },
+              name: {
+                type: "string",
+              },
+            },
+            required: ["name", "id"],
+            additionalProperties: {
+              type: "unknown",
+            },
           },
         },
-        {
-          description: "Schema for 'identity.basic,identity.email' scopes",
-          type: "object",
-          properties: {
-            ok: {
-              type: "ref",
-              ref: "defs_ok_true",
+        required: ["ok", "user", "team"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        description: "Schema for 'identity.basic,identity.email' scopes",
+        type: "object",
+        properties: {
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
+          },
+          team: {
+            type: "object",
+            properties: {
+              id: {
+                type: "ref",
+                ref: "defs_team",
+              },
             },
-            team: {
-              type: "object",
-              properties: {
-                id: {
-                  type: "ref",
-                  ref: "defs_team",
-                },
-              },
-              required: ["id"],
-              additionalProperties: {
-                type: "unknown",
-              },
-            },
-            user: {
-              type: "object",
-              properties: {
-                email: {
-                  type: "string",
-                },
-                id: {
-                  type: "ref",
-                  ref: "defs_user_id",
-                },
-                name: {
-                  type: "string",
-                },
-              },
-              required: ["name", "id", "email"],
-              additionalProperties: {
-                type: "unknown",
-              },
+            required: ["id"],
+            additionalProperties: {
+              type: "unknown",
             },
           },
-          required: ["ok", "user", "team"],
-          additionalProperties: {
-            type: "unknown",
+          user: {
+            type: "object",
+            properties: {
+              email: {
+                type: "string",
+              },
+              id: {
+                type: "ref",
+                ref: "defs_user_id",
+              },
+              name: {
+                type: "string",
+              },
+            },
+            required: ["name", "id", "email"],
+            additionalProperties: {
+              type: "unknown",
+            },
           },
         },
-        {
-          description: "Schema for 'identity.basic,identity.avatar' scopes",
-          type: "object",
-          properties: {
-            ok: {
-              type: "ref",
-              ref: "defs_ok_true",
+        required: ["ok", "user", "team"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        description: "Schema for 'identity.basic,identity.avatar' scopes",
+        type: "object",
+        properties: {
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
+          },
+          team: {
+            type: "object",
+            properties: {
+              id: {
+                type: "ref",
+                ref: "defs_team",
+              },
             },
-            team: {
-              type: "object",
-              properties: {
-                id: {
-                  type: "ref",
-                  ref: "defs_team",
-                },
-              },
-              required: ["id"],
-              additionalProperties: {
-                type: "unknown",
-              },
-            },
-            user: {
-              type: "object",
-              properties: {
-                id: {
-                  type: "ref",
-                  ref: "defs_user_id",
-                },
-                image_192: {
-                  type: "string",
-                },
-                image_24: {
-                  type: "string",
-                },
-                image_32: {
-                  type: "string",
-                },
-                image_48: {
-                  type: "string",
-                },
-                image_512: {
-                  type: "string",
-                },
-                image_72: {
-                  type: "string",
-                },
-                name: {
-                  type: "string",
-                },
-              },
-              required: ["name", "id", "image_24", "image_32", "image_48", "image_72", "image_192", "image_512"],
-              additionalProperties: {
-                type: "unknown",
-              },
+            required: ["id"],
+            additionalProperties: {
+              type: "unknown",
             },
           },
-          required: ["ok", "user", "team"],
-          additionalProperties: {
-            type: "unknown",
+          user: {
+            type: "object",
+            properties: {
+              id: {
+                type: "ref",
+                ref: "defs_user_id",
+              },
+              image_192: {
+                type: "string",
+              },
+              image_24: {
+                type: "string",
+              },
+              image_32: {
+                type: "string",
+              },
+              image_48: {
+                type: "string",
+              },
+              image_512: {
+                type: "string",
+              },
+              image_72: {
+                type: "string",
+              },
+              name: {
+                type: "string",
+              },
+            },
+            required: ["name", "id", "image_24", "image_32", "image_48", "image_72", "image_192", "image_512"],
+            additionalProperties: {
+              type: "unknown",
+            },
           },
         },
-        {
-          description: "Schema for 'identity.basic,identity.team' scopes",
-          type: "object",
-          properties: {
-            ok: {
-              type: "ref",
-              ref: "defs_ok_true",
-            },
-            team: {
-              type: "object",
-              properties: {
-                domain: {
-                  type: "string",
-                },
-                id: {
-                  type: "ref",
-                  ref: "defs_team",
-                },
-                image_102: {
-                  type: "string",
-                },
-                image_132: {
-                  type: "string",
-                },
-                image_230: {
-                  type: "string",
-                },
-                image_34: {
-                  type: "string",
-                },
-                image_44: {
-                  type: "string",
-                },
-                image_68: {
-                  type: "string",
-                },
-                image_88: {
-                  type: "string",
-                },
-                image_default: {
-                  type: "boolean",
-                },
-                name: {
-                  type: "string",
-                },
+        required: ["ok", "user", "team"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+      {
+        description: "Schema for 'identity.basic,identity.team' scopes",
+        type: "object",
+        properties: {
+          ok: {
+            type: "ref",
+            ref: "defs_ok_true",
+          },
+          team: {
+            type: "object",
+            properties: {
+              domain: {
+                type: "string",
               },
-              required: [
-                "id",
-                "name",
-                "domain",
-                "image_34",
-                "image_44",
-                "image_68",
-                "image_88",
-                "image_102",
-                "image_132",
-                "image_230",
-                "image_default",
-              ],
-              additionalProperties: {
-                type: "unknown",
+              id: {
+                type: "ref",
+                ref: "defs_team",
+              },
+              image_102: {
+                type: "string",
+              },
+              image_132: {
+                type: "string",
+              },
+              image_230: {
+                type: "string",
+              },
+              image_34: {
+                type: "string",
+              },
+              image_44: {
+                type: "string",
+              },
+              image_68: {
+                type: "string",
+              },
+              image_88: {
+                type: "string",
+              },
+              image_default: {
+                type: "boolean",
+              },
+              name: {
+                type: "string",
               },
             },
-            user: {
-              type: "object",
-              properties: {
-                id: {
-                  type: "ref",
-                  ref: "defs_user_id",
-                },
-                name: {
-                  type: "string",
-                },
-              },
-              required: ["name", "id"],
-              additionalProperties: {
-                type: "unknown",
-              },
+            required: [
+              "id",
+              "name",
+              "domain",
+              "image_34",
+              "image_44",
+              "image_68",
+              "image_88",
+              "image_102",
+              "image_132",
+              "image_230",
+              "image_default",
+            ],
+            additionalProperties: {
+              type: "unknown",
             },
           },
-          required: ["ok", "user", "team"],
-          additionalProperties: {
-            type: "unknown",
+          user: {
+            type: "object",
+            properties: {
+              id: {
+                type: "ref",
+                ref: "defs_user_id",
+              },
+              name: {
+                type: "string",
+              },
+            },
+            required: ["name", "id"],
+            additionalProperties: {
+              type: "unknown",
+            },
           },
         },
-      ],
-    },
+        required: ["ok", "user", "team"],
+        additionalProperties: {
+          type: "unknown",
+        },
+      },
+    ],
   },
   UsersInfoResponse: {
     description: "Schema for successful response from users.info method",

@@ -284,7 +284,7 @@ Not from the source: the spec signs in by a `token` parameter; Slack's docs send
 
 ## Spec corrections
 
-- 28 draft-04 tuple `items` became `anyOf` (OpenAPI 3 has no tuples)
+- 28 draft-04 tuple `items` became the value they describe, or `anyOf` its entries (OpenAPI 3 has no tuples)
 - patched /paths/~1conversations.history/get/parameters/1/required: Slack's docs mark `channel` required in conversations.history (<https://docs.slack.dev/reference/methods/conversations.history/>); the spec does not
 - patched /paths/~1conversations.replies/get/parameters/1/required: Slack's docs mark `channel` required in conversations.replies (<https://docs.slack.dev/reference/methods/conversations.replies/>); the spec does not
 - patched /paths/~1conversations.info/get/parameters/1/required: Slack's docs mark `channel` required in conversations.info (<https://docs.slack.dev/reference/methods/conversations.info/>); the spec does not

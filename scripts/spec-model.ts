@@ -24,15 +24,23 @@ export const parseSpec = (text: string): unknown => {
   }
 }
 
-// Slack's Swagger writes 28 schemas as draft-04 tuples (`items: [a, b]`), which OpenAPI 3 does not allow: each is one
-// value of either type, so a tuple becomes `anyOf`, and a one-entry tuple its only schema.
+// Slack's Swagger writes 28 schemas as draft-04 tuples (`items: [a, b]`), which OpenAPI 3 does not allow. Only one of
+// them is on a `type: array`, whose elements are one of the entries; on the other 27 the tuple is the value itself
+// (`objs_conversation` is one conversation, `channel_actions_ts` an integer or null), so the node becomes the entry,
+// or `anyOf` the entries. Kept as `items`, `conversations.list` would answer a list of lists of channels.
+const oneOf = (entries: unknown[]) => (entries.length === 1 ? (entries[0] as object) : { anyOf: entries })
 const untuple = (node: unknown): number => {
   if (Array.isArray(node)) return node.reduce((sum: number, child) => sum + untuple(child), 0)
   if (!node || typeof node !== "object") return 0
   const schema = node as Record<string, unknown>
   let fixed = 0
   if (Array.isArray(schema.items)) {
-    schema.items = schema.items.length === 1 ? schema.items[0] : { anyOf: schema.items }
+    const entries = schema.items
+    if (schema.type === "array") schema.items = oneOf(entries)
+    else {
+      delete schema.items
+      Object.assign(schema, oneOf(entries))
+    }
     fixed = 1
   }
   return Object.values(schema).reduce((sum: number, child) => sum + untuple(child), fixed)
@@ -348,7 +356,7 @@ export const specModel = async (root: string): Promise<{ model: ApiModel; notes:
     model,
     notes: [
       ...merged.notes,
-      `${tuples} draft-04 tuple \`items\` became \`anyOf\` (OpenAPI 3 has no tuples)`,
+      `${tuples} draft-04 tuple \`items\` became the value they describe, or \`anyOf\` its entries (OpenAPI 3 has no tuples)`,
       ...notesOf(applied),
     ],
   }
