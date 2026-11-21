@@ -12,6 +12,7 @@ import type { Command } from "commander"
 import { configuration } from "./config.js"
 import { IDENTITY, SERVICE } from "./identity.js"
 import { slackClient } from "./slack/client.js"
+import { refuseOtherTokens } from "./slack/tokens.js"
 
 /** What a test hands `run()` beside cli-core's own: the fake service in place of the network (WC-ARCH-10). */
 export interface ServiceEnvironment extends BaseEnvironment {
@@ -54,9 +55,12 @@ export const slackFor = (command: Command, token: string, events?: EventSink) =>
   })
 }
 
-/** The profile's saved token, or an authentication error that says how to sign in. Read before any request. */
+/**
+ * The profile's saved token, or an authentication error that says how to sign in. Read before any request; one from
+ * `SLACK_TOKEN` skips `session start`, so it is refused here as there.
+ */
 export const tokenOf = (command: Command): string => {
   const { profile, tokens } = contextOf(command)
   refuseOffline(command, SERVICE)
-  return tokens.need(profile)
+  return refuseOtherTokens(tokens.need(profile))
 }

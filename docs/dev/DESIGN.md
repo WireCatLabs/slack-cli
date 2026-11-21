@@ -44,8 +44,9 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   [docs/slack-app-manifest.json](../slack-app-manifest.json) and pastes its User OAuth Token (`xoxp-`). An app shared
   outside its workspace gets one history call a minute; an internal one keeps the full limits. One profile is one
   workspace and one person: the account is `<team_id>:<user_id>` from `auth.test`. A bot token is refused, since the
-  CLI reads as the person. Token rotation stays off in the manifest: a rotated token lasts 12 hours, and refreshing it
-  needs the app's client secret.
+  CLI reads as the person. Token rotation stays off in the manifest, and a rotating token (`xoxe.`) is refused: it
+  lasts 12 hours, refreshing it needs the app's client secret, and rotation cannot be turned off once on
+  (<https://docs.slack.dev/authentication/using-token-rotation/>).
 - **Sign-in code:** cli-core's `tokenSessionCommand` and `ProfileTokenStore`, as every token CLI. The messenger
   session types in cli-core belong to device sessions (WhatsApp, Telegram, MAX); a Slack token is one bearer token.
 - **The `api` group:** Slack's Swagger of 2020 with the corrections listed on [API coverage](API_COVERAGE.md). Command

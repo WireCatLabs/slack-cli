@@ -34,7 +34,13 @@ it("the token reaches no output, no error and no run record", async () => {
     stdin: FAKE_TOKEN,
   })
   const runs = await runCli(["personal", "runs", "list", "--json"], { keyring })
-  expect(runs.out).toContain("session start")
+  const run = (runs.json().items as { run_id: string; command: string }[]).find(({ command }) =>
+    command.includes("session start"),
+  )
+  expect(run).toBeDefined()
+  const record = await runCli(["personal", "runs", "show", String(run?.run_id), "--json"], { keyring })
+  expect(record.code, record.err).toBe(0)
+  expect(record.out).toContain("auth.test")
   const refused = await runCli(["personal", "session", "status", "--check", "--json"], {
     keyring,
     service: fakeSlack({ "auth.test": { body: { ok: false, error: "token_revoked" } } }),
@@ -42,7 +48,7 @@ it("the token reaches no output, no error and no run record", async () => {
   expect(refused.json()).toMatchObject({
     error: { code: "authentication_error", message: expect.stringContaining("token_revoked") },
   })
-  for (const text of [started.out, started.err, runs.out, refused.out, refused.err])
+  for (const text of [started.out, started.err, runs.out, record.out, refused.out, refused.err])
     expect(text).not.toContain(FAKE_TOKEN)
 })
 
@@ -58,6 +64,35 @@ it("session start refuses a bot token before anything is sent, and keeps nothing
   expect(refused.err).toContain("User OAuth Token")
   expect(service.calls).toEqual([])
   expect(new ProfileTokenStore({ app: IDENTITY, keyring }).signedIn("personal")).toBe(false)
+})
+
+it("session start refuses a rotating token (xoxe.) before anything is sent, and keeps nothing", async () => {
+  const keyring = memoryKeyring()
+  const service = fakeSlack()
+  const refused = await runCli(["personal", "session", "start", "--json"], {
+    keyring,
+    service,
+    stdin: "xoxe.xoxp-0synth-rotating-fake",
+  })
+  expect(refused.json()).toMatchObject({
+    error: { code: "validation_error", message: expect.stringContaining("token rotation off") },
+  })
+  expect(service.calls).toEqual([])
+  expect(new ProfileTokenStore({ app: IDENTITY, keyring }).signedIn("personal")).toBe(false)
+})
+
+it("a token from SLACK_TOKEN is refused as session start refuses it, before anything is sent", async () => {
+  const service = fakeSlack()
+  for (const token of ["xoxb-0synth-bot-fake", "xoxe.xoxp-0synth-rotating-fake"]) {
+    const ran = await runCli(["personal", "api", "auth", "test", "--json"], {
+      keyring: memoryKeyring(),
+      service,
+      env: { SLACK_TOKEN: token },
+    })
+    expect(ran.json()).toMatchObject({ error: { code: "validation_error" } })
+    expect(ran.err).not.toContain(token)
+  }
+  expect(service.calls).toEqual([])
 })
 
 it("session start refuses what is no user token, and a token Slack says is a bot's", async () => {
