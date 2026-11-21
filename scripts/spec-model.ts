@@ -103,12 +103,12 @@ const correctionsOf = (document: unknown): SpecPatch[] => [
   ...REQUIRED_CHANNEL.map((method) => ({
     pointer: `${parameterPointer(document, method, "channel")}/required`,
     value: true,
-    reason: `Slack's docs mark \`channel\` required in ${method} (${DOCS}${method}/); the spec does not`,
+    reason: `Slack's docs mark \`channel\` required in ${method} (<${DOCS}${method}/>); the spec does not`,
   })),
   {
     pointer: `${parameterPointer(document, "conversations.replies", "ts")}/required`,
     value: true,
-    reason: `Slack's docs mark \`ts\` required in conversations.replies (${DOCS}conversations.replies/)`,
+    reason: `Slack's docs mark \`ts\` required in conversations.replies (<${DOCS}conversations.replies/>)`,
   },
   ...operationsOf(document)
     .flatMap((found) => [
@@ -166,24 +166,24 @@ const correctionsOf = (document: unknown): SpecPatch[] => [
   ...PAGED_WITHOUT_METADATA.map((method) => ({
     pointer: answerPointer(document, method, "properties", "response_metadata"),
     value: { type: "object", properties: { next_cursor: { type: "string" } } },
-    reason: `Slack's docs show \`response_metadata.next_cursor\` in the answer of ${method} (${DOCS}${method}/)`,
+    reason: `Slack's docs show \`response_metadata.next_cursor\` in the answer of ${method} (<${DOCS}${method}/>)`,
   })),
   ...CREDENTIAL_ANSWERS.map((method) => ({
     pointer: answerPointer(document, method, "properties", "access_token"),
     value: { type: "string", format: "password" },
-    reason: `${method} answers an access token (${DOCS}${method}/), so the api group offers no command for it`,
+    reason: `${method} answers an access token (<${DOCS}${method}/>), so the api group offers no command for it`,
   })),
   {
     pointer: answerPointer(document, "rtm.connect", "properties", "url", "format"),
     value: "password",
     reason:
-      "rtm.connect answers a WebSocket URL that carries a connection ticket (" +
-      `${DOCS}rtm.connect/), a link with a secret, so the api group offers no command for it`,
+      "rtm.connect answers a WebSocket URL that carries a connection ticket (<" +
+      `${DOCS}rtm.connect/>), a link with a secret, so the api group offers no command for it`,
   },
 ]
 
 const TOKEN_REASON =
-  "Slack's docs send the token as `Authorization: Bearer` (https://docs.slack.dev/apis/web-api/); a `token` " +
+  "Slack's docs send the token as `Authorization: Bearer` (<https://docs.slack.dev/apis/web-api/>); a `token` " +
   "argument would put the secret in shell history and the run record (WC-SECR-5)"
 
 /** The spec's `token` parameter, in a header, the query or the form, removed from every operation. */
@@ -271,12 +271,29 @@ const relaxedAnswers = (document: unknown): SpecPatch[] => {
   ]
 }
 
+const LINK_REASON =
+  "Slack's descriptions link relative to api.slack.com (`/docs/pagination`) or to anchors of its own pages, which " +
+  "break in the coverage page, the commands page and the agent skill"
+
+/** A relative link becomes one to api.slack.com; a link to an anchor of Slack's page keeps only its text. */
+const absoluteLinks = (document: unknown): SpecPatch[] => {
+  const walk = (node: unknown, at: string[]): SpecPatch[] => {
+    if (!node || typeof node !== "object") return []
+    return Object.entries(node as Json).flatMap(([key, child]) => {
+      if (key !== "description" || typeof child !== "string") return walk(child, [...at, key])
+      const fixed = child.replace(/\]\(\//g, "](https://api.slack.com/").replace(/\[([^\]]*)\]\(#[^)]*\)/g, "$1")
+      return fixed === child ? [] : [{ pointer: pointerOf(...at, key), value: fixed, reason: LINK_REASON }]
+    })
+  }
+  return walk(document, [])
+}
+
 /**
  * Applied in stages, each read from the document the one before left, so a pointer never names a parameter that
  * an earlier stage moved.
  */
 const patched = (document: unknown, swagger: unknown) =>
-  [correctionsOf, withoutToken, (at: unknown) => jsonBodies(at, swagger), relaxedAnswers].reduce(
+  [correctionsOf, withoutToken, (at: unknown) => jsonBodies(at, swagger), relaxedAnswers, absoluteLinks].reduce(
     (state, stage) => {
       const next = patchSpec(state.document, { patches: stage(state.document) })
       return { document: next.document as unknown, applied: [...state.applied, ...next.applied] }

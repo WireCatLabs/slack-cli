@@ -38,7 +38,7 @@
 | `--count <value>` | no | count |
 | `--page <value>` | no | page |
 | `--limit <value>` | no | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached. |
-| `--cursor <value>` | no | Parameter for pagination. File comments are paginated for a single file. Set \`cursor\` equal to the \`next\_cursor\` attribute returned by the previous request's \`response\_metadata\`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection of comments. See \[pagination\](/docs/pagination) for more details. |
+| `--cursor <value>` | no | Parameter for pagination. File comments are paginated for a single file. Set \`cursor\` equal to the \`next\_cursor\` attribute returned by the previous request's \`response\_metadata\`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection of comments. See \[pagination\](https://api.slack.com/docs/pagination) for more details. |
 | `--all` | no | read every page, as the API pages it |
 
 ## `slack api files list [options]`
@@ -53,7 +53,7 @@
 | `--channel <value>` | no | Filter files appearing in a specific channel, indicated by its ID. |
 | `--ts-from <value>` | no | Filter files created after this timestamp (inclusive). |
 | `--ts-to <value>` | no | Filter files created before this timestamp (inclusive). |
-| `--types <value>` | no | Filter files by type (\[see below\](#file\_types)). You can pass multiple values in the types argument, like \`types=spaces,snippets\`.The default value is \`all\`, which does not filter the list. |
+| `--types <value>` | no | Filter files by type (see below). You can pass multiple values in the types argument, like \`types=spaces,snippets\`.The default value is \`all\`, which does not filter the list. |
 | `--count <value>` | no | count |
 | `--page <value>` | no | page |
 | `--show-files-hidden-by-limit <value>` | no | Show truncated file info for files hidden due to being too old, and the team who owns the file being over the file limit. |
@@ -80,7 +80,7 @@
 | `--ts-from <value>` | no | Filter files created after this timestamp (inclusive). |
 | `--ts-to <value>` | no | Filter files created before this timestamp (inclusive). |
 | `--limit <value>` | no | The maximum number of items to return. |
-| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](/docs/pagination) for more detail. |
+| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 
 ## `slack api files remote-share [options]`
 

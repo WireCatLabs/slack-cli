@@ -49,7 +49,7 @@
 | `--oldest <value>` | no | Start of time range of messages to include in results. |
 | `--inclusive <value>` | no | Include messages with latest or oldest timestamp in results only when either timestamp is specified. |
 | `--limit <value>` | no | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the users list hasn't been reached. |
-| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](/docs/pagination) for more detail. |
+| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
 ## `slack api conversations info [options]`
@@ -120,7 +120,7 @@
 | `--exclude-archived <value>` | no | Set to \`true\` to exclude archived channels from the list |
 | `--types <value>` | no | Mix and match channel types by providing a comma-separated list of any combination of \`public\_channel\`, \`private\_channel\`, \`mpim\`, \`im\` |
 | `--limit <value>` | no | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached. Must be an integer no larger than 1000. |
-| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](/docs/pagination) for more detail. |
+| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
 ## `slack api conversations mark [options]`
@@ -144,7 +144,7 @@
 |---|---|---|
 | `--channel <value>` | yes | ID of the conversation to retrieve members for |
 | `--limit <value>` | no | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the users list hasn't been reached. |
-| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](/docs/pagination) for more detail. |
+| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
 ## `slack api conversations open [options]`
@@ -183,7 +183,7 @@
 | `--oldest <value>` | no | Start of time range of messages to include in results. |
 | `--inclusive <value>` | no | Include messages with latest or oldest timestamp in results only when either timestamp is specified. |
 | `--limit <value>` | no | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the users list hasn't been reached. |
-| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](/docs/pagination) for more detail. |
+| `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
 ## `slack api conversations set-purpose [options]`

@@ -23,7 +23,7 @@
 |---|---|---|
 | `--count <value>` | no | count |
 | `--page <value>` | no | page |
-| `--cursor <value>` | no | Parameter for pagination. Set \`cursor\` equal to the \`next\_cursor\` attribute returned by the previous request's \`response\_metadata\`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection. See \[pagination\](/docs/pagination) for more details. |
+| `--cursor <value>` | no | Parameter for pagination. Set \`cursor\` equal to the \`next\_cursor\` attribute returned by the previous request's \`response\_metadata\`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more details. |
 | `--limit <value>` | no | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached. |
 | `--all` | no | read every page, as the API pages it |
 

@@ -10,7 +10,7 @@
 | Flag | Required | What |
 |---|---|---|
 | `--trigger-id <value>` | yes | Exchange a trigger to post to the user. |
-| `--view <value>` | yes | A \[view payload\](/reference/surfaces/views). This must be a JSON-encoded string. |
+| `--view <value>` | yes | A \[view payload\](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 
 ## `slack api views publish [options]`
 
@@ -20,7 +20,7 @@
 | Flag | Required | What |
 |---|---|---|
 | `--user-id <value>` | yes | \`id\` of the user you want publish a view to. |
-| `--view <value>` | yes | A \[view payload\](/reference/surfaces/views). This must be a JSON-encoded string. |
+| `--view <value>` | yes | A \[view payload\](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 | `--hash <value>` | no | A string that represents view state to protect against possible race conditions. |
 
 ## `slack api views push [options]`
@@ -31,7 +31,7 @@
 | Flag | Required | What |
 |---|---|---|
 | `--trigger-id <value>` | yes | Exchange a trigger to post to the user. |
-| `--view <value>` | yes | A \[view payload\](/reference/surfaces/views). This must be a JSON-encoded string. |
+| `--view <value>` | yes | A \[view payload\](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 
 ## `slack api views update [options]`
 
@@ -42,5 +42,5 @@
 |---|---|---|
 | `--view-id <value>` | no | A unique identifier of the view to be updated. Either \`view\_id\` or \`external\_id\` is required. |
 | `--external-id <value>` | no | A unique identifier of the view set by the developer. Must be unique for all views on a team. Max length of 255 characters. Either \`view\_id\` or \`external\_id\` is required. |
-| `--view <value>` | no | A \[view object\](/reference/surfaces/views). This must be a JSON-encoded string. |
+| `--view <value>` | no | A \[view object\](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 | `--hash <value>` | no | A string that represents view state to protect against possible race conditions. |

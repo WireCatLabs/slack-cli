@@ -49,7 +49,7 @@ const DELETING: Record<string, string> = {
 const DELETES = Object.fromEntries(
   Object.entries(DELETING).map(([id, does]) => [
     id,
-    { effect: "destructive" as const, reason: `${does} (${DOCS}${id.replaceAll("_", ".")}/)` },
+    { effect: "destructive" as const, reason: `${does} (<${DOCS}${id.replaceAll("_", ".")}/>)` },
   ]),
 )
 
@@ -95,7 +95,7 @@ const FILES_PAGED = {
       items: "files",
       start: 1,
     },
-    reason: `Slack pages files.list by \`page\` from 1 and \`count\`, with no cursor (${DOCS}files.list/)`,
+    reason: `Slack pages files.list by \`page\` from 1 and \`count\`, with no cursor (<${DOCS}files.list/>)`,
   },
 }
 
@@ -139,7 +139,7 @@ const artifacts = generate(
       security: [{ bearer: [] }],
       reason:
         "the spec signs in by a `token` parameter; Slack's docs send it as `Authorization: Bearer <token>` " +
-        "(https://docs.slack.dev/authentication/tokens/), and a token in the query or the form would reach logs",
+        "(<https://docs.slack.dev/authentication/tokens/>), and a token in the query or the form would reach logs",
     },
   },
 )

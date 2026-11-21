@@ -1459,7 +1459,7 @@ export type CallsAddRequest = {
   title?: string
   /** The valid Slack user ID of the user who created this Call. When this method is called with a user token, the `created_by` field is optional and defaults to the authed user of the token. Otherwise, the field is required. */
   created_by?: string
-  /** The list of users to register as participants in the Call. [Read more on how to specify users here](/apis/calls#users). */
+  /** The list of users to register as participants in the Call. [Read more on how to specify users here](https://api.slack.com/apis/calls#users). */
   users?: string
 }
 
@@ -1469,7 +1469,7 @@ export type CallsAddResponse = {
 } & { [key: string]: unknown }
 
 export type CallsEndRequest = {
-  /** `id` returned when registering the call using the [`calls.add`](/methods/calls.add) method. */
+  /** `id` returned when registering the call using the [`calls.add`](https://api.slack.com/methods/calls.add) method. */
   id: string
   /** Call duration in seconds */
   duration?: number
@@ -1486,9 +1486,9 @@ export type CallsInfoResponse = {
 } & { [key: string]: unknown }
 
 export type CallsParticipantsAddRequest = {
-  /** `id` returned by the [`calls.add`](/methods/calls.add) method. */
+  /** `id` returned by the [`calls.add`](https://api.slack.com/methods/calls.add) method. */
   id: string
-  /** The list of users to add as participants in the Call. [Read more on how to specify users here](/apis/calls#users). */
+  /** The list of users to add as participants in the Call. [Read more on how to specify users here](https://api.slack.com/apis/calls#users). */
   users: string
 }
 
@@ -1498,9 +1498,9 @@ export type CallsParticipantsAddResponse = {
 } & { [key: string]: unknown }
 
 export type CallsParticipantsRemoveRequest = {
-  /** `id` returned by the [`calls.add`](/methods/calls.add) method. */
+  /** `id` returned by the [`calls.add`](https://api.slack.com/methods/calls.add) method. */
   id: string
-  /** The list of users to remove as participants in the Call. [Read more on how to specify users here](/apis/calls#users). */
+  /** The list of users to remove as participants in the Call. [Read more on how to specify users here](https://api.slack.com/apis/calls#users). */
   users: string
 }
 
@@ -1510,7 +1510,7 @@ export type CallsParticipantsRemoveResponse = {
 } & { [key: string]: unknown }
 
 export type CallsUpdateRequest = {
-  /** `id` returned by the [`calls.add`](/methods/calls.add) method. */
+  /** `id` returned by the [`calls.add`](https://api.slack.com/methods/calls.add) method. */
   id: string
   /** The name of the Call. */
   title?: string
@@ -1530,7 +1530,7 @@ export type ChatDeleteRequest = {
   ts?: string
   /** Channel containing the message to be deleted. */
   channel?: string
-  /** Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope. */
+  /** Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](https://api.slack.com/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope. */
   as_user?: boolean
 }
 
@@ -1542,7 +1542,7 @@ export type ChatDeleteResponse = {
 } & { [key: string]: unknown }
 
 export type ChatDeleteScheduledMessageRequest = {
-  /** Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope. */
+  /** Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](https://api.slack.com/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope. */
   as_user?: boolean
   /** The channel the scheduled_message is posting to */
   channel: string
@@ -1585,21 +1585,21 @@ export type ChatPostEphemeralRequest = {
   blocks?: string
   /** Channel, private group, or IM channel to send message to. Can be an encoded ID, or a name. */
   channel: string
-  /** Emoji to use as the icon for this message. Overrides `icon_url`. Must be used in conjunction with `as_user` set to `false`, otherwise ignored. See [authorship](#authorship) below. */
+  /** Emoji to use as the icon for this message. Overrides `icon_url`. Must be used in conjunction with `as_user` set to `false`, otherwise ignored. See authorship below. */
   icon_emoji?: string
-  /** URL to an image to use as the icon for this message. Must be used in conjunction with `as_user` set to false, otherwise ignored. See [authorship](#authorship) below. */
+  /** URL to an image to use as the icon for this message. Must be used in conjunction with `as_user` set to false, otherwise ignored. See authorship below. */
   icon_url?: string
   /** Find and link channel names and usernames. */
   link_names?: boolean
-  /** Change how messages are treated. Defaults to `none`. See [below](#formatting). */
+  /** Change how messages are treated. Defaults to `none`. See below. */
   parse?: string
-  /** How this field works and whether it is required depends on other fields you use in your API call. [See below](#text_usage) for more detail. */
+  /** How this field works and whether it is required depends on other fields you use in your API call. See below for more detail. */
   text?: string
   /** Provide another message's `ts` value to post this message in a thread. Avoid using a reply's `ts` value; use its parent's value instead. Ephemeral messages in threads are only shown if there is already an active thread. */
   thread_ts?: string
   /** `id` of the user who will receive the ephemeral message. The user should be in the channel specified by the `channel` argument. */
   user: string
-  /** Set your bot's user name. Must be used in conjunction with `as_user` set to false, otherwise ignored. See [authorship](#authorship) below. */
+  /** Set your bot's user name. Must be used in conjunction with `as_user` set to false, otherwise ignored. See authorship below. */
   username?: string
 }
 
@@ -1610,27 +1610,27 @@ export type ChatPostEphemeralResponse = {
 } & { [key: string]: unknown }
 
 export type ChatPostMessageRequest = {
-  /** Pass true to post the message as the authed user, instead of as a bot. Defaults to false. See [authorship](#authorship) below. */
+  /** Pass true to post the message as the authed user, instead of as a bot. Defaults to false. See authorship below. */
   as_user?: string
   /** A JSON-based array of structured attachments, presented as a URL-encoded string. */
   attachments?: string
   /** A JSON-based array of structured blocks, presented as a URL-encoded string. */
   blocks?: string
-  /** Channel, private group, or IM channel to send message to. Can be an encoded ID, or a name. See [below](#channels) for more details. */
+  /** Channel, private group, or IM channel to send message to. Can be an encoded ID, or a name. See below for more details. */
   channel: string
-  /** Emoji to use as the icon for this message. Overrides `icon_url`. Must be used in conjunction with `as_user` set to `false`, otherwise ignored. See [authorship](#authorship) below. */
+  /** Emoji to use as the icon for this message. Overrides `icon_url`. Must be used in conjunction with `as_user` set to `false`, otherwise ignored. See authorship below. */
   icon_emoji?: string
-  /** URL to an image to use as the icon for this message. Must be used in conjunction with `as_user` set to false, otherwise ignored. See [authorship](#authorship) below. */
+  /** URL to an image to use as the icon for this message. Must be used in conjunction with `as_user` set to false, otherwise ignored. See authorship below. */
   icon_url?: string
   /** Find and link channel names and usernames. */
   link_names?: boolean
   /** Disable Slack markup parsing by setting to `false`. Enabled by default. */
   mrkdwn?: boolean
-  /** Change how messages are treated. Defaults to `none`. See [below](#formatting). */
+  /** Change how messages are treated. Defaults to `none`. See below. */
   parse?: string
   /** Used in conjunction with `thread_ts` and indicates whether reply should be made visible to everyone in the channel or conversation. Defaults to `false`. */
   reply_broadcast?: boolean
-  /** How this field works and whether it is required depends on other fields you use in your API call. [See below](#text_usage) for more detail. */
+  /** How this field works and whether it is required depends on other fields you use in your API call. See below for more detail. */
   text?: string
   /** Provide another message's `ts` value to make this message a reply. Avoid using a reply's `ts` value; use its parent instead. */
   thread_ts?: string
@@ -1638,7 +1638,7 @@ export type ChatPostMessageRequest = {
   unfurl_links?: boolean
   /** Pass false to disable unfurling of media content. */
   unfurl_media?: boolean
-  /** Set your bot's user name. Must be used in conjunction with `as_user` set to false, otherwise ignored. See [authorship](#authorship) below. */
+  /** Set your bot's user name. Must be used in conjunction with `as_user` set to false, otherwise ignored. See authorship below. */
   username?: string
 }
 
@@ -1651,9 +1651,9 @@ export type ChatPostMessageResponse = {
 } & { [key: string]: unknown }
 
 export type ChatScheduleMessageRequest = {
-  /** Channel, private group, or DM channel to send message to. Can be an encoded ID, or a name. See [below](#channels) for more details. */
+  /** Channel, private group, or DM channel to send message to. Can be an encoded ID, or a name. See below for more details. */
   channel?: string
-  /** How this field works and whether it is required depends on other fields you use in your API call. [See below](#text_usage) for more detail. */
+  /** How this field works and whether it is required depends on other fields you use in your API call. See below for more detail. */
   text?: string
   /** Unix EPOCH timestamp of time in future to send the message. */
   post_at?: string
@@ -1732,11 +1732,11 @@ export type ChatUnfurlResponse = {
 } & { [key: string]: unknown }
 
 export type ChatUpdateRequest = {
-  /** Pass true to update the message as the authed user. [Bot users](/bot-users) in this context are considered authed users. */
+  /** Pass true to update the message as the authed user. [Bot users](https://api.slack.com/bot-users) in this context are considered authed users. */
   as_user?: string
   /** A JSON-based array of structured attachments, presented as a URL-encoded string. This field is required when not presenting `text`. If you don't include this field, the message's previous `attachments` will be retained. To remove previous `attachments`, include an empty array for this field. */
   attachments?: string
-  /** A JSON-based array of [structured blocks](/block-kit/building), presented as a URL-encoded string. If you don't include this field, the message's previous `blocks` will be retained. To remove previous `blocks`, include an empty array for this field. */
+  /** A JSON-based array of [structured blocks](https://api.slack.com/block-kit/building), presented as a URL-encoded string. If you don't include this field, the message's previous `blocks` will be retained. To remove previous `blocks`, include an empty array for this field. */
   blocks?: string
   /** Channel containing the message to be updated. */
   channel: string
@@ -1744,7 +1744,7 @@ export type ChatUpdateRequest = {
   link_names?: string
   /** Change how messages are treated. Defaults to `client`, unlike `chat.postMessage`. Accepts either `none` or `full`. If you do not specify a value for this field, the original value set for the message will be overwritten with the default, `client`. */
   parse?: string
-  /** New text for the message, using the [default formatting rules](/reference/surfaces/formatting). It's not required when presenting `blocks` or `attachments`. */
+  /** New text for the message, using the [default formatting rules](https://api.slack.com/reference/surfaces/formatting). It's not required when presenting `blocks` or `attachments`. */
   text?: string
   /** Timestamp of the message to be updated. */
   ts: string
@@ -2210,7 +2210,7 @@ export type FilesUploadRequest = {
   file?: string
   /** File contents via a POST variable. If omitting this parameter, you must provide a `file`. */
   content?: string
-  /** A [file type](/types/file#file_types) identifier. */
+  /** A [file type](https://api.slack.com/types/file#file_types) identifier. */
   filetype?: string
   /** Filename of file. */
   filename?: string

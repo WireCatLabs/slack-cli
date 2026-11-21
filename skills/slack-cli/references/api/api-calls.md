@@ -31,7 +31,7 @@
 
 | Flag | Required | What |
 |---|---|---|
-| `--id <value>` | yes | \`id\` of the Call returned by the \[\`calls.add\`\](/methods/calls.add) method. |
+| `--id <value>` | yes | \`id\` of the Call returned by the \[\`calls.add\`\](https://api.slack.com/methods/calls.add) method. |
 
 ## `slack api calls participants-add [options]`
 

@@ -4676,7 +4676,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       users: {
         description:
-          "The list of users to register as participants in the Call. [Read more on how to specify users here](/apis/calls#users).",
+          "The list of users to register as participants in the Call. [Read more on how to specify users here](https://api.slack.com/apis/calls#users).",
         type: "string",
       },
     },
@@ -4701,7 +4701,8 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     type: "object",
     properties: {
       id: {
-        description: "`id` returned when registering the call using the [`calls.add`](/methods/calls.add) method.",
+        description:
+          "`id` returned when registering the call using the [`calls.add`](https://api.slack.com/methods/calls.add) method.",
         type: "string",
       },
       duration: {
@@ -4745,12 +4746,12 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     type: "object",
     properties: {
       id: {
-        description: "`id` returned by the [`calls.add`](/methods/calls.add) method.",
+        description: "`id` returned by the [`calls.add`](https://api.slack.com/methods/calls.add) method.",
         type: "string",
       },
       users: {
         description:
-          "The list of users to add as participants in the Call. [Read more on how to specify users here](/apis/calls#users).",
+          "The list of users to add as participants in the Call. [Read more on how to specify users here](https://api.slack.com/apis/calls#users).",
         type: "string",
       },
     },
@@ -4775,12 +4776,12 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     type: "object",
     properties: {
       id: {
-        description: "`id` returned by the [`calls.add`](/methods/calls.add) method.",
+        description: "`id` returned by the [`calls.add`](https://api.slack.com/methods/calls.add) method.",
         type: "string",
       },
       users: {
         description:
-          "The list of users to remove as participants in the Call. [Read more on how to specify users here](/apis/calls#users).",
+          "The list of users to remove as participants in the Call. [Read more on how to specify users here](https://api.slack.com/apis/calls#users).",
         type: "string",
       },
     },
@@ -4805,7 +4806,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     type: "object",
     properties: {
       id: {
-        description: "`id` returned by the [`calls.add`](/methods/calls.add) method.",
+        description: "`id` returned by the [`calls.add`](https://api.slack.com/methods/calls.add) method.",
         type: "string",
       },
       title: {
@@ -4852,7 +4853,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       as_user: {
         description:
-          "Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope.",
+          "Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](https://api.slack.com/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope.",
         type: "boolean",
       },
     },
@@ -4885,7 +4886,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     properties: {
       as_user: {
         description:
-          "Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope.",
+          "Pass true to delete the message as the authed user with `chat:write:user` scope. [Bot users](https://api.slack.com/bot-users) in this context are considered authed users. If unused or false, the message will be deleted with `chat:write:bot` scope.",
         type: "boolean",
       },
       channel: {
@@ -4993,12 +4994,12 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       icon_emoji: {
         description:
-          "Emoji to use as the icon for this message. Overrides `icon_url`. Must be used in conjunction with `as_user` set to `false`, otherwise ignored. See [authorship](#authorship) below.",
+          "Emoji to use as the icon for this message. Overrides `icon_url`. Must be used in conjunction with `as_user` set to `false`, otherwise ignored. See authorship below.",
         type: "string",
       },
       icon_url: {
         description:
-          "URL to an image to use as the icon for this message. Must be used in conjunction with `as_user` set to false, otherwise ignored. See [authorship](#authorship) below.",
+          "URL to an image to use as the icon for this message. Must be used in conjunction with `as_user` set to false, otherwise ignored. See authorship below.",
         type: "string",
       },
       link_names: {
@@ -5006,12 +5007,12 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "boolean",
       },
       parse: {
-        description: "Change how messages are treated. Defaults to `none`. See [below](#formatting).",
+        description: "Change how messages are treated. Defaults to `none`. See below.",
         type: "string",
       },
       text: {
         description:
-          "How this field works and whether it is required depends on other fields you use in your API call. [See below](#text_usage) for more detail.",
+          "How this field works and whether it is required depends on other fields you use in your API call. See below for more detail.",
         type: "string",
       },
       thread_ts: {
@@ -5026,7 +5027,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       username: {
         description:
-          "Set your bot's user name. Must be used in conjunction with `as_user` set to false, otherwise ignored. See [authorship](#authorship) below.",
+          "Set your bot's user name. Must be used in conjunction with `as_user` set to false, otherwise ignored. See authorship below.",
         type: "string",
       },
     },
@@ -5055,7 +5056,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     properties: {
       as_user: {
         description:
-          "Pass true to post the message as the authed user, instead of as a bot. Defaults to false. See [authorship](#authorship) below.",
+          "Pass true to post the message as the authed user, instead of as a bot. Defaults to false. See authorship below.",
         type: "string",
       },
       attachments: {
@@ -5068,17 +5069,17 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       channel: {
         description:
-          "Channel, private group, or IM channel to send message to. Can be an encoded ID, or a name. See [below](#channels) for more details.",
+          "Channel, private group, or IM channel to send message to. Can be an encoded ID, or a name. See below for more details.",
         type: "string",
       },
       icon_emoji: {
         description:
-          "Emoji to use as the icon for this message. Overrides `icon_url`. Must be used in conjunction with `as_user` set to `false`, otherwise ignored. See [authorship](#authorship) below.",
+          "Emoji to use as the icon for this message. Overrides `icon_url`. Must be used in conjunction with `as_user` set to `false`, otherwise ignored. See authorship below.",
         type: "string",
       },
       icon_url: {
         description:
-          "URL to an image to use as the icon for this message. Must be used in conjunction with `as_user` set to false, otherwise ignored. See [authorship](#authorship) below.",
+          "URL to an image to use as the icon for this message. Must be used in conjunction with `as_user` set to false, otherwise ignored. See authorship below.",
         type: "string",
       },
       link_names: {
@@ -5090,7 +5091,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "boolean",
       },
       parse: {
-        description: "Change how messages are treated. Defaults to `none`. See [below](#formatting).",
+        description: "Change how messages are treated. Defaults to `none`. See below.",
         type: "string",
       },
       reply_broadcast: {
@@ -5100,7 +5101,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       text: {
         description:
-          "How this field works and whether it is required depends on other fields you use in your API call. [See below](#text_usage) for more detail.",
+          "How this field works and whether it is required depends on other fields you use in your API call. See below for more detail.",
         type: "string",
       },
       thread_ts: {
@@ -5118,7 +5119,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       username: {
         description:
-          "Set your bot's user name. Must be used in conjunction with `as_user` set to false, otherwise ignored. See [authorship](#authorship) below.",
+          "Set your bot's user name. Must be used in conjunction with `as_user` set to false, otherwise ignored. See authorship below.",
         type: "string",
       },
     },
@@ -5155,12 +5156,12 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     properties: {
       channel: {
         description:
-          "Channel, private group, or DM channel to send message to. Can be an encoded ID, or a name. See [below](#channels) for more details.",
+          "Channel, private group, or DM channel to send message to. Can be an encoded ID, or a name. See below for more details.",
         type: "string",
       },
       text: {
         description:
-          "How this field works and whether it is required depends on other fields you use in your API call. [See below](#text_usage) for more detail.",
+          "How this field works and whether it is required depends on other fields you use in your API call. See below for more detail.",
         type: "string",
       },
       post_at: {
@@ -5377,7 +5378,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
     properties: {
       as_user: {
         description:
-          "Pass true to update the message as the authed user. [Bot users](/bot-users) in this context are considered authed users.",
+          "Pass true to update the message as the authed user. [Bot users](https://api.slack.com/bot-users) in this context are considered authed users.",
         type: "string",
       },
       attachments: {
@@ -5387,7 +5388,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       blocks: {
         description:
-          "A JSON-based array of [structured blocks](/block-kit/building), presented as a URL-encoded string. If you don't include this field, the message's previous `blocks` will be retained. To remove previous `blocks`, include an empty array for this field.",
+          "A JSON-based array of [structured blocks](https://api.slack.com/block-kit/building), presented as a URL-encoded string. If you don't include this field, the message's previous `blocks` will be retained. To remove previous `blocks`, include an empty array for this field.",
         type: "string",
       },
       channel: {
@@ -5406,7 +5407,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
       },
       text: {
         description:
-          "New text for the message, using the [default formatting rules](/reference/surfaces/formatting). It's not required when presenting `blocks` or `attachments`.",
+          "New text for the message, using the [default formatting rules](https://api.slack.com/reference/surfaces/formatting). It's not required when presenting `blocks` or `attachments`.",
         type: "string",
       },
       ts: {
@@ -6714,7 +6715,7 @@ export const definitions: Readonly<Record<string, SchemaNode>> = {
         type: "string",
       },
       filetype: {
-        description: "A [file type](/types/file#file_types) identifier.",
+        description: "A [file type](https://api.slack.com/types/file#file_types) identifier.",
         type: "string",
       },
       filename: {

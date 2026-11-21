@@ -189,32 +189,32 @@ Run: pnpm generate
 
 | Operation | Effect | Why |
 |---|---|---|
-| `admin_conversations_archive` | destructive | override: archives a channel (https://docs.slack.dev/reference/methods/admin.conversations.archive/) |
-| `admin_conversations_delete` | destructive | override: deletes a channel (https://docs.slack.dev/reference/methods/admin.conversations.delete/) |
-| `admin_conversations_restrictAccess_removeGroup` | destructive | override: removes a group's access to a channel (https://docs.slack.dev/reference/methods/admin.conversations.restrictAccess.removeGroup/) |
-| `admin_emoji_remove` | destructive | override: removes an emoji (https://docs.slack.dev/reference/methods/admin.emoji.remove/) |
-| `admin_usergroups_removeChannels` | destructive | override: removes channels from a user group (https://docs.slack.dev/reference/methods/admin.usergroups.removeChannels/) |
-| `admin_users_remove` | destructive | override: removes a person from the workspace (https://docs.slack.dev/reference/methods/admin.users.remove/) |
-| `admin_users_session_invalidate` | destructive | override: ends a person's session (https://docs.slack.dev/reference/methods/admin.users.session.invalidate/) |
-| `admin_users_session_reset` | destructive | override: signs a person out of every session (https://docs.slack.dev/reference/methods/admin.users.session.reset/) |
-| `apps_uninstall` | destructive | override: uninstalls the app from the workspace, a GET in the spec (https://docs.slack.dev/reference/methods/apps.uninstall/) |
-| `auth_revoke` | destructive | override: revokes the token, a GET in the spec (https://docs.slack.dev/reference/methods/auth.revoke/) |
-| `calls_participants_remove` | destructive | override: removes participants from a call (https://docs.slack.dev/reference/methods/calls.participants.remove/) |
-| `chat_delete` | destructive | override: deletes a message (https://docs.slack.dev/reference/methods/chat.delete/) |
-| `chat_deleteScheduledMessage` | destructive | override: deletes a scheduled message (https://docs.slack.dev/reference/methods/chat.deleteScheduledMessage/) |
-| `conversations_archive` | destructive | override: archives a channel for everyone in it (https://docs.slack.dev/reference/methods/conversations.archive/) |
-| `conversations_kick` | destructive | override: removes a person from a channel (https://docs.slack.dev/reference/methods/conversations.kick/) |
-| `conversations_leave` | destructive | override: leaves a channel (https://docs.slack.dev/reference/methods/conversations.leave/) |
-| `files_comments_delete` | destructive | override: deletes a file comment (https://docs.slack.dev/reference/methods/files.comments.delete/) |
-| `files_delete` | destructive | override: deletes a file (https://docs.slack.dev/reference/methods/files.delete/) |
-| `files_remote_remove` | destructive | override: removes a remote file (https://docs.slack.dev/reference/methods/files.remote.remove/) |
-| `files_revokePublicURL` | destructive | override: revokes a file's public link (https://docs.slack.dev/reference/methods/files.revokePublicURL/) |
-| `pins_remove` | destructive | override: unpins a message (https://docs.slack.dev/reference/methods/pins.remove/) |
-| `reactions_remove` | destructive | override: removes a reaction (https://docs.slack.dev/reference/methods/reactions.remove/) |
-| `reminders_delete` | destructive | override: deletes a reminder (https://docs.slack.dev/reference/methods/reminders.delete/) |
-| `stars_remove` | destructive | override: removes a saved item (https://docs.slack.dev/reference/methods/stars.remove/) |
-| `usergroups_disable` | destructive | override: disables a user group (https://docs.slack.dev/reference/methods/usergroups.disable/) |
-| `users_deletePhoto` | destructive | override: deletes the profile photo (https://docs.slack.dev/reference/methods/users.deletePhoto/) |
+| `admin_conversations_archive` | destructive | override: archives a channel (<https://docs.slack.dev/reference/methods/admin.conversations.archive/>) |
+| `admin_conversations_delete` | destructive | override: deletes a channel (<https://docs.slack.dev/reference/methods/admin.conversations.delete/>) |
+| `admin_conversations_restrictAccess_removeGroup` | destructive | override: removes a group's access to a channel (<https://docs.slack.dev/reference/methods/admin.conversations.restrictAccess.removeGroup/>) |
+| `admin_emoji_remove` | destructive | override: removes an emoji (<https://docs.slack.dev/reference/methods/admin.emoji.remove/>) |
+| `admin_usergroups_removeChannels` | destructive | override: removes channels from a user group (<https://docs.slack.dev/reference/methods/admin.usergroups.removeChannels/>) |
+| `admin_users_remove` | destructive | override: removes a person from the workspace (<https://docs.slack.dev/reference/methods/admin.users.remove/>) |
+| `admin_users_session_invalidate` | destructive | override: ends a person's session (<https://docs.slack.dev/reference/methods/admin.users.session.invalidate/>) |
+| `admin_users_session_reset` | destructive | override: signs a person out of every session (<https://docs.slack.dev/reference/methods/admin.users.session.reset/>) |
+| `apps_uninstall` | destructive | override: uninstalls the app from the workspace, a GET in the spec (<https://docs.slack.dev/reference/methods/apps.uninstall/>) |
+| `auth_revoke` | destructive | override: revokes the token, a GET in the spec (<https://docs.slack.dev/reference/methods/auth.revoke/>) |
+| `calls_participants_remove` | destructive | override: removes participants from a call (<https://docs.slack.dev/reference/methods/calls.participants.remove/>) |
+| `chat_delete` | destructive | override: deletes a message (<https://docs.slack.dev/reference/methods/chat.delete/>) |
+| `chat_deleteScheduledMessage` | destructive | override: deletes a scheduled message (<https://docs.slack.dev/reference/methods/chat.deleteScheduledMessage/>) |
+| `conversations_archive` | destructive | override: archives a channel for everyone in it (<https://docs.slack.dev/reference/methods/conversations.archive/>) |
+| `conversations_kick` | destructive | override: removes a person from a channel (<https://docs.slack.dev/reference/methods/conversations.kick/>) |
+| `conversations_leave` | destructive | override: leaves a channel (<https://docs.slack.dev/reference/methods/conversations.leave/>) |
+| `files_comments_delete` | destructive | override: deletes a file comment (<https://docs.slack.dev/reference/methods/files.comments.delete/>) |
+| `files_delete` | destructive | override: deletes a file (<https://docs.slack.dev/reference/methods/files.delete/>) |
+| `files_remote_remove` | destructive | override: removes a remote file (<https://docs.slack.dev/reference/methods/files.remote.remove/>) |
+| `files_revokePublicURL` | destructive | override: revokes a file's public link (<https://docs.slack.dev/reference/methods/files.revokePublicURL/>) |
+| `pins_remove` | destructive | override: unpins a message (<https://docs.slack.dev/reference/methods/pins.remove/>) |
+| `reactions_remove` | destructive | override: removes a reaction (<https://docs.slack.dev/reference/methods/reactions.remove/>) |
+| `reminders_delete` | destructive | override: deletes a reminder (<https://docs.slack.dev/reference/methods/reminders.delete/>) |
+| `stars_remove` | destructive | override: removes a saved item (<https://docs.slack.dev/reference/methods/stars.remove/>) |
+| `usergroups_disable` | destructive | override: disables a user group (<https://docs.slack.dev/reference/methods/usergroups.disable/>) |
+| `users_deletePhoto` | destructive | override: deletes the profile photo (<https://docs.slack.dev/reference/methods/users.deletePhoto/>) |
 
 ## Pagination
 
@@ -229,7 +229,7 @@ Run: pnpm generate
 | `conversations_members` | cursor | query `cursor`, query `limit` | next `response_metadata.next_cursor`, items `members` | override: Slack pages conversations.members by `cursor` and `response_metadata.next_cursor` |
 | `conversations_replies` | cursor | query `cursor`, query `limit` | next `response_metadata.next_cursor`, items `messages` | override: Slack pages conversations.replies by `cursor` and `response_metadata.next_cursor` |
 | `files_info` | cursor | query `cursor`, query `limit` | next `response_metadata.next_cursor` | detected |
-| `files_list` | page | query `page`, query `count` | items `files` | override: Slack pages files.list by `page` from 1 and `count`, with no cursor (https://docs.slack.dev/reference/methods/files.list/) |
+| `files_list` | page | query `page`, query `count` | items `files` | override: Slack pages files.list by `page` from 1 and `count`, with no cursor (<https://docs.slack.dev/reference/methods/files.list/>) |
 | `reactions_list` | cursor | query `cursor`, query `limit` | next `response_metadata.next_cursor`, items `items` | override: Slack pages reactions.list by `cursor` and `response_metadata.next_cursor` |
 | `stars_list` | cursor | query `cursor`, query `limit` | next `response_metadata.next_cursor`, items `items` | override: Slack pages stars.list by `cursor` and `response_metadata.next_cursor` |
 | `users_conversations` | cursor | query `cursor`, query `limit` | next `response_metadata.next_cursor`, items `channels` | override: Slack pages users.conversations by `cursor` and `response_metadata.next_cursor` |
@@ -237,7 +237,7 @@ Run: pnpm generate
 
 ## Sign-in
 
-Not from the source: the spec signs in by a `token` parameter; Slack's docs send it as `Authorization: Bearer <token>` (https://docs.slack.dev/authentication/tokens/), and a token in the query or the form would reach logs
+Not from the source: the spec signs in by a `token` parameter; Slack's docs send it as `Authorization: Bearer <token>` (<https://docs.slack.dev/authentication/tokens/>), and a token in the query or the form would reach logs
 
 ## Permission keys
 
@@ -274,20 +274,21 @@ Not from the source: the spec signs in by a `token` parameter; Slack's docs send
 ## Spec corrections
 
 - 28 draft-04 tuple `items` became `anyOf` (OpenAPI 3 has no tuples)
-- patched /paths/~1conversations.history/get/parameters/1/required: Slack's docs mark `channel` required in conversations.history (https://docs.slack.dev/reference/methods/conversations.history/); the spec does not
-- patched /paths/~1conversations.replies/get/parameters/1/required: Slack's docs mark `channel` required in conversations.replies (https://docs.slack.dev/reference/methods/conversations.replies/); the spec does not
-- patched /paths/~1conversations.info/get/parameters/1/required: Slack's docs mark `channel` required in conversations.info (https://docs.slack.dev/reference/methods/conversations.info/); the spec does not
-- patched /paths/~1conversations.members/get/parameters/1/required: Slack's docs mark `channel` required in conversations.members (https://docs.slack.dev/reference/methods/conversations.members/); the spec does not
-- patched /paths/~1conversations.replies/get/parameters/2/required: Slack's docs mark `ts` required in conversations.replies (https://docs.slack.dev/reference/methods/conversations.replies/)
+- patched /paths/~1conversations.history/get/parameters/1/required: Slack's docs mark `channel` required in conversations.history (<https://docs.slack.dev/reference/methods/conversations.history/>); the spec does not
+- patched /paths/~1conversations.replies/get/parameters/1/required: Slack's docs mark `channel` required in conversations.replies (<https://docs.slack.dev/reference/methods/conversations.replies/>); the spec does not
+- patched /paths/~1conversations.info/get/parameters/1/required: Slack's docs mark `channel` required in conversations.info (<https://docs.slack.dev/reference/methods/conversations.info/>); the spec does not
+- patched /paths/~1conversations.members/get/parameters/1/required: Slack's docs mark `channel` required in conversations.members (<https://docs.slack.dev/reference/methods/conversations.members/>); the spec does not
+- patched /paths/~1conversations.replies/get/parameters/2/required: Slack's docs mark `ts` required in conversations.replies (<https://docs.slack.dev/reference/methods/conversations.replies/>)
 - 11 patches: a Slack timestamp is a string with six decimals (the spec's own `defs_ts`); as a number 1700000000.000100 loses its digits and names another message
 - patched /components/schemas/objs_response_metadata: the spec's three variants of `response_metadata` (paging, a warning, both) are one object whose fields come and go; as a union the paging of users.list and reactions.list cannot be read from it
-- patched /paths/~1conversations.history/get/responses/200/content/application~1json/schema/properties/response_metadata: Slack's docs show `response_metadata.next_cursor` in the answer of conversations.history (https://docs.slack.dev/reference/methods/conversations.history/)
-- patched /paths/~1conversations.replies/get/responses/200/content/application~1json/schema/properties/response_metadata: Slack's docs show `response_metadata.next_cursor` in the answer of conversations.replies (https://docs.slack.dev/reference/methods/conversations.replies/)
-- patched /paths/~1stars.list/get/responses/200/content/application~1json/schema/properties/response_metadata: Slack's docs show `response_metadata.next_cursor` in the answer of stars.list (https://docs.slack.dev/reference/methods/stars.list/)
-- patched /paths/~1oauth.access/get/responses/200/content/application~1json/schema/properties/access_token: oauth.access answers an access token (https://docs.slack.dev/reference/methods/oauth.access/), so the api group offers no command for it
-- patched /paths/~1oauth.v2.access/get/responses/200/content/application~1json/schema/properties/access_token: oauth.v2.access answers an access token (https://docs.slack.dev/reference/methods/oauth.v2.access/), so the api group offers no command for it
-- patched /paths/~1oauth.token/get/responses/200/content/application~1json/schema/properties/access_token: oauth.token answers an access token (https://docs.slack.dev/reference/methods/oauth.token/), so the api group offers no command for it
-- patched /paths/~1rtm.connect/get/responses/200/content/application~1json/schema/properties/url/format: rtm.connect answers a WebSocket URL that carries a connection ticket (https://docs.slack.dev/reference/methods/rtm.connect/), a link with a secret, so the api group offers no command for it
-- 185 patches: Slack's docs send the token as `Authorization: Bearer` (https://docs.slack.dev/apis/web-api/); a `token` argument would put the secret in shell history and the run record (WC-SECR-5)
+- patched /paths/~1conversations.history/get/responses/200/content/application~1json/schema/properties/response_metadata: Slack's docs show `response_metadata.next_cursor` in the answer of conversations.history (<https://docs.slack.dev/reference/methods/conversations.history/>)
+- patched /paths/~1conversations.replies/get/responses/200/content/application~1json/schema/properties/response_metadata: Slack's docs show `response_metadata.next_cursor` in the answer of conversations.replies (<https://docs.slack.dev/reference/methods/conversations.replies/>)
+- patched /paths/~1stars.list/get/responses/200/content/application~1json/schema/properties/response_metadata: Slack's docs show `response_metadata.next_cursor` in the answer of stars.list (<https://docs.slack.dev/reference/methods/stars.list/>)
+- patched /paths/~1oauth.access/get/responses/200/content/application~1json/schema/properties/access_token: oauth.access answers an access token (<https://docs.slack.dev/reference/methods/oauth.access/>), so the api group offers no command for it
+- patched /paths/~1oauth.v2.access/get/responses/200/content/application~1json/schema/properties/access_token: oauth.v2.access answers an access token (<https://docs.slack.dev/reference/methods/oauth.v2.access/>), so the api group offers no command for it
+- patched /paths/~1oauth.token/get/responses/200/content/application~1json/schema/properties/access_token: oauth.token answers an access token (<https://docs.slack.dev/reference/methods/oauth.token/>), so the api group offers no command for it
+- patched /paths/~1rtm.connect/get/responses/200/content/application~1json/schema/properties/url/format: rtm.connect answers a WebSocket URL that carries a connection ticket (<https://docs.slack.dev/reference/methods/rtm.connect/>), a link with a secret, so the api group offers no command for it
+- 185 patches: Slack's docs send the token as `Authorization: Bearer` (<https://docs.slack.dev/apis/web-api/>); a `token` argument would put the secret in shell history and the run record (WC-SECR-5)
 - 76 patches: the method accepts `application/json` (its Swagger `consumes`), which cli-core can send; the form it lists first it cannot
 - 290 patches: Slack adds answer fields over time and answers an empty list where the spec of 2020 says `additionalProperties: false` and `minItems: 1`, so a strict fake would refuse what Slack sends today
+- 51 patches: Slack's descriptions link relative to api.slack.com (`/docs/pagination`) or to anchors of its own pages, which break in the coverage page, the commands page and the agent skill

@@ -676,7 +676,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          "The type of channel to include or exclude in the search. For example `private` will search private channels, while `private_exclude` will exclude them. For a full list of types, check the [Types section](#types).",
+          "The type of channel to include or exclude in the search. For example `private` will search private channels, while `private_exclude` will exclude them. For a full list of types, check the Types section.",
       },
       {
         name: "sort",
@@ -1949,7 +1949,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
       {
         name: "limit",
@@ -2005,7 +2005,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
       {
         name: "limit",
@@ -2255,7 +2255,7 @@ export const operations: readonly ManifestOperation[] = [
         schema: {
           type: "string",
         },
-        description: "`id` of the Call returned by the [`calls.add`](/methods/calls.add) method.",
+        description: "`id` of the Call returned by the [`calls.add`](https://api.slack.com/methods/calls.add) method.",
       },
     ],
     response: {
@@ -2801,7 +2801,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
     ],
     response: {
@@ -3020,7 +3020,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
     ],
     response: {
@@ -3104,7 +3104,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
     ],
     response: {
@@ -3249,7 +3249,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
     ],
     response: {
@@ -3619,7 +3619,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Parameter for pagination. File comments are paginated for a single file. Set `cursor` equal to the `next_cursor` attribute returned by the previous request\'s `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection of comments. See [pagination](/docs/pagination) for more details.',
+          'Parameter for pagination. File comments are paginated for a single file. Set `cursor` equal to the `next_cursor` attribute returned by the previous request\'s `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection of comments. See [pagination](https://api.slack.com/docs/pagination) for more details.',
       },
     ],
     response: {
@@ -3697,7 +3697,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          "Filter files by type ([see below](#file_types)). You can pass multiple values in the types argument, like `types=spaces,snippets`.The default value is `all`, which does not filter the list.",
+          "Filter files by type (see below). You can pass multiple values in the types argument, like `types=spaces,snippets`.The default value is `all`, which does not filter the list.",
       },
       {
         name: "count",
@@ -3849,7 +3849,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
     ],
     response: {
@@ -4505,7 +4505,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Parameter for pagination. Set `cursor` equal to the `next_cursor` attribute returned by the previous request\'s `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection. See [pagination](/docs/pagination) for more details.',
+          'Parameter for pagination. Set `cursor` equal to the `next_cursor` attribute returned by the previous request\'s `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more details.',
       },
       {
         name: "limit",
@@ -4691,7 +4691,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "boolean",
         },
         description:
-          "Batch presence deliveries via subscription. Enabling changes the shape of `presence_change` events. See [batch presence](/docs/presence-and-status#batching).",
+          "Batch presence deliveries via subscription. Enabling changes the shape of `presence_change` events. See [batch presence](https://api.slack.com/docs/presence-and-status#batching).",
       },
       {
         name: "presence_sub",
@@ -4701,7 +4701,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "boolean",
         },
         description:
-          "Only deliver presence events when requested by subscription. See [presence subscriptions](/docs/presence-and-status#subscriptions).",
+          "Only deliver presence events when requested by subscription. See [presence subscriptions](https://api.slack.com/docs/presence-and-status#subscriptions).",
       },
     ],
     response: {
@@ -4854,7 +4854,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Parameter for pagination. Set `cursor` equal to the `next_cursor` attribute returned by the previous request\'s `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection. See [pagination](/docs/pagination) for more details.',
+          'Parameter for pagination. Set `cursor` equal to the `next_cursor` attribute returned by the previous request\'s `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more details.',
       },
       {
         name: "limit",
@@ -5376,7 +5376,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
     ],
     response: {
@@ -5540,7 +5540,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](/docs/pagination) for more detail.',
+          'Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request\'s `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail.',
       },
       {
         name: "include_locale",
@@ -5739,7 +5739,8 @@ export const operations: readonly ManifestOperation[] = [
         schema: {
           type: "string",
         },
-        description: "A [view payload](/reference/surfaces/views). This must be a JSON-encoded string.",
+        description:
+          "A [view payload](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string.",
       },
     ],
     response: {
@@ -5776,7 +5777,8 @@ export const operations: readonly ManifestOperation[] = [
         schema: {
           type: "string",
         },
-        description: "A [view payload](/reference/surfaces/views). This must be a JSON-encoded string.",
+        description:
+          "A [view payload](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string.",
       },
       {
         name: "hash",
@@ -5822,7 +5824,8 @@ export const operations: readonly ManifestOperation[] = [
         schema: {
           type: "string",
         },
-        description: "A [view payload](/reference/surfaces/views). This must be a JSON-encoded string.",
+        description:
+          "A [view payload](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string.",
       },
     ],
     response: {
@@ -5869,7 +5872,8 @@ export const operations: readonly ManifestOperation[] = [
         schema: {
           type: "string",
         },
-        description: "A [view object](/reference/surfaces/views). This must be a JSON-encoded string.",
+        description:
+          "A [view object](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string.",
       },
       {
         name: "hash",
@@ -5916,7 +5920,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          "Key-value object of outputs from your step. Keys of this object reflect the configured `key` properties of your [`outputs`](/reference/workflows/workflow_step#output) array from your `workflow_step` object.",
+          "Key-value object of outputs from your step. Keys of this object reflect the configured `key` properties of your [`outputs`](https://api.slack.com/reference/workflows/workflow_step#output) array from your `workflow_step` object.",
       },
     ],
     response: {
@@ -5993,7 +5997,7 @@ export const operations: readonly ManifestOperation[] = [
           type: "string",
         },
         description:
-          "A JSON key-value map of inputs required from a user during configuration. This is the data your app expects to receive when the workflow step starts. **Please note**: the embedded variable format is set and replaced by the workflow system. You cannot create custom variables that will be replaced at runtime. [Read more about variables in workflow steps here](/workflows/steps#variables).",
+          "A JSON key-value map of inputs required from a user during configuration. This is the data your app expects to receive when the workflow step starts. **Please note**: the embedded variable format is set and replaced by the workflow system. You cannot create custom variables that will be replaced at runtime. [Read more about variables in workflow steps here](https://api.slack.com/workflows/steps#variables).",
       },
       {
         name: "outputs",
