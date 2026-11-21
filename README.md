@@ -73,6 +73,23 @@ one is kept as a run in `slack personal runs list`. To stop that, make the profi
 
 ## What it can do
 
+Read your workspace with the same commands as every WireCat messenger CLI:
+
+- `slack personal chats list` lists the channels, DMs and group DMs you are in. `chats show '#general'` shows one,
+  with its members; a DM also shows its unread count. `chats members list '#general'` lists who is in a channel.
+- `slack personal messages list '#general'` reads recent messages as plain text, with names in place of user ids.
+  `messages list '#general' topic:<ts>` reads one thread. `messages show` and `messages context` open one message
+  and the messages around it.
+- `slack personal messages download '#general' <ts>` saves a message's files. They come only from
+  `files.slack.com`, and the token goes only there.
+- `slack personal messages sync '#general'` saves a channel's history on this computer, with new replies of threads
+  up to 14 days old (`thread_window_days`). `slack personal search all "invoice"` then searches it.
+- `slack personal chats events '#general'` shows who joined or left and what was renamed, from Slack's service
+  messages. `slack personal contacts show anna` shows a person.
+
+Slack does not say when a message was deleted, so a message saved by a sync stays saved. Sending, editing and
+reactions come in a later version; `slack personal api` reaches them now.
+
 [docs/commands.md](docs/commands.md) lists every command, and `--help` after any of them shows its flags.
 
 ## Settings and permissions
