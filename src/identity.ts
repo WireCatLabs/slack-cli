@@ -1,5 +1,6 @@
 import type { ManifestIdentity } from "@wirecat/cli-base/wcat/manifest"
 import type { AppIdentity } from "@wirecat/cli-core/cli"
+import { REASONS } from "./reasons.js"
 import { VERSION } from "./version.js"
 
 export const SERVICE = "Slack"
@@ -15,6 +16,7 @@ export const IDENTITY: AppIdentity = {
   issues: "https://github.com/WireCatLabs/slack-cli/issues/new",
   messenger: true,
   contentLanguages: ["en", "ru"],
+  errors: { reasons: REASONS },
 }
 
 // What `wcat` and WireCat Desktop show before the tool is installed. The bin passes it to wcatStart before anything

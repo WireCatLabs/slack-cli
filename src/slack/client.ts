@@ -1,4 +1,4 @@
-import { CliError, isCliError, type SleepLike, wallClock } from "@wirecat/cli-base"
+import { CliError, type ErrorCode, isCliError, type SleepLike, wallClock } from "@wirecat/cli-base"
 import {
   type FetchLike,
   hostFetch,
@@ -31,14 +31,27 @@ export interface SlackClientOptions {
 export type SlackArgs = Readonly<Record<string, string | number | boolean | undefined>>
 
 const AUTH = new Set(["invalid_auth", "not_authed", "token_revoked", "token_expired", "account_inactive"])
-const PERMISSION = new Set(["missing_scope", "not_allowed_token_type", "no_permission", "restricted_action"])
+const PERMISSION = new Set(["missing_scope", "not_allowed_token_type", "no_permission"])
+
+/** Slack's codes with a reason of their own (src/reasons.ts). */
+const REASON_OF: Record<string, string> = {
+  cant_update_message: "message.not-yours",
+  cant_delete_message: "message.not-yours",
+  edit_window_closed: "message.edit-window-closed",
+  msg_too_long: "message.too-long",
+  not_in_channel: "chat.not-joined",
+  is_archived: "chat.archived",
+}
+
+const reasonOf = (code: string) =>
+  REASON_OF[code] ??
+  (code === "restricted_action" || code.startsWith("restricted_action_") ? "chat.restricted" : undefined)
 const NOT_FOUND = new Set([
   "channel_not_found",
   "user_not_found",
   "message_not_found",
   "thread_not_found",
   "file_not_found",
-  "not_in_channel",
 ])
 const INPUT = new Set([
   "invalid_arguments",
@@ -54,8 +67,19 @@ const UNAVAILABLE = new Set(["fatal_error", "internal_error", "service_unavailab
 const failureAnswer = v.looseObject({
   ok: v.literal(false),
   error: v.optional(v.string()),
+  // conversations.leave answers a chat the account is not in with this flag and no `error`.
+  not_in_channel: v.optional(v.boolean()),
   needed: v.optional(v.string()),
 })
+
+const REASONED: Record<string, [ErrorCode, string]> = {
+  "message.not-yours": ["permission_error", `${SERVICE} lets you change only your own messages`],
+  "message.edit-window-closed": ["permission_error", `${SERVICE} no longer lets this message be edited`],
+  "message.too-long": ["validation_error", `the message is longer than ${SERVICE} takes; shorten it`],
+  "chat.not-joined": ["permission_error", "you are not in this chat; join it first"],
+  "chat.archived": ["validation_error", "the chat is archived"],
+  "chat.restricted": ["permission_error", "a workspace or channel setting stops this"],
+}
 
 /**
  * Slack answers a refusal with HTTP 200 and `ok: false`. Only the code is kept, never Slack's free text, which can
@@ -63,6 +87,11 @@ const failureAnswer = v.looseObject({
  */
 export const slackFailure = (code: string, writes: boolean, needed?: string): CliError => {
   const details = { slack_error: code }
+  const reason = reasonOf(code)
+  if (reason) {
+    const [errorCode, message] = REASONED[reason] ?? ["provider_error", `${SERVICE} refused the call`]
+    return new CliError(errorCode, `${message} (${code})`, { ...details, reason })
+  }
   if (AUTH.has(code))
     return new CliError("authentication_error", `${SERVICE} refused the token (${code}); sign in again`, details)
   if (code === "missing_scope")
@@ -108,6 +137,12 @@ const statusFailure = (status: number, writes: boolean, retryAfterMs: number | u
   })
 }
 
+// An answer that cannot be read does not say the write did not land (WC-LIFE-9).
+const unreadableWrite = () =>
+  new CliError("outcome_unknown", `${SERVICE} answered a write with something unreadable; check before repeating it`, {
+    retryable: false,
+  })
+
 const formOf = (args: SlackArgs) =>
   new URLSearchParams(
     Object.entries(args).flatMap(([name, value]) =>
@@ -127,7 +162,7 @@ export const slackClient = (options: SlackClientOptions) => {
     ...(options.sleep ? { sleep: options.sleep } : {}),
   })
 
-  return async <T>(
+  const call = async <T>(
     method: string,
     args: SlackArgs,
     answer: v.GenericSchema<unknown, T>,
@@ -175,17 +210,67 @@ export const slackClient = (options: SlackClientOptions) => {
         ...(options.signal ? { signal: options.signal } : {}),
       })
     } catch {
-      return fail(new CliError("invalid_response", `${SERVICE} answered with something other than JSON`), 200)
+      return fail(
+        writes
+          ? unreadableWrite()
+          : new CliError("invalid_response", `${SERVICE} answered with something other than JSON`),
+        200,
+      )
     }
     const refused = v.safeParse(failureAnswer, body)
     if (refused.success)
-      return fail(slackFailure(refused.output.error ?? "unknown", writes, refused.output.needed), 200)
+      return fail(
+        slackFailure(
+          refused.output.error ?? (refused.output.not_in_channel ? "not_in_channel" : "unknown"),
+          writes,
+          refused.output.needed,
+        ),
+        200,
+      )
     const parsed = v.safeParse(answer, body)
     if (!parsed.success)
-      return fail(new CliError("invalid_response", `${SERVICE}'s answer to ${method} lacks the documented fields`), 200)
+      return fail(
+        writes
+          ? unreadableWrite()
+          : new CliError("invalid_response", `${SERVICE}'s answer to ${method} lacks the documented fields`),
+        200,
+      )
     end({ status: response.status })
     return parsed.output
   }
+
+  /**
+   * A file's bytes POSTed to the address `files.getUploadURLExternal` gave, on files.slack.com only, paced and in the
+   * run record as `files.upload`. Nothing is shared before `files.completeUploadExternal`, so a failure here sent
+   * nothing.
+   */
+  const upload = async (address: string, bytes: Uint8Array): Promise<void> => {
+    const end = providerRequest("files.upload", options.events, { method: "POST", transport: "http" })
+    const refused = (message: string): never => {
+      const failure = new CliError("provider_error", message, { sent: false })
+      end({ errorCode: failure.code })
+      throw failure
+    }
+    if (!URL.canParse(address) || new URL(address).host !== "files.slack.com")
+      return refused(`${SERVICE} gave an upload address off files.slack.com; nothing was sent`)
+    let response: Response
+    try {
+      response = await send(new URL(address), {
+        method: "POST",
+        headers: { authorization: `Bearer ${options.token}`, "content-type": "application/octet-stream" },
+        body: bytes,
+        redirect: "error",
+        ...(options.signal ? { signal: options.signal } : {}),
+      })
+    } catch {
+      return refused(`${SERVICE} could not take the file; nothing was sent`)
+    }
+    if (!response.ok) return refused(`${SERVICE} refused the file (HTTP ${response.status}); nothing was sent`)
+    await response.body?.cancel()
+    end({ status: response.status })
+  }
+
+  return Object.assign(call, { upload })
 }
 
 export type SlackClient = ReturnType<typeof slackClient>

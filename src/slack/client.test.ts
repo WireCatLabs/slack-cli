@@ -42,7 +42,12 @@ it.each([
   ["message_not_found", false, "not_found", `${METHOD}chat.delete/`],
   ["thread_not_found", false, "not_found", `${METHOD}conversations.replies/`],
   ["file_not_found", false, "not_found", `${METHOD}files.info/`],
-  ["not_in_channel", false, "not_found", `${METHOD}chat.postMessage/`],
+  ["not_in_channel", true, "permission_error", `${METHOD}chat.postMessage/`],
+  ["cant_update_message", true, "permission_error", `${METHOD}chat.update/`],
+  ["cant_delete_message", true, "permission_error", `${METHOD}chat.delete/`],
+  ["edit_window_closed", true, "permission_error", `${METHOD}chat.update/`],
+  ["msg_too_long", true, "validation_error", `${METHOD}chat.update/`],
+  ["restricted_action_read_only_channel", true, "permission_error", `${METHOD}chat.postMessage/`],
   ["invalid_arguments", false, "validation_error", `${METHOD}auth.test/`],
   ["invalid_arg_name", false, "validation_error", `${METHOD}auth.test/`],
   ["invalid_array_arg", false, "validation_error", `${METHOD}auth.test/`],
@@ -55,7 +60,7 @@ it.each([
   ["service_unavailable", false, "provider_unavailable", `${METHOD}auth.test/`],
   ["request_timeout", false, "provider_unavailable", `${METHOD}auth.test/`],
   ["internal_error", true, "outcome_unknown", `${METHOD}auth.test/`],
-  ["is_archived", true, "provider_error", `${METHOD}reactions.add/`],
+  ["is_archived", true, "validation_error", `${METHOD}chat.postMessage/`],
 ])("Slack's %s (a write: %s) is %s, as %s lists it", (error, writes, code) => {
   expect(slackFailure(error, writes).code).toBe(code)
 })
