@@ -87,12 +87,55 @@ const METHODS: Record<string, { takes: readonly string[]; needs?: readonly strin
   "conversations.members": { takes: ["channel", "cursor", "limit"], needs: ["channel"] },
   "users.info": { takes: ["user", "include_locale"], needs: ["user"] },
   "users.list": { takes: ["cursor", "include_locale", "limit", "team_id"] },
+  "conversations.list": { takes: ["cursor", "exclude_archived", "limit", "team_id", "types"] },
+  "chat.postMessage": {
+    takes: ["channel", "text", "thread_ts", "reply_broadcast", "mrkdwn", "unfurl_links", "unfurl_media", "parse"],
+    needs: ["channel", "text"],
+  },
+  "chat.update": { takes: ["channel", "ts", "text", "parse", "link_names"], needs: ["channel", "ts"] },
+  "chat.delete": { takes: ["channel", "ts", "as_user"], needs: ["channel", "ts"] },
+  "chat.getPermalink": { takes: ["channel", "message_ts"], needs: ["channel", "message_ts"] },
+  "reactions.add": { takes: ["channel", "name", "timestamp"], needs: ["channel", "name", "timestamp"] },
+  "reactions.remove": { takes: ["channel", "name", "timestamp", "file", "file_comment"], needs: ["name"] },
+  "pins.add": { takes: ["channel", "timestamp"], needs: ["channel", "timestamp"] },
+  "pins.remove": { takes: ["channel", "timestamp"], needs: ["channel", "timestamp"] },
+  "conversations.mark": { takes: ["channel", "ts"], needs: ["channel", "ts"] },
+  "conversations.join": { takes: ["channel"], needs: ["channel"] },
+  "conversations.leave": { takes: ["channel"], needs: ["channel"] },
+  "files.getUploadURLExternal": {
+    takes: ["filename", "length", "alt_txt", "snippet_type"],
+    needs: ["filename", "length"],
+  },
+  "files.completeUploadExternal": {
+    takes: ["files", "channel_id", "channels", "thread_ts", "initial_comment", "blocks"],
+    needs: ["files"],
+  },
+}
+
+/** The scope each write needs of a user token, by the conversation's kind (https://docs.slack.dev/reference/scopes/). */
+const WRITE_SCOPE = { public: "channels:write", private: "groups:write", mpim: "mpim:write", im: "im:write" }
+const WRITE_NEEDS: Record<string, string> = {
+  "chat.postMessage": "chat:write",
+  "chat.update": "chat:write",
+  "chat.delete": "chat:write",
+  "reactions.add": "reactions:write",
+  "reactions.remove": "reactions:write",
+  "pins.add": "pins:write",
+  "pins.remove": "pins:write",
+  "files.getUploadURLExternal": "files:write",
+  "files.completeUploadExternal": "files:write",
 }
 
 const HISTORY_SCOPE = { public: "channels:history", private: "groups:history", mpim: "mpim:history", im: "im:history" }
 const READ_SCOPE = { public: "channels:read", private: "groups:read", mpim: "mpim:read", im: "im:read" }
 const TYPE_OF = { public: "public_channel", private: "private_channel", mpim: "mpim", im: "im" }
-const ALL_SCOPES = [...Object.values(HISTORY_SCOPE), ...Object.values(READ_SCOPE), "users:read"]
+const ALL_SCOPES = [
+  ...Object.values(HISTORY_SCOPE),
+  ...Object.values(READ_SCOPE),
+  ...Object.values(WRITE_SCOPE),
+  ...Object.values(WRITE_NEEDS),
+  "users:read",
+]
 
 const num = (ts: string) => Number(ts)
 
@@ -176,6 +219,11 @@ export const fakeSlack = (
   const calls: SlackCall[] = []
   const refusals: string[] = []
   const downloads: string[] = []
+  /** Every write Slack took, in order: the method and its arguments. */
+  const writes: { method: string; args: Record<string, string> }[] = []
+  const uploads = new Map<string, { name: string; bytes: string }>()
+  const pinned = new Set<string>()
+  const read: Record<string, string> = {}
   const refuse = (why: string, error: string, extra: Record<string, unknown> = {}): Response => {
     refusals.push(why)
     return Response.json({ ok: false, error, ...extra })
@@ -184,6 +232,108 @@ export const fakeSlack = (
   const self = AUTH_TEST.user_id
   const channelOf = (id: string | undefined) => workspace.channels.find((one) => one.id === id)
   const messagesOf = (id: string) => workspace.messages[id] ?? []
+
+  const newTs = (chatId: string) => {
+    const newest = messagesOf(chatId).reduce((at, one) => Math.max(at, Math.floor(num(one.ts))), 1_700_000_000)
+    return `${newest + 1}.000100`
+  }
+
+  /** A write to a conversation the person is in; undefined for a read. */
+  const write = (method: string, args: Record<string, string>, channel: FakeChannel): Response | undefined => {
+    const needed = method.startsWith("conversations.") ? WRITE_SCOPE[channel.kind] : WRITE_NEEDS[method]
+    if (method === "chat.getPermalink") {
+      const at = messagesOf(channel.id).find((one) => one.ts === args.message_ts)
+      if (!at) return refuse(`no message ${args.message_ts}`, "message_not_found")
+      const path = `p${args.message_ts?.replace(".", "")}`
+      return Response.json({
+        ok: true,
+        channel: channel.id,
+        permalink: `${AUTH_TEST.url}archives/${channel.id}/${path}`,
+      })
+    }
+    if (!needed || !(method in WRITE_NEEDS || ["conversations.mark", "conversations.leave"].includes(method)))
+      return undefined
+    if (!scopes().includes(needed)) return refuse(`${method} without ${needed}`, "missing_scope", { needed })
+    workspace.messages[channel.id] ??= []
+    const all = workspace.messages[channel.id] ?? []
+    const target = all.find((one) => one.ts === (args.ts ?? args.timestamp))
+    const done = (body: Record<string, unknown> = {}) => {
+      writes.push({ method, args })
+      return Response.json({ ok: true, ...body })
+    }
+    if (method === "conversations.leave") {
+      if (!channel.members.includes(self))
+        return Response.json({ ok: false, not_in_channel: true, error: "not_in_channel" })
+      channel.members = channel.members.filter((one) => one !== self)
+      return done()
+    }
+    if (method === "chat.postMessage" || method === "files.completeUploadExternal") {
+      const ts = newTs(channel.id)
+      const files =
+        method === "files.completeUploadExternal"
+          ? (JSON.parse(args.files ?? "[]") as { id: string; title?: string }[]).map((one) => ({
+              id: one.id,
+              name: uploads.get(one.id)?.name,
+              title: one.title,
+              mimetype: "text/plain",
+              size: uploads.get(one.id)?.bytes.length,
+              url_private: `https://files.slack.com/files-pri/${AUTH_TEST.team_id}-${one.id}/${uploads.get(one.id)?.name}`,
+            }))
+          : undefined
+      const message: FakeMessage = {
+        ts,
+        user: self,
+        text: args.text ?? args.initial_comment ?? "",
+        ...(args.thread_ts ? { thread_ts: args.thread_ts } : {}),
+        ...(args.reply_broadcast === "true" ? { subtype: "thread_broadcast" } : {}),
+        ...(files ? { files } : {}),
+      }
+      all.push(message)
+      if (method === "files.completeUploadExternal")
+        return done({ files: (files ?? []).map((one) => ({ id: one.id, title: one.title })) })
+      return done({ channel: channel.id, ts, message: { type: "message", ...message } })
+    }
+    if (method === "conversations.mark") {
+      read[channel.id] = args.ts ?? ""
+      return done()
+    }
+    if (!target) return refuse(`no message ${args.ts ?? args.timestamp}`, "message_not_found")
+    if (method === "chat.update") {
+      if (target.user !== self) return refuse("not mine", "cant_update_message")
+      target.text = args.text ?? ""
+      target.edited = { ts: newTs(channel.id), user: self }
+      return done({ channel: channel.id, ts: target.ts, text: target.text })
+    }
+    if (method === "chat.delete") {
+      if (target.user !== self) return refuse("not mine", "cant_delete_message")
+      workspace.messages[channel.id] = all.filter((one) => one !== target)
+      return done({ channel: channel.id, ts: target.ts })
+    }
+    if (method === "reactions.add" || method === "reactions.remove") {
+      const reactions = target.reactions ?? []
+      const held = reactions.find((one) => one.name === args.name)
+      if (method === "reactions.add") {
+        if (held?.users.includes(self)) return refuse("again", "already_reacted")
+        if (held) held.users.push(self)
+        else reactions.push({ name: args.name ?? "", users: [self], count: 1 })
+      } else {
+        if (!held?.users.includes(self)) return refuse("none", "no_reaction")
+        held.users = held.users.filter((one) => one !== self)
+      }
+      for (const one of reactions) one.count = one.users.length
+      target.reactions = reactions.filter((one) => one.count > 0)
+      return done()
+    }
+    const key = `${channel.id}/${target.ts}`
+    if (method === "pins.add") {
+      if (pinned.has(key)) return refuse("again", "already_pinned")
+      pinned.add(key)
+      return done()
+    }
+    if (!pinned.has(key)) return refuse("not pinned", "no_pin")
+    pinned.delete(key)
+    return done()
+  }
 
   const answer = (method: string, args: Record<string, string>): Response => {
     if (method === "auth.test") return Response.json(AUTH_TEST)
@@ -212,8 +362,36 @@ export const fakeSlack = (
         response_metadata: page.response_metadata,
       })
     }
-    const channel = channelOf(args.channel)
-    if (!channel) return refuse(`no conversation ${args.channel}`, "channel_not_found")
+    if (method === "conversations.list") {
+      if (!scopes().includes("channels:read"))
+        return refuse("list without channels:read", "missing_scope", { needed: "channels:read" })
+      const open = workspace.channels.filter((one) => one.kind === "public" && !one.archived)
+      const page = cursorPage(open, args, 100)
+      return Response.json({
+        ok: true,
+        channels: page.shown.map((one) => conversationOf(one, messagesOf(one.id), false, false)),
+        response_metadata: page.response_metadata,
+      })
+    }
+    if (method === "files.getUploadURLExternal") {
+      if (!scopes().includes("files:write"))
+        return refuse("upload without files:write", "missing_scope", { needed: "files:write" })
+      const id = `F0UPLD${String(uploads.size + 1).padStart(3, "0")}`
+      uploads.set(id, { name: args.filename ?? "", bytes: "" })
+      return Response.json({ ok: true, upload_url: `https://files.slack.com/upload/v1/${id}`, file_id: id })
+    }
+    if (method === "files.completeUploadExternal" && !args.channel_id)
+      return refuse("kept private", "invalid_arguments")
+    const channel = channelOf(args.channel ?? args.channel_id)
+    if (!channel) return refuse(`no conversation ${args.channel ?? args.channel_id}`, "channel_not_found")
+    if (method === "conversations.join") {
+      if (!scopes().includes("channels:write"))
+        return refuse("join without channels:write", "missing_scope", { needed: "channels:write" })
+      if (channel.kind !== "public") return refuse(`join ${channel.id}`, "method_not_supported_for_channel_type")
+      if (!channel.members.includes(self)) channel.members.push(self)
+      writes.push({ method, args })
+      return Response.json({ ok: true, channel: conversationOf(channel, messagesOf(channel.id), true, true) })
+    }
     const all = messagesOf(channel.id)
     if (method === "conversations.info") {
       if (!scopes().includes(READ_SCOPE[channel.kind]))
@@ -229,6 +407,8 @@ export const fakeSlack = (
       const page = cursorPage(channel.members, args, 100)
       return Response.json({ ok: true, members: page.shown, response_metadata: page.response_metadata })
     }
+    const written = write(method, args, channel)
+    if (written) return written
     const scope = HISTORY_SCOPE[channel.kind]
     if (!scopes().includes(scope)) return refuse(`${method} without ${scope}`, "missing_scope", { needed: scope })
     const inside = window(args)
@@ -265,6 +445,13 @@ export const fakeSlack = (
   const fetch = async (input: string | URL | Request, init: RequestInit = {}): Promise<Response> => {
     const url = new URL(input instanceof Request ? input.url : input)
     const headers = new Headers(input instanceof Request ? input.headers : init.headers)
+    if (url.host === "files.slack.com" && url.pathname.startsWith("/upload/v1/")) {
+      const held = uploads.get(url.pathname.slice("/upload/v1/".length))
+      if (init.method !== "POST" || !held) return new Response("", { status: 404 })
+      held.bytes = new TextDecoder().decode(new Uint8Array(await new Response(init.body).arrayBuffer()))
+      workspace.files = { ...workspace.files }
+      return new Response(`OK - ${held.bytes.length}`)
+    }
     if (url.host === "files.slack.com") {
       downloads.push(url.pathname)
       const bytes = workspace.files?.[url.toString()]
@@ -295,5 +482,5 @@ export const fakeSlack = (
     if (!replaced) return answer(method, args)
     return Response.json(replaced.body, { status: replaced.status ?? 200, headers: replaced.headers ?? {} })
   }
-  return { fetch, calls, refusals, downloads, workspace }
+  return { fetch, calls, refusals, downloads, writes, uploads, read, workspace }
 }
