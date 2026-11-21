@@ -89,7 +89,7 @@ try {
       : []
   for (const root of ["commands", "doctor", "skill", "mcp", "upgrade", "config"])
     assert.ok(names.includes(root), `${root} is missing from the installed package`)
-  assert.equal(JSON.parse(run(["doctor", "--json"])).item.version, version)
+  assert.equal(JSON.parse(run(["doctor", "--json"])).item.cli.version, version)
   assert.match(run(["skill", "show"]), /name: slack-cli/)
   console.log(`installed ${name}@${version}: help, version, commands, doctor and skill answer offline`)
 } finally {
