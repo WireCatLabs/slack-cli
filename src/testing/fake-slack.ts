@@ -112,6 +112,7 @@ const METHODS: Record<string, { takes: readonly string[]; needs?: readonly strin
   "conversations.mark": { takes: ["channel", "ts"], needs: ["channel", "ts"] },
   "conversations.join": { takes: ["channel"], needs: ["channel"] },
   "conversations.leave": { takes: ["channel"], needs: ["channel"] },
+  "conversations.open": { takes: ["channel", "users", "return_im", "prevent_creation"] },
   "files.getUploadURLExternal": {
     takes: ["filename", "length", "alt_txt", "snippet_type"],
     needs: ["filename", "length"],
@@ -249,8 +250,9 @@ export const fakeSlack = (
   const messagesOf = (id: string) => workspace.messages[id] ?? []
 
   const newTs = (chatId: string) => {
-    const newest = messagesOf(chatId).reduce((at, one) => Math.max(at, Math.floor(num(one.ts))), 1_700_000_000)
-    return `${newest + 1}.000100`
+    // Now, as Slack stamps a message, and after every message the chat holds.
+    const newest = messagesOf(chatId).reduce((at, one) => Math.max(at, Math.floor(num(one.ts))), 0)
+    return `${Math.max(newest + 1, Math.floor(Date.now() / 1000))}.000100`
   }
 
   /** A write to a conversation the person is in; undefined for a read. */
@@ -281,7 +283,10 @@ export const fakeSlack = (
       channel.members = channel.members.filter((one) => one !== self)
       return done()
     }
+    // chat.postMessage's page: "Message metadata can only be posted or updated using an app-level token".
+    if (args.metadata !== undefined) return refuse("metadata from a user token", "metadata_must_be_sent_from_app")
     if (method === "chat.postMessage" || method === "files.completeUploadExternal") {
+      if (!channel.members.includes(self)) return refuse(`${method} outside ${channel.id}`, "not_in_channel")
       const ts = newTs(channel.id)
       const files =
         method === "files.completeUploadExternal"
@@ -320,6 +325,7 @@ export const fakeSlack = (
       return done({ channel: channel.id, ts: target.ts, text: target.text })
     }
     if (method === "chat.delete") {
+      if (target.user !== self) return refuse("not mine", "cant_delete_message")
       workspace.messages[channel.id] = all.filter((one) => one !== target)
       return done({ channel: channel.id, ts: target.ts })
     }
@@ -341,6 +347,7 @@ export const fakeSlack = (
     // Slack's message object lists where it is pinned in `pinned_to`.
     const pinnedTo = Array.isArray(target.pinned_to) ? (target.pinned_to as string[]) : []
     if (method === "pins.add") {
+      if (pinnedTo.includes(channel.id)) return refuse("again", "already_pinned")
       target.pinned_to = [...new Set([...pinnedTo, channel.id])]
       return done()
     }
@@ -375,6 +382,18 @@ export const fakeSlack = (
         channels: page.shown.map((one) => conversationOf(one, messagesOf(one.id), false, false)),
         response_metadata: page.response_metadata,
       })
+    }
+    if (method === "conversations.open") {
+      if (!scopes().includes("im:write"))
+        return refuse("open without im:write", "missing_scope", { needed: "im:write" })
+      const user = args.users ?? ""
+      if (!workspace.users.some((one) => one.id === user)) return refuse(`no person ${user}`, "user_not_found")
+      const held = workspace.channels.find((one) => one.kind === "im" && one.user === user)
+      if (held) return Response.json({ ok: true, channel: { id: held.id } })
+      const id = `D0OPEN${String(workspace.channels.length).padStart(3, "0")}`
+      workspace.channels.push({ id, kind: "im", user, members: [self, user] })
+      writes.push({ method, args })
+      return Response.json({ ok: true, channel: { id } })
     }
     if (method === "conversations.list") {
       if (!scopes().includes("channels:read"))

@@ -5,6 +5,7 @@ import type {
   Chat,
   ChatEvent,
   Contact,
+  GroupCard,
   Member,
   Message,
   ProfileFacts,
@@ -180,6 +181,10 @@ export type HistoryAnswer = v.InferOutput<typeof historyAnswer>
 
 /** `ts` is seconds with microseconds as a string; it is the message's id, never parsed for anything but its time. */
 export const DAY = 86_400_000
+
+/** A conversation's id (C…, D…, G…) and a person's (U…, W…), as Slack makes them. */
+export const CONVERSATION_ID = /^[CDG][A-Z0-9]{2,}$/
+export const USER_ID = /^[UW][A-Z0-9]{2,}$/
 
 export const timeOf = (ts: string): string => new Date(Math.floor(Number(ts) * 1000)).toISOString()
 
@@ -422,6 +427,20 @@ export const chatOf = (one: Conversation, names: Names): Chat => {
     },
   }
 }
+
+/** A channel as a group card: Slack's purpose, else its topic, is the description; Slack gives no invite link. */
+export const groupOf = (one: Conversation, names: Names): GroupCard => ({
+  ...chatOf(one, names),
+  description: one.purpose?.value || one.topic?.value || null,
+  link: null,
+  settings: {
+    allCanPin: null,
+    onlyAdminsAdd: null,
+    onlyAdminsCall: null,
+    onlyOwnerEditsInfo: null,
+    membersSeeLink: null,
+  },
+})
 
 export const memberOf = (person: User): Member => ({
   id: person.id,

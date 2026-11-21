@@ -8,6 +8,7 @@ import {
   accountOfUser,
   addressEntryOf,
   byTs,
+  CONVERSATION_ID,
   type Conversation,
   chatEventOf,
   chatOf,
@@ -29,6 +30,7 @@ import {
   profileOf,
   type Self,
   tsOf,
+  USER_ID,
   type User,
   userAnswer,
   usersAnswer,
@@ -64,9 +66,6 @@ const quietlyMissing = (error: unknown) => {
 }
 
 const MISSING_MESSAGE = new Set(["thread_not_found", "message_not_found"])
-
-const CONVERSATION_ID = /^[CDG][A-Z0-9]{2,}$/
-const USER_ID = /^[UW][A-Z0-9]{2,}$/
 
 /**
  * Slack's Web API as cli-core's messenger. Only reads for now; a write port is added beside the reads and through the
@@ -327,11 +326,9 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
 
   const writes = slackWrites({
     slack,
-    token: options.token,
     self: me.user,
     names,
-    fetch: options.fetch,
-    signal: options.signal,
+    ...(options.now ? { now: options.now } : {}),
     oneMessage,
     mapped,
     conversationOf,
@@ -344,7 +341,18 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     ...writes,
     self: () => (self ? `${self.team}:${self.user}` : null),
     me: async () => accountOfUser(me, me.user ? await person(me.user).catch(quietlyMissing) : undefined),
-    resolve: async (typed) => chatOf(await conversationOf(typed), names),
+    // A person with no DM yet resolves to them, by their user id: a send opens the DM first.
+    resolve: async (typed) => {
+      const held = await conversationOf(typed).catch(async (error: unknown) => {
+        if (!isCliError(error) || error.code !== "not_found" || CONVERSATION_ID.test(typed.trim())) throw error
+        const person = await findPerson(typed).catch(() => {
+          throw error
+        })
+        if (person.id === me.user) throw error
+        return { id: person.id, is_im: true, user: person.id } as Conversation
+      })
+      return chatOf(held, names)
+    },
     chat: async (typed): Promise<ChatCard> => {
       const id = await idOf(typed)
       const { channel } = await slack(

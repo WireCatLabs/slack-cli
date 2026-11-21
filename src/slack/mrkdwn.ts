@@ -4,6 +4,13 @@ import type { TextSpan } from "@wirecat/cli-core"
 /** The three characters Slack reads as markup, escaped (https://docs.slack.dev/messaging/formatting-message-text/). */
 export const escaped = (text: string) => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
 
+/**
+ * A URL inside `<url|label>`: `<`, `>` and `|` would end the link or start a mention such as `<!channel>`, so they are
+ * percent-encoded, and `&` is escaped as everywhere in Slack's text.
+ */
+const linkOf = (url: string) =>
+  url.replaceAll("&", "&amp;").replaceAll("<", "%3C").replaceAll(">", "%3E").replaceAll("|", "%7C")
+
 const MARKS: Partial<Record<TextSpan["type"], readonly [string, string]>> = {
   bold: ["*", "*"],
   italic: ["_", "_"],
@@ -32,7 +39,7 @@ export const mrkdwnOf = (text: string, spans: readonly TextSpan[] = []): string 
     if (cannot) throw new CliError("validation_error", `Slack's text has no ${cannot}; take it out of the Markdown`)
     const end = span.from + span.length
     if (span.type === "link") {
-      before[span.from]?.push(`<${span.url ?? ""}|`)
+      before[span.from]?.push(`<${linkOf(span.url ?? "")}|`)
       before[end]?.unshift(">")
     } else if (span.type === "blockquote") {
       before[span.from]?.push("> ")

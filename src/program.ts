@@ -1,5 +1,5 @@
 import { join } from "node:path"
-import { resolvePaths } from "@wirecat/cli-base"
+import { CliError, resolvePaths } from "@wirecat/cli-base"
 import { annotate, overrideSharedContract } from "@wirecat/cli-base/commands"
 import {
   accountCommand,
@@ -82,6 +82,22 @@ const slackChats = () => {
   return chats
 }
 
+/** Slack deletes for everyone only: a delete without --for-everyone is refused before anyone is asked to confirm. */
+const slackMessages = () => {
+  const messages = messagesCommand(SLACK)
+  messages.commands
+    .find((one) => one.name() === "delete")
+    ?.hook("preAction", (command) => {
+      if (command.opts().forEveryone !== true)
+        throw new CliError(
+          "validation_error",
+          `${SERVICE} deletes a message for everyone in the chat, never for you alone; add --for-everyone`,
+          { sent: false },
+        )
+    })
+  return messages
+}
+
 export const definition = (): ProgramDefinition => ({
   app: IDENTITY,
   // The daily "a newer version exists" line after a command that succeeded; <PREFIX>_NO_UPDATE_CHECK turns it off.
@@ -95,7 +111,7 @@ export const definition = (): ProgramDefinition => ({
     accountCommand(SLACK),
     slackChats(),
     contactsCommand(SLACK),
-    messagesCommand(SLACK),
+    slackMessages(),
     reactionsCommand(SLACK),
     modelsCommand(SLACK),
     reviewCommand(SLACK),
