@@ -15,7 +15,7 @@ it("mcp serve offers search, read and write, and runs a command through the CLI"
   try {
     expect((await mcp.tools()).sort()).toEqual(["slack_read", "slack_tools_search", "slack_write"])
     const doctor = await mcp.call("slack_read", { command: "doctor" })
-    expect(doctor.body).toMatchObject({ item: { version: IDENTITY.version } })
+    expect(doctor.body).toMatchObject({ item: { cli: { version: IDENTITY.version } } })
   } finally {
     expect(await mcp.close()).toBe(0)
   }
@@ -67,7 +67,7 @@ it("mcp revoke answers for the profile it names", async () => {
 it("doctor --online answers even when npm cannot be reached", async () => {
   const online = await runCli(["doctor", "--online", "--json"])
   expect(online.code).toBe(0)
-  expect(online.json().item).toMatchObject({ version: IDENTITY.version, online: expect.any(Object) })
+  expect(online.json().item).toMatchObject({ cli: { version: IDENTITY.version }, online: expect.any(Object) })
 })
 
 it("a denied command is offered as unavailable and refused before any request (WC-PERM-23)", async () => {

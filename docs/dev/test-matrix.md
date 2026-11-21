@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**355 ✅ · 517 ⛔ · 0 ❌** — 277 commands, 595 options.
+**355 ✅ · 954 ⛔ · 0 ❌** — 404 commands, 905 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -222,6 +222,414 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages sync` | `--with-muted` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` | `--background` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` | `--dry-run` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
+| `reactions add` |  | ⛔ | the write slice adds Slack's reactions.add and reactions.remove; until then SLACK.lacks refuses both |
+| `reactions remove` |  | ⛔ | the write slice adds Slack's reactions.add and reactions.remove; until then SLACK.lacks refuses both |
+| `models keys set` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models keys remove` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models chats show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models chats set` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models chats set` | `--from-app` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models download` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models download` | `--accept-terms` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models set` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models add` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `models add` | `--payload` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `review` |  | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
+| `review` | `--unanswered` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
+| `review` | `--all` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
+| `review` | `--transcribe` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
+| `review` | `--model` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
+| `review` | `--new` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
+| `store status` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store chats status` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--max-gaps` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--repair-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--page-size` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--pause` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--fingerprint` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--catch-up` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--no-catch-up` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--catch-up-chunks` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--catch-up-messages` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--catch-up-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store gaps repair` | `--background` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs list` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs list` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs list` | `--all` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs cancel` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs retry` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs retry` | `--failed` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store jobs clear` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store export` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store export` | `--format` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store export` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store export` | `--output` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store export` | `--output-dir` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store export` | `--include` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store export` | `--all` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store export` | `--encrypt` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store clear` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store clear` | `--left` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store clear` | `--allow-dangerous` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store clear` | `--dry-run` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store import` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store info` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store check` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store migrate` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store rebuild` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store backup` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store backup` | `--encrypt` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store restore` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store decrypt` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store decrypt` | `--output` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store repair` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store repair` | `--dry-run` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store reset` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store reset` | `--no-backup` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store reset` | `--dry-run` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store copies delete` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store tables list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store recover` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store recover run` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `conversations list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations list` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations related` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations related` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations related` | `--model` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations related` | `--embedding-provider` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations related` | `--base-url` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations related` | `--dims` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations status` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations status` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations status` | `--model` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations status` | `--embedding-provider` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations status` | `--base-url` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations status` | `--dims` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations batches status` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations batches status` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations batches status` | `--size` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations batches show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations batches show` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations batches show` | `--size` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--analyze` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--yes` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--analysis-provider` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--model` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--base-url` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--size` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--max-tokens` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links rebuild` | `--max-chats` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links add` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links add` | `--batch` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links clear` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links clear` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations links clear` | `--answer-model` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings status` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings status` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings status` | `--model` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings status` | `--embedding-provider` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings status` | `--base-url` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings status` | `--dims` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings clear` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings clear` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings clear` | `--model` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings clear` | `--embedding-provider` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings clear` | `--base-url` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embeddings clear` | `--dims` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations rebuild` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations rebuild` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations rebuild` | `--max-chats` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations rebuild` | `--max-chunks` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations consents list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations consents remove` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations consents remove` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations consents remove` | `--consent-provider` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--model` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--embedding-provider` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--base-url` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--dims` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--threads` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--concurrency` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--max-tokens` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--yes` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--max-chats` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `conversations embed` | `--max-chunks` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts |
+| `attachments extract` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments extract` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments extract` | `--from-dir` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments extract` | `--cursor` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments extract` | `--download` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments extract` | `--output-dir` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments extract` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments extract` | `--ocr` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments extract` | `--concurrency` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments list` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments list` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments list` | `--all` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments show` | `--attachment` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments show` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments show` | `--offset-bytes` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments show` | `--chunk-bytes` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments show` | `--expected-fingerprint` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments update` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments update` | `--attachment` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments update` | `--text-file` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments download` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments download` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments download` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments download` | `--pause` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments check` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs install` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs install` | `--at` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs install` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs install` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs install` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs start` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs stop` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs status` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments jobs uninstall` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments move` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments move` | `--before-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `attachments move` | `--dry-run` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/attachments.test.ts and media-archive.test.ts |
+| `tags rebuild` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags rebuild` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags rebuild` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags rebuild` | `--sync-first` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags rebuild` | `--dry-run` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags add` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags add` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags add` | `--contact` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags add` | `--message` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags add` | `--task` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags remove` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags remove` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags remove` | `--contact` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags remove` | `--message` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags remove` | `--task` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags remove` | `--claim` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `tags list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tags.test.ts |
+| `mentions list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions list` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions list` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions list` | `--new` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions domains` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions domains` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions domains` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions places` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions places` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions places` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions confirm` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions confirm` | `--all-in-chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions confirm` | `--as-owner` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions reject` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions reject` | `--all-in-chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions reject` | `--as-owner` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `mentions rebuild` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/mentions.test.ts |
+| `metadata show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/metadata.test.ts |
+| `metadata show` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/metadata.test.ts |
+| `metadata sync` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/metadata.test.ts |
+| `metadata sync` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/metadata.test.ts |
+| `metadata sync` | `--only-missing` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/metadata.test.ts |
+| `metadata sync` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/metadata.test.ts |
+| `stats messages show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--sync-first` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--max-chats` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--sync-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--max-messages` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--by` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--exact` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages show` | `--saved` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` | `--exact` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` | `--selection` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` | `--counters` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters show` | `--max-age` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--exact` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--selection` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--counters` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--max-messages` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--sync-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages counters sync` | `--dry-run` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages unanswered` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages unanswered` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages unanswered` | `--saved` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages unanswered` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages unanswered` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages unanswered` | `--answerer` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages discussion` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages discussion` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages discussion` | `--saved` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages discussion` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages discussion` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages responses` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages responses` | `--who` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages responses` | `--by` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages responses` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages responses` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages waiting` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages waiting` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages waiting` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--sync-first` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--max-chats` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--sync-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--max-messages` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--measure` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--score` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--weights` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages top` | `--saved` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages evidence` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages evidence` | `--selection` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages evidence` | `--component` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages evidence` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats messages evidence` | `--cursor` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts responses` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts responses` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts responses` | `--saved` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts responses` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts responses` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts responses` | `--answerer` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--sync-first` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--max-chats` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--sync-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--max-messages` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--measure` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--score` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--weights` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts top` | `--saved` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts evidence` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts evidence` | `--selection` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts evidence` | `--component` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts evidence` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats contacts evidence` | `--cursor` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats show` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats show` | `--by` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats show` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats newcomers` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats newcomers` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats newcomers` | `--until-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats newcomers` | `--within` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats newcomers` | `--saved` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats newcomers` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats newcomers` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats newcomers` | `--answerer` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats retention` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats retention` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats retention` | `--until-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats retention` | `--checkpoints` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats retention` | `--within` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats retention` | `--by` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats retention` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats chats retention` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats tasks show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats tasks show` | `--by` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats tasks show` | `--type` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats tasks show` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats charts` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats charts` | `--chart-kind` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats charts` | `--by` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats charts` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats charts` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `stats charts` | `--output` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts |
+| `tasks list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks list` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--type` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--category` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--into` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--new` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--open-new` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--title` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--description` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--due` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--remind-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks add` | `--assignee` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` | `--category` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` | `--priority` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` | `--parent` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` | `--title` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` | `--description` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` | `--due` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` | `--remind-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks update` | `--assignee` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks link` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks link` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks link` | `--kind` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks related` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks related` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks duplicates list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks duplicates list` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks duplicates reject` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks duplicates defer` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks merge` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks merge` | `--into` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks unmerge` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks agenda` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks agenda` | `--due-within` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks agenda` | `--unanswered` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks agenda` | `--waiting` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks agenda` | `--within` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks agenda` | `--holder` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks categories` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks scan` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks scan` | `--last` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks scan` | `--yes` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks status` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks status` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks review` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks review` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks review` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks acknowledge` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks acknowledge` | `--since-time` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks claim` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks claim` | `--lease` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks claim` | `--holder` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks release` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks release` | `--holder` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks close` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks close` | `--as` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks close` | `--reason` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks close` | `--certainty` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks close` | `--as-owner` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks reject` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
+| `tasks reject` | `--as-owner` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
 | `search all` |  | ✅ |  |
 | `search all` | `--only` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search all` | `--source` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -275,6 +683,34 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `search runs` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search runs` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search runs` | `--page` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
+| `searches create` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--chat` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--source` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--newest` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--exact` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--context` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--timezone` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--by` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--selection` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches create` | `--replace` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches history` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches history` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches history` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches history` | `--all` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches delete` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `searches clear` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/searches.test.ts |
+| `flood clear` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/flood-command.test.ts |
+| `recipients list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts («recipients») |
+| `recipients add` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts («recipients») |
+| `recipients remove` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts («recipients») |
+| `recipients clear` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts («recipients») |
+| `sends list` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts and src/sends/journal.test.ts |
+| `sends list` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts and src/sends/journal.test.ts |
+| `sends list` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts and src/sends/journal.test.ts |
+| `sends list` | `--all` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts and src/sends/journal.test.ts |
 | `api list` |  | ✅ |  |
 | `api show` |  | ✅ |  |
 | `api admin apps-approve` |  | ✅ |  |
@@ -807,10 +1243,11 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `api workflows update-step` | `--step-image-url` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `doctor` |  | ✅ |  |
 | `doctor` | `--online` | ✅ |  |
-| `doctor reports show` |  | ⛔ | cli-core's appDoctorCommand; its app-mcp-command test creates and shows a report |
-| `doctor reports create` |  | ⛔ | cli-core's appDoctorCommand; its app-mcp-command test creates and shows a report |
-| `doctor reports create` | `--run` | ⛔ | cli-core's appDoctorCommand; its app-mcp-command test creates and shows a report |
-| `doctor reports create` | `--output` | ⛔ | cli-core's appDoctorCommand; its app-mcp-command test creates and shows a report |
+| `doctor reports show` |  | ⛔ | cli-core's messenger doctorCommand; cli-core's doctor tests create and show a report |
+| `doctor reports create` |  | ⛔ | cli-core's messenger doctorCommand; cli-core's doctor tests create and show a report |
+| `doctor reports create` | `--run` | ⛔ | cli-core's messenger doctorCommand; cli-core's doctor tests create and show a report |
+| `doctor reports create` | `--output` | ⛔ | cli-core's messenger doctorCommand; cli-core's doctor tests create and show a report |
+| `complete` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/complete-command.test.ts |
 | `skill show` |  | ✅ |  |
 | `skill show` | `--for` | ✅ |  |
 | `skill install` |  | ✅ |  |

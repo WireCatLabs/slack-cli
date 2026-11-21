@@ -32,7 +32,7 @@ it.each([
 ])("doctor runs with the global option %s", async (...flag) => {
   const { code, out } = await ran([...flag, "doctor", "--json"])
   expect(code).toBe(0)
-  expect(JSON.parse(out).item.version).toEqual(expect.any(String))
+  expect(JSON.parse(out).item.cli.version).toEqual(expect.any(String))
 })
 
 it("--jsonl prints one object per line", async () => {

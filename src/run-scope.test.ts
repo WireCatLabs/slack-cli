@@ -39,6 +39,8 @@ const UNREAD =
   "hidden through SLACK.never or refused through SLACK.lacks before connecting; the read slice sends nothing for it"
 
 const NOT_SENT = [
+  "reactions add",
+  "reactions remove",
   "chats inspect",
   "chats documents list",
   "chats members check",
@@ -81,6 +83,35 @@ const NOT_SENT = [
   "messages comments",
 ]
 
+// Mounted unchanged from cli-core over the store or the model downloads; cli-core's own tests run each in its run.
+const SHARED = [
+  "models download",
+  "models add",
+  "review",
+  "store gaps repair",
+  "conversations links rebuild",
+  "conversations embed",
+  "attachments extract",
+  "attachments list",
+  "attachments show",
+  "attachments download",
+  "tags rebuild",
+  "metadata sync",
+  "stats messages show",
+  "stats messages counters sync",
+  "stats messages unanswered",
+  "stats messages discussion",
+  "stats messages top",
+  "stats contacts responses",
+  "stats contacts top",
+  "stats chats show",
+  "stats chats newcomers",
+  "stats chats retention",
+  "searches show",
+  "recipients add",
+]
+const SHARED_REASON = "cli-core's shared messenger command, mounted unchanged; cli-core's tests run it inside its run"
+
 const stdin = () => Object.assign(Readable.from([FAKE_TOKEN]), { isTTY: false })
 
 describe("each remote command runs inside cli-core's run", () => {
@@ -89,7 +120,7 @@ describe("each remote command runs inside cli-core's run", () => {
     commands: {
       "session start": ["personal", "session", "start"],
       "session status": ["personal", "session", "status", "--check"],
-      doctor: ["doctor", "--online"],
+      doctor: ["personal", "doctor", "--online"],
       ...READS,
     },
     skip: {
@@ -101,6 +132,7 @@ describe("each remote command runs inside cli-core's run", () => {
       ),
       "mcp serve": "listens until stopped",
       ...Object.fromEntries(NOT_SENT.map((path) => [path, UNREAD])),
+      ...Object.fromEntries(SHARED.map((path) => [path, SHARED_REASON])),
       setup: "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
       "setup run": "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
       "setup apply": "src/setup/flow.test.ts runs its check",

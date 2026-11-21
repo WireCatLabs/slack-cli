@@ -19,7 +19,7 @@ const generatedOptions = [
 const SHARED_MCP =
   "cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs " +
   "this CLI's own server, config, revoke and refusals"
-const SHARED_REPORTS = "cli-core's appDoctorCommand; its app-mcp-command test creates and shows a report"
+const SHARED_REPORTS = "cli-core's messenger doctorCommand; cli-core's doctor tests create and show a report"
 const LONG_RUNNING = `starts an HTTP server or a background process that runs until stopped; ${SHARED_MCP}`
 
 const REFUSED =
@@ -337,5 +337,34 @@ export const UNTESTED: { command: string; option?: string; reason: string }[] = 
     command: "setup apply",
     option: "--dry-run",
     reason: "cli-core's setupCommand checks the answers without saving; tested in cli-core",
+  },
+  ...Object.entries({
+    "store *": "src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts",
+    "conversations *": "src/cli/messenger/analysis.test.ts and src/services/conversations.test.ts",
+    "attachments *": "src/cli/messenger/attachments.test.ts and media-archive.test.ts",
+    "tags *": "src/cli/messenger/tags.test.ts",
+    "mentions *": "src/cli/messenger/mentions.test.ts",
+    "models *": "src/cli/messenger/models-command.test.ts",
+    "stats *": "src/cli/messenger/stats-command.test.ts and src/services/counters.test.ts",
+    "tasks *": "src/cli/messenger/tasks.test.ts",
+    "searches *": "src/cli/messenger/searches.test.ts",
+    "metadata *": "src/cli/messenger/metadata.test.ts",
+    "recipients *": "src/cli/messenger/messenger.test.ts («recipients»)",
+    "sends *": "src/cli/messenger/messenger.test.ts and src/sends/journal.test.ts",
+    "flood *": "src/cli/messenger/flood-command.test.ts",
+    complete: "src/cli/messenger/complete-command.test.ts",
+  }).map(([command, tests]) => ({
+    command,
+    reason: `cli-core's shared group over the local store, mounted unchanged; tested in cli-core ${tests}`,
+  })),
+  ...[undefined, "--unanswered", "--all", "--transcribe", "--model", "--new"].map((option) => ({
+    command: "review",
+    ...(option ? { option } : {}),
+    reason:
+      "cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts",
+  })),
+  {
+    command: "reactions *",
+    reason: "the write slice adds Slack's reactions.add and reactions.remove; until then SLACK.lacks refuses both",
   },
 ]

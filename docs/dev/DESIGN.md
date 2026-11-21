@@ -67,9 +67,24 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   page also carries the new replies of its own roots, and of roots up to `thread_window_days` (14) old once the page
   reaches them; a reply never lowers a page's oldest key. A thread holding fewer replies than Slack's `reply_count`
   is read whole.
-- **What stays the app's own:** `doctor` and `mcp`. cli-core's messenger MCP server checks `--permission` against
-  messenger keys only and refuses the `api` group's. There is no `inbox`: Slack's conversation list carries no unread
-  count or last message, and cli-core refuses `inbox --offline`.
+- **Commands mounted as whatsapp-cli mounts them:** reactions, the store-only reads (store, conversations,
+  attachments, tags, mentions, metadata, stats, tasks, searches), models, review, recipients, sends, flood,
+  complete and cli-core's messenger `doctor`. `mcp` stays the app's own: cli-core's messenger MCP server checks
+  `--permission` against messenger keys only and refuses the `api` group's.
+- **Left out, with the reason:**
+  - `watch`, `serve` and `server`: they listen to a push the adapter would have to receive. A user token gets none.
+    Slack's Events API needs a public address, and Socket Mode needs an app-level token (`xapp-`) besides the user
+    token; polling every chat would spend the 20-a-minute pace.
+  - `inbox`: Slack's conversation list carries no unread count or last message, so it is empty online, and cli-core
+    refuses `inbox --offline`.
+  - `guide`: it reads scenario files, and slack has none yet.
+  - `images`: cli-core's `images read` fails cli-dev's command lint here ("read" is not in its vocabulary), which
+    fails `ci:quick`; it comes back when cli-core renames it.
+  - `polls`, `stickers`, `bot`, `topics`, `calls`: Slack has no such thing for a user token.
+- **Last activity:** `users.conversations` gives no `latest`, so a listed chat's `lastMessageAt` is unknown and
+  `messages sync --all` reads every chat it lists. Archived channels are left out of the list
+  (`exclude_archived`). No cheap source of last activity was found for a user token: `conversations.info` would cost a
+  call per chat at the profile's pace.
 - **Hidden and refused:** what Slack has no primitive for is in `SLACK.never`. Sessions and folders are in `lacks`
   instead, since `never` would leave `account sessions` and `chats folders` in sight with nothing under them.
 

@@ -1,30 +1,47 @@
 import { join } from "node:path"
 import { resolvePaths } from "@wirecat/cli-base"
+import { annotate, overrideSharedContract } from "@wirecat/cli-base/commands"
 import {
   accountCommand,
   appMcpCommand,
+  attachmentsCommand,
   chatsCommand,
   commandsCommand,
+  completeCommand,
   configCommand,
   contactsCommand,
+  conversationsCommand,
   createProgram as createSharedProgram,
+  doctorCommand,
+  floodCommand,
+  mentionsCommand,
   messagesCommand,
+  metadataCommand,
+  modelsCommand,
   outputFor,
   ProfileTokenStore,
   type ProgramDefinition,
   type ProgramOptions,
   type RunOptions,
+  reactionsCommand,
+  recipientsCommand,
+  reviewCommand,
   run as runShared,
   runsCommand,
   searchCommand,
+  searchesCommand,
+  sendsCommand,
   setupCommand,
   skillCommand,
+  statsCommand,
+  storeCommand,
+  tagsCommand,
+  tasksCommand,
   upgradeCommand,
 } from "@wirecat/cli-core/cli"
 import { appUpdate } from "@wirecat/cli-core/update"
 import type { Command } from "commander"
 import { apiCommand } from "./commands/api.js"
-import { doctorCommand } from "./commands/doctor.js"
 import { sessionCommand } from "./commands/session.js"
 import { configuration } from "./config.js"
 import { IDENTITY, PACKAGE, SERVICE, SKILL } from "./identity.js"
@@ -54,6 +71,17 @@ const mcpCommand = () =>
     signedIn: (profile, env, keyring) => new ProfileTokenStore({ app: IDENTITY, env, keyring }).signedIn(profile),
   })
 
+// cli-core's example joins by an invite link; Slack joins a public channel by its name or id.
+const slackChats = () => {
+  const chats = chatsCommand(SLACK)
+  const join = chats.commands.find((one) => one.name() === "join")
+  if (join)
+    overrideSharedContract(join, "Slack joins a public channel by name, not by an invite link", (command) =>
+      annotate(command, { examples: [`${IDENTITY.command} personal chats join '#general'`] }),
+    )
+  return chats
+}
+
 export const definition = (): ProgramDefinition => ({
   app: IDENTITY,
   // The daily "a newer version exists" line after a command that succeeded; <PREFIX>_NO_UPDATE_CHECK turns it off.
@@ -65,12 +93,28 @@ export const definition = (): ProgramDefinition => ({
     sessionCommand(),
     setupCommand(slackSetup),
     accountCommand(SLACK),
-    chatsCommand(SLACK),
+    slackChats(),
     contactsCommand(SLACK),
     messagesCommand(SLACK),
+    reactionsCommand(SLACK),
+    modelsCommand(SLACK),
+    reviewCommand(SLACK),
+    storeCommand(SLACK),
+    conversationsCommand(SLACK),
+    attachmentsCommand(SLACK),
+    tagsCommand(SLACK),
+    mentionsCommand(SLACK),
+    metadataCommand(SLACK),
+    statsCommand(SLACK),
+    tasksCommand(SLACK),
     searchCommand(SLACK),
+    searchesCommand(SLACK),
+    floodCommand(SLACK),
+    recipientsCommand(SLACK),
+    sendsCommand(SLACK),
     apiCommand(),
-    doctorCommand(),
+    doctorCommand(SLACK),
+    completeCommand(SLACK, configuration),
     skillCommand(IDENTITY, SKILL),
     mcpCommand(),
     upgradeCommand(IDENTITY, PACKAGE, (command) => ({

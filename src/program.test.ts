@@ -36,7 +36,7 @@ it("lists the required root commands and config", async () => {
 it("doctor answers without a config file", async () => {
   const { code, out } = await ran(["doctor", "--json"])
   expect(code).toBe(0)
-  expect(json(out).item).toMatchObject({ config: { found: false, issues: [] }, profiles: [], read_only: null })
+  expect(json(out).item).toMatchObject({ config: { found: false, issues: [] }, profile: null })
 })
 
 const withConfig = async (text: string, check: (config: unknown) => void) => {
@@ -75,7 +75,7 @@ it("doctor reports settings an environment variable breaks, and still answers", 
     env: { ...process.env, SLACK_EMBEDDING_DIMS: "many" },
   })
   expect(code).toBe(0)
-  expect(json(out.join("")).item).toMatchObject({ config: { issues: [] }, version: IDENTITY.version })
+  expect(json(out.join("")).item).toMatchObject({ config: { issues: [] }, cli: { version: IDENTITY.version } })
 })
 
 it.skipIf(process.platform === "win32")(

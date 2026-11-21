@@ -326,7 +326,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
 
   return {
     self: () => (self ? `${self.team}:${self.user}` : null),
-    me: async () => accountOfUser(me, me.user ? await person(me.user).catch(() => undefined) : undefined),
+    me: async () => accountOfUser(me, me.user ? await person(me.user).catch(quietlyMissing) : undefined),
     resolve: async (typed) => chatOf(await conversationOf(typed), names),
     chat: async (typed): Promise<ChatCard> => {
       const id = await idOf(typed)
