@@ -19,9 +19,11 @@ export interface ServiceEnvironment extends BaseEnvironment {
   fetch?: typeof fetch
 }
 
-// Slack limits each method per workspace by tier; 50 a minute is Tier 3, which the paging reads have
-// (https://docs.slack.dev/apis/web-api/rate-limits/). A 429 holds every process of the profile for its Retry-After.
-export const PACE = { perMinute: 50, burst: 10 }
+// Slack limits each method per workspace by tier (https://docs.slack.dev/apis/web-api/rate-limits/). The paging reads
+// mix Tier 2 (conversations.list, users.list, reactions.list: 20 a minute) and Tier 3 (conversations.history, 50);
+// cli-core's Pacer keeps one pace per profile, so it is the lowest, Tier 2. A 429 holds every process of the profile
+// for its Retry-After.
+export const PACE = { perMinute: 20, burst: 10 }
 
 /**
  * Settings, keyring and the run come from cli-core's `baseContext` and nowhere else: a command that resolves settings

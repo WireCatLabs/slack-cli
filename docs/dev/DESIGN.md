@@ -52,7 +52,9 @@ Set the messenger's `speechModels` to `parakeet-v3`.
 - **The `api` group:** Slack's Swagger of 2020 with the corrections listed on [API coverage](API_COVERAGE.md). Command
   names are Slack's method names, grouped by their first word: `api conversations history`. A Slack call that fails
   answers HTTP 200 with `ok: false`; until cli-core reads that for an HTTP API, `api` prints such an answer as it is.
-- **Pace:** 50 calls a minute per profile, Slack's Tier 3, which the paging reads have; a 429 holds every process of
+- **Pace:** 20 calls a minute per profile, Slack's Tier 2. The paging reads mix Tier 2 (`conversations.list`,
+  `users.list`, `reactions.list`) and Tier 3 (`conversations.history`, `conversations.replies`, `users.conversations`,
+  50 a minute); cli-core's `Pacer` keeps one pace per profile, so it takes the lowest. A 429 holds every process of
   the profile for its `Retry-After`.
 
 ## Open questions for the owner
