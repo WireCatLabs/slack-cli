@@ -170,6 +170,8 @@ export const historyAnswer = v.looseObject({
 export type HistoryAnswer = v.InferOutput<typeof historyAnswer>
 
 /** `ts` is seconds with microseconds as a string; it is the message's id, never parsed for anything but its time. */
+export const DAY = 86_400_000
+
 export const timeOf = (ts: string): string => new Date(Math.floor(Number(ts) * 1000)).toISOString()
 
 /** A moment as Slack's `latest`/`oldest` take it. */

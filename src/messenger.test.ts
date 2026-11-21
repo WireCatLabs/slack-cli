@@ -1,7 +1,10 @@
-import { mkdtempSync, readFileSync } from "node:fs"
+import { mkdtempSync, readFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
+import { memoryKeyring } from "@wirecat/cli-base"
+import { accountFileFor, recalledAccount, rememberAccount } from "@wirecat/cli-core/cli"
 import { beforeEach, describe, expect, it } from "vitest"
+import { IDENTITY } from "./identity.js"
 import { FAKE_TOKEN, type FakeMessage, type FakeWorkspace, fakeSlack } from "./testing/fake-slack.js"
 import { runCli } from "./testing/harness.js"
 import {
@@ -21,6 +24,8 @@ import {
 } from "./testing/workspace.js"
 
 type Item = Record<string, unknown> & { id: string }
+
+const accountFile = () => accountFileFor(IDENTITY, "personal", process.env)
 
 const slackOf = (world: FakeWorkspace = workspace()) => fakeSlack({}, FAKE_TOKEN, world)
 
@@ -281,5 +286,42 @@ describe("messages sync", () => {
     await runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })
     const found = await runCli(["personal", "search", "all", "numbers", "--json"], { service })
     expect(items(found).map((one) => one.ref)).toEqual([`msg:slack/T0SYNTH01%3AU0SYNTH01/${GENERAL}/${ts(30)}`])
+  })
+})
+
+describe("a token from SLACK_TOKEN", () => {
+  const fromEnvironment = { SLACK_TOKEN: FAKE_TOKEN }
+
+  it("**asks auth.test whose it is and remembers it**, so a profile never signed in here syncs", async () => {
+    rmSync(accountFile(), { force: true })
+    const service = slackOf()
+    const sync = await runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], {
+      service,
+      keyring: memoryKeyring(),
+      env: fromEnvironment,
+    })
+    expect(sync.code).toBe(0)
+    expect(service.calls.filter((one) => one.method === "auth.test")).toHaveLength(1)
+    expect(recalledAccount(IDENTITY, "slack", "personal", process.env)?.account).toBe(`T0SYNTH01:${ME}`)
+  })
+
+  it("**is refused when the profile holds another account's messages**, before it reads anything", async () => {
+    rememberAccount(IDENTITY, "personal", "T0OTHER01:U0OTHER01", process.env)
+    const service = slackOf()
+    const ran = await runCli(["personal", "messages", "list", "general", "--json"], {
+      service,
+      keyring: memoryKeyring(),
+      env: fromEnvironment,
+    })
+    expect(ran.json()).toMatchObject({ error: { code: "validation_error" } })
+    expect(ran.err).toContain("SLACK_TOKEN belongs to T0SYNTH01:U0SYNTH01")
+    expect(service.calls.map((one) => one.method)).toEqual(["auth.test"])
+    expect(recalledAccount(IDENTITY, "slack", "personal", process.env)?.account).toBe("T0OTHER01:U0OTHER01")
+  })
+
+  it("**is not asked again when the token was saved by session start**", async () => {
+    const service = slackOf()
+    await runCli(["personal", "messages", "list", "general", "--json"], { service })
+    expect(service.calls.filter((one) => one.method === "auth.test")).toEqual([])
   })
 })

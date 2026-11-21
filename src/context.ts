@@ -45,16 +45,26 @@ export const contextOf = (command: Command) => {
   }
 }
 
+/** The profile's pace: Slack's Tier 2, or `requests_per_minute` when set; 0 turns it off for tests. */
+export const pacerFor = (command: Command) => {
+  const { env, profile, settings } = contextOf(command)
+  const { requestsPerMinute } = settings
+  return new Pacer(
+    pacePathFor(IDENTITY, profile, env),
+    requestsPerMinute === undefined ? PACE : { ...PACE, perMinute: requestsPerMinute },
+  )
+}
+
 /** Slack for one run, with the token it was given and the profile's pace; each call lands in the run's `events`. */
 export const slackFor = (command: Command, token: string, events?: EventSink) => {
-  const { environment, env, profile } = contextOf(command)
-  return slackClient({
-    token,
-    events,
-    signal: environment.signal,
-    fetch: environment.fetch,
-    pacer: new Pacer(pacePathFor(IDENTITY, profile, env), PACE),
-  })
+  const { environment } = contextOf(command)
+  return slackClient({ token, events, signal: environment.signal, fetch: environment.fetch, pacer: pacerFor(command) })
+}
+
+/** Whether the profile's token comes from SLACK_TOKEN, which never went through `session start`. */
+export const tokenFromEnvironment = (command: Command) => {
+  const { profile, tokens } = contextOf(command)
+  return tokens.read(profile)?.source === "environment"
 }
 
 /**

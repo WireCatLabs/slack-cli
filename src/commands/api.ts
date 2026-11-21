@@ -1,9 +1,8 @@
 import { retrying } from "@wirecat/cli-base/http"
 import { hostsFetch, serviceApiCommand } from "@wirecat/cli-core/cli"
-import { Pacer, pacePathFor } from "@wirecat/cli-core/sends"
 import type { Command } from "commander"
 import { API, configuration } from "../config.js"
-import { contextOf, PACE, type ServiceEnvironment, tokenOf } from "../context.js"
+import { contextOf, pacerFor, type ServiceEnvironment, tokenOf } from "../context.js"
 import { DESKTOP, IDENTITY } from "../identity.js"
 
 // Slack is RPC: a GET can send or publish (`views.publish`), so only an operation the manifest calls a read may be sent
@@ -30,13 +29,8 @@ export const apiCommand = (): Command =>
     ...API,
     app: IDENTITY,
     configuration,
-    fetch: (command) => {
-      const { environment, env, profile } = contextOf(command)
-      return retrying(serviceFetch(environment), {
-        reads: isRead,
-        pacer: new Pacer(pacePathFor(IDENTITY, profile, env), PACE),
-      })
-    },
+    fetch: (command) =>
+      retrying(serviceFetch(contextOf(command).environment), { reads: isRead, pacer: pacerFor(command) }),
     token: tokenOf,
     schemas: () => import("../generated/schemas.js").then((module) => module.schemas),
     definitions: () => import("../generated/definitions.js").then((module) => module.definitions),

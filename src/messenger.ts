@@ -1,12 +1,20 @@
+import { CliError } from "@wirecat/cli-base"
 import type { ProviderEntry } from "@wirecat/cli-core"
-import { environmentOf, type Messenger, openAppStore, ProfileTokenStore, recalledAccount } from "@wirecat/cli-core/cli"
-import { Pacer, pacePathFor } from "@wirecat/cli-core/sends"
+import {
+  environmentOf,
+  type Messenger,
+  openAppStore,
+  ProfileTokenStore,
+  recalledAccount,
+  rememberAccount,
+} from "@wirecat/cli-core/cli"
+import type { Command } from "commander"
 import { whoAmI } from "./commands/session.js"
 import { configuration, type SlackSettings, THREAD_WINDOW_DAYS } from "./config.js"
-import { PACE, type ServiceEnvironment, tokenOf } from "./context.js"
+import { PACE, type ServiceEnvironment, slackFor, tokenFromEnvironment, tokenOf } from "./context.js"
 import { IDENTITY, SERVICE, SKILL } from "./identity.js"
 import { HISTORY_MOST, slackAdapter } from "./slack/adapter.js"
-import { slackClient } from "./slack/client.js"
+import type { SlackClient } from "./slack/client.js"
 import { selfOf } from "./slack/map.js"
 
 export const PROVIDER = "slack"
@@ -22,6 +30,24 @@ export const PROVIDER_ENTRY: ProviderEntry = {
 
 const tokensOf = (env: NodeJS.ProcessEnv, keyring?: ConstructorParameters<typeof ProfileTokenStore>[0]["keyring"]) =>
   new ProfileTokenStore({ app: IDENTITY, env, keyring })
+
+/**
+ * Whose token this is. `session start` checked a saved token and remembered its account; one from SLACK_TOKEN never
+ * went through it, so it is asked of `auth.test` every run, remembered, and refused when the profile already holds
+ * another person's or workspace's messages.
+ */
+const accountOf = async (command: Command, slack: SlackClient, profile: string, env: NodeJS.ProcessEnv) => {
+  const remembered = recalledAccount(IDENTITY, PROVIDER, profile, env)?.account
+  if (remembered && !tokenFromEnvironment(command)) return remembered
+  const { id } = await whoAmI(slack)
+  if (remembered && remembered !== id)
+    throw new CliError(
+      "validation_error",
+      `SLACK_TOKEN belongs to ${id}, not to ${remembered}, whose messages profile ${profile} holds; use another profile`,
+    )
+  if (!remembered) rememberAccount(IDENTITY, profile, id, env)
+  return id
+}
 
 /**
  * Slack for cli-core's shared commands. What Slack has no primitive for is turned off or listed in `never`, so its
@@ -143,6 +169,7 @@ export const SLACK: Messenger = {
   // In `never` these would hide every command of `account sessions` and `chats folders` but leave both groups in
   // sight with nothing under them, which cli-core's command lint refuses; listed here, they refuse when typed.
   lacks: [
+    "send",
     "sessions",
     "endOtherSessions",
     "folders",
@@ -168,23 +195,13 @@ export const SLACK: Messenger = {
     const token = tokenOf(command)
     const { fetch, signal } = environmentOf<ServiceEnvironment>(command)
     const { profile } = base.settings
-    const remembered = recalledAccount(IDENTITY, PROVIDER, profile, base.env)
     // The messenger commands open the store without a provider entry; written here, every other CLI's search knows
     // that a `slack` account holds messages.
     await openAppStore(base.env, { app: IDENTITY, provider: PROVIDER_ENTRY })
       .then((store) => store.close())
       .catch(() => base.renderer.warn("could not record slack in the local store; other tools' search may skip it"))
-    const { requestsPerMinute } = base.settings
-    const rate = requestsPerMinute === undefined ? PACE : { ...PACE, perMinute: requestsPerMinute }
-    const slack = slackClient({
-      token,
-      events: options.events,
-      signal,
-      fetch,
-      pacer: new Pacer(pacePathFor(IDENTITY, profile, base.env), rate),
-    })
-    // A token from SLACK_TOKEN never went through `session start`, so nothing remembers whose it is.
-    const account = remembered?.account ?? (await whoAmI(slack)).id
+    const slack = slackFor(command, token, options.events)
+    const account = await accountOf(command, slack, profile, base.env)
     return slackAdapter({
       slack,
       token,

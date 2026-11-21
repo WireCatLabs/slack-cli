@@ -14,6 +14,7 @@ import {
   contactOf,
   conversationAnswer,
   conversationsAnswer,
+  DAY,
   type HistoryAnswer,
   historyAnswer,
   isService,
@@ -39,8 +40,6 @@ export const HISTORY_MOST = 999
 
 /** What Slack recommends per page of a cursor list (https://docs.slack.dev/apis/web-api/pagination/). */
 const PAGE = 200
-
-const DAY = 86_400_000
 
 export interface SlackAdapterOptions {
   slack: SlackClient

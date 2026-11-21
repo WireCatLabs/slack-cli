@@ -1,9 +1,7 @@
 import type { Message } from "@wirecat/cli-core"
 import type { StoredMessages } from "@wirecat/cli-core/cli"
 import type { SlackArgs, SlackClient } from "./client.js"
-import { historyAnswer, nextCursor, tsOf, type WireMessage } from "./map.js"
-
-const DAY = 86_400_000
+import { DAY, historyAnswer, nextCursor, tsOf, type WireMessage } from "./map.js"
 
 export interface ThreadSyncOptions {
   slack: SlackClient
