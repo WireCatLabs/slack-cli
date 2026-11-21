@@ -35,6 +35,7 @@ import {
   type WireMessage,
 } from "./map.js"
 import { append, threadSync } from "./threads.js"
+import { slackWrites } from "./writes.js"
 
 /** Slack's own cap on `conversations.history` (https://docs.slack.dev/reference/methods/conversations.history/). */
 export const HISTORY_MOST = 999
@@ -324,7 +325,23 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return thread?.messages.find((one) => one.ts === id)
   }
 
+  const writes = slackWrites({
+    slack,
+    token: options.token,
+    self: me.user,
+    names,
+    fetch: options.fetch,
+    signal: options.signal,
+    oneMessage,
+    mapped,
+    conversationOf,
+    forget: () => {
+      conversations = undefined
+    },
+  })
+
   return {
+    ...writes,
     self: () => (self ? `${self.team}:${self.user}` : null),
     me: async () => accountOfUser(me, me.user ? await person(me.user).catch(quietlyMissing) : undefined),
     resolve: async (typed) => chatOf(await conversationOf(typed), names),
@@ -342,9 +359,6 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
           ? [memberOf(await person(channel.user)), ...(me.user ? [memberOf(await person(me.user))] : [])]
           : null
       return { ...chat, members }
-    },
-    send: async () => {
-      throw new CliError("validation_error", `sending to ${SERVICE} comes in a later version; this one only reads`)
     },
     logout: async () => {},
     close: async () => {},

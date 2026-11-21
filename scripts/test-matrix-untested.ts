@@ -363,8 +363,4 @@ export const UNTESTED: { command: string; option?: string; reason: string }[] = 
     reason:
       "cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts",
   })),
-  {
-    command: "reactions *",
-    reason: "the write slice adds Slack's reactions.add and reactions.remove; until then SLACK.lacks refuses both",
-  },
 ]

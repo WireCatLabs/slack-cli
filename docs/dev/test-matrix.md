@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**355 ✅ · 954 ⛔ · 0 ❌** — 404 commands, 905 options.
+**369 ✅ · 940 ⛔ · 0 ❌** — 404 commands, 905 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -64,7 +64,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `chats members fetch` | `--max-pages` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats members add` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats members remove` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `chats mark-read` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `chats mark-read` |  | ✅ |  |
 | `chats mark-read` | `--until-id` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats mark-read` | `--topic` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats tracking list` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -73,8 +73,8 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `chats tracking remove` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats create` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats create` | `--channel` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `chats join` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `chats leave` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `chats join` |  | ✅ |  |
+| `chats leave` |  | ✅ |  |
 | `chats update` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats update` | `--title` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats update` | `--description` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
@@ -161,13 +161,13 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages list` | `--cursor` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages list` | `--transcribe` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages list` | `--model` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages send` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `messages send` |  | ✅ |  |
 | `messages send` | `--topic` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages send` | `--reply-to` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `messages send` | `--reply-to` | ✅ |  |
 | `messages send` | `--operation-id` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages send` | `--no-preview` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages send` | `--md` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages send` | `--file` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `messages send` | `--md` | ✅ |  |
+| `messages send` | `--file` | ✅ |  |
 | `messages send` | `--photo` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages send` | `--as-file` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages send` | `--voice` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
@@ -190,18 +190,18 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages transcribe` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages transcribe` | `--local` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages transcribe` | `--model` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages edit` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `messages edit` |  | ✅ |  |
 | `messages edit` | `--md` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages delete` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `messages delete` |  | ✅ |  |
 | `messages delete` | `--for-everyone` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages delete` | `--allow-dangerous` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages forward` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages forward` | `--to` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages forward` | `--operation-id` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages pin` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `messages pin` |  | ✅ |  |
 | `messages pin` | `--notify` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages unpin` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages link` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
+| `messages unpin` |  | ✅ |  |
+| `messages link` |  | ✅ |  |
 | `messages comments` |  | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages comments` | `--limit` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages comments` | `--cursor` | ⛔ | a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
@@ -222,8 +222,8 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages sync` | `--with-muted` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` | `--background` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` | `--dry-run` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `reactions add` |  | ⛔ | the write slice adds Slack's reactions.add and reactions.remove; until then SLACK.lacks refuses both |
-| `reactions remove` |  | ⛔ | the write slice adds Slack's reactions.add and reactions.remove; until then SLACK.lacks refuses both |
+| `reactions add` |  | ✅ |  |
+| `reactions remove` |  | ✅ |  |
 | `models keys set` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
 | `models keys remove` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
 | `models chats show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |

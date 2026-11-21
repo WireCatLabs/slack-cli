@@ -169,27 +169,17 @@ export const SLACK: Messenger = {
   // In `never` these would hide every command of `account sessions` and `chats folders` but leave both groups in
   // sight with nothing under them, which cli-core's command lint refuses; listed here, they refuse when typed.
   lacks: [
-    "send",
     "sessions",
     "endOtherSessions",
     "folders",
     "createFolder",
     "updateFolder",
     "deleteFolder",
-    "edit",
-    "delete",
-    "pin",
-    "unpin",
-    "react",
-    "markRead",
     "createGroup",
     "updateGroup",
-    "join",
-    "leave",
     "addMembers",
     "removeMembers",
     "updateProfile",
-    "permalink",
   ],
   connect: async (command, base, options = {}) => {
     const token = tokenOf(command)

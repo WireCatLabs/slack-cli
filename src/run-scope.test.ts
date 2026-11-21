@@ -34,23 +34,36 @@ const READS: Record<string, readonly string[]> = {
   "messages sync": ["personal", "messages", "sync", "general", "--pause", "1ms"],
 }
 
+// The silent fake stalls the chat lookup before anything is sent, and that is honestly a `timeout`; a write that
+// went out and got no answer is `outcome_unknown` in src/writes.test.ts.
+const WRITE_REASON = "a write; src/writes.test.ts runs it, and its stalled send under --timeout ends in outcome_unknown"
+
+const WRITES: Record<string, readonly string[]> = {
+  "messages send": ["personal", "messages", "send", "general", "Hi"],
+  "messages edit": ["personal", "messages", "edit", "general", "1700000020.000100", "Read it"],
+  "messages delete": ["personal", "messages", "delete", "general", "1700000020.000100", "--yes"],
+  "messages pin": ["personal", "messages", "pin", "general", "1700000030.000100"],
+  "messages unpin": ["personal", "messages", "unpin", "general", "1700000030.000100"],
+  "messages link": ["personal", "messages", "link", "general", "1700000030.000100"],
+  "reactions add": ["personal", "reactions", "add", "general", "1700000010.000100", "tada"],
+  "reactions remove": ["personal", "reactions", "remove", "general", "1700000040.000100"],
+  "chats mark-read": ["personal", "chats", "mark-read", "general"],
+  "chats join": ["personal", "chats", "join", "#elsewhere", "--yes"],
+  "chats leave": ["personal", "chats", "leave", "general", "--yes"],
+}
+
 // cli-core mounts every messenger command and hides or refuses what Slack lacks; those never reach Slack.
 const UNREAD =
   "hidden through SLACK.never or refused through SLACK.lacks before connecting; the read slice sends nothing for it"
 
 const NOT_SENT = [
-  "reactions add",
-  "reactions remove",
   "chats inspect",
   "chats documents list",
   "chats members check",
   "chats members fetch",
   "chats members add",
   "chats members remove",
-  "chats mark-read",
   "chats create",
-  "chats join",
-  "chats leave",
   "chats update",
   "chats links show",
   "chats links reset",
@@ -72,14 +85,8 @@ const NOT_SENT = [
   "contacts unblock",
   "contacts rename",
   "contacts import",
-  "messages send",
   "messages transcribe",
-  "messages edit",
-  "messages delete",
   "messages forward",
-  "messages pin",
-  "messages unpin",
-  "messages link",
   "messages comments",
 ]
 
@@ -132,6 +139,7 @@ describe("each remote command runs inside cli-core's run", () => {
       ),
       "mcp serve": "listens until stopped",
       ...Object.fromEntries(NOT_SENT.map((path) => [path, UNREAD])),
+      ...Object.fromEntries(Object.keys(WRITES).map((path) => [path, WRITE_REASON])),
       ...Object.fromEntries(SHARED.map((path) => [path, SHARED_REASON])),
       setup: "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
       "setup run": "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
