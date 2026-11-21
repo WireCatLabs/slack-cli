@@ -1,4 +1,4 @@
-import { CliError } from "@wirecat/cli-base"
+import { CliError, isCliError } from "@wirecat/cli-base"
 import { type FetchLike, hostFetch } from "@wirecat/cli-base/http"
 import type { ChatCard, Message, Page, PersonCard, WindowedMessage } from "@wirecat/cli-core"
 import type { After, MessengerAdapter, RemoteFile, StoredMessages } from "@wirecat/cli-core/cli"
@@ -18,6 +18,7 @@ import {
   type HistoryAnswer,
   historyAnswer,
   isService,
+  isShown,
   isTs,
   memberOf,
   membersAnswer,
@@ -53,6 +54,16 @@ export interface SlackAdapterOptions {
   now?: () => number
 }
 
+/** How many unknown people are asked by users.info one by one before the directory is read instead. */
+const FEW = 3
+
+const quietlyMissing = (error: unknown) => {
+  if (isCliError(error) && error.details.slack_error === "user_not_found") return undefined
+  throw error
+}
+
+const MISSING_MESSAGE = new Set(["thread_not_found", "message_not_found"])
+
 const CONVERSATION_ID = /^[CDG][A-Z0-9]{2,}$/
 const USER_ID = /^[UW][A-Z0-9]{2,}$/
 
@@ -80,9 +91,22 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return known((await slack("users.info", { user: id }, userAnswer)).user)
   }
 
-  // A person the token cannot see (a bot id in `reply_users`, a deleted account) leaves the id in place of a name.
+  let directory: Promise<unknown> | undefined
+
+  /**
+   * Names for the people a read names. A few are asked one by one; more than that, and the whole directory is read
+   * once for the run, as one users.info each would cost a call of the profile's pace. A person Slack does not know
+   * keeps the id in place of a name; any other refusal, a rate limit among them, is the read's.
+   */
   const learn = async (ids: Iterable<string>) => {
-    for (const id of new Set(ids)) if (USER_ID.test(id) && !people.has(id)) await person(id).catch(() => undefined)
+    const unknown = () => [...new Set(ids)].filter((id) => USER_ID.test(id) && !people.has(id))
+    if (unknown().length > FEW) {
+      directory ??= everyone()
+      await directory
+    }
+    const left = unknown()
+    if (directory && left.length > FEW) return
+    for (const id of left) await person(id).catch(quietlyMissing)
   }
 
   const everyone = async (): Promise<User[]> => {
@@ -101,13 +125,14 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       for (let cursor: string | undefined; ; ) {
         const page = await slack(
           "users.conversations",
-          { types: "public_channel,private_channel,mpim,im", exclude_archived: false, limit: PAGE, cursor },
+          { types: "public_channel,private_channel,mpim,im", exclude_archived: true, limit: PAGE, cursor },
           conversationsAnswer,
         )
         append(found, page.channels)
         cursor = nextCursor(page)
         if (!cursor) break
       }
+      for (const one of found) if (one.name && !one.is_mpim) names.set(one.id, one.name)
       await learn(found.flatMap((one) => (one.user ? [one.user] : [])))
       return found
     })()
@@ -137,9 +162,11 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return CONVERSATION_ID.test(wanted) ? wanted : (await conversationOf(wanted)).id
   }
 
+  /** The messages among `wires`, mapped: service messages, tombstones and the like are left out. */
   const mapped = async (chatId: string, wires: readonly WireMessage[]): Promise<Message[]> => {
-    await learn(wires.flatMap(peopleIn))
-    return wires.map((wire) => messageOf(chatId, wire, me, names))
+    const shown = wires.filter(isShown)
+    await learn(shown.flatMap(peopleIn))
+    return shown.map((wire) => messageOf(chatId, wire, me, names))
   }
 
   const historyCall = (chatId: string, args: SlackArgs) =>
@@ -148,7 +175,10 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
   const repliesCall = (chatId: string, ts: string, args: SlackArgs) =>
     slack("conversations.replies", { channel: chatId, ts, ...args }, historyAnswer)
 
-  /** Newest first, as Slack answers, service messages left out; pages on by cursor while they leave it short. */
+  /**
+   * Newest first, as Slack answers, service messages left out; pages on by cursor while they leave it short. A
+   * tombstone stays, since a sync finds a deleted root's replies through it; `mapped` leaves it out of the page.
+   */
   const newestFirst = async (chatId: string, limit: number, args: SlackArgs) => {
     const kept: WireMessage[] = []
     let answer: HistoryAnswer
@@ -184,7 +214,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     for (const span of [DAY / 24, DAY, 7 * DAY, 30 * DAY, 365 * DAY, Number.POSITIVE_INFINITY]) {
       const end = from + span
       const open = end >= now()
-      const found = (await between(chatId, after, open ? undefined : tsOf(end))).filter((one) => !isService(one))
+      const found = (await between(chatId, after, open ? undefined : tsOf(end))).filter(isShown)
       if (found.length >= limit || open) {
         const oldest = found.toReversed().slice(0, limit)
         return { wires: oldest, hasMore: found.length > limit || !open }
@@ -247,30 +277,39 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     ...(options.fetch ? { fetch: options.fetch } : {}),
   })
 
-  const fileOf = (attachment: Message["attachments"][number], position: number): RemoteFile => {
-    const url = attachment.providerRef?.url
-    return {
-      kind: attachment.kind,
-      ...(attachment.name ? { name: attachment.name } : {}),
-      ...(attachment.mime ? { mime: attachment.mime } : {}),
-      ...(attachment.size === undefined ? {} : { size: attachment.size }),
-      position,
-      async *bytes() {
-        if (typeof url !== "string" || new URL(url).host !== "files.slack.com")
-          throw new CliError("provider_error", `${SERVICE} gave this file no address on files.slack.com`)
-        const response = await downloads(url, {
-          headers: { authorization: `Bearer ${options.token}` },
-          ...(options.signal ? { signal: options.signal } : {}),
-        })
-        if (!response.ok || !response.body)
-          throw new CliError(
-            response.status === 404 ? "not_found" : "provider_error",
-            `${SERVICE} refused the file (HTTP ${response.status})`,
-          )
-        yield* response.body
-      },
-    }
+  /** Why Slack hands out no bytes for this file, or nothing when it does. */
+  const unusable = (attachment: Message["attachments"][number]): string | undefined => {
+    const ref = attachment.providerRef ?? {}
+    // The kind, not the file name: a name is someone else's text.
+    const name = attachment.kind
+    if (ref.mode === "hidden_by_limit") return `${name}: hidden past the workspace's history limit`
+    if (ref.external === true || ref.mode === "external") return `${name}: a link to a file elsewhere`
+    if (ref.mode === "tombstone") return `${name}: deleted`
+    const url = ref.url
+    if (typeof url !== "string" || !URL.canParse(url) || new URL(url).host !== "files.slack.com")
+      return `${name}: no address on files.slack.com`
+    return undefined
   }
+
+  const fileOf = (attachment: Message["attachments"][number], position: number): RemoteFile => ({
+    kind: attachment.kind,
+    ...(attachment.name ? { name: attachment.name } : {}),
+    ...(attachment.mime ? { mime: attachment.mime } : {}),
+    ...(attachment.size === undefined ? {} : { size: attachment.size }),
+    position,
+    async *bytes() {
+      const response = await downloads(String(attachment.providerRef?.url), {
+        headers: { authorization: `Bearer ${options.token}` },
+        ...(options.signal ? { signal: options.signal } : {}),
+      })
+      if (!response.ok || !response.body)
+        throw new CliError(
+          response.status === 404 ? "not_found" : "provider_error",
+          `${SERVICE} refused the file (HTTP ${response.status})`,
+        )
+      yield* response.body
+    },
+  })
 
   const oneMessage = async (chatId: string, id: string): Promise<WireMessage | undefined> => {
     const top = await historyCall(chatId, { latest: id, inclusive: true, limit: 1 })
@@ -278,7 +317,10 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     if (found) return found
     // A reply is not in the channel's history; `conversations.replies` takes any message of a thread.
     // Its answer starts with the root, so the reply asked for is the second message.
-    const thread = await repliesCall(chatId, id, { oldest: id, inclusive: true, limit: 2 }).catch(() => undefined)
+    const thread = await repliesCall(chatId, id, { oldest: id, inclusive: true, limit: 2 }).catch((error: unknown) => {
+      if (isCliError(error) && MISSING_MESSAGE.has(String(error.details.slack_error))) return undefined
+      throw error
+    })
     return thread?.messages.find((one) => one.ts === id)
   }
 
@@ -398,7 +440,14 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       const wire = await oneMessage(chatId, messageId)
       if (!wire) throw new CliError("not_found", `no message ${messageId} in this chat`)
       const [message] = await mapped(chatId, [wire])
-      return { files: (message?.attachments ?? []).map(fileOf), skipped: [] }
+      const files: RemoteFile[] = []
+      const skipped: string[] = []
+      for (const [position, attachment] of (message?.attachments ?? []).entries()) {
+        const why = unusable(attachment)
+        if (why) skipped.push(why)
+        else files.push(fileOf(attachment, position))
+      }
+      return { files, skipped }
     },
   }
 }

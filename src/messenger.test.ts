@@ -9,6 +9,7 @@ import { FAKE_TOKEN, type FakeMessage, type FakeWorkspace, fakeSlack } from "./t
 import { runCli } from "./testing/harness.js"
 import {
   ANNA,
+  ARCHIVED,
   BORIS,
   DM,
   daysAgo,
@@ -16,6 +17,8 @@ import {
   GENERAL,
   GROUP_DM,
   ME,
+  PRIVATE_UNJOINED,
+  PUBLIC_UNJOINED,
   remembered,
   SHARED,
   ts,
@@ -87,10 +90,21 @@ describe("chats", () => {
     expect(byId(items(listed), ts(0))).toBeUndefined()
   })
 
-  it("**refuses a conversation the person is not in** the way Slack does", async () => {
-    const ran = await runCli(["personal", "messages", "list", "C0NOTMINE", "--json"], { service: slackOf() })
-    expect(ran.code).not.toBe(0)
+  it("**reads a public channel the person has not joined**, as a user token may", async () => {
+    const ran = await runCli(["personal", "messages", "list", PUBLIC_UNJOINED, "--json"], { service: slackOf() })
+    expect(items(ran).map((one) => one.text)).toEqual(["Anyone can read this"])
+  })
+
+  it("**cannot find a private conversation the person is not in**, as Slack answers", async () => {
+    const ran = await runCli(["personal", "messages", "list", PRIVATE_UNJOINED, "--json"], { service: slackOf() })
     expect(ran.json()).toMatchObject({ error: { code: "not_found" } })
+  })
+
+  it("**leaves archived channels out of the list**, so a sync of every chat skips them", async () => {
+    const service = slackOf()
+    const ran = await runCli(["personal", "chats", "list", "--json"], { service })
+    expect(byId(items(ran), ARCHIVED)).toBeUndefined()
+    expect(service.calls.find((one) => one.method === "users.conversations")?.args.exclude_archived).toBe("true")
   })
 })
 
@@ -184,19 +198,32 @@ describe("messages", () => {
     expect(ran.out + ran.err).not.toContain(FAKE_TOKEN)
   })
 
-  it("**refuses a file whose address is not files.slack.com** before anything is sent there", async () => {
+  it("**skips each file it cannot fetch** with the reason, and saves the rest, never sending off files.slack.com", async () => {
     const world = workspace()
     const message = world.messages[GENERAL]?.find((one) => one.ts === ts(40)) as FakeMessage
     message.files = [
+      ...(message.files ?? []),
       { id: "F0SYNTH02", name: "x.txt", mimetype: "text/plain", url_private: "https://elsewhere.example/x" },
+      { id: "F0SYNTH03", name: "old.txt", mimetype: "text/plain", mode: "hidden_by_limit" },
+      {
+        id: "F0SYNTH04",
+        name: "doc",
+        mimetype: "text/plain",
+        is_external: true,
+        url_private: "https://docs.example/d",
+      },
+      { id: "F0SYNTH05", name: "bad", mimetype: "text/plain", url_private: "not a url" },
     ]
     const service = slackOf(world)
     const dir = mkdtempSync(join(tmpdir(), "slack-download-"))
     const ran = await runCli(["personal", "messages", "download", "general", ts(40), "--output-dir", dir, "--json"], {
       service,
     })
-    expect(JSON.stringify(ran.json())).toContain("files.slack.com")
-    expect(service.downloads).toEqual([])
+    expect(ran.code).toBe(0)
+    expect(ran.err).toContain("hidden past the workspace's history limit")
+    expect(ran.err).toContain("a link to a file elsewhere")
+    expect(readFileSync(join(dir, "report.txt"), "utf8")).toBe("the numbers\n")
+    expect(service.downloads).toEqual([new URL(FILE_URL).pathname])
     expect(service.refusals).toEqual([])
   })
 
@@ -233,6 +260,57 @@ const stored = async (service: ReturnType<typeof slackOf>, chat = GENERAL) =>
   items(await runCli(["personal", "messages", "list", chat, "--offline", "--limit", "100", "--json"], { service }))
 
 describe("messages sync", () => {
+  const syncOf =
+    (service: ReturnType<typeof slackOf>, pageSize = "2") =>
+    () =>
+      runCli(["personal", "messages", "sync", "general", "--page-size", pageSize, "--pause", "1ms", "--json"], {
+        service,
+      })
+  const repliesCalls = (service: ReturnType<typeof slackOf>) =>
+    service.calls.filter((one) => one.method === "conversations.replies").length
+
+  it("**holds a reply sent between an old root and the first page**, with every top-level message after it", async () => {
+    const root = daysAgo(10)
+    const world = busyChannel(root, 5)
+    const service = slackOf(world)
+    const sync = syncOf(service)
+    await sync()
+    const reply = daysAgo(5)
+    thread(world, root, { ts: reply, user: ME, text: "Late answer" })
+    world.messages[GENERAL]?.push(
+      ...Array.from({ length: 5 }, (_, at) => ({ ts: daysAgo(0, (at + 1) * 1000), user: BORIS, text: `today ${at}` })),
+    )
+    expect((await sync()).code).toBe(0)
+    const held = await stored(service)
+    expect(held).toHaveLength(12)
+    expect(byId(held, reply)).toMatchObject({ thread_id: root })
+  })
+
+  it("**reads a thread whole when the store holds its broadcast reply but not an older one**", async () => {
+    const world = workspace()
+    world.messages[GENERAL] = [
+      { ts: ts(30), user: BORIS, text: "Who has the numbers?" },
+      { ts: ts(32), user: ME, text: "Sending them now", thread_ts: ts(30), subtype: "thread_broadcast" },
+    ]
+    const service = slackOf(world)
+    await syncOf(service, "200")()
+    thread(world, ts(30), { ts: ts(31), user: ANNA, text: "I do" })
+    await syncOf(service, "200")()
+    expect(byId(await stored(service), ts(31))).toMatchObject({ text: "I do" })
+  })
+
+  it("**reads each thread once on a first sync of several pages**", async () => {
+    const world = workspace()
+    world.messages[GENERAL] = Array.from({ length: 5 }, (_, at) => [
+      { ts: daysAgo(2, (at + 1) * 1000), user: ANNA, text: `question ${at}` },
+      { ts: daysAgo(1, (at + 1) * 1000), user: BORIS, text: `answer ${at}`, thread_ts: daysAgo(2, (at + 1) * 1000) },
+    ]).flat()
+    const service = slackOf(world)
+    expect((await syncOf(service)()).code).toBe(0)
+    expect(await stored(service)).toHaveLength(10)
+    expect(repliesCalls(service)).toBe(5)
+  })
+
   it("**brings a new reply to a 10-day-old thread in with one sync**, and a second sync adds nothing", async () => {
     const root = daysAgo(10)
     const world = busyChannel(root, 5)
@@ -323,5 +401,116 @@ describe("a token from SLACK_TOKEN", () => {
     const service = slackOf()
     await runCli(["personal", "messages", "list", "general", "--json"], { service })
     expect(service.calls.filter((one) => one.method === "auth.test")).toEqual([])
+  })
+})
+
+describe("odd messages", () => {
+  const channelWith = (messages: FakeMessage[]) => {
+    const world = workspace()
+    world.messages[GENERAL] = messages
+    return world
+  }
+
+  it("**reads a channel link without a label, or with an empty one, as the channel's name**", async () => {
+    const world = channelWith([
+      { ts: ts(1), user: ANNA, text: `See <#${GENERAL}> and <#${GENERAL}|> and <@${BORIS}|>` },
+    ])
+    const ran = await runCli(["personal", "messages", "list", "general", "--json"], { service: slackOf(world) })
+    expect(items(ran)[0]?.text).toBe("See #general and #general and @Boris Synth")
+  })
+
+  it("**takes an integration's words from its attachments or blocks** when its text is empty", async () => {
+    const world = channelWith([
+      {
+        ts: ts(1),
+        bot_id: "B0SYNTH01",
+        subtype: "bot_message",
+        text: "",
+        attachments: [{ fallback: "Build 12 passed" }],
+      },
+      {
+        ts: ts(2),
+        bot_id: "B0SYNTH01",
+        subtype: "bot_message",
+        blocks: [{ type: "section", text: { text: "Deploy done" } }],
+      },
+    ])
+    const ran = await runCli(["personal", "messages", "list", "general", "--json"], { service: slackOf(world) })
+    expect(items(ran).map((one) => one.text)).toEqual(["Build 12 passed", "Deploy done"])
+  })
+
+  it("**leaves out reminders, withheld content and other non-messages**, as neither messages nor events", async () => {
+    const world = channelWith([
+      { ts: ts(1), user: ANNA, subtype: "reminder_add", text: "set up a reminder" },
+      { ts: ts(2), user: ANNA, subtype: "ekm_access_denied", text: "Your admins have suspended access" },
+      { ts: ts(3), user: ANNA, subtype: "file_comment", text: "a comment" },
+      { ts: ts(4), user: ANNA, text: "A real one" },
+    ])
+    const service = slackOf(world)
+    const listed = await runCli(["personal", "messages", "list", "general", "--json"], { service })
+    expect(items(listed).map((one) => one.text)).toEqual(["A real one"])
+    const events = await runCli(["personal", "chats", "events", "general", "time>2023-11-01", "--json"], { service })
+    expect(items(events)).toEqual([])
+  })
+
+  it("**keeps a deleted thread root out, and its replies in**: a tombstone never overwrites the stored root", async () => {
+    const world = channelWith([
+      { ts: ts(1), user: ANNA, text: "Original question" },
+      { ts: ts(2), user: BORIS, text: "Its answer", thread_ts: ts(1) },
+    ])
+    const service = slackOf(world)
+    const sync = () => runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })
+    await sync()
+    world.messages[GENERAL] = [
+      { ts: ts(1), user: "USLACKBOT", subtype: "tombstone", text: "This message was deleted." },
+      { ts: ts(2), user: BORIS, text: "Its answer", thread_ts: ts(1) },
+      { ts: ts(3), user: ANNA, text: "A later reply", thread_ts: ts(1) },
+    ]
+    await sync()
+    const held = await stored(service)
+    expect(byId(held, ts(1))).toMatchObject({ text: "Original question", sender_id: ANNA })
+    expect(byId(held, ts(3))).toMatchObject({ text: "A later reply", thread_id: ts(1) })
+    const listed = await runCli(["personal", "messages", "list", "general", "--json"], { service })
+    expect(byId(items(listed), ts(1))).toBeUndefined()
+  })
+
+  it("**reads the directory once when a page names many unknown people**, never one users.info each", async () => {
+    const world = workspace()
+    const crowd = Array.from({ length: 8 }, (_, at) => ({ id: `U0CROWD0${at}`, name: `crowd${at}` }))
+    world.users.push(...crowd)
+    world.messages[GENERAL] = crowd.map((one, at) => ({ ts: ts(at + 1), user: one.id, text: `hi ${at}` }))
+    const service = slackOf(world)
+    const ran = await runCli(["personal", "messages", "list", "general", "--json"], { service })
+    expect(items(ran)[0]).toMatchObject({ sender_name: "crowd0" })
+    expect(service.calls.filter((one) => one.method === "users.info" && one.args.user?.startsWith("U0CROWD"))).toEqual(
+      [],
+    )
+    expect(service.calls.filter((one) => one.method === "users.list")).toHaveLength(1)
+  })
+
+  it("**keeps an unknown person's id quietly, but not a rate limit** on users.info", async () => {
+    const world = channelWith([{ ts: ts(1), user: "U0GONE001", text: "from a deleted account" }])
+    const quiet = await runCli(["personal", "messages", "list", "general", "--json"], { service: slackOf(world) })
+    expect(items(quiet)[0]).toMatchObject({ sender_id: "U0GONE001", sender_name: null })
+    const limited = fakeSlack(
+      { "users.info": { body: { ok: false, error: "ratelimited" }, status: 429, headers: { "retry-after": "0" } } },
+      FAKE_TOKEN,
+      world,
+    )
+    const ran = await runCli(["personal", "messages", "list", "general", "--json"], { service: limited })
+    expect(ran.code).toBe(8)
+    expect(ran.err).toContain('"code":"rate_limited"')
+  })
+
+  it("**says a message is not there only when Slack says so**; another refusal stays what it is", async () => {
+    const missing = await runCli(["personal", "messages", "show", "general", ts(99), "--json"], { service: slackOf() })
+    expect(missing.json()).toMatchObject({ error: { code: "not_found" } })
+    const refusing = fakeSlack(
+      { "conversations.replies": { body: { ok: false, error: "invalid_auth" } } },
+      FAKE_TOKEN,
+      workspace(),
+    )
+    const refused = await runCli(["personal", "messages", "show", "general", ts(99), "--json"], { service: refusing })
+    expect(refused.json()).toMatchObject({ error: { code: "authentication_error" } })
   })
 })

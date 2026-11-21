@@ -129,6 +129,10 @@ const file = v.looseObject({
   original_h: v.optional(v.number()),
   url_private: v.optional(v.string()),
   url_private_download: v.optional(v.string()),
+  // `hidden_by_limit` past a free workspace's history limit, `external` a link to another service, `tombstone` deleted
+  // (https://docs.slack.dev/reference/objects/file-object/).
+  mode: v.optional(v.string()),
+  is_external: v.optional(v.boolean()),
 })
 
 /** A message as `conversations.history` and `conversations.replies` hand it out. */
@@ -156,6 +160,11 @@ const message = v.looseObject({
   inviter: v.optional(v.string()),
   user_profile: v.optional(v.looseObject({ real_name: v.optional(v.string()), display_name: v.optional(v.string()) })),
   bot_profile: v.optional(v.looseObject({ name: v.optional(v.string()) })),
+  // Legacy attachments and Block Kit: an integration's message often has its words only there.
+  attachments: v.optional(v.array(v.looseObject({ fallback: v.optional(v.string()), text: v.optional(v.string()) }))),
+  blocks: v.optional(
+    v.array(v.looseObject({ type: v.string(), text: v.optional(v.looseObject({ text: v.optional(v.string()) })) })),
+  ),
 })
 
 export type WireMessage = v.InferOutput<typeof message>
@@ -182,7 +191,7 @@ export const isTs = (value: string) => /^\d+\.\d+$/.test(value)
 export const byTs = (one: { id: string }, other: { id: string }) =>
   Number(one.id) - Number(other.id) || one.id.localeCompare(other.id)
 
-/** Names known for user ids, so a mention reads as the person and not as `U…`. */
+/** Names known for user and channel ids, so a mention reads as the person or channel and not as `U…` or `C…`. */
 export type Names = ReadonlyMap<string, string>
 
 export const nameOf = (person: User): string =>
@@ -196,11 +205,11 @@ export const plainText = (raw: string, names: Names): string =>
   raw
     .replace(/<([^<>]*)>/g, (_, inner: string) => {
       const [target = "", label] = inner.split("|", 2)
-      if (target.startsWith("@")) return `@${label ?? names.get(target.slice(1)) ?? target.slice(1)}`
-      if (target.startsWith("#")) return `#${label ?? target.slice(1)}`
-      if (target.startsWith("!subteam^")) return label ?? "@group"
-      if (target.startsWith("!date^")) return label ?? ""
-      if (target.startsWith("!")) return `@${label ?? target.slice(1)}`
+      if (target.startsWith("@")) return `@${label || names.get(target.slice(1)) || target.slice(1)}`
+      if (target.startsWith("#")) return `#${label || names.get(target.slice(1)) || target.slice(1)}`
+      if (target.startsWith("!subteam^")) return label || "@group"
+      if (target.startsWith("!date^")) return label || ""
+      if (target.startsWith("!")) return `@${label || target.slice(1)}`
       const address = target.startsWith("mailto:") ? target.slice("mailto:".length) : target
       return label && label !== address ? `${label} (${address})` : address
     })
@@ -247,6 +256,28 @@ const SERVICE: Readonly<Record<string, string>> = {
 
 export const isService = (wire: WireMessage) => wire.subtype !== undefined && wire.subtype in SERVICE
 
+/**
+ * Subtypes that are neither something someone said nor a change to the conversation
+ * (https://docs.slack.dev/reference/events/message/): a reminder set, content an admin's key withholds, a comment in
+ * the old file model, an assistant thread's opening. A `tombstone`, which that list leaves out, is what Slack keeps in
+ * place of a deleted thread root that has replies. A root among them still leads to its replies.
+ */
+const NO_MESSAGE = new Set(["reminder_add", "ekm_access_denied", "file_comment", "assistant_app_thread", "tombstone"])
+
+/** What `messages list` shows: neither a service message nor one of the subtypes above. */
+export const isShown = (wire: WireMessage) => !isService(wire) && !NO_MESSAGE.has(wire.subtype ?? "")
+
+/** The words of a message whose `text` is empty: its attachments' fallback, else its blocks' text. */
+const wordsOf = (wire: WireMessage): string => {
+  if (wire.text) return wire.text
+  const fallback = (wire.attachments ?? []).map((one) => one.fallback || one.text || "").filter(Boolean)
+  if (fallback.length) return fallback.join("\n")
+  return (wire.blocks ?? [])
+    .map((one) => one.text?.text ?? "")
+    .filter(Boolean)
+    .join("\n")
+}
+
 const kindOfFile = (mime: string | undefined) => {
   if (mime?.startsWith("image/")) return "photo"
   if (mime?.startsWith("video/")) return "video"
@@ -264,7 +295,12 @@ const attachmentsOf = (wire: WireMessage): Attachment[] =>
       ...(one.size === undefined ? {} : { size: one.size }),
       ...(one.original_w === undefined ? {} : { width: one.original_w }),
       ...(one.original_h === undefined ? {} : { height: one.original_h }),
-      providerRef: { file_id: one.id, ...(url ? { url } : {}) },
+      providerRef: {
+        file_id: one.id,
+        ...(url ? { url } : {}),
+        ...(one.mode ? { mode: one.mode } : {}),
+        ...(one.is_external ? { external: true } : {}),
+      },
     }
   })
 
@@ -284,7 +320,7 @@ const reactionsOf = (wire: WireMessage, self: Self): Reactions | null => {
  * a person of another team (Slack Connect) keeps that team.
  */
 export const messageOf = (chatId: string, wire: WireMessage, self: Self, names: Names): Message => {
-  const raw = wire.text ?? ""
+  const raw = wordsOf(wire)
   const sender = wire.user ?? wire.bot_id ?? null
   const team = wire.user_team ?? wire.team
   const reply = wire.thread_ts !== undefined && wire.thread_ts !== wire.ts
@@ -382,8 +418,6 @@ export const chatOf = (one: Conversation, names: Names): Chat => {
       slack_kind: kind,
       slack_shared: one.is_ext_shared === true || one.is_org_shared === true ? true : null,
       slack_user: one.user ?? null,
-      topic: one.topic?.value || null,
-      purpose: one.purpose?.value || null,
       last_read: one.last_read ?? null,
     },
   }

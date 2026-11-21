@@ -37,6 +37,7 @@ export interface FakeChannel {
   members: string[]
   is_ext_shared?: boolean
   unread?: number
+  archived?: boolean
 }
 
 export interface FakeMessage {
@@ -150,7 +151,7 @@ const conversationOf = (one: FakeChannel, all: readonly FakeMessage[], info: boo
     is_channel: one.kind === "public",
     is_group: one.kind === "private" || one.kind === "mpim",
     is_private: one.kind !== "public",
-    is_archived: false,
+    is_archived: one.archived === true,
     is_ext_shared: one.is_ext_shared === true,
     ...(one.name ? { name: one.name } : {}),
     ...(one.user ? { user: one.user } : {}),
@@ -198,7 +199,12 @@ export const fakeSlack = (
     }
     if (method === "users.conversations") {
       const types = (args.types ?? "public_channel").split(",")
-      const mine = workspace.channels.filter((one) => one.members.includes(self) && types.includes(TYPE_OF[one.kind]))
+      const mine = workspace.channels.filter(
+        (one) =>
+          one.members.includes(self) &&
+          types.includes(TYPE_OF[one.kind]) &&
+          !(args.exclude_archived === "true" && one.archived === true),
+      )
       const page = cursorPage(mine, args, 100)
       return Response.json({
         ok: true,
@@ -215,7 +221,10 @@ export const fakeSlack = (
       const counted = args.include_num_members === "true"
       return Response.json({ ok: true, channel: conversationOf(channel, all, true, counted) })
     }
-    if (!channel.members.includes(self)) return refuse(`not in ${channel.id}`, "not_in_channel")
+    // A user token reads every public conversation and the private ones its person is in
+    // (https://docs.slack.dev/reference/methods/conversations.history/); a private one it is not in is not there.
+    if (!channel.members.includes(self) && channel.kind !== "public")
+      return refuse(`not in ${channel.id}`, "channel_not_found")
     if (method === "conversations.members") {
       const page = cursorPage(channel.members, args, 100)
       return Response.json({ ok: true, members: page.shown, response_metadata: page.response_metadata })

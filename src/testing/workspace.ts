@@ -10,6 +10,9 @@ export const GENERAL = "C0SYNTH01"
 export const DM = "D0SYNTH01"
 export const GROUP_DM = "G0SYNTH01"
 export const SHARED = "C0SHARD01"
+export const PUBLIC_UNJOINED = "C0NOTMINE"
+export const PRIVATE_UNJOINED = "G0NOTMINE"
+export const ARCHIVED = "C0ARCHIVD"
 export const FILE_URL = "https://files.slack.com/files-pri/T0SYNTH01-F0SYNTH01/report.txt"
 
 /** The account `session start` remembers, so a command knows whose messages are outgoing without asking Slack. */
@@ -63,10 +66,13 @@ export const workspace = (): FakeWorkspace => ({
     { id: DM, kind: "im", user: ANNA, members: [ME, ANNA], unread: 1 },
     { id: GROUP_DM, kind: "mpim", name: "mpdm-test.person--anna--boris-1", members: [ME, ANNA, BORIS] },
     { id: SHARED, kind: "private", name: "partners", members: [ME, VERA], is_ext_shared: true },
-    { id: "C0NOTMINE", kind: "public", name: "elsewhere", members: [ANNA] },
+    { id: PUBLIC_UNJOINED, kind: "public", name: "elsewhere", members: [ANNA] },
+    { id: PRIVATE_UNJOINED, kind: "private", name: "secret", members: [ANNA] },
+    { id: ARCHIVED, kind: "public", name: "old-project", members: [ME, ANNA], archived: true },
   ],
   messages: {
     [GENERAL]: GENERAL_MESSAGES,
+    [PUBLIC_UNJOINED]: [{ ts: ts(3), user: ANNA, text: "Anyone can read this" }],
     [DM]: [{ ts: ts(5), user: ANNA, text: "Are you free?" }],
     [SHARED]: [{ ts: ts(7), user: VERA, user_team: "T0OTHER01", team: "T0OTHER01", text: "Hello from outside" }],
   },
