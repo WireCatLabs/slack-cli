@@ -86,31 +86,44 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   (`exclude_archived`). No cheap source of last activity was found for a user token: `conversations.info` would cost a
   call per chat at the profile's pace.
 - **Writes** (`src/slack/writes.ts`): `chat.postMessage`, `chat.update`, `chat.delete`, `reactions.add|remove`,
-  `pins.add|remove`, `conversations.mark`, `chat.getPermalink`, `conversations.join|leave`, and a file through
-  `files.getUploadURLExternal`, a POST of the bytes to `files.slack.com` and `files.completeUploadExternal`. Every
-  write goes with `writes: true`: no answer is `outcome_unknown`, never retried. Plain text is escaped and sent with
-  `mrkdwn: false`; `--md` is cli-core's Markdown spans written as mrkdwn, and a mark mrkdwn lacks is refused. A reply
-  goes to its root's thread, since Slack threads are one level deep. `reactions remove` takes off every reaction of
-  the owner on the message, as cli-core's `react(…, null)` means.
-- **A repeat is one copy:** Slack's `chat.postMessage` has no idempotency key, so a send carries its send id as
-  message metadata (`event_type: wirecat_send`). A send id this run did not make is a repeat: the adapter looks for
-  that mark among the chat's (or the thread's) newest messages with `include_all_metadata` and answers with the copy it
-  finds, else sends. A file message carries no mark, so a repeat of a file send is refused with a way forward.
+  `pins.add|remove`, `conversations.mark`, `conversations.open`, `chat.getPermalink`, `conversations.join|leave`, and
+  a file through `files.getUploadURLExternal`, a POST of the bytes to `files.slack.com` and
+  `files.completeUploadExternal`. A write goes with `writes: true`: no answer, or an answer that cannot be read, is
+  `outcome_unknown`, never retried. The upload address and the bytes share nothing yet, so they go as reads, and a
+  failure there says nothing was sent; the bytes go through the client, paced and in the run record as
+  `files.upload`, to `files.slack.com` only. Plain text is escaped and sent with `mrkdwn: false`; `--md` is
+  cli-core's Markdown spans written as mrkdwn, a link's address percent-encoded where `<`, `>` or `|` would end it,
+  and a mark mrkdwn lacks is refused. `--reply-to` and `--topic` go to the message's root: a Slack thread is one level.
+  A person with no DM yet gets one through `conversations.open` before the send.
+- **A repeat is one copy:** Slack's `chat.postMessage` has no idempotency key, and its metadata is refused from a user
+  token (`metadata_must_be_sent_from_app`). A send id carries the time it was made (`s<ms>-<uuid>`). A send id this run
+  did not make is a repeat: the adapter reads the chat (or the thread) from a minute before that time to the end,
+  every page, and answers with the owner's own message of the same text in the same place, else sends. An id slack
+  did not make is refused. A file message is found by its file id the same way, but a repeat of a file send is
+  refused: the files would be uploaded again under new ids. A repeat of a pin, an unpin, a delete, a reaction or a
+  leave that finds it done (`already_pinned`, `no_pin`, `message_not_found`, `already_reacted`, `not_in_channel`) is
+  the outcome asked for. So a delete of a message that is not there answers as done.
+- **A file's message shows late:** Slack may share a file a moment after `files.completeUploadExternal`. The chat is
+  read three times for it; then the answer stands in for the message, under the first file's id.
+- **Slack's refusals with a reason** (`src/reasons.ts`, each code from the method's page): `message.not-yours`
+  (`cant_update_message`, `cant_delete_message`), `message.edit-window-closed`, `message.too-long`,
+  `chat.not-joined` (`not_in_channel`), `chat.archived` (`is_archived`), `chat.restricted` (`restricted_action*`).
+  Slack's own code is in `details.slack_error`.
 - **Deviations from cli-core's ports:**
   - `delete` is for everyone only: Slack has no delete for one person, so a delete without `--for-everyone` is
-    refused, never widened.
+    refused before the confirmation question, never widened.
   - `react` adds; Slack keeps several reactions per person, so an emoji does not replace the owner's other ones. An
-    emoji is Slack's name for it (`thumbsup`, `:eyes:`); a Unicode emoji is refused, since Slack names each one.
+    emoji is Slack's name for it (`thumbsup`, `:eyes:`, `thumbsup::skin-tone-2`); a Unicode emoji is refused.
   - `pin --notify` changes nothing: Slack shows a pin in the channel either way.
   - `chat.update` takes no `mrkdwn` switch, so a plain edit with `*x*` may show bold where a plain send would not.
+    `files.completeUploadExternal`'s `initial_comment` has none either: a file's caption is escaped like plain text,
+    and `*x*` in it may show bold.
 - **Not offered by cli-core's send:** `reply_broadcast` (a thread reply also shown in the channel) has no field in
-  `SendOptions`, so a reply stays in its thread. A send goes to a chat the list has; a person with no DM yet is
-  refused (`conversations.open` is not called). `--silent`, `--at-time`, `--send-as`, buttons, spoilers and voice
+  `SendOptions`, so a reply stays in its thread. `--silent`, `--at-time`, `--send-as`, buttons, spoilers and voice
   messages are refused by name.
-- **Not verified on a live workspace:** whether a user token's message metadata is kept and read back, and whether a
-  file message shows in the history right after `files.completeUploadExternal`; Slack may share it later, and then
-  a file send that worked answers with exit `14`. `messages link` asks for the remembered account before connecting,
-  so on `SLACK_TOKEN` alone it works only after one other command has saved the account.
+- **Not verified on a live workspace:** whether Slack keeps a sent text exactly as sent, which the repeat matches on;
+  and how long a file's message takes to show. `messages link` asks for the remembered account before connecting, so
+  on `SLACK_TOKEN` alone it works only after one other command has saved the account.
 - **Hidden and refused:** what Slack has no primitive for is in `SLACK.never`. Sessions and folders are in `lacks`
   instead, since `never` would leave `account sessions` and `chats folders` in sight with nothing under them.
 

@@ -14,4 +14,6 @@
 - **Write to Slack with the messenger commands.** `messages send|edit|delete|pin|unpin|link`, `reactions add|remove`
   and `chats mark-read|join|leave`. Text is sent as typed; `--md` turns Markdown into Slack's mrkdwn. `--reply-to`
   answers in the thread, and `--file` uploads through Slack's external upload. A write with no answer is reported as
-  unknown and never sent twice.
+  unknown and never sent twice; a repeat with its `--operation-id` finds the copy Slack kept. A message to a person
+  with no DM yet opens one. Slack's refusals carry a reason of their own, such as `message.not-yours` and
+  `chat.not-joined`, with Slack's code in `details.slack_error`.
