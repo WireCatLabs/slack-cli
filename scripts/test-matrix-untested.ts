@@ -23,9 +23,16 @@ const SHARED_REPORTS = "cli-core's messenger doctorCommand; cli-core's doctor te
 const LONG_RUNNING = `starts an HTTP server or a background process that runs until stopped; ${SHARED_MCP}`
 
 const REFUSED =
-  "a write or a feature Slack's user token lacks: SLACK.lacks refuses it before connecting, or Slack has no such " +
-  "thing (folders, sessions, join requests, moderation); cli-core's lacks test holds each refusal, and " +
-  "src/run-scope.test.ts lists them"
+  "something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, " +
+  "transcripts, comments, contact lists), so " +
+  "the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never " +
+  "names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them"
+/** What Slack has a method for and this version does not do yet; SLACK.lacks refuses each before connecting. */
+const NOT_YET = ["account update", "chats members add", "chats members remove", "chats create", "chats update"]
+const NOT_YET_REASON =
+  "Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, " +
+  "conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before " +
+  "connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them"
 const SHARED_MESSENGER =
   "cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it " +
   "beyond the adapter reads src/messenger.test.ts drives"
@@ -46,13 +53,8 @@ const NOT_SENT_ROWS: string[][] = [
   ["chats inspect"],
   ["chats members add"],
   ["chats members remove"],
-  ["chats mark-read"],
-  ["chats mark-read", "--until-id"],
-  ["chats mark-read", "--topic"],
   ["chats create"],
   ["chats create", "--channel"],
-  ["chats join"],
-  ["chats leave"],
   ["chats update"],
   ["chats update", "--title"],
   ["chats update", "--description"],
@@ -97,32 +99,12 @@ const NOT_SENT_ROWS: string[][] = [
   ["contacts import"],
   ["messages list", "--transcribe"],
   ["messages list", "--model"],
-  ["messages send"],
-  ["messages send", "--topic"],
-  ["messages send", "--reply-to"],
-  ["messages send", "--operation-id"],
-  ["messages send", "--no-preview"],
-  ["messages send", "--md"],
-  ["messages send", "--file"],
-  ["messages send", "--photo"],
-  ["messages send", "--as-file"],
-  ["messages send", "--voice"],
-  ["messages send", "--allow-any-file"],
   ["messages transcribe"],
   ["messages transcribe", "--local"],
   ["messages transcribe", "--model"],
-  ["messages edit"],
-  ["messages edit", "--md"],
-  ["messages delete"],
-  ["messages delete", "--for-everyone"],
-  ["messages delete", "--allow-dangerous"],
   ["messages forward"],
   ["messages forward", "--to"],
   ["messages forward", "--operation-id"],
-  ["messages pin"],
-  ["messages pin", "--notify"],
-  ["messages unpin"],
-  ["messages link"],
   ["messages comments"],
   ["messages comments", "--limit"],
   ["messages comments", "--cursor"],
@@ -322,7 +304,28 @@ export const UNTESTED: { command: string; option?: string; reason: string }[] = 
     ...(option ? { option } : {}),
     reason: `starts the installed CLI as a child process, as the agent would; ${SHARED_MCP}`,
   })),
-  ...rowsOf(REFUSED, NOT_SENT_ROWS),
+  ...rowsOf(
+    REFUSED,
+    NOT_SENT_ROWS.filter(([command = ""]) => !NOT_YET.some((one) => command.startsWith(one))),
+  ),
+  ...rowsOf(
+    NOT_YET_REASON,
+    NOT_SENT_ROWS.filter(([command = ""]) => NOT_YET.some((one) => command.startsWith(one))),
+  ),
+  {
+    command: "messages send",
+    option: "--allow-any-file",
+    reason:
+      "cli-core's guard on files from credential and app folders, the same in every messenger CLI; tested in " +
+      "cli-core's send tests, and slack's own file sends run in src/writes.test.ts",
+  },
+  {
+    command: "messages delete",
+    option: "--allow-dangerous",
+    reason:
+      "cli-core's switch past an ask level's question before a deletion; tested in cli-core's messages delete " +
+      "command tests, and slack's deletes run with --yes in src/writes.test.ts",
+  },
   ...rowsOf(SHARED_MESSENGER, SHARED_ROWS),
   {
     command: "setup",
