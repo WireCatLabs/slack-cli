@@ -10,6 +10,8 @@ const saved = { ...process.env }
 // write into it by name.
 process.env.SLACK_CONFIG_DIR = join(tmpdir(), "config")
 process.env.SLACK_NO_UPDATE_CHECK = "1"
+// The tests' Slack answers at once; the pace a profile keeps with the real one has its own test.
+process.env.SLACK_REQUESTS_PER_MINUTE = "0"
 process.env.SLACK_TEST_ARGV_LOG = ARGV_LOG
 delete process.env.SLACK_PROFILE
 delete process.env.SLACK_READ_ONLY

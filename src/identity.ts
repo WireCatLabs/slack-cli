@@ -23,7 +23,7 @@ export const DESKTOP = {
   ...IDENTITY,
   docs: "https://github.com/WireCatLabs/slack-cli#readme",
   // Every host the CLI contacts (WC-CMD-32): Slack's Web API.
-  hosts: ["slack.com"],
+  hosts: ["slack.com", "files.slack.com"],
   tagline: "Read and search your Slack channels, DMs and threads",
   signIn: {
     gives: "Lets your agent read and write your Slack workspace as you.",

@@ -1,10 +1,14 @@
 import { join } from "node:path"
 import { resolvePaths } from "@wirecat/cli-base"
 import {
+  accountCommand,
   appMcpCommand,
+  chatsCommand,
   commandsCommand,
   configCommand,
+  contactsCommand,
   createProgram as createSharedProgram,
+  messagesCommand,
   outputFor,
   ProfileTokenStore,
   type ProgramDefinition,
@@ -12,6 +16,8 @@ import {
   type RunOptions,
   run as runShared,
   runsCommand,
+  searchCommand,
+  setupCommand,
   skillCommand,
   upgradeCommand,
 } from "@wirecat/cli-core/cli"
@@ -22,6 +28,8 @@ import { doctorCommand } from "./commands/doctor.js"
 import { sessionCommand } from "./commands/session.js"
 import { configuration } from "./config.js"
 import { IDENTITY, PACKAGE, SERVICE, SKILL } from "./identity.js"
+import { SLACK } from "./messenger.js"
+import { slackSetup } from "./setup/flow.js"
 
 const update = appUpdate({
   packageName: PACKAGE,
@@ -35,11 +43,13 @@ const update = appUpdate({
   offVariables: [`${IDENTITY.envPrefix}_NO_UPDATE_CHECK`],
 })
 
+// The program's own MCP server, not cli-core's messenger one: that one checks `--permission` against messenger keys
+// only and refuses the `api` group's, and Slack needs no single shared connection for serve to hold.
 const mcpCommand = () =>
   appMcpCommand(IDENTITY, configuration, {
     name: SERVICE,
     untrusted: ["message text", "names and titles set by others", "file names", "links"],
-    permissionExample: "api.chat.post-message=deny",
+    permissionExample: "messages.list=deny",
     skill: SKILL,
     signedIn: (profile, env, keyring) => new ProfileTokenStore({ app: IDENTITY, env, keyring }).signedIn(profile),
   })
@@ -53,6 +63,12 @@ export const definition = (): ProgramDefinition => ({
   commands: () => [
     commandsCommand(IDENTITY),
     sessionCommand(),
+    setupCommand(slackSetup),
+    accountCommand(SLACK),
+    chatsCommand(SLACK),
+    contactsCommand(SLACK),
+    messagesCommand(SLACK),
+    searchCommand(SLACK),
     apiCommand(),
     doctorCommand(),
     skillCommand(IDENTITY, SKILL),

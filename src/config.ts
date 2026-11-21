@@ -5,6 +5,7 @@ import {
   serviceApiPermissions,
   settingsFor,
 } from "@wirecat/cli-core/cli"
+import * as v from "valibot"
 import * as manifest from "./generated/manifest.js"
 import { IDENTITY, SERVICE } from "./identity.js"
 
@@ -21,4 +22,22 @@ export const API = {
 
 export const permissions = commandPermissions(serviceApiPermissions(API))
 
-export const configuration: Configuration = settingsFor(IDENTITY, { permissions })
+/** How many days back `messages sync` looks for threads with new replies (plan.md, "Sync and threads"). */
+export const THREAD_WINDOW_DAYS = 14
+
+export interface SlackSettings {
+  threadWindowDays: number
+}
+
+export const configuration: Configuration = settingsFor<SlackSettings>(IDENTITY, {
+  permissions,
+  personal: {
+    thread_window_days: v.optional(
+      v.pipe(v.number("has to be a number of days"), v.integer(), v.minValue(1), v.maxValue(365)),
+    ),
+  },
+  resolve: ({ fromLayers }) => {
+    const days = fromLayers("thread_window_days", THREAD_WINDOW_DAYS)
+    return { values: { threadWindowDays: days.value }, sources: { thread_window_days: days.from } }
+  },
+})

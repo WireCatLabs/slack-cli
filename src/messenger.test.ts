@@ -1,0 +1,272 @@
+import { mkdtempSync, readFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { beforeEach, describe, expect, it } from "vitest"
+import { FAKE_TOKEN, type FakeMessage, type FakeWorkspace, fakeSlack } from "./testing/fake-slack.js"
+import { runCli } from "./testing/harness.js"
+import {
+  ANNA,
+  BORIS,
+  DM,
+  daysAgo,
+  FILE_URL,
+  GENERAL,
+  GROUP_DM,
+  ME,
+  remembered,
+  SHARED,
+  ts,
+  VERA,
+  workspace,
+} from "./testing/workspace.js"
+
+type Item = Record<string, unknown> & { id: string }
+
+const slackOf = (world: FakeWorkspace = workspace()) => fakeSlack({}, FAKE_TOKEN, world)
+
+const items = (ran: { json: () => Record<string, unknown> }) => ran.json().items as Item[]
+
+const byId = (list: Item[], id: string) => list.find((one) => one.id === id)
+
+beforeEach(() => remembered())
+
+describe("chats", () => {
+  it("**lists the conversations the person is in**, a DM as a dialog named after the person and every channel as a group", async () => {
+    const ran = await runCli(["personal", "chats", "list", "--json"], { service: slackOf() })
+    expect(ran.code).toBe(0)
+    const chats = items(ran)
+    expect(chats.map((one) => one.id)).toEqual([GENERAL, DM, GROUP_DM, SHARED])
+    expect(byId(chats, DM)).toMatchObject({
+      kind: "dialog",
+      title: "Anna Synth",
+      provider_metadata: { slack_kind: "im", slack_user: ANNA },
+    })
+    expect(byId(chats, GENERAL)).toMatchObject({ kind: "group", title: "general", unread_count: null })
+    expect(byId(chats, GROUP_DM)).toMatchObject({ kind: "group", provider_metadata: { slack_kind: "mpim" } })
+    expect(byId(chats, SHARED)).toMatchObject({ provider_metadata: { slack_kind: "private", slack_shared: true } })
+  })
+
+  it("**shows one DM with Slack's unread count**, which Slack gives only for a DM, and both people in it", async () => {
+    const ran = await runCli(["personal", "chats", "show", "Anna Synth", "--json"], { service: slackOf() })
+    expect(ran.json().item).toMatchObject({
+      id: DM,
+      unread_count: 1,
+      participants_count: 2,
+      members: [{ id: ANNA, name: "Anna Synth" }, { id: ME }],
+    })
+  })
+
+  it("**lists a channel's members** with their names", async () => {
+    const ran = await runCli(["personal", "chats", "members", "list", "#general", "--json"], { service: slackOf() })
+    expect(items(ran).map((one) => [one.id, one.name])).toEqual([
+      [ME, "Test"],
+      [ANNA, "Anna Synth"],
+      [BORIS, "Boris Synth"],
+    ])
+  })
+
+  it("**turns service messages into chat events**: who joined is an event, never a message", async () => {
+    const service = slackOf()
+    const events = await runCli(["personal", "chats", "events", "general", "time>2023-11-01", "--json"], { service })
+    expect(events.code).toBe(0)
+    expect(items(events)).toEqual([
+      expect.objectContaining({ type: "join", people: [expect.objectContaining({ id: BORIS })] }),
+    ])
+    const listed = await runCli(["personal", "messages", "list", "general", "--json"], { service })
+    expect(byId(items(listed), ts(0))).toBeUndefined()
+  })
+
+  it("**refuses a conversation the person is not in** the way Slack does", async () => {
+    const ran = await runCli(["personal", "messages", "list", "C0NOTMINE", "--json"], { service: slackOf() })
+    expect(ran.code).not.toBe(0)
+    expect(ran.json()).toMatchObject({ error: { code: "not_found" } })
+  })
+})
+
+describe("messages", () => {
+  it("**reads a channel as plain text with names**, ts as the id, mentions as user ids, edits and reactions", async () => {
+    const ran = await runCli(["personal", "messages", "list", "general", "--json"], { service: slackOf() })
+    const list = items(ran)
+    expect(list.map((one) => one.id)).toEqual([ts(10), ts(20), ts(30), ts(32), ts(40), ts(50)])
+    expect(byId(list, ts(10))).toMatchObject({
+      text: "Hi @Test, the plan is in #general & here (https://example.com)",
+      mentions: [ME],
+      sender_name: "Anna Synth",
+      outgoing: false,
+    })
+    expect(byId(list, ts(20))).toMatchObject({
+      outgoing: true,
+      sender_is_me: true,
+      edited_at: "2023-11-14T22:13:45.000Z",
+    })
+    expect(byId(list, ts(30))).toMatchObject({
+      text: "Who has the numbers? @here",
+      thread_id: ts(30),
+      provider_metadata: { reply_count: 2, latest_reply: ts(32) },
+    })
+    expect(byId(list, ts(40))).toMatchObject({
+      reactions: { counts: [{ reaction: "eyes", count: 2 }], mine: "eyes", total: 2 },
+      attachments: [{ kind: "file", name: "report.txt", mime: "text/plain", size: 12 }],
+      provider_metadata: { slack_reactions: [{ name: "eyes", users: [ME, BORIS] }] },
+    })
+    expect(byId(list, ts(50))).toMatchObject({ sender_name: "deploybot", provider_metadata: { slack_bot: true } })
+    expect(JSON.stringify(list)).not.toContain(FILE_URL)
+  })
+
+  it("**keeps a reply sent also to the channel once**, as a reply of its thread", async () => {
+    const ran = await runCli(["personal", "messages", "list", "general", "--json"], { service: slackOf() })
+    const broadcast = items(ran).filter((one) => one.id === ts(32))
+    expect(broadcast).toEqual([
+      expect.objectContaining({
+        thread_id: ts(30),
+        thread_root_id: ts(30),
+        provider_metadata: { slack_subtype: "thread_broadcast" },
+      }),
+    ])
+  })
+
+  it("**marks a person of another team** in a Slack Connect channel", async () => {
+    const ran = await runCli(["personal", "messages", "list", SHARED, "--json"], { service: slackOf() })
+    expect(items(ran)[0]).toMatchObject({ sender_id: VERA, provider_metadata: { slack_team: "T0OTHER01" } })
+  })
+
+  it("**reads a thread** by its root's ts: the root, then its replies", async () => {
+    const ran = await runCli(["personal", "messages", "list", "general", `topic:${ts(30)}`, "--json"], {
+      service: slackOf(),
+    })
+    expect(ran.code).toBe(0)
+    expect(items(ran).map((one) => [one.id, one.thread_root_id ?? null])).toEqual([
+      [ts(30), null],
+      [ts(31), ts(30)],
+      [ts(32), ts(30)],
+    ])
+  })
+
+  it("**shows a reply by its ts** though it is not in the channel's history, and by the locator a list printed", async () => {
+    const service = slackOf()
+    const reply = await runCli(["personal", "messages", "show", "general", ts(31), "--json"], { service })
+    expect(reply.json().item).toMatchObject({ id: ts(31), text: "I do", thread_root_id: ts(30) })
+    const listed = await runCli(["personal", "messages", "list", "general", "--json"], { service })
+    const ref = String(byId(items(listed), ts(20))?.ref)
+    const again = await runCli(["personal", "messages", "show", ref, "--json"], { service })
+    expect(again.json().item).toMatchObject({ id: ts(20), chat_id: GENERAL })
+  })
+
+  it("**reads the messages around one**, oldest first", async () => {
+    const ran = await runCli(
+      ["personal", "messages", "context", "general", ts(30), "--before-n", "1", "--after-n", "1", "--json"],
+      {
+        service: slackOf(),
+      },
+    )
+    expect(items(ran).map((one) => one.id)).toEqual([ts(20), ts(30), ts(32)])
+  })
+
+  it("**downloads a file with the token, only from files.slack.com**", async () => {
+    const service = slackOf()
+    const dir = mkdtempSync(join(tmpdir(), "slack-download-"))
+    const ran = await runCli(["personal", "messages", "download", "general", ts(40), "--output-dir", dir, "--json"], {
+      service,
+    })
+    expect(ran.code).toBe(0)
+    expect(readFileSync(join(dir, "report.txt"), "utf8")).toBe("the numbers\n")
+    expect(ran.out + ran.err).not.toContain(FAKE_TOKEN)
+  })
+
+  it("**refuses a file whose address is not files.slack.com** before anything is sent there", async () => {
+    const world = workspace()
+    const message = world.messages[GENERAL]?.find((one) => one.ts === ts(40)) as FakeMessage
+    message.files = [
+      { id: "F0SYNTH02", name: "x.txt", mimetype: "text/plain", url_private: "https://elsewhere.example/x" },
+    ]
+    const service = slackOf(world)
+    const dir = mkdtempSync(join(tmpdir(), "slack-download-"))
+    const ran = await runCli(["personal", "messages", "download", "general", ts(40), "--output-dir", dir, "--json"], {
+      service,
+    })
+    expect(JSON.stringify(ran.json())).toContain("files.slack.com")
+    expect(service.downloads).toEqual([])
+    expect(service.refusals).toEqual([])
+  })
+
+  it("**says which scope the app lacks** when Slack refuses a read for it", async () => {
+    const world = { ...workspace(), scopes: ["channels:read", "users:read"] }
+    const ran = await runCli(["personal", "messages", "list", "general", "--json"], { service: slackOf(world) })
+    expect(ran.json()).toMatchObject({ error: { code: "permission_error" } })
+    expect(ran.err).toContain("channels:history")
+  })
+})
+
+describe("contacts", () => {
+  it("**shows a person** by their name, with the DM shared with them", async () => {
+    const ran = await runCli(["personal", "contacts", "show", "anna", "--json"], { service: slackOf() })
+    expect(ran.json().item).toMatchObject({ id: ANNA, name: "Anna Synth", username: "anna", description: "Planner" })
+    expect(JSON.stringify(ran.json())).toContain(DM)
+  })
+})
+
+const thread = (world: FakeWorkspace, root: string, reply: FakeMessage) => {
+  world.messages[GENERAL]?.push({ thread_ts: root, ...reply })
+}
+
+const busyChannel = (rootTs: string, count: number): FakeWorkspace => {
+  const world = workspace()
+  world.messages[GENERAL] = [
+    { ts: rootTs, user: ANNA, text: "An old question" },
+    ...Array.from({ length: count }, (_, at) => ({ ts: daysAgo(1, at + 1), user: BORIS, text: `news ${at}` })),
+  ]
+  return world
+}
+
+const stored = async (service: ReturnType<typeof slackOf>, chat = GENERAL) =>
+  items(await runCli(["personal", "messages", "list", chat, "--offline", "--limit", "100", "--json"], { service }))
+
+describe("messages sync", () => {
+  it("**brings a new reply to a 10-day-old thread in with one sync**, and a second sync adds nothing", async () => {
+    const root = daysAgo(10)
+    const world = busyChannel(root, 5)
+    const service = slackOf(world)
+    const sync = () =>
+      runCli(["personal", "messages", "sync", "general", "--page-size", "2", "--pause", "1ms", "--json"], { service })
+    expect((await sync()).code).toBe(0)
+    expect((await stored(service)).map((one) => one.id)).toContain(root)
+
+    const reply = daysAgo(0, 7)
+    thread(world, root, { ts: reply, user: ME, text: "Answered at last" })
+    expect((await sync()).code).toBe(0)
+    expect(byId(await stored(service), reply)).toMatchObject({ thread_id: root, text: "Answered at last" })
+
+    const before = (await stored(service)).length
+    const replyCalls = service.calls.filter((one) => one.method === "conversations.replies").length
+    expect((await sync()).code).toBe(0)
+    expect((await stored(service)).length).toBe(before)
+    expect(service.calls.filter((one) => one.method === "conversations.replies").length).toBe(replyCalls)
+  })
+
+  it("**reads the replies of the roots it pages through**, older threads included", async () => {
+    const world = workspace()
+    const service = slackOf(world)
+    expect(
+      (await runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })).code,
+    ).toBe(0)
+    expect((await stored(service)).map((one) => one.id)).toEqual(
+      expect.arrayContaining([ts(10), ts(20), ts(30), ts(31), ts(32), ts(40), ts(50)]),
+    )
+  })
+
+  it("**never marks a message deleted because Slack stopped showing it**", async () => {
+    const world = workspace()
+    const service = slackOf(world)
+    await runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })
+    world.messages[GENERAL] = world.messages[GENERAL]?.filter((one) => one.ts !== ts(20)) ?? []
+    await runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })
+    expect(byId(await stored(service), ts(20))).toMatchObject({ text: "Thanks, reading it" })
+  })
+
+  it("**makes what it synced searchable**, in this CLI and under the slack provider", async () => {
+    const service = slackOf()
+    await runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })
+    const found = await runCli(["personal", "search", "all", "numbers", "--json"], { service })
+    expect(items(found).map((one) => one.ref)).toEqual([`msg:slack/T0SYNTH01%3AU0SYNTH01/${GENERAL}/${ts(30)}`])
+  })
+})
