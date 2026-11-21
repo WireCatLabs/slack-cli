@@ -144,3 +144,11 @@ it("asks by the messenger's own key before a Slack delete", async () => {
   expect(ran.code).not.toBe(0)
   expect(service.calls).toEqual([])
 })
+
+it("api list names Slack's methods by group, and none that answers a token", async () => {
+  const listed = await runCli(["personal", "api", "list", "--json"], { service: fake() })
+  expect(listed.code, listed.err).toBe(0)
+  const text = JSON.stringify(listed.json())
+  expect(text).toContain("conversations history")
+  expect(text).not.toContain("oauth")
+})

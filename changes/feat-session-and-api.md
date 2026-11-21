@@ -11,6 +11,7 @@
   The token goes in the `Authorization: Bearer` header only. Writes go as JSON. `--all` reads every page of the
   methods Slack pages by cursor, and of `files list` by page. A method that deletes, archives, leaves, removes or
   revokes asks for its delete key, `messages.delete` for `chat delete`, `chats.delete` for
-  `conversations archive`, `slack.delete` for the rest. The 15 methods that take only a form and the four that
-  answer with a token or a secret link are left out, each with its reason in `slack api show` and
-  [API coverage](../docs/dev/API_COVERAGE.md).
+  `conversations archive`, `slack.delete` for the rest. Eleven GETs that send, share or publish
+  (`views publish`, `files remote-share` …) count as writes, so a read-only profile refuses them. The 15 methods
+  that take only a form and the four that answer with a token or a secret link are left out, each with its reason in
+  `slack api show` and [API coverage](../docs/dev/API_COVERAGE.md).

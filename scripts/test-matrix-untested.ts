@@ -1,3 +1,21 @@
+import { createProgram } from "./command-program.ts"
+
+const GENERATED =
+  "generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through " +
+  "fakeApi, which checks every flag it gets against the spec"
+
+type Node = { name(): string; commands: readonly Node[]; options: readonly { long?: string }[] }
+const leaves = (node: Node): Node[] => (node.commands.length ? node.commands.flatMap(leaves) : [node])
+const api = (createProgram() as unknown as Node).commands.find((command) => command.name() === "api")
+const generatedOptions = [
+  ...new Set(
+    (api?.commands ?? [])
+      .filter((command) => !["list", "show"].includes(command.name()))
+      .flatMap(leaves)
+      .flatMap((command) => command.options.map((option) => option.long ?? "")),
+  ),
+].filter((name) => name && name !== "--help")
+
 const SHARED_MCP =
   "cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs " +
   "this CLI's own server, config, revoke and refusals"
@@ -5,6 +23,7 @@ const SHARED_REPORTS = "cli-core's appDoctorCommand; its app-mcp-command test cr
 const LONG_RUNNING = `starts an HTTP server or a background process that runs until stopped; ${SHARED_MCP}`
 
 export const UNTESTED: { command: string; option?: string; reason: string }[] = [
+  ...generatedOptions.map((option) => ({ command: "api *", option, reason: GENERATED })),
   {
     command: "",
     option: "--help-all",
