@@ -6,6 +6,7 @@
 
 - What: pins\_add — write (POST /pins.add)
 - Call: `POST /pins.add`, effect: write
+- Permission keys: `messages.pin`
 - Body: `PinsAddRequest`
 
 | Flag | Required | What |
@@ -26,7 +27,7 @@
 
 - What: pins\_remove — destructive (POST /pins.remove)
 - Call: `POST /pins.remove`, effect: destructive
-- Permission keys: `messages.delete`
+- Permission keys: `messages.unpin`, `slack.delete`
 - Body: `PinsRemoveRequest`
 
 | Flag | Required | What |

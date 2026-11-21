@@ -6,6 +6,7 @@
 
 - What: reactions\_add — write (POST /reactions.add)
 - Call: `POST /reactions.add`, effect: write
+- Permission keys: `reactions.add`
 - Body: `ReactionsAddRequest`
 
 | Flag | Required | What |
@@ -46,7 +47,7 @@
 
 - What: reactions\_remove — destructive (POST /reactions.remove)
 - Call: `POST /reactions.remove`, effect: destructive
-- Permission keys: `slack.delete`
+- Permission keys: `reactions.remove`, `slack.delete`
 - Body: `ReactionsRemoveRequest`
 
 | Flag | Required | What |

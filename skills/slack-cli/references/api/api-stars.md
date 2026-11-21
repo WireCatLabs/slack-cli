@@ -6,6 +6,7 @@
 
 - What: stars\_add — write (POST /stars.add)
 - Call: `POST /stars.add`, effect: write
+- Permission keys: `messages.star`
 - Body: `StarsAddRequest`
 
 | Flag | Required | What |
@@ -31,7 +32,7 @@
 
 - What: stars\_remove — destructive (POST /stars.remove)
 - Call: `POST /stars.remove`, effect: destructive
-- Permission keys: `slack.delete`
+- Permission keys: `messages.unstar`, `slack.delete`
 - Body: `StarsRemoveRequest`
 
 | Flag | Required | What |

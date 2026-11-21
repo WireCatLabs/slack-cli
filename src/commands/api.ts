@@ -6,6 +6,16 @@ import { API, configuration } from "../config.js"
 import { contextOf, PACE, type ServiceEnvironment, tokenOf } from "../context.js"
 import { DESKTOP, IDENTITY } from "../identity.js"
 
+// Slack is RPC: a GET can send or publish (`views.publish`), so only an operation the manifest calls a read may be sent
+// again after a 5xx or a lost answer; a write is sent once (WC-OUT-20).
+const READS = new Set(
+  API.manifest.operations.flatMap(({ effect, binding }) =>
+    effect === "read" && binding.kind === "http" ? [`${binding.method} ${binding.path}`] : [],
+  ),
+)
+export const isRead = (method: string, url: URL) =>
+  READS.has(`${method} ${url.pathname.slice(url.pathname.lastIndexOf("/"))}`)
+
 /** The service's hosts and nothing else (WC-CMD-32), over the test's fake when it gives one. */
 export const serviceFetch = (environment: ServiceEnvironment) => hostsFetch(DESKTOP.hosts, environment.fetch)
 
@@ -22,7 +32,10 @@ export const apiCommand = (): Command =>
     configuration,
     fetch: (command) => {
       const { environment, env, profile } = contextOf(command)
-      return retrying(serviceFetch(environment), { pacer: new Pacer(pacePathFor(IDENTITY, profile, env), PACE) })
+      return retrying(serviceFetch(environment), {
+        reads: isRead,
+        pacer: new Pacer(pacePathFor(IDENTITY, profile, env), PACE),
+      })
     },
     token: tokenOf,
     schemas: () => import("../generated/schemas.js").then((module) => module.schemas),

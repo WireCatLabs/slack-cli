@@ -2379,7 +2379,10 @@ export const operations: readonly ManifestOperation[] = [
     tags: ["chat"],
     permissions: [
       {
-        key: "messages.delete",
+        key: "messages.scheduled.cancel",
+      },
+      {
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -2442,6 +2445,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Share a me message into a channel.",
     tags: ["chat"],
+    permissions: [
+      {
+        key: "messages.send",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -2465,6 +2473,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sends an ephemeral message to a user in a channel.",
     tags: ["chat"],
+    permissions: [
+      {
+        key: "messages.send",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -2488,6 +2501,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sends a message to a channel.",
     tags: ["chat"],
+    permissions: [
+      {
+        key: "messages.send",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -2511,6 +2529,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Schedules a message to be sent to a channel.",
     tags: ["chat"],
+    permissions: [
+      {
+        key: "messages.send",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -2635,6 +2658,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Updates a message.",
     tags: ["chat"],
+    permissions: [
+      {
+        key: "messages.edit",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -2660,7 +2688,10 @@ export const operations: readonly ManifestOperation[] = [
     tags: ["conversations"],
     permissions: [
       {
-        key: "chats.delete",
+        key: "chats.archive",
+      },
+      {
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -2709,6 +2740,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Initiates a public or private channel-based conversation",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "chats.create",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -2867,6 +2903,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Invites users to a channel.",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "chats.members.add",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -2890,6 +2931,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Joins an existing conversation.",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "chats.join",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -2915,7 +2961,10 @@ export const operations: readonly ManifestOperation[] = [
     tags: ["conversations"],
     permissions: [
       {
-        key: "chats.delete",
+        key: "chats.members.remove",
+      },
+      {
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -2943,7 +2992,10 @@ export const operations: readonly ManifestOperation[] = [
     tags: ["conversations"],
     permissions: [
       {
-        key: "chats.delete",
+        key: "chats.leave",
+      },
+      {
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -3040,6 +3092,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sets the read cursor in a channel.",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "chats.mark-read",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -3147,6 +3204,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Renames a conversation.",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "chats.update",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -3269,6 +3331,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sets the purpose for a conversation.",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "chats.update",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -3292,6 +3359,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Sets the topic for a conversation.",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "chats.update",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -3315,6 +3387,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Reverses conversation archival.",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "chats.unarchive",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -4283,6 +4360,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Pins an item to a channel.",
     tags: ["pins"],
+    permissions: [
+      {
+        key: "messages.pin",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -4336,7 +4418,10 @@ export const operations: readonly ManifestOperation[] = [
     tags: ["pins"],
     permissions: [
       {
-        key: "messages.delete",
+        key: "messages.unpin",
+      },
+      {
+        key: "slack.delete",
       },
     ],
     parameters: [],
@@ -4362,6 +4447,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Adds a reaction to an item.",
     tags: ["reactions"],
+    permissions: [
+      {
+        key: "reactions.add",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -4536,6 +4626,9 @@ export const operations: readonly ManifestOperation[] = [
     description: "Removes a reaction from an item.",
     tags: ["reactions"],
     permissions: [
+      {
+        key: "reactions.remove",
+      },
       {
         key: "slack.delete",
       },
@@ -4793,6 +4886,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "write",
     description: "Adds a star to an item.",
     tags: ["stars"],
+    permissions: [
+      {
+        key: "messages.star",
+      },
+    ],
     parameters: [],
     request: {
       required: false,
@@ -4885,6 +4983,9 @@ export const operations: readonly ManifestOperation[] = [
     description: "Removes a star from an item.",
     tags: ["stars"],
     permissions: [
+      {
+        key: "messages.unstar",
+      },
       {
         key: "slack.delete",
       },

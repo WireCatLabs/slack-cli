@@ -121,9 +121,54 @@ const FILES_PAGED = {
   },
 }
 
-// The keys a messenger's own commands check, so denying `messages.delete` holds over `api chat delete` too.
-const GROUPS: Record<string, string> = { chat: "messages", pins: "messages", conversations: "chats" }
-const groupOf = (operation: { id: string }) => GROUPS[operation.id.split("_")[0] ?? ""] ?? "slack"
+// The key of the messenger command that does the same thing (cli-core's chats, messages and reactions commands, as
+// tg-cli and whatsapp-cli name them), so denying `chats.leave` holds over `api conversations leave` too. cli-base's
+// permission rule gives only `<group>.delete` and `<group>.share`, so the keys are set on the model before `generate`;
+// cli-core's api group wants a `.delete` key on every delete, so one without its own (`chats.leave`) has
+// `slack.delete` too.
+const MESSENGER_KEYS: Record<string, string> = {
+  chat_delete: "messages.delete",
+  chat_update: "messages.edit",
+  chat_postMessage: "messages.send",
+  chat_meMessage: "messages.send",
+  chat_postEphemeral: "messages.send",
+  chat_scheduleMessage: "messages.send",
+  chat_deleteScheduledMessage: "messages.scheduled.cancel",
+  conversations_archive: "chats.archive",
+  conversations_unarchive: "chats.unarchive",
+  conversations_leave: "chats.leave",
+  conversations_join: "chats.join",
+  conversations_create: "chats.create",
+  conversations_invite: "chats.members.add",
+  conversations_kick: "chats.members.remove",
+  conversations_mark: "chats.mark-read",
+  conversations_rename: "chats.update",
+  conversations_setPurpose: "chats.update",
+  conversations_setTopic: "chats.update",
+  pins_add: "messages.pin",
+  pins_remove: "messages.unpin",
+  stars_add: "messages.star",
+  stars_remove: "messages.unstar",
+  reactions_add: "reactions.add",
+  reactions_remove: "reactions.remove",
+}
+const SHARES = ["files_sharedPublicURL"]
+
+const keysOf = (id: string) => {
+  const own = MESSENGER_KEYS[id]
+  return [
+    ...(own ? [own] : []),
+    ...(id in DELETING && !own?.endsWith(".delete") ? ["slack.delete"] : []),
+    ...(SHARES.includes(id) ? ["slack.share"] : []),
+  ]
+}
+const withKeys = <M extends { operations: readonly { id: string }[] }>(model: M): M => ({
+  ...model,
+  operations: model.operations.map((operation) => {
+    const keys = keysOf(operation.id)
+    return keys.length ? { ...operation, permissions: keys.map((key) => ({ key })) } : operation
+  }),
+})
 
 // The service's API description → src/generated/ and docs/dev/API_COVERAGE.md. Each correction below is read from
 // the service's documentation, never guessed; cli-base docs/standards/kit-surface.md says what each one does.
@@ -132,7 +177,7 @@ const root = resolve(import.meta.dirname, "..")
 if (process.argv.includes("--if-missing") && existsSync(join(root, "src/generated/manifest.ts"))) process.exit(0)
 const { model, notes } = await specModel(root)
 const artifacts = generate(
-  model,
+  withKeys(model),
   [
     typesGenerator({ path: "src/generated/types.ts" }),
     valibotGenerator({ path: "src/generated/schemas.ts", typesImport: "./types.js" }),
@@ -154,7 +199,6 @@ const artifacts = generate(
     // The operation id in kebab case is Slack's method name (`chat_postMessage` → `chat-post-message`), grouped by
     // its first word: `api conversations history`. `fromPath` would add a `list` to every GET.
     names: { groups: "first-word", groupNames: { api: "" } },
-    permissions: { group: groupOf, shares: ["files_sharedPublicURL"] },
     pagination: true,
     auth: {
       securitySchemes: { bearer: { type: "http", scheme: "bearer" } },

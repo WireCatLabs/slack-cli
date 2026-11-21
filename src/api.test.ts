@@ -39,14 +39,8 @@ const fake = () =>
     token: FAKE_TOKEN,
   })
 
-const deleteKeys = [
-  ...new Set(
-    API.manifest.operations.flatMap((operation) =>
-      (operation.permissions ?? [])
-        .map((permission) => permission.key)
-        .filter((key) => key.endsWith(".delete") || key.endsWith(".share")),
-    ),
-  ),
+const guardKeys = [
+  ...new Set(API.manifest.operations.flatMap((operation) => (operation.permissions ?? []).map(({ key }) => key))),
 ]
 
 const argsOf = (operation: Operation) => [
@@ -82,7 +76,7 @@ it.each(API.manifest.operations.map((operation) => [apiCommandPath(operation).jo
   "sends %s as the spec describes it",
   async (_, operation) => {
     writeFileSync(upload, new Uint8Array([0x89, 0x50, 0x4e, 0x47]))
-    withPermissions({ api: "allow", ...Object.fromEntries(deleteKeys.map((key) => [key, "allow"])) })
+    withPermissions({ api: "allow", ...Object.fromEntries(guardKeys.map((key) => [key, "allow"])) })
     const service = fake()
     const ran = await runCli(["personal", "api", ...argsOf(operation), "--json"], { service })
     expect(ran.code, ran.err).toBe(0)
@@ -97,8 +91,8 @@ const destructive = API.manifest.operations.filter((operation) => operation.effe
 it.runIf(destructive.length > 0)(
   "a delete through api checks the manifest's delete key too, before anything is sent",
   async () => {
-    expect(deleteKeys.length).toBeGreaterThan(0)
-    withPermissions({ api: "allow", ...Object.fromEntries(deleteKeys.map((key) => [key, "deny"])) })
+    expect(guardKeys.length).toBeGreaterThan(0)
+    withPermissions({ api: "allow", ...Object.fromEntries(guardKeys.map((key) => [key, "deny"])) })
     const service = fake()
     for (const operation of destructive) {
       const ran = await runCli(["personal", "api", ...argsOf(operation), "--json"], { service })
@@ -123,7 +117,7 @@ it("signs every call in with the Bearer header and never sends a token parameter
 })
 
 it("sends a write as JSON, which cli-core can send, and leaves out the form-only ones with the reason", async () => {
-  withPermissions({ api: "allow" })
+  withPermissions({ api: "allow", "messages.send": "allow" })
   const service = fake()
   const ran = await runCli(
     ["personal", "api", "chat", "post-message", "--body", '{"channel":"C0SYNTH01","text":"hi"}', "--json"],
@@ -134,15 +128,60 @@ it("sends a write as JSON, which cli-core can send, and leaves out the form-only
   expect(API.excluded.map((one) => one.id)).toEqual(expect.arrayContaining(["files_upload", "oauth_v2_access"]))
 })
 
-it("asks by the messenger's own key before a Slack delete", async () => {
-  withPermissions({ api: "allow", "messages.delete": "deny" })
+const operationOf = (id: string) => API.manifest.operations.find((operation) => operation.id === id) as Operation
+
+it.each([
+  ["chat_delete", "messages.delete"],
+  ["chat_update", "messages.edit"],
+  ["conversations_archive", "chats.archive"],
+  ["conversations_leave", "chats.leave"],
+  ["pins_remove", "messages.unpin"],
+  ["reactions_remove", "reactions.remove"],
+])("%s is refused by the messenger's own key %s before anything is sent", async (id, key) => {
+  withPermissions({ api: "allow", [key]: "deny" })
   const service = fake()
-  const ran = await runCli(
-    ["personal", "api", "chat", "delete", "--body", '{"channel":"C0SYNTH01","ts":"1700000000.000100"}', "--yes"],
-    { service },
-  )
-  expect(ran.code).not.toBe(0)
+  const ran = await runCli(["personal", "api", ...argsOf(operationOf(id)), "--json"], { service })
+  expect(ran.json()).toMatchObject({ error: { code: "permission_error", message: expect.stringContaining(key) } })
   expect(service.calls).toEqual([])
+})
+
+it("a read-only profile refuses a GET that writes, such as views publish", async () => {
+  withPermissions({ api: "readonly" })
+  const service = fake()
+  const ran = await runCli(["personal", "api", ...argsOf(operationOf("views_publish")), "--json"], { service })
+  expect(ran.json()).toMatchObject({ error: { code: "permission_error" } })
+  expect(service.calls).toEqual([])
+})
+
+it("a GET that writes is sent once: a 503 is outcome_unknown, never a second publish", async () => {
+  withPermissions({ api: "allow" })
+  const service = fake()
+  const sent: string[] = []
+  const fetch = async (input: string | URL | Request, init?: RequestInit) => {
+    sent.push(String(input))
+    return sent.length === 1 ? new Response("", { status: 503 }) : service.fetch(input, init)
+  }
+  const ran = await runCli(["personal", "api", ...argsOf(operationOf("views_publish")), "--json"], {
+    service: { fetch },
+  })
+  expect(ran.json()).toMatchObject({ error: { code: "outcome_unknown" } })
+  expect(sent).toHaveLength(1)
+})
+
+it("a read is sent again after a 503", async () => {
+  const service = fake()
+  const sent: string[] = []
+  const fetch = async (input: string | URL | Request, init?: RequestInit) => {
+    sent.push(String(input))
+    return sent.length === 1
+      ? new Response("", { status: 503, headers: { "retry-after": "0" } })
+      : service.fetch(input, init)
+  }
+  const ran = await runCli(["personal", "api", "conversations", "history", "--channel", "C0SYNTH01", "--json"], {
+    service: { fetch },
+  })
+  expect(ran.code, ran.err).toBe(0)
+  expect(sent).toHaveLength(2)
 })
 
 it("api list names Slack's methods by group, and none that answers a token", async () => {

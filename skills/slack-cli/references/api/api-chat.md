@@ -18,7 +18,7 @@
 
 - What: chat\_deleteScheduledMessage — destructive (POST /chat.deleteScheduledMessage)
 - Call: `POST /chat.deleteScheduledMessage`, effect: destructive
-- Permission keys: `messages.delete`
+- Permission keys: `messages.scheduled.cancel`, `slack.delete`
 - Body: `ChatDeleteScheduledMessageRequest`
 
 | Flag | Required | What |
@@ -40,6 +40,7 @@
 
 - What: chat\_meMessage — write (POST /chat.meMessage)
 - Call: `POST /chat.meMessage`, effect: write
+- Permission keys: `messages.send`
 - Body: `ChatMeMessageRequest`
 
 | Flag | Required | What |
@@ -51,6 +52,7 @@
 
 - What: chat\_postEphemeral — write (POST /chat.postEphemeral)
 - Call: `POST /chat.postEphemeral`, effect: write
+- Permission keys: `messages.send`
 - Body: `ChatPostEphemeralRequest`
 
 | Flag | Required | What |
@@ -62,6 +64,7 @@
 
 - What: chat\_postMessage — write (POST /chat.postMessage)
 - Call: `POST /chat.postMessage`, effect: write
+- Permission keys: `messages.send`
 - Body: `ChatPostMessageRequest`
 
 | Flag | Required | What |
@@ -73,6 +76,7 @@
 
 - What: chat\_scheduleMessage — write (POST /chat.scheduleMessage)
 - Call: `POST /chat.scheduleMessage`, effect: write
+- Permission keys: `messages.send`
 - Body: `ChatScheduleMessageRequest`
 
 | Flag | Required | What |
@@ -110,6 +114,7 @@
 
 - What: chat\_update — write (POST /chat.update)
 - Call: `POST /chat.update`, effect: write
+- Permission keys: `messages.edit`
 - Body: `ChatUpdateRequest`
 
 | Flag | Required | What |

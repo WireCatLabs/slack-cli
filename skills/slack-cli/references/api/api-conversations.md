@@ -6,7 +6,7 @@
 
 - What: conversations\_archive — destructive (POST /conversations.archive)
 - Call: `POST /conversations.archive`, effect: destructive
-- Permission keys: `chats.delete`
+- Permission keys: `chats.archive`, `slack.delete`
 - Body: `ConversationsArchiveRequest`
 
 | Flag | Required | What |
@@ -29,6 +29,7 @@
 
 - What: conversations\_create — write (POST /conversations.create)
 - Call: `POST /conversations.create`, effect: write
+- Permission keys: `chats.create`
 - Body: `ConversationsCreateRequest`
 
 | Flag | Required | What |
@@ -67,6 +68,7 @@
 
 - What: conversations\_invite — write (POST /conversations.invite)
 - Call: `POST /conversations.invite`, effect: write
+- Permission keys: `chats.members.add`
 - Body: `ConversationsInviteRequest`
 
 | Flag | Required | What |
@@ -78,6 +80,7 @@
 
 - What: conversations\_join — write (POST /conversations.join)
 - Call: `POST /conversations.join`, effect: write
+- Permission keys: `chats.join`
 - Body: `ConversationsJoinRequest`
 
 | Flag | Required | What |
@@ -89,7 +92,7 @@
 
 - What: conversations\_kick — destructive (POST /conversations.kick)
 - Call: `POST /conversations.kick`, effect: destructive
-- Permission keys: `chats.delete`
+- Permission keys: `chats.members.remove`, `slack.delete`
 - Body: `ConversationsKickRequest`
 
 | Flag | Required | What |
@@ -101,7 +104,7 @@
 
 - What: conversations\_leave — destructive (POST /conversations.leave)
 - Call: `POST /conversations.leave`, effect: destructive
-- Permission keys: `chats.delete`
+- Permission keys: `chats.leave`, `slack.delete`
 - Body: `ConversationsLeaveRequest`
 
 | Flag | Required | What |
@@ -127,6 +130,7 @@
 
 - What: conversations\_mark — write (POST /conversations.mark)
 - Call: `POST /conversations.mark`, effect: write
+- Permission keys: `chats.mark-read`
 - Body: `ConversationsMarkRequest`
 
 | Flag | Required | What |
@@ -162,6 +166,7 @@
 
 - What: conversations\_rename — write (POST /conversations.rename)
 - Call: `POST /conversations.rename`, effect: write
+- Permission keys: `chats.update`
 - Body: `ConversationsRenameRequest`
 
 | Flag | Required | What |
@@ -190,6 +195,7 @@
 
 - What: conversations\_setPurpose — write (POST /conversations.setPurpose)
 - Call: `POST /conversations.setPurpose`, effect: write
+- Permission keys: `chats.update`
 - Body: `ConversationsSetPurposeRequest`
 
 | Flag | Required | What |
@@ -201,6 +207,7 @@
 
 - What: conversations\_setTopic — write (POST /conversations.setTopic)
 - Call: `POST /conversations.setTopic`, effect: write
+- Permission keys: `chats.update`
 - Body: `ConversationsSetTopicRequest`
 
 | Flag | Required | What |
@@ -212,6 +219,7 @@
 
 - What: conversations\_unarchive — write (POST /conversations.unarchive)
 - Call: `POST /conversations.unarchive`, effect: write
+- Permission keys: `chats.unarchive`
 - Body: `ConversationsUnarchiveRequest`
 
 | Flag | Required | What |
