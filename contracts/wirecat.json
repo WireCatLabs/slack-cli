@@ -32,7 +32,7 @@
         "session",
         "start"
       ],
-      "summary": "sign in to Slack Web with an API token",
+      "summary": "sign in to Slack with its user token",
       "effects": {
         "remote": "read",
         "local": "write"
@@ -76,7 +76,7 @@
         "api",
         "list"
       ],
-      "summary": "list every Slack Web API operation this CLI offers, without calling Slack Web",
+      "summary": "list every Slack API operation this CLI offers, without calling Slack",
       "effects": {
         "remote": "none",
         "local": "none"
@@ -89,7 +89,7 @@
         "api",
         "show"
       ],
-      "summary": "show one operation's parameters and request schema, without calling Slack Web",
+      "summary": "show one operation's parameters and request schema, without calling Slack",
       "effects": {
         "remote": "none",
         "local": "none"
@@ -99,998 +99,2011 @@
     {
       "path": [
         "api",
-        "admin-apps-approved-list-list"
+        "admin",
+        "apps-approve"
+      ],
+      "summary": "admin_apps_approve — write (POST /admin.apps.approve)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.apps-approve"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "apps-approved-list"
       ],
       "summary": "admin_apps_approved_list — read (GET /admin.apps.approved.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-apps-approved-list-list"
+      "permission": "api.admin.apps-approved-list"
     },
     {
       "path": [
         "api",
-        "admin-apps-requests-list-list"
+        "admin",
+        "apps-requests-list"
       ],
       "summary": "admin_apps_requests_list — read (GET /admin.apps.requests.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-apps-requests-list-list"
+      "permission": "api.admin.apps-requests-list"
     },
     {
       "path": [
         "api",
-        "admin-apps-restricted-list-list"
+        "admin",
+        "apps-restrict"
+      ],
+      "summary": "admin_apps_restrict — write (POST /admin.apps.restrict)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.apps-restrict"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "apps-restricted-list"
       ],
       "summary": "admin_apps_restricted_list — read (GET /admin.apps.restricted.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-apps-restricted-list-list"
+      "permission": "api.admin.apps-restricted-list"
     },
     {
       "path": [
         "api",
-        "admin-conversations-ekm-list-original-connected-channel-info-list"
+        "admin",
+        "conversations-archive"
+      ],
+      "summary": "admin_conversations_archive — destructive (POST /admin.conversations.archive)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-archive"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-convert-to-private"
+      ],
+      "summary": "admin_conversations_convertToPrivate — write (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-convert-to-private"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-create"
+      ],
+      "summary": "admin_conversations_create — write (POST /admin.conversations.create)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-create"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-delete"
+      ],
+      "summary": "admin_conversations_delete — destructive (POST /admin.conversations.delete)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-delete"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-disconnect-shared"
+      ],
+      "summary": "admin_conversations_disconnectShared — write (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-disconnect-shared"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-ekm-list-original-connected-channel-info"
       ],
       "summary": "admin_conversations_ekm_listOriginalConnectedChannelInfo — read (GET…",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-conversations-ekm-list-original-connected-channel-info-list"
+      "permission": "api.admin.conversations-ekm-list-original-connected-channel-info"
     },
     {
       "path": [
         "api",
-        "admin-conversations-get-conversation-prefs-list"
+        "admin",
+        "conversations-get-conversation-prefs"
       ],
       "summary": "admin_conversations_getConversationPrefs — read (GET…",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-conversations-get-conversation-prefs-list"
+      "permission": "api.admin.conversations-get-conversation-prefs"
     },
     {
       "path": [
         "api",
-        "admin-conversations-get-teams-list"
+        "admin",
+        "conversations-get-teams"
       ],
       "summary": "admin_conversations_getTeams — read (GET /admin.conversations.getTeams)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-conversations-get-teams-list"
+      "permission": "api.admin.conversations-get-teams"
     },
     {
       "path": [
         "api",
-        "admin-conversations-restrict-access-list-groups-list"
+        "admin",
+        "conversations-invite"
+      ],
+      "summary": "admin_conversations_invite — write (POST /admin.conversations.invite)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-invite"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-rename"
+      ],
+      "summary": "admin_conversations_rename — write (POST /admin.conversations.rename)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-rename"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-restrict-access-list-groups"
       ],
       "summary": "admin_conversations_restrictAccess_listGroups — read (GET…",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-conversations-restrict-access-list-groups-list"
+      "permission": "api.admin.conversations-restrict-access-list-groups"
     },
     {
       "path": [
         "api",
-        "admin-conversations-search-list"
+        "admin",
+        "conversations-search"
       ],
       "summary": "admin_conversations_search — read (GET /admin.conversations.search)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-conversations-search-list"
+      "permission": "api.admin.conversations-search"
     },
     {
       "path": [
         "api",
-        "admin-emoji-list-list"
+        "admin",
+        "conversations-set-conversation-prefs"
+      ],
+      "summary": "admin_conversations_setConversationPrefs — write (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-set-conversation-prefs"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-set-teams"
+      ],
+      "summary": "admin_conversations_setTeams — write (POST /admin.conversations.setTeams)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-set-teams"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "conversations-unarchive"
+      ],
+      "summary": "admin_conversations_unarchive — write (POST /admin.conversations.unarchive)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.conversations-unarchive"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "emoji-list"
       ],
       "summary": "admin_emoji_list — read (GET /admin.emoji.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-emoji-list-list"
+      "permission": "api.admin.emoji-list"
     },
     {
       "path": [
         "api",
-        "admin-invite-requests-approved-list-list"
+        "admin",
+        "invite-requests-approve"
+      ],
+      "summary": "admin_inviteRequests_approve — write (POST /admin.inviteRequests.approve)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.invite-requests-approve"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "invite-requests-approved-list"
       ],
       "summary": "admin_inviteRequests_approved_list — read (GET…",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-invite-requests-approved-list-list"
+      "permission": "api.admin.invite-requests-approved-list"
     },
     {
       "path": [
         "api",
-        "admin-invite-requests-denied-list-list"
+        "admin",
+        "invite-requests-denied-list"
       ],
       "summary": "admin_inviteRequests_denied_list — read (GET /admin.inviteRequests.denied.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-invite-requests-denied-list-list"
+      "permission": "api.admin.invite-requests-denied-list"
     },
     {
       "path": [
         "api",
-        "admin-invite-requests-list-list"
+        "admin",
+        "invite-requests-deny"
+      ],
+      "summary": "admin_inviteRequests_deny — write (POST /admin.inviteRequests.deny)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.invite-requests-deny"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "invite-requests-list"
       ],
       "summary": "admin_inviteRequests_list — read (GET /admin.inviteRequests.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-invite-requests-list-list"
+      "permission": "api.admin.invite-requests-list"
     },
     {
       "path": [
         "api",
-        "admin-teams-admins-list-list"
+        "admin",
+        "teams-admins-list"
       ],
       "summary": "admin_teams_admins_list — read (GET /admin.teams.admins.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-teams-admins-list-list"
+      "permission": "api.admin.teams-admins-list"
     },
     {
       "path": [
         "api",
-        "admin-teams-list-list"
+        "admin",
+        "teams-create"
+      ],
+      "summary": "admin_teams_create — write (POST /admin.teams.create)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.teams-create"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "teams-list"
       ],
       "summary": "admin_teams_list — read (GET /admin.teams.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-teams-list-list"
+      "permission": "api.admin.teams-list"
     },
     {
       "path": [
         "api",
-        "admin-teams-owners-list-list"
+        "admin",
+        "teams-owners-list"
       ],
       "summary": "admin_teams_owners_list — read (GET /admin.teams.owners.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-teams-owners-list-list"
+      "permission": "api.admin.teams-owners-list"
     },
     {
       "path": [
         "api",
-        "admin-teams-settings-info-list"
+        "admin",
+        "teams-settings-info"
       ],
       "summary": "admin_teams_settings_info — read (GET /admin.teams.settings.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-teams-settings-info-list"
+      "permission": "api.admin.teams-settings-info"
     },
     {
       "path": [
         "api",
-        "admin-usergroups-list-channels-list"
+        "admin",
+        "teams-settings-set-description"
+      ],
+      "summary": "admin_teams_settings_setDescription — write (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.teams-settings-set-description"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "teams-settings-set-discoverability"
+      ],
+      "summary": "admin_teams_settings_setDiscoverability — write (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.teams-settings-set-discoverability"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "teams-settings-set-name"
+      ],
+      "summary": "admin_teams_settings_setName — write (POST /admin.teams.settings.setName)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.teams-settings-set-name"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "usergroups-add-channels"
+      ],
+      "summary": "admin_usergroups_addChannels — write (POST /admin.usergroups.addChannels)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.usergroups-add-channels"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "usergroups-add-teams"
+      ],
+      "summary": "admin_usergroups_addTeams — write (POST /admin.usergroups.addTeams)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.usergroups-add-teams"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "usergroups-list-channels"
       ],
       "summary": "admin_usergroups_listChannels — read (GET /admin.usergroups.listChannels)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-usergroups-list-channels-list"
+      "permission": "api.admin.usergroups-list-channels"
     },
     {
       "path": [
         "api",
-        "admin-users-list-list"
+        "admin",
+        "usergroups-remove-channels"
+      ],
+      "summary": "admin_usergroups_removeChannels — destructive (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.usergroups-remove-channels"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-assign"
+      ],
+      "summary": "admin_users_assign — write (POST /admin.users.assign)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-assign"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-invite"
+      ],
+      "summary": "admin_users_invite — write (POST /admin.users.invite)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-invite"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-list"
       ],
       "summary": "admin_users_list — read (GET /admin.users.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.admin-users-list-list"
+      "permission": "api.admin.users-list"
     },
     {
       "path": [
         "api",
-        "api-test-list"
+        "admin",
+        "users-remove"
+      ],
+      "summary": "admin_users_remove — destructive (POST /admin.users.remove)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-remove"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-session-invalidate"
+      ],
+      "summary": "admin_users_session_invalidate — destructive (POST…",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-session-invalidate"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-session-reset"
+      ],
+      "summary": "admin_users_session_reset — destructive (POST /admin.users.session.reset)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-session-reset"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-set-admin"
+      ],
+      "summary": "admin_users_setAdmin — write (POST /admin.users.setAdmin)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-set-admin"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-set-expiration"
+      ],
+      "summary": "admin_users_setExpiration — write (POST /admin.users.setExpiration)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-set-expiration"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-set-owner"
+      ],
+      "summary": "admin_users_setOwner — write (POST /admin.users.setOwner)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-set-owner"
+    },
+    {
+      "path": [
+        "api",
+        "admin",
+        "users-set-regular"
+      ],
+      "summary": "admin_users_setRegular — write (POST /admin.users.setRegular)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.admin.users-set-regular"
+    },
+    {
+      "path": [
+        "api",
+        "api-test"
       ],
       "summary": "api_test — read (GET /api.test)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.api-test-list"
+      "permission": "api.api-test"
     },
     {
       "path": [
         "api",
-        "apps-event-authorizations-list-list"
+        "apps",
+        "event-authorizations-list"
       ],
       "summary": "apps_event_authorizations_list — read (GET /apps.event.authorizations.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.apps-event-authorizations-list-list"
+      "permission": "api.apps.event-authorizations-list"
     },
     {
       "path": [
         "api",
-        "apps-permissions-info-list"
+        "apps",
+        "permissions-info"
       ],
       "summary": "apps_permissions_info — read (GET /apps.permissions.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.apps-permissions-info-list"
+      "permission": "api.apps.permissions-info"
     },
     {
       "path": [
         "api",
-        "apps-permissions-request-list"
+        "apps",
+        "permissions-request"
       ],
       "summary": "apps_permissions_request — read (GET /apps.permissions.request)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.apps-permissions-request-list"
+      "permission": "api.apps.permissions-request"
     },
     {
       "path": [
         "api",
-        "apps-permissions-resources-list-list"
+        "apps",
+        "permissions-resources-list"
       ],
       "summary": "apps_permissions_resources_list — read (GET /apps.permissions.resources.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.apps-permissions-resources-list-list"
+      "permission": "api.apps.permissions-resources-list"
     },
     {
       "path": [
         "api",
-        "apps-permissions-scopes-list-list"
+        "apps",
+        "permissions-scopes-list"
       ],
       "summary": "apps_permissions_scopes_list — read (GET /apps.permissions.scopes.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.apps-permissions-scopes-list-list"
+      "permission": "api.apps.permissions-scopes-list"
     },
     {
       "path": [
         "api",
-        "apps-permissions-users-list-list"
+        "apps",
+        "permissions-users-list"
       ],
       "summary": "apps_permissions_users_list — read (GET /apps.permissions.users.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.apps-permissions-users-list-list"
+      "permission": "api.apps.permissions-users-list"
     },
     {
       "path": [
         "api",
-        "apps-permissions-users-request-list"
+        "apps",
+        "permissions-users-request"
       ],
       "summary": "apps_permissions_users_request — read (GET /apps.permissions.users.request)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.apps-permissions-users-request-list"
+      "permission": "api.apps.permissions-users-request"
     },
     {
       "path": [
         "api",
-        "apps-uninstall-list"
+        "apps",
+        "uninstall"
       ],
-      "summary": "apps_uninstall — read (GET /apps.uninstall)",
+      "summary": "apps_uninstall — destructive (GET /apps.uninstall)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
-      "permission": "api.apps-uninstall-list"
+      "permission": "api.apps.uninstall"
     },
     {
       "path": [
         "api",
-        "auth-revoke-list"
+        "auth",
+        "revoke"
       ],
-      "summary": "auth_revoke — read (GET /auth.revoke)",
+      "summary": "auth_revoke — destructive (GET /auth.revoke)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
-      "permission": "api.auth-revoke-list"
+      "permission": "api.auth.revoke"
     },
     {
       "path": [
         "api",
-        "auth-test-list"
+        "auth",
+        "test"
       ],
       "summary": "auth_test — read (GET /auth.test)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.auth-test-list"
+      "permission": "api.auth.test"
     },
     {
       "path": [
         "api",
-        "bots-info-list"
+        "bots-info"
       ],
       "summary": "bots_info — read (GET /bots.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.bots-info-list"
+      "permission": "api.bots-info"
     },
     {
       "path": [
         "api",
-        "calls-info-list"
+        "calls",
+        "add"
+      ],
+      "summary": "calls_add — write (POST /calls.add)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.calls.add"
+    },
+    {
+      "path": [
+        "api",
+        "calls",
+        "end"
+      ],
+      "summary": "calls_end — write (POST /calls.end)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.calls.end"
+    },
+    {
+      "path": [
+        "api",
+        "calls",
+        "info"
       ],
       "summary": "calls_info — read (GET /calls.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.calls-info-list"
+      "permission": "api.calls.info"
     },
     {
       "path": [
         "api",
-        "chat-get-permalink-list"
+        "calls",
+        "participants-add"
+      ],
+      "summary": "calls_participants_add — write (POST /calls.participants.add)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.calls.participants-add"
+    },
+    {
+      "path": [
+        "api",
+        "calls",
+        "participants-remove"
+      ],
+      "summary": "calls_participants_remove — destructive (POST /calls.participants.remove)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.calls.participants-remove"
+    },
+    {
+      "path": [
+        "api",
+        "calls",
+        "update"
+      ],
+      "summary": "calls_update — write (POST /calls.update)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.calls.update"
+    },
+    {
+      "path": [
+        "api",
+        "chat",
+        "delete"
+      ],
+      "summary": "chat_delete — destructive (POST /chat.delete)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.chat.delete"
+    },
+    {
+      "path": [
+        "api",
+        "chat",
+        "delete-scheduled-message"
+      ],
+      "summary": "chat_deleteScheduledMessage — destructive (POST /chat.deleteScheduledMessage)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.chat.delete-scheduled-message"
+    },
+    {
+      "path": [
+        "api",
+        "chat",
+        "get-permalink"
       ],
       "summary": "chat_getPermalink — read (GET /chat.getPermalink)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.chat-get-permalink-list"
+      "permission": "api.chat.get-permalink"
     },
     {
       "path": [
         "api",
-        "chat-scheduled-messages-list-list"
+        "chat",
+        "me-message"
+      ],
+      "summary": "chat_meMessage — write (POST /chat.meMessage)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.chat.me-message"
+    },
+    {
+      "path": [
+        "api",
+        "chat",
+        "post-ephemeral"
+      ],
+      "summary": "chat_postEphemeral — write (POST /chat.postEphemeral)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.chat.post-ephemeral"
+    },
+    {
+      "path": [
+        "api",
+        "chat",
+        "post-message"
+      ],
+      "summary": "chat_postMessage — write (POST /chat.postMessage)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.chat.post-message"
+    },
+    {
+      "path": [
+        "api",
+        "chat",
+        "schedule-message"
+      ],
+      "summary": "chat_scheduleMessage — write (POST /chat.scheduleMessage)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.chat.schedule-message"
+    },
+    {
+      "path": [
+        "api",
+        "chat",
+        "scheduled-messages-list"
       ],
       "summary": "chat_scheduledMessages_list — read (GET /chat.scheduledMessages.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.chat-scheduled-messages-list-list"
+      "permission": "api.chat.scheduled-messages-list"
     },
     {
       "path": [
         "api",
-        "conversations-history-list"
+        "chat",
+        "unfurl"
+      ],
+      "summary": "chat_unfurl — write (POST /chat.unfurl)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.chat.unfurl"
+    },
+    {
+      "path": [
+        "api",
+        "chat",
+        "update"
+      ],
+      "summary": "chat_update — write (POST /chat.update)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.chat.update"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "archive"
+      ],
+      "summary": "conversations_archive — destructive (POST /conversations.archive)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.archive"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "close"
+      ],
+      "summary": "conversations_close — write (POST /conversations.close)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.close"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "create"
+      ],
+      "summary": "conversations_create — write (POST /conversations.create)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.create"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "history"
       ],
       "summary": "conversations_history — read (GET /conversations.history)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.conversations-history-list"
+      "permission": "api.conversations.history"
     },
     {
       "path": [
         "api",
-        "conversations-info-list"
+        "conversations",
+        "info"
       ],
       "summary": "conversations_info — read (GET /conversations.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.conversations-info-list"
+      "permission": "api.conversations.info"
     },
     {
       "path": [
         "api",
-        "conversations-list-list"
+        "conversations",
+        "invite"
+      ],
+      "summary": "conversations_invite — write (POST /conversations.invite)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.invite"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "join"
+      ],
+      "summary": "conversations_join — write (POST /conversations.join)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.join"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "kick"
+      ],
+      "summary": "conversations_kick — destructive (POST /conversations.kick)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.kick"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "leave"
+      ],
+      "summary": "conversations_leave — destructive (POST /conversations.leave)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.leave"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "list"
       ],
       "summary": "conversations_list — read (GET /conversations.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.conversations-list-list"
+      "permission": "api.conversations.list"
     },
     {
       "path": [
         "api",
-        "conversations-members-list"
+        "conversations",
+        "mark"
+      ],
+      "summary": "conversations_mark — write (POST /conversations.mark)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.mark"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "members"
       ],
       "summary": "conversations_members — read (GET /conversations.members)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.conversations-members-list"
+      "permission": "api.conversations.members"
     },
     {
       "path": [
         "api",
-        "conversations-replies-list"
+        "conversations",
+        "open"
+      ],
+      "summary": "conversations_open — write (POST /conversations.open)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.open"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "rename"
+      ],
+      "summary": "conversations_rename — write (POST /conversations.rename)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.rename"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "replies"
       ],
       "summary": "conversations_replies — read (GET /conversations.replies)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.conversations-replies-list"
+      "permission": "api.conversations.replies"
     },
     {
       "path": [
         "api",
-        "dialog-open-list"
+        "conversations",
+        "set-purpose"
+      ],
+      "summary": "conversations_setPurpose — write (POST /conversations.setPurpose)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.set-purpose"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "set-topic"
+      ],
+      "summary": "conversations_setTopic — write (POST /conversations.setTopic)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.set-topic"
+    },
+    {
+      "path": [
+        "api",
+        "conversations",
+        "unarchive"
+      ],
+      "summary": "conversations_unarchive — write (POST /conversations.unarchive)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.conversations.unarchive"
+    },
+    {
+      "path": [
+        "api",
+        "dialog-open"
       ],
       "summary": "dialog_open — read (GET /dialog.open)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.dialog-open-list"
+      "permission": "api.dialog-open"
     },
     {
       "path": [
         "api",
-        "dnd-end-dnd"
+        "dnd",
+        "end-dnd"
       ],
       "summary": "dnd_endDnd — write (POST /dnd.endDnd)",
       "effects": {
         "remote": "write",
         "local": "none"
       },
-      "permission": "api.dnd-end-dnd"
+      "permission": "api.dnd.end-dnd"
     },
     {
       "path": [
         "api",
-        "dnd-end-snooze"
+        "dnd",
+        "end-snooze"
       ],
       "summary": "dnd_endSnooze — write (POST /dnd.endSnooze)",
       "effects": {
         "remote": "write",
         "local": "none"
       },
-      "permission": "api.dnd-end-snooze"
+      "permission": "api.dnd.end-snooze"
     },
     {
       "path": [
         "api",
-        "dnd-info-list"
+        "dnd",
+        "info"
       ],
       "summary": "dnd_info — read (GET /dnd.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.dnd-info-list"
+      "permission": "api.dnd.info"
     },
     {
       "path": [
         "api",
-        "dnd-team-info-list"
+        "dnd",
+        "team-info"
       ],
       "summary": "dnd_teamInfo — read (GET /dnd.teamInfo)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.dnd-team-info-list"
+      "permission": "api.dnd.team-info"
     },
     {
       "path": [
         "api",
-        "emoji-list-list"
+        "emoji-list"
       ],
       "summary": "emoji_list — read (GET /emoji.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.emoji-list-list"
+      "permission": "api.emoji-list"
     },
     {
       "path": [
         "api",
-        "files-info-list"
+        "files",
+        "comments-delete"
+      ],
+      "summary": "files_comments_delete — destructive (POST /files.comments.delete)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.files.comments-delete"
+    },
+    {
+      "path": [
+        "api",
+        "files",
+        "delete"
+      ],
+      "summary": "files_delete — destructive (POST /files.delete)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.files.delete"
+    },
+    {
+      "path": [
+        "api",
+        "files",
+        "info"
       ],
       "summary": "files_info — read (GET /files.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.files-info-list"
+      "permission": "api.files.info"
     },
     {
       "path": [
         "api",
-        "files-list-list"
+        "files",
+        "list"
       ],
       "summary": "files_list — read (GET /files.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.files-list-list"
+      "permission": "api.files.list"
     },
     {
       "path": [
         "api",
-        "files-remote-info-list"
+        "files",
+        "remote-info"
       ],
       "summary": "files_remote_info — read (GET /files.remote.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.files-remote-info-list"
+      "permission": "api.files.remote-info"
     },
     {
       "path": [
         "api",
-        "files-remote-list-list"
+        "files",
+        "remote-list"
       ],
       "summary": "files_remote_list — read (GET /files.remote.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.files-remote-list-list"
+      "permission": "api.files.remote-list"
     },
     {
       "path": [
         "api",
-        "files-remote-share-list"
+        "files",
+        "remote-share"
       ],
       "summary": "files_remote_share — read (GET /files.remote.share)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.files-remote-share-list"
+      "permission": "api.files.remote-share"
     },
     {
       "path": [
         "api",
-        "migration-exchange-list"
+        "files",
+        "revoke-public-url"
+      ],
+      "summary": "files_revokePublicURL — destructive (POST /files.revokePublicURL)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.files.revoke-public-url"
+    },
+    {
+      "path": [
+        "api",
+        "files",
+        "shared-public-url"
+      ],
+      "summary": "files_sharedPublicURL — write (POST /files.sharedPublicURL)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.files.shared-public-url"
+    },
+    {
+      "path": [
+        "api",
+        "migration-exchange"
       ],
       "summary": "migration_exchange — read (GET /migration.exchange)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.migration-exchange-list"
+      "permission": "api.migration-exchange"
     },
     {
       "path": [
         "api",
-        "oauth-access-list"
+        "pins",
+        "add"
       ],
-      "summary": "oauth_access — read (GET /oauth.access)",
+      "summary": "pins_add — write (POST /pins.add)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
-      "permission": "api.oauth-access-list"
+      "permission": "api.pins.add"
     },
     {
       "path": [
         "api",
-        "oauth-token-list"
-      ],
-      "summary": "oauth_token — read (GET /oauth.token)",
-      "effects": {
-        "remote": "read",
-        "local": "none"
-      },
-      "permission": "api.oauth-token-list"
-    },
-    {
-      "path": [
-        "api",
-        "oauth-v2-access-list"
-      ],
-      "summary": "oauth_v2_access — read (GET /oauth.v2.access)",
-      "effects": {
-        "remote": "read",
-        "local": "none"
-      },
-      "permission": "api.oauth-v2-access-list"
-    },
-    {
-      "path": [
-        "api",
-        "pins-list-list"
+        "pins",
+        "list"
       ],
       "summary": "pins_list — read (GET /pins.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.pins-list-list"
+      "permission": "api.pins.list"
     },
     {
       "path": [
         "api",
-        "reactions-get-list"
+        "pins",
+        "remove"
+      ],
+      "summary": "pins_remove — destructive (POST /pins.remove)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.pins.remove"
+    },
+    {
+      "path": [
+        "api",
+        "reactions",
+        "add"
+      ],
+      "summary": "reactions_add — write (POST /reactions.add)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.reactions.add"
+    },
+    {
+      "path": [
+        "api",
+        "reactions",
+        "get"
       ],
       "summary": "reactions_get — read (GET /reactions.get)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.reactions-get-list"
+      "permission": "api.reactions.get"
     },
     {
       "path": [
         "api",
-        "reactions-list-list"
+        "reactions",
+        "list"
       ],
       "summary": "reactions_list — read (GET /reactions.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.reactions-list-list"
+      "permission": "api.reactions.list"
     },
     {
       "path": [
         "api",
-        "reminders-info-list"
+        "reactions",
+        "remove"
+      ],
+      "summary": "reactions_remove — destructive (POST /reactions.remove)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.reactions.remove"
+    },
+    {
+      "path": [
+        "api",
+        "reminders",
+        "add"
+      ],
+      "summary": "reminders_add — write (POST /reminders.add)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.reminders.add"
+    },
+    {
+      "path": [
+        "api",
+        "reminders",
+        "complete"
+      ],
+      "summary": "reminders_complete — write (POST /reminders.complete)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.reminders.complete"
+    },
+    {
+      "path": [
+        "api",
+        "reminders",
+        "delete"
+      ],
+      "summary": "reminders_delete — destructive (POST /reminders.delete)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.reminders.delete"
+    },
+    {
+      "path": [
+        "api",
+        "reminders",
+        "info"
       ],
       "summary": "reminders_info — read (GET /reminders.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.reminders-info-list"
+      "permission": "api.reminders.info"
     },
     {
       "path": [
         "api",
-        "reminders-list-list"
+        "reminders",
+        "list"
       ],
       "summary": "reminders_list — read (GET /reminders.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.reminders-list-list"
+      "permission": "api.reminders.list"
     },
     {
       "path": [
         "api",
-        "rtm-connect-list"
-      ],
-      "summary": "rtm_connect — read (GET /rtm.connect)",
-      "effects": {
-        "remote": "read",
-        "local": "none"
-      },
-      "permission": "api.rtm-connect-list"
-    },
-    {
-      "path": [
-        "api",
-        "search-messages-list"
+        "search-messages"
       ],
       "summary": "search_messages — read (GET /search.messages)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.search-messages-list"
+      "permission": "api.search-messages"
     },
     {
       "path": [
         "api",
-        "stars-list-list"
+        "stars",
+        "add"
+      ],
+      "summary": "stars_add — write (POST /stars.add)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.stars.add"
+    },
+    {
+      "path": [
+        "api",
+        "stars",
+        "list"
       ],
       "summary": "stars_list — read (GET /stars.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.stars-list-list"
+      "permission": "api.stars.list"
     },
     {
       "path": [
         "api",
-        "team-access-logs-list"
+        "stars",
+        "remove"
+      ],
+      "summary": "stars_remove — destructive (POST /stars.remove)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.stars.remove"
+    },
+    {
+      "path": [
+        "api",
+        "team",
+        "access-logs"
       ],
       "summary": "team_accessLogs — read (GET /team.accessLogs)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.team-access-logs-list"
+      "permission": "api.team.access-logs"
     },
     {
       "path": [
         "api",
-        "team-billable-info-list"
+        "team",
+        "billable-info"
       ],
       "summary": "team_billableInfo — read (GET /team.billableInfo)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.team-billable-info-list"
+      "permission": "api.team.billable-info"
     },
     {
       "path": [
         "api",
-        "team-info-list"
+        "team",
+        "info"
       ],
       "summary": "team_info — read (GET /team.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.team-info-list"
+      "permission": "api.team.info"
     },
     {
       "path": [
         "api",
-        "team-integration-logs-list"
+        "team",
+        "integration-logs"
       ],
       "summary": "team_integrationLogs — read (GET /team.integrationLogs)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.team-integration-logs-list"
+      "permission": "api.team.integration-logs"
     },
     {
       "path": [
         "api",
-        "team-profile-get-list"
+        "team",
+        "profile-get"
       ],
       "summary": "team_profile_get — read (GET /team.profile.get)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.team-profile-get-list"
+      "permission": "api.team.profile-get"
     },
     {
       "path": [
         "api",
-        "usergroups-list-list"
+        "usergroups",
+        "create"
+      ],
+      "summary": "usergroups_create — write (POST /usergroups.create)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.usergroups.create"
+    },
+    {
+      "path": [
+        "api",
+        "usergroups",
+        "disable"
+      ],
+      "summary": "usergroups_disable — destructive (POST /usergroups.disable)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.usergroups.disable"
+    },
+    {
+      "path": [
+        "api",
+        "usergroups",
+        "enable"
+      ],
+      "summary": "usergroups_enable — write (POST /usergroups.enable)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.usergroups.enable"
+    },
+    {
+      "path": [
+        "api",
+        "usergroups",
+        "list"
       ],
       "summary": "usergroups_list — read (GET /usergroups.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.usergroups-list-list"
+      "permission": "api.usergroups.list"
     },
     {
       "path": [
         "api",
-        "usergroups-users-list-list"
+        "usergroups",
+        "update"
+      ],
+      "summary": "usergroups_update — write (POST /usergroups.update)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.usergroups.update"
+    },
+    {
+      "path": [
+        "api",
+        "usergroups",
+        "users-list"
       ],
       "summary": "usergroups_users_list — read (GET /usergroups.users.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.usergroups-users-list-list"
+      "permission": "api.usergroups.users-list"
     },
     {
       "path": [
         "api",
-        "users-conversations-list"
+        "usergroups",
+        "users-update"
+      ],
+      "summary": "usergroups_users_update — write (POST /usergroups.users.update)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.usergroups.users-update"
+    },
+    {
+      "path": [
+        "api",
+        "users",
+        "conversations"
       ],
       "summary": "users_conversations — read (GET /users.conversations)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.users-conversations-list"
+      "permission": "api.users.conversations"
     },
     {
       "path": [
         "api",
-        "users-get-presence-list"
+        "users",
+        "get-presence"
       ],
       "summary": "users_getPresence — read (GET /users.getPresence)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.users-get-presence-list"
+      "permission": "api.users.get-presence"
     },
     {
       "path": [
         "api",
-        "users-identity-list"
+        "users",
+        "identity"
       ],
       "summary": "users_identity — read (GET /users.identity)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.users-identity-list"
+      "permission": "api.users.identity"
     },
     {
       "path": [
         "api",
-        "users-info-list"
+        "users",
+        "info"
       ],
       "summary": "users_info — read (GET /users.info)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.users-info-list"
+      "permission": "api.users.info"
     },
     {
       "path": [
         "api",
-        "users-list-list"
+        "users",
+        "list"
       ],
       "summary": "users_list — read (GET /users.list)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.users-list-list"
+      "permission": "api.users.list"
     },
     {
       "path": [
         "api",
-        "users-lookup-by-email-list"
+        "users",
+        "lookup-by-email"
       ],
       "summary": "users_lookupByEmail — read (GET /users.lookupByEmail)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.users-lookup-by-email-list"
+      "permission": "api.users.lookup-by-email"
     },
     {
       "path": [
         "api",
-        "users-profile-get-list"
+        "users",
+        "profile-get"
       ],
       "summary": "users_profile_get — read (GET /users.profile.get)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.users-profile-get-list"
+      "permission": "api.users.profile-get"
     },
     {
       "path": [
         "api",
-        "users-set-active"
+        "users",
+        "profile-set"
+      ],
+      "summary": "users_profile_set — write (POST /users.profile.set)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.users.profile-set"
+    },
+    {
+      "path": [
+        "api",
+        "users",
+        "set-active"
       ],
       "summary": "users_setActive — write (POST /users.setActive)",
       "effects": {
         "remote": "write",
         "local": "none"
       },
-      "permission": "api.users-set-active"
+      "permission": "api.users.set-active"
     },
     {
       "path": [
         "api",
-        "views-open-list"
+        "users",
+        "set-presence"
+      ],
+      "summary": "users_setPresence — write (POST /users.setPresence)",
+      "effects": {
+        "remote": "write",
+        "local": "none"
+      },
+      "permission": "api.users.set-presence"
+    },
+    {
+      "path": [
+        "api",
+        "views",
+        "open"
       ],
       "summary": "views_open — read (GET /views.open)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.views-open-list"
+      "permission": "api.views.open"
     },
     {
       "path": [
         "api",
-        "views-publish-list"
+        "views",
+        "publish"
       ],
       "summary": "views_publish — read (GET /views.publish)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.views-publish-list"
+      "permission": "api.views.publish"
     },
     {
       "path": [
         "api",
-        "views-push-list"
+        "views",
+        "push"
       ],
       "summary": "views_push — read (GET /views.push)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.views-push-list"
+      "permission": "api.views.push"
     },
     {
       "path": [
         "api",
-        "views-update-list"
+        "views",
+        "update"
       ],
       "summary": "views_update — read (GET /views.update)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.views-update-list"
+      "permission": "api.views.update"
     },
     {
       "path": [
         "api",
-        "workflows-step-completed-list"
+        "workflows",
+        "step-completed"
       ],
       "summary": "workflows_stepCompleted — read (GET /workflows.stepCompleted)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.workflows-step-completed-list"
+      "permission": "api.workflows.step-completed"
     },
     {
       "path": [
         "api",
-        "workflows-step-failed-list"
+        "workflows",
+        "step-failed"
       ],
       "summary": "workflows_stepFailed — read (GET /workflows.stepFailed)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.workflows-step-failed-list"
+      "permission": "api.workflows.step-failed"
     },
     {
       "path": [
         "api",
-        "workflows-update-step-list"
+        "workflows",
+        "update-step"
       ],
       "summary": "workflows_updateStep — read (GET /workflows.updateStep)",
       "effects": {
         "remote": "read",
         "local": "none"
       },
-      "permission": "api.workflows-update-step-list"
+      "permission": "api.workflows.update-step"
     },
     {
       "path": [
@@ -1502,8 +2515,8 @@
       "start"
     ],
     "signIn": {
-      "gives": "Lets your agent read and change your account through slack.",
-      "asks": "An API token or key from the service."
+      "gives": "Lets your agent read and write your Slack workspace as you.",
+      "asks": "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from slack's manifest."
     },
     "skill": {
       "status": [

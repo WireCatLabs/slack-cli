@@ -1,0 +1,39 @@
+{
+  "_metadata": { "major_version": 2, "minor_version": 1 },
+  "display_information": {
+    "name": "WireCat slack",
+    "description": "Your own Slack, read and written as you by the slack CLI on your computer."
+  },
+  "oauth_config": {
+    "scopes": {
+      "user": [
+        "channels:history",
+        "groups:history",
+        "im:history",
+        "mpim:history",
+        "channels:read",
+        "groups:read",
+        "im:read",
+        "mpim:read",
+        "users:read",
+        "search:read",
+        "reactions:read",
+        "files:read",
+        "pins:read",
+        "chat:write",
+        "reactions:write",
+        "files:write",
+        "pins:write",
+        "channels:write",
+        "groups:write",
+        "im:write",
+        "mpim:write"
+      ]
+    }
+  },
+  "settings": {
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}

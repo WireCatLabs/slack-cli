@@ -4,7 +4,8 @@ import { neverAnswers, runScopeCases } from "@wirecat/cli-core/testing"
 import { describe, it } from "vitest"
 import { API } from "./config.js"
 import { definition } from "./program.js"
-import { FAKE_TOKEN, fakeComments } from "./testing/fake-comments.js"
+import { fakeComments } from "./testing/fake-comments.js"
+import { FAKE_TOKEN, fakeSlack } from "./testing/fake-slack.js"
 import { signedIn } from "./testing/harness.js"
 
 const stdin = () => Object.assign(Readable.from([FAKE_TOKEN]), { isTTY: false })
@@ -20,6 +21,7 @@ describe("each remote command runs inside cli-core's run", () => {
       "comments update": ["personal", "comments", "update", "c1", "--text", "Plans"],
       "session start": ["personal", "session", "start"],
       "session status": ["personal", "session", "status", "--check"],
+      doctor: ["doctor", "--online"],
     },
     skip: {
       ...Object.fromEntries(
@@ -29,10 +31,14 @@ describe("each remote command runs inside cli-core's run", () => {
         ]),
       ),
       "mcp serve": "listens until stopped",
-      doctor:
-        "cli-core's appDoctorCommand answers --online outside a run of its own; drop this once core runs it inside",
     },
-    answering: () => ({ keyring: signedIn(), fetch: fakeComments().fetch, stdin: stdin() }),
+    answering: () => {
+      const slack = fakeSlack()
+      const comments = fakeComments()
+      const fetch: typeof slack.fetch = (input, init) =>
+        (new URL(String(input)).host === "slack.com" ? slack : comments).fetch(input, init)
+      return { keyring: signedIn(), fetch, stdin: stdin() }
+    },
     silent: () => ({ keyring: signedIn(), fetch: neverAnswers, stdin: stdin() }),
   })
   for (const one of cases) it(one.name, () => one.run())

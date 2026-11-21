@@ -1,7 +1,6 @@
 import { join } from "node:path"
 import { resolvePaths } from "@wirecat/cli-base"
 import {
-  appDoctorCommand,
   appMcpCommand,
   commandsCommand,
   configCommand,
@@ -20,6 +19,7 @@ import { appUpdate } from "@wirecat/cli-core/update"
 import type { Command } from "commander"
 import { apiCommand } from "./commands/api.js"
 import { commentsCommand } from "./commands/comments.js"
+import { doctorCommand } from "./commands/doctor.js"
 import { sessionCommand } from "./commands/session.js"
 import { configuration } from "./config.js"
 import { IDENTITY, PACKAGE, SERVICE, SKILL } from "./identity.js"
@@ -57,7 +57,7 @@ export const definition = (): ProgramDefinition => ({
     sessionCommand(),
     apiCommand(),
     commentsCommand(),
-    appDoctorCommand(IDENTITY, configuration, { packageName: PACKAGE }),
+    doctorCommand(),
     skillCommand(IDENTITY, SKILL),
     mcpCommand(),
     upgradeCommand(IDENTITY, PACKAGE, (command) => ({

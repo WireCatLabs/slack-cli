@@ -26,8 +26,8 @@ export const DESKTOP = {
   hosts: ["comments.example.invalid", "slack.com"],
   tagline: "A new WireCat CLI, started from cli-template",
   signIn: {
-    gives: "Lets your agent read and change your account through slack.",
-    asks: "An API token or key from the service.",
+    gives: "Lets your agent read and write your Slack workspace as you.",
+    asks: "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from slack's manifest.",
   },
 } satisfies ManifestIdentity
 

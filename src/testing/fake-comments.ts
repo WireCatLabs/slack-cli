@@ -2,8 +2,10 @@
 // or a captured answer. It refuses what the real service would refuse, so a field name typed from memory fails a test
 // instead of reaching the owner's account. Visibly fake data only (WC-TEST-8).
 
-/** Spelled so gitleaks lets it through; never a real token. */
-export const FAKE_TOKEN = "wirecatfake0token42"
+import { FAKE_TOKEN } from "./fake-slack.js"
+
+export { FAKE_TOKEN }
+
 const HOST = "comments.example.invalid"
 
 export interface FakeCall {

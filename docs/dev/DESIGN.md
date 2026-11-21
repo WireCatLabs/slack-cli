@@ -40,4 +40,18 @@ Set the messenger's `speechModels` to `parakeet-v3`.
 
 ## Further answers
 
+- **Sign-in (2026-11-21):** each person makes an internal Slack app in their own workspace from
+  [docs/slack-app-manifest.json](../slack-app-manifest.json) and pastes its User OAuth Token (`xoxp-`). An app shared
+  outside its workspace gets one history call a minute; an internal one keeps the full limits. One profile is one
+  workspace and one person: the account is `<team_id>:<user_id>` from `auth.test`. A bot token is refused, since the
+  CLI reads as the person. Token rotation stays off in the manifest: a rotated token lasts 12 hours, and refreshing it
+  needs the app's client secret.
+- **Sign-in code:** cli-core's `tokenSessionCommand` and `ProfileTokenStore`, as every token CLI. The messenger
+  session types in cli-core belong to device sessions (WhatsApp, Telegram, MAX); a Slack token is one bearer token.
+- **The `api` group:** Slack's Swagger of 2020 with the corrections listed on [API coverage](API_COVERAGE.md). Command
+  names are Slack's method names, grouped by their first word: `api conversations history`. A Slack call that fails
+  answers HTTP 200 with `ok: false`; until cli-core reads that for an HTTP API, `api` prints such an answer as it is.
+- **Pace:** 50 calls a minute per profile, Slack's Tier 3, which the paging reads have; a 429 holds every process of
+  the profile for its `Retry-After`.
+
 ## Open questions for the owner

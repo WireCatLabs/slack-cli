@@ -1,17 +1,23 @@
+import { mkdirSync, rmSync, writeFileSync } from "node:fs"
+import { join } from "node:path"
 import { brokenKeyring, memoryKeyring } from "@wirecat/cli-base"
 import { ProfileTokenStore } from "@wirecat/cli-core/cli"
 import { expect, it } from "vitest"
 import { IDENTITY } from "../identity.js"
-import { FAKE_TOKEN, fakeComments } from "../testing/fake-comments.js"
+import { AUTH_TEST, FAKE_TOKEN, fakeSlack } from "../testing/fake-slack.js"
 import { runCli } from "../testing/harness.js"
 
-it("session start reads the token from stdin and checks it before keeping it; status, list and end", async () => {
+const ACCOUNT = { team_id: "T0SYNTH01", team: "Synth Team", user_id: "U0SYNTH01", user: "test.person" }
+
+it("session start checks the token with auth.test before keeping it; status, list and end", async () => {
   const keyring = memoryKeyring()
-  const service = fakeComments()
+  const service = fakeSlack()
   const started = await runCli(["personal", "session", "start", "--json"], { keyring, service, stdin: FAKE_TOKEN })
-  expect(started.json().item).toMatchObject({ verified: true, user: { id: "u1" } })
+  expect(started.json().item).toMatchObject({ state: "saved", stored_in: "keyring", verified: true, ...ACCOUNT })
+  expect(service.calls.map((call) => call.method)).toEqual(["auth.test"])
+  expect(service.refusals).toEqual([])
   const status = await runCli(["personal", "session", "status", "--check", "--json"], { keyring, service })
-  expect(status.json().item).toMatchObject({ state: "saved", token_from: "keyring", verified: true })
+  expect(status.json().item).toMatchObject({ state: "saved", token_from: "keyring", verified: true, ...ACCOUNT })
   expect((await runCli(["session", "list", "--json"], { keyring })).json().items).toContainEqual(
     expect.objectContaining({ profile: "personal", signed_in: true }),
   )
@@ -20,40 +26,111 @@ it("session start reads the token from stdin and checks it before keeping it; st
   expect(ended.json().item).toMatchObject({ state: "missing" })
 })
 
-it("session start --credential-storage file keeps the token in a private file instead of the keyring", async () => {
+it("the token reaches no output, no error and no run record", async () => {
   const keyring = memoryKeyring()
-  const started = await runCli(["personal", "session", "start", "--credential-storage", "file", "--json"], {
+  const started = await runCli(["personal", "session", "start", "--record", "--json"], {
     keyring,
+    service: fakeSlack(),
     stdin: FAKE_TOKEN,
   })
-  expect(started.json().item).toMatchObject({ stored_in: "file" })
-  const status = await runCli(["personal", "session", "status", "--json"], { keyring })
-  expect(status.json().item).toMatchObject({ token_from: "file" })
-  expect((await runCli(["personal", "session", "end", "--json"], { keyring })).json().item).toMatchObject({
-    ended: expect.arrayContaining(["file"]),
+  const runs = await runCli(["personal", "runs", "list", "--json"], { keyring })
+  expect(runs.out).toContain("session start")
+  const refused = await runCli(["personal", "session", "status", "--check", "--json"], {
+    keyring,
+    service: fakeSlack({ "auth.test": { body: { ok: false, error: "token_revoked" } } }),
   })
+  expect(refused.json()).toMatchObject({
+    error: { code: "authentication_error", message: expect.stringContaining("token_revoked") },
+  })
+  for (const text of [started.out, started.err, runs.out, refused.out, refused.err])
+    expect(text).not.toContain(FAKE_TOKEN)
 })
 
-it("session start without a working keyring keeps the token in a private file, and says so on stderr", async () => {
-  const keyring = brokenKeyring()
-  const started = await runCli(["personal", "session", "start", "--json"], { keyring, stdin: FAKE_TOKEN })
-  expect(started.json().item).toMatchObject({ stored_in: "file" })
-  expect(started.err).toContain("keyring")
-  expect(new ProfileTokenStore({ app: IDENTITY, keyring }).signedIn("personal")).toBe(true)
-  expect((await runCli(["personal", "session", "end", "--json"], { keyring })).code).toBe(0)
+it("session start refuses a bot token before anything is sent, and keeps nothing", async () => {
+  const keyring = memoryKeyring()
+  const service = fakeSlack()
+  const refused = await runCli(["personal", "session", "start", "--json"], {
+    keyring,
+    service,
+    stdin: "xoxb-0synth-bot-fake",
+  })
+  expect(refused.json()).toMatchObject({ error: { code: "validation_error" } })
+  expect(refused.err).toContain("User OAuth Token")
+  expect(service.calls).toEqual([])
   expect(new ProfileTokenStore({ app: IDENTITY, keyring }).signedIn("personal")).toBe(false)
 })
 
-it("session start refuses a storage it does not know, before asking for the token", async () => {
-  const { code, err } = await runCli(["personal", "session", "start", "--credential-storage", "vault", "--json"])
-  expect(code).toBe(2)
-  expect(err).toContain("--credential-storage takes keyring or file")
+it("session start refuses what is no user token, and a token Slack says is a bot's", async () => {
+  const keyring = memoryKeyring()
+  const other = await runCli(["personal", "session", "start", "--json"], { keyring, stdin: "xapp-0synth-fake" })
+  expect(other.json()).toMatchObject({ error: { code: "validation_error" } })
+  const bot = await runCli(["personal", "session", "start", "--json"], {
+    keyring,
+    service: fakeSlack({ "auth.test": { body: { ...AUTH_TEST, bot_id: "B0SYNTH01" } } }),
+    stdin: FAKE_TOKEN,
+  })
+  expect(bot.json()).toMatchObject({ error: { code: "validation_error" } })
+  expect(new ProfileTokenStore({ app: IDENTITY, keyring }).signedIn("personal")).toBe(false)
 })
 
-it("session start keeps nothing when the service refuses the token", async () => {
+it("session start keeps nothing when Slack refuses the token with HTTP 200 and ok: false", async () => {
   const keyring = memoryKeyring()
-  const refused = await runCli(["personal", "session", "start", "--json"], { keyring, stdin: "wrong0token" })
-  expect(refused.json()).toMatchObject({ error: { code: "authentication_error" } })
+  const refused = await runCli(["personal", "session", "start", "--json"], {
+    keyring,
+    service: fakeSlack({}, "xoxp-0synth-other"),
+    stdin: FAKE_TOKEN,
+  })
+  expect(refused.json()).toMatchObject({
+    error: { code: "authentication_error", message: expect.stringContaining("invalid_auth") },
+  })
   const status = await runCli(["personal", "session", "status", "--json"], { keyring })
   expect(status.json().item).toMatchObject({ state: "missing" })
+})
+
+it("session start --credential-storage file, or with no working keyring, keeps the token in a private file", async () => {
+  const keyring = brokenKeyring()
+  const started = await runCli(["personal", "session", "start", "--json"], {
+    keyring,
+    service: fakeSlack(),
+    stdin: FAKE_TOKEN,
+  })
+  expect(started.json().item).toMatchObject({ stored_in: "file" })
+  expect(started.err).toContain("keyring")
+  expect((await runCli(["personal", "session", "end", "--json"], { keyring })).code).toBe(0)
+  const filed = await runCli(["personal", "session", "start", "--credential-storage", "file", "--json"], {
+    keyring: memoryKeyring(),
+    service: fakeSlack(),
+    stdin: FAKE_TOKEN,
+  })
+  expect(filed.json().item).toMatchObject({ stored_in: "file" })
+  expect((await runCli(["personal", "session", "end", "--json"])).code).toBe(0)
+})
+
+it("doctor --online asks auth.test for every profile signed in here, each under its own name", async () => {
+  const config = join(process.env.SLACK_CONFIG_DIR ?? "", "config.json")
+  mkdirSync(join(config, ".."), { recursive: true })
+  writeFileSync(config, JSON.stringify({ profiles: { personal: {}, work: {}, idle: {} } }))
+  const keyring = memoryKeyring({
+    "slack-cli:token:personal": FAKE_TOKEN,
+    "slack-cli:token:work": "xoxp-0synth-revoked",
+  })
+  const service = fakeSlack()
+  const ran = await runCli(["doctor", "--online", "--json"], { keyring, service })
+  const { online } = ran.json().item as { online: unknown }
+  expect(JSON.stringify(online)).not.toContain("xoxp-")
+  expect(online).toMatchObject({
+    ok: false,
+    profiles: expect.arrayContaining([
+      { profile: "personal", ok: true, ...ACCOUNT, url: AUTH_TEST.url },
+      { profile: "work", ok: false, error_code: "authentication_error" },
+    ]),
+  })
+  expect(JSON.stringify(online)).not.toContain("idle")
+  rmSync(config)
+})
+
+it("doctor without --online calls nothing", async () => {
+  const service = fakeSlack()
+  expect((await runCli(["doctor", "--json"], { service })).code).toBe(0)
+  expect(service.calls).toEqual([])
 })

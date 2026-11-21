@@ -36,7 +36,22 @@ node dist/bin/slack.js doctor
 Once it is on npm: `npm install -g @wirecat/slack-cli`, then `slack doctor`. Every command that uses an account
 starts with a profile, a name you choose: `slack personal config show`.
 
-Sign in once with `slack personal session start`. It asks for the token and keeps it in the keyring.
+## Sign in with your own Slack app
+
+slack reads and writes as you, with the user token of a Slack app you make in your own workspace. An app that only
+your workspace uses keeps Slack's full limits for reading history; one shared outside it gets one call a minute.
+
+1. Open [api.slack.com/apps](https://api.slack.com/apps), choose **Create New App**, then **From a manifest**, and
+   pick your workspace.
+2. Paste [docs/slack-app-manifest.json](docs/slack-app-manifest.json). It asks only for the user scopes the commands
+   use: reading channels, direct messages, people, files, reactions and pins, searching, and sending as you.
+3. Choose **Install to Workspace** and allow it. An admin may have to approve the app first.
+4. On **OAuth & Permissions**, copy the **User OAuth Token**. It starts with `xoxp-`.
+5. Run `slack personal session start` and paste the token at the hidden prompt. slack checks it with Slack
+   (`auth.test`) and keeps it in the system keyring. A bot token (`xoxb-`) is refused, because it cannot read as you.
+
+`slack doctor --online` asks Slack whose each saved token is. To sign out on this computer, run
+`slack personal session end`. To revoke the token, remove the app from the workspace.
 
 ## Use it with your agent
 

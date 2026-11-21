@@ -13,14 +13,16 @@ import { configuration } from "./config.js"
 import { IDENTITY, SERVICE } from "./identity.js"
 import { type CommentsService, commentsService } from "./sample/comments.js"
 import { transport } from "./sample/transport.js"
+import { slackClient } from "./slack/client.js"
 
 /** What a test hands `run()` beside cli-core's own: the fake service in place of the network (WC-ARCH-10). */
 export interface ServiceEnvironment extends BaseEnvironment {
   fetch?: typeof fetch
 }
 
-// SAMPLE: your service's documented limit; this one is made up.
-export const PACE = { perMinute: 120, burst: 20 }
+// Slack limits each method per workspace by tier; 50 a minute is Tier 3, which the paging reads have
+// (https://docs.slack.dev/apis/web-api/rate-limits/). A 429 holds every process of the profile for its Retry-After.
+export const PACE = { perMinute: 50, burst: 10 }
 
 /**
  * Settings, keyring and the run come from cli-core's `baseContext` and nowhere else: a command that resolves settings
@@ -54,6 +56,18 @@ export const serviceFor = (command: Command, token: string, events: EventSink) =
       pacer: new Pacer(pacePathFor(IDENTITY, profile, env), PACE),
     }),
   )
+}
+
+/** Slack for one run, with the token it was given and the profile's pace; each call lands in the run's `events`. */
+export const slackFor = (command: Command, token: string, events?: EventSink) => {
+  const { environment, env, profile } = contextOf(command)
+  return slackClient({
+    token,
+    events,
+    signal: environment.signal,
+    fetch: environment.fetch,
+    pacer: new Pacer(pacePathFor(IDENTITY, profile, env), PACE),
+  })
 }
 
 /** The profile's saved token, or an authentication error that says how to sign in. Read before any request. */
