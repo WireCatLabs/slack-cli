@@ -3,9 +3,9 @@ import { type KeyringStore, memoryKeyring } from "@wirecat/cli-base"
 import type { RunOptions } from "@wirecat/cli-core/cli"
 import type { ServiceEnvironment } from "../context.js"
 import { run } from "../program.js"
-import { FAKE_TOKEN, fakeComments } from "./fake-comments.js"
+import { FAKE_TOKEN, fakeSlack } from "./fake-slack.js"
 
-/** A keyring where profile `personal` is already signed in to the fake service; never the real one (WC-TEST-2). */
+/** A keyring where profile `personal` is already signed in to the fake Slack; never the real one (WC-TEST-2). */
 export const signedIn = (): KeyringStore => memoryKeyring({ "slack-cli:token:personal": FAKE_TOKEN })
 
 export interface Ran {
@@ -20,7 +20,7 @@ export interface Ran {
 export const runCli = async (
   argv: string[],
   {
-    service = fakeComments(),
+    service = fakeSlack(),
     keyring = signedIn(),
     stdin,
     env,

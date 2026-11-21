@@ -11,8 +11,6 @@ import { Pacer, pacePathFor } from "@wirecat/cli-core/sends"
 import type { Command } from "commander"
 import { configuration } from "./config.js"
 import { IDENTITY, SERVICE } from "./identity.js"
-import { type CommentsService, commentsService } from "./sample/comments.js"
-import { transport } from "./sample/transport.js"
 import { slackClient } from "./slack/client.js"
 
 /** What a test hands `run()` beside cli-core's own: the fake service in place of the network (WC-ARCH-10). */
@@ -44,20 +42,6 @@ export const contextOf = (command: Command) => {
   }
 }
 
-/** The service for one run, with the token it was given; `events` comes from `run()`, so each request is recorded. */
-export const serviceFor = (command: Command, token: string, events: EventSink) => {
-  const { environment, env, profile } = contextOf(command)
-  return commentsService(
-    transport({
-      token,
-      events,
-      signal: environment.signal,
-      ...(environment.fetch ? { fetch: environment.fetch } : {}),
-      pacer: new Pacer(pacePathFor(IDENTITY, profile, env), PACE),
-    }),
-  )
-}
-
 /** Slack for one run, with the token it was given and the profile's pace; each call lands in the run's `events`. */
 export const slackFor = (command: Command, token: string, events?: EventSink) => {
   const { environment, env, profile } = contextOf(command)
@@ -75,13 +59,4 @@ export const tokenOf = (command: Command): string => {
   const { profile, tokens } = contextOf(command)
   refuseOffline(command, SERVICE)
   return tokens.need(profile)
-}
-
-/**
- * Every remote call goes through here: inside cli-core's run, so `--timeout` bounds it, a failure or `--record` keeps
- * a run named after the command, and the transport's requests land in that run (WC-LIFE-5, WC-LIFE-15).
- */
-export const withService = <T>(command: Command, body: (service: CommentsService) => Promise<T>): Promise<T> => {
-  const token = tokenOf(command)
-  return contextOf(command).run((events) => body(serviceFor(command, token, events)))
 }

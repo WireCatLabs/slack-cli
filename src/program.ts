@@ -18,7 +18,6 @@ import {
 import { appUpdate } from "@wirecat/cli-core/update"
 import type { Command } from "commander"
 import { apiCommand } from "./commands/api.js"
-import { commentsCommand } from "./commands/comments.js"
 import { doctorCommand } from "./commands/doctor.js"
 import { sessionCommand } from "./commands/session.js"
 import { configuration } from "./config.js"
@@ -39,9 +38,8 @@ const update = appUpdate({
 const mcpCommand = () =>
   appMcpCommand(IDENTITY, configuration, {
     name: SERVICE,
-    // SAMPLE: name the kinds of text other people wrote that your answers carry (WC-MCP-11).
-    untrusted: ["comment text", "author names"],
-    permissionExample: "comments.create=deny",
+    untrusted: ["message text", "names and titles set by others", "file names", "links"],
+    permissionExample: "api.chat.post-message=deny",
     skill: SKILL,
     signedIn: (profile, env, keyring) => new ProfileTokenStore({ app: IDENTITY, env, keyring }).signedIn(profile),
   })
@@ -56,7 +54,6 @@ export const definition = (): ProgramDefinition => ({
     commandsCommand(IDENTITY),
     sessionCommand(),
     apiCommand(),
-    commentsCommand(),
     doctorCommand(),
     skillCommand(IDENTITY, SKILL),
     mcpCommand(),

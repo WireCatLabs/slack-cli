@@ -990,7 +990,9 @@ slack api apps permissions-info
 
 #### `slack api apps permissions-request`
 
-apps_permissions_request — read (GET /apps.permissions.request)
+apps_permissions_request — write (GET /apps.permissions.request)
+
+**Changes something in the service.**
 
 ```sh
 slack api apps permissions-request [options]
@@ -1046,7 +1048,9 @@ slack api apps permissions-users-list [options]
 
 #### `slack api apps permissions-users-request`
 
-apps_permissions_users_request — read (GET /apps.permissions.users.request)
+apps_permissions_users_request — write (GET /apps.permissions.users.request)
+
+**Changes something in the service.**
 
 ```sh
 slack api apps permissions-users-request [options]
@@ -1717,7 +1721,9 @@ slack api conversations unarchive [options]
 
 ### `slack api dialog-open`
 
-dialog_open — read (GET /dialog.open)
+dialog_open — write (GET /dialog.open)
+
+**Changes something in the service.**
 
 ```sh
 slack api dialog-open [options]
@@ -1910,7 +1916,9 @@ slack api files remote-list [options]
 
 #### `slack api files remote-share`
 
-files_remote_share — read (GET /files.remote.share)
+files_remote_share — write (GET /files.remote.share)
+
+**Changes something in the service.**
 
 ```sh
 slack api files remote-share [options]
@@ -2617,7 +2625,9 @@ the views operations
 
 #### `slack api views open`
 
-views_open — read (GET /views.open)
+views_open — write (GET /views.open)
+
+**Changes something in the service.**
 
 ```sh
 slack api views open [options]
@@ -2632,7 +2642,9 @@ slack api views open [options]
 
 #### `slack api views publish`
 
-views_publish — read (GET /views.publish)
+views_publish — write (GET /views.publish)
+
+**Changes something in the service.**
 
 ```sh
 slack api views publish [options]
@@ -2648,7 +2660,9 @@ slack api views publish [options]
 
 #### `slack api views push`
 
-views_push — read (GET /views.push)
+views_push — write (GET /views.push)
+
+**Changes something in the service.**
 
 ```sh
 slack api views push [options]
@@ -2663,7 +2677,9 @@ slack api views push [options]
 
 #### `slack api views update`
 
-views_update — read (GET /views.update)
+views_update — write (GET /views.update)
+
+**Changes something in the service.**
 
 ```sh
 slack api views update [options]
@@ -2684,7 +2700,9 @@ the workflows operations
 
 #### `slack api workflows step-completed`
 
-workflows_stepCompleted — read (GET /workflows.stepCompleted)
+workflows_stepCompleted — write (GET /workflows.stepCompleted)
+
+**Changes something in the service.**
 
 ```sh
 slack api workflows step-completed [options]
@@ -2699,7 +2717,9 @@ slack api workflows step-completed [options]
 
 #### `slack api workflows step-failed`
 
-workflows_stepFailed — read (GET /workflows.stepFailed)
+workflows_stepFailed — write (GET /workflows.stepFailed)
+
+**Changes something in the service.**
 
 ```sh
 slack api workflows step-failed [options]
@@ -2714,7 +2734,9 @@ slack api workflows step-failed [options]
 
 #### `slack api workflows update-step`
 
-workflows_updateStep — read (GET /workflows.updateStep)
+workflows_updateStep — write (GET /workflows.updateStep)
+
+**Changes something in the service.**
 
 ```sh
 slack api workflows update-step [options]
@@ -2729,84 +2751,6 @@ slack api workflows update-step [options]
 | `--step-image-url <value>` | An optional field that can be used to override app image that is shown in the Workflow Builder. |
 
 **Example:** `slack personal api workflows update-step --workflow-step-edit-id <value>`
-
-## `slack comments`
-
-read and write comments in Example Comments, the sample service
-
-### `slack comments list`
-
-list the comments in Example Comments, newest first
-
-```sh
-slack comments list [query] [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
-
-| Option | What it does |
-|---|---|
-| `--limit <n>` | how many to show. |
-| `--page <n>` | which page, starting at 1. |
-| `--all` | every row, no paging. |
-
-**Returns:** comment — id, text, author, created_at; every field: slack commands info comments list
-
-**Example:** `slack personal comments list`, `slack personal comments list author:u2 --json=id,text`
-
-### `slack comments show`
-
-show one comment in Example Comments
-
-```sh
-slack comments show <id>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `id` | required | the comment's id, as list prints it. |
-
-**Returns:** comment — id, text, author, created_at; every field: slack commands info comments show
-
-**Example:** `slack personal comments show c1`, `slack personal comments show c1 --json`
-
-### `slack comments create`
-
-post a comment in Example Comments
-
-**Changes something in the service.**
-
-```sh
-slack comments create [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--text <text>` | the comment's text. |
-
-**Example:** `slack personal comments create --text "Looks good to me"`, `slack personal comments create --text "Looks good to me" --dry-run`
-
-### `slack comments update`
-
-change the text of your comment in Example Comments
-
-**Changes something in the service.**
-
-```sh
-slack comments update <id> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `id` | required | the comment's id, as list prints it. |
-
-| Option | What it does |
-|---|---|
-| `--text <text>` | the new text. |
-
-**Example:** `slack personal comments update c1 --text "Looks good now"`
 
 ## `slack doctor`
 
@@ -2917,7 +2861,7 @@ slack mcp serve [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like comments.create=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like api.chat.post-message=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
@@ -3004,7 +2948,7 @@ slack mcp config [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like comments.create=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like api.chat.post-message=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
 **Example:** `slack personal mcp config`, `slack mcp config --profiles all`
@@ -3026,7 +2970,7 @@ slack mcp add <client> [options]
 | Option | What it does |
 |---|---|
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
-| `--permission <key=level>` | make a permission stricter for this server only, like comments.create=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like api.chat.post-message=deny; it never loosens the profile; repeat for more keys. |
 
 **Example:** `slack personal mcp add codex --allow-writes`
 
@@ -3040,7 +2984,7 @@ slack mcp check [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like comments.create=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like api.chat.post-message=deny; it never loosens the profile; repeat for more keys. |
 
 **Example:** `slack personal mcp check`
 

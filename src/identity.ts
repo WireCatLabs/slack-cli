@@ -22,8 +22,8 @@ export const IDENTITY: AppIdentity = {
 export const DESKTOP = {
   ...IDENTITY,
   docs: "https://github.com/WireCatLabs/slack-cli#readme",
-  // SAMPLE: every host the CLI contacts (WC-CMD-32); src/sample/transport.ts reaches only these.
-  hosts: ["comments.example.invalid", "slack.com"],
+  // Every host the CLI contacts (WC-CMD-32): Slack's Web API.
+  hosts: ["slack.com"],
   tagline: "A new WireCat CLI, started from cli-template",
   signIn: {
     gives: "Lets your agent read and write your Slack workspace as you.",

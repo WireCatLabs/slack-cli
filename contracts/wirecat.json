@@ -764,9 +764,9 @@
         "apps",
         "permissions-request"
       ],
-      "summary": "apps_permissions_request — read (GET /apps.permissions.request)",
+      "summary": "apps_permissions_request — write (GET /apps.permissions.request)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.apps.permissions-request"
@@ -816,9 +816,9 @@
         "apps",
         "permissions-users-request"
       ],
-      "summary": "apps_permissions_users_request — read (GET /apps.permissions.users.request)",
+      "summary": "apps_permissions_users_request — write (GET /apps.permissions.users.request)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.apps.permissions-users-request"
@@ -1321,9 +1321,9 @@
         "api",
         "dialog-open"
       ],
-      "summary": "dialog_open — read (GET /dialog.open)",
+      "summary": "dialog_open — write (GET /dialog.open)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.dialog-open"
@@ -1476,9 +1476,9 @@
         "files",
         "remote-share"
       ],
-      "summary": "files_remote_share — read (GET /files.remote.share)",
+      "summary": "files_remote_share — write (GET /files.remote.share)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.files.remote-share"
@@ -2020,9 +2020,9 @@
         "views",
         "open"
       ],
-      "summary": "views_open — read (GET /views.open)",
+      "summary": "views_open — write (GET /views.open)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.views.open"
@@ -2033,9 +2033,9 @@
         "views",
         "publish"
       ],
-      "summary": "views_publish — read (GET /views.publish)",
+      "summary": "views_publish — write (GET /views.publish)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.views.publish"
@@ -2046,9 +2046,9 @@
         "views",
         "push"
       ],
-      "summary": "views_push — read (GET /views.push)",
+      "summary": "views_push — write (GET /views.push)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.views.push"
@@ -2059,9 +2059,9 @@
         "views",
         "update"
       ],
-      "summary": "views_update — read (GET /views.update)",
+      "summary": "views_update — write (GET /views.update)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.views.update"
@@ -2072,9 +2072,9 @@
         "workflows",
         "step-completed"
       ],
-      "summary": "workflows_stepCompleted — read (GET /workflows.stepCompleted)",
+      "summary": "workflows_stepCompleted — write (GET /workflows.stepCompleted)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.workflows.step-completed"
@@ -2085,9 +2085,9 @@
         "workflows",
         "step-failed"
       ],
-      "summary": "workflows_stepFailed — read (GET /workflows.stepFailed)",
+      "summary": "workflows_stepFailed — write (GET /workflows.stepFailed)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.workflows.step-failed"
@@ -2098,62 +2098,12 @@
         "workflows",
         "update-step"
       ],
-      "summary": "workflows_updateStep — read (GET /workflows.updateStep)",
+      "summary": "workflows_updateStep — write (GET /workflows.updateStep)",
       "effects": {
-        "remote": "read",
+        "remote": "write",
         "local": "none"
       },
       "permission": "api.workflows.update-step"
-    },
-    {
-      "path": [
-        "comments",
-        "list"
-      ],
-      "summary": "list the comments in Example Comments, newest first",
-      "effects": {
-        "remote": "read",
-        "local": "read"
-      },
-      "permission": "comments.list",
-      "entity": "comment"
-    },
-    {
-      "path": [
-        "comments",
-        "show"
-      ],
-      "summary": "show one comment in Example Comments",
-      "effects": {
-        "remote": "read",
-        "local": "read"
-      },
-      "permission": "comments.show",
-      "entity": "comment"
-    },
-    {
-      "path": [
-        "comments",
-        "create"
-      ],
-      "summary": "post a comment in Example Comments",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "comments.create"
-    },
-    {
-      "path": [
-        "comments",
-        "update"
-      ],
-      "summary": "change the text of your comment in Example Comments",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "comments.update"
     },
     {
       "path": [
@@ -2423,11 +2373,6 @@
         "tag"
       ]
     },
-    "comment": {
-      "fields": [
-        "author"
-      ]
-    },
     "run": {
       "fields": [
         "run_id",
@@ -2461,7 +2406,6 @@
   },
   "network": {
     "hosts": [
-      "comments.example.invalid",
       "slack.com",
       "registry.npmjs.org",
       "huggingface.co",

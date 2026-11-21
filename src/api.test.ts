@@ -7,7 +7,7 @@ import { afterEach, expect, it } from "vitest"
 import { API } from "./config.js"
 import { definitions } from "./generated/definitions.js"
 import { IDENTITY } from "./identity.js"
-import { FAKE_TOKEN } from "./testing/fake-comments.js"
+import { FAKE_TOKEN } from "./testing/fake-slack.js"
 import { runCli } from "./testing/harness.js"
 
 const configFile = join(process.env.SLACK_CONFIG_DIR ?? "", "config.json")

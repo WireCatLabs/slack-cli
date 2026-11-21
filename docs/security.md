@@ -4,8 +4,7 @@ What WireCat CLIs share — the keyring, permissions, MCP and what never reaches
 [shared security page](https://wirecat.dev/en/docs/security). This page keeps only what is particular to `slack`.
 
 `slack` keeps its settings in `config.json` and its state in the folders `slack doctor` shows.
-Its `api` group reaches Slack Web; the sample's made-up address never resolves.
-`session start` keeps the service's token in the OS
+It reaches only `slack.com`. `session start` keeps the Slack user token in the OS
 keyring, or in a private file where no keyring works; the token goes only into the request's Authorization header,
 never into an address, an answer, a run record or the send journal.
 

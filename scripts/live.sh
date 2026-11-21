@@ -3,10 +3,8 @@
 # the `# Needs:` lines below, passes the token on stdin and records the pass. Every folder is a temporary one and the
 # keyring is out of reach, so nothing touches the owner's store, keyring or settings.
 #   scripts/live.sh < token-file
-# SAMPLE: replace the comments reads with your own commands; checked against the sample, it fails at sign-in.
-# SAMPLE: one `# Needs:` line for each thing the test account must hold, so the owner prepares it before the run.
-# Needs: a token for a test account, never one that matters
-# Needs: at least one comment the token can read
+# Needs: the User OAuth Token (xoxp-) of an app made from docs/slack-app-manifest.json in a test workspace
+# Needs: at least one public channel the token's user can see
 set -euo pipefail
 root=$(cd -- "$(dirname -- "$0")/.." && pwd)
 work=$(mktemp -d)
@@ -32,11 +30,15 @@ mkdir -p "$HOME"
 "${cli[@]}" live session start --credential-storage file --json >/dev/null
 trap '"${cli[@]}" live session end --json >/dev/null 2>&1 || true; rm -rf "$work"' EXIT
 
-"${cli[@]}" live comments list --json >"$work/list.json"
+"${cli[@]}" live api conversations list --types public_channel --limit 5 --json >"$work/list.json"
 node -e '
   const list = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
-  if (!Array.isArray(list.items)) throw new Error(`no items: ${JSON.stringify(list).slice(0, 200)}`)' "$work/list.json"
-"${cli[@]}" live doctor --json >/dev/null
+  if (list.item?.ok !== true || !Array.isArray(list.item.channels))
+    throw new Error(`no channels: ${JSON.stringify(list).slice(0, 200)}`)' "$work/list.json"
+"${cli[@]}" doctor --online --json >"$work/doctor.json"
+node -e '
+  const doctor = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
+  if (doctor.item?.online?.ok !== true) throw new Error("doctor --online: auth.test failed")' "$work/doctor.json"
 
 "${cli[@]}" live session end --json >/dev/null
-echo "live check passed: describe format 2, sign-in, comments list, doctor, sign-out"
+echo "live check passed: describe format 2, sign-in, conversations list, doctor --online, sign-out"
