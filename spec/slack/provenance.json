@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "name": "slack",
+      "url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2_without_examples.json",
+      "file": "swagger.json",
+      "sha256": "8b92da26a3c5b11d20042a9f36d81f1fa6fc9382c5ddc471babb68b91936bc3a"
+    }
+  ],
+  "retrieved_at": "2026-11-21T02:17:12.790Z"
+}
