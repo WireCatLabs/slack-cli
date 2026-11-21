@@ -1671,7 +1671,7 @@ slack skill show [name] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | optional | a part of this skill, or a skill shipped for a task: follow-ups, link-conversations. |
+| `name` | optional | a part of this skill, or a skill shipped for a task: api-workflows, api-views, api-users, api-users-profile, api-usergroups, api-usergroups-users, api-team, api-team-profile, api-stars, api-search, api-rtm, api-reminders, api-reactions, api-pins, api-oauth, api-oauth-v2, api-migration, api-files, api-files-remote, api-emoji, api-dnd, api-dialog, api-conversations, api-chat, api-chat-scheduled-messages, api-calls, api-bots, api-auth, api-apps, api-apps-permissions, api-apps-permissions-users, api-apps-permissions-scopes, api-apps-permissions-resources, api-apps-event-authorizations, api-api, api-admin-users, api-admin-usergroups, api-admin-teams, api-admin-teams-settings, api-admin-teams-owners, api-admin-teams-admins, api-admin-invite-requests, api-admin-invite-requests-denied, api-admin-invite-requests-approved, api-admin-emoji, api-admin-conversations, api-admin-conversations-restrict-access, api-admin-conversations-ekm, api-admin-apps-restricted, api-admin-apps-requests, api-admin-apps-approved, api, follow-ups, link-conversations. |
 
 | Option | What it does |
 |---|---|
