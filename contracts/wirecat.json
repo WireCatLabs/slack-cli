@@ -73,6 +73,1054 @@
     },
     {
       "path": [
+        "setup"
+      ],
+      "summary": "connect this profile, question by question",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      },
+      "permission": "setup"
+    },
+    {
+      "path": [
+        "setup",
+        "show"
+      ],
+      "summary": "print the connection flow as JSON, for WireCat Desktop",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "setup.show"
+    },
+    {
+      "path": [
+        "setup",
+        "apply"
+      ],
+      "summary": "check the answers on stdin against the flow, and save them",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      },
+      "permission": "setup.apply"
+    },
+    {
+      "path": [
+        "setup",
+        "run"
+      ],
+      "summary": "run one step of the flow, as WireCat Desktop does",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      },
+      "permission": "setup.run"
+    },
+    {
+      "path": [
+        "account",
+        "list"
+      ],
+      "summary": "profiles on this computer and their signed-in accounts",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "account.list",
+      "entity": "account_profile"
+    },
+    {
+      "path": [
+        "account",
+        "show"
+      ],
+      "summary": "who this profile is logged in as, with the phone number",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "account.show",
+      "entity": "account"
+    },
+    {
+      "path": [
+        "account",
+        "update"
+      ],
+      "summary": "change the name, the description or the photo everyone sees on your profile",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "account.update",
+      "entity": "account_change"
+    },
+    {
+      "path": [
+        "account",
+        "sessions"
+      ],
+      "summary": "devices and apps signed in to this account",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "account.sessions"
+    },
+    {
+      "path": [
+        "account",
+        "remove"
+      ],
+      "summary": "sign this profile out and forget it, keeping or deleting its data",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "account.remove",
+      "entity": "account_removal"
+    },
+    {
+      "path": [
+        "chats",
+        "list"
+      ],
+      "summary": "chats, newest first, archived ones included",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.list",
+      "entity": "chat"
+    },
+    {
+      "path": [
+        "chats",
+        "events"
+      ],
+      "summary": "stored membership and title changes",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.events",
+      "entity": "chat_event"
+    },
+    {
+      "path": [
+        "chats",
+        "show"
+      ],
+      "summary": "one chat: its kind, unread count, last message time and who is in it",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.show",
+      "entity": "chat"
+    },
+    {
+      "path": [
+        "chats",
+        "documents",
+        "list"
+      ],
+      "summary": "every document link in the chat, newest first, and whether the store has it",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.documents.list",
+      "entity": "document_link"
+    },
+    {
+      "path": [
+        "chats",
+        "members",
+        "list"
+      ],
+      "summary": "group members and their roles",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.members.list",
+      "entity": "member"
+    },
+    {
+      "path": [
+        "chats",
+        "members",
+        "check"
+      ],
+      "summary": "members that look like bots, with reasons",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.members.check",
+      "entity": "member"
+    },
+    {
+      "path": [
+        "chats",
+        "members",
+        "history"
+      ],
+      "summary": "stored membership changes",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "chats.members.history",
+      "entity": "chat_event"
+    },
+    {
+      "path": [
+        "chats",
+        "members",
+        "fetch"
+      ],
+      "summary": "save the group's current membership",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      },
+      "permission": "chats.members.fetch",
+      "entity": "chat_members_fetch"
+    },
+    {
+      "path": [
+        "chats",
+        "members",
+        "add"
+      ],
+      "summary": "add people; they are told",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.members.add",
+      "entity": "chat_members_change"
+    },
+    {
+      "path": [
+        "chats",
+        "members",
+        "remove"
+      ],
+      "summary": "remove people; their messages stay",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.members.remove",
+      "entity": "chat_members_change"
+    },
+    {
+      "path": [
+        "chats",
+        "mark-read"
+      ],
+      "summary": "mark a chat read; the other side sees that you read it",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.mark-read",
+      "entity": "chat_read"
+    },
+    {
+      "path": [
+        "chats",
+        "tracking",
+        "list"
+      ],
+      "summary": "every tracked chat: since when, and its last member count",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "chats.tracking.list",
+      "entity": "tracked_chat"
+    },
+    {
+      "path": [
+        "chats",
+        "tracking",
+        "show"
+      ],
+      "summary": "one chat's member tracking and daily counts",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "chats.tracking.show",
+      "entity": "tracked_chat_history"
+    },
+    {
+      "path": [
+        "chats",
+        "tracking",
+        "add"
+      ],
+      "summary": "fetch this chat's member list daily while serve runs, from its next run",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "chats.tracking.add",
+      "entity": "chat_tracking"
+    },
+    {
+      "path": [
+        "chats",
+        "tracking",
+        "remove"
+      ],
+      "summary": "stop fetching it daily; the history already kept stays",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "chats.tracking.remove",
+      "entity": "chat_tracking"
+    },
+    {
+      "path": [
+        "chats",
+        "create"
+      ],
+      "summary": "create a group or a channel; the people added are told",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.create",
+      "entity": "chat_group_change"
+    },
+    {
+      "path": [
+        "chats",
+        "join"
+      ],
+      "summary": "join a group or channel by its link; the others in it see that you joined",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.join",
+      "entity": "chat_group_change"
+    },
+    {
+      "path": [
+        "chats",
+        "leave"
+      ],
+      "summary": "leave a group or channel; the others in it see that you left",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.leave",
+      "entity": "chat_removal"
+    },
+    {
+      "path": [
+        "chats",
+        "update"
+      ],
+      "summary": "change a group or channel's profile and settings",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.update",
+      "entity": "chat_group_change"
+    },
+    {
+      "path": [
+        "chats",
+        "links",
+        "show"
+      ],
+      "summary": "the invite link, if you may see it",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.links.show",
+      "entity": "chat_invite"
+    },
+    {
+      "path": [
+        "chats",
+        "links",
+        "reset"
+      ],
+      "summary": "replace the invite link; the old one stops working",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.links.reset",
+      "entity": "chat_group_change"
+    },
+    {
+      "path": [
+        "chats",
+        "requests",
+        "list"
+      ],
+      "summary": "who asked to join, newest first; only admins see them, and reading tells nobody",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "chats.requests.list",
+      "entity": "join_request"
+    },
+    {
+      "path": [
+        "chats",
+        "requests",
+        "confirm"
+      ],
+      "summary": "let them in; the group sees them join",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.requests.confirm",
+      "entity": "chat_request_change"
+    },
+    {
+      "path": [
+        "chats",
+        "requests",
+        "reject"
+      ],
+      "summary": "turn the request away",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.requests.reject",
+      "entity": "chat_request_change"
+    },
+    {
+      "path": [
+        "chats",
+        "admins",
+        "add"
+      ],
+      "summary": "make a member an admin with these rights",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.admins.add",
+      "entity": "chat_admin_change"
+    },
+    {
+      "path": [
+        "chats",
+        "admins",
+        "remove"
+      ],
+      "summary": "take an admin's rights back; they stay a member",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.admins.remove",
+      "entity": "chat_admin_change"
+    },
+    {
+      "path": [
+        "chats",
+        "folders"
+      ],
+      "summary": "your chat folders",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.folders"
+    },
+    {
+      "path": [
+        "chats",
+        "rules",
+        "show"
+      ],
+      "summary": "the group's rules; the defaults, marked not saved, if it has none yet",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "chats.rules.show",
+      "entity": "chat_rules"
+    },
+    {
+      "path": [
+        "chats",
+        "rules",
+        "set"
+      ],
+      "summary": "change one rule; the group's first change writes every rule with its default",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "chats.rules.set",
+      "entity": "chat_rules"
+    },
+    {
+      "path": [
+        "chats",
+        "rules",
+        "unset"
+      ],
+      "summary": "put one rule back to its default",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "chats.rules.unset",
+      "entity": "chat_rules"
+    },
+    {
+      "path": [
+        "chats",
+        "moderate"
+      ],
+      "summary": "judge a group's new messages and members by its rules, and act as they allow",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "chats.moderate",
+      "entity": "chat_moderation"
+    },
+    {
+      "path": [
+        "contacts",
+        "list"
+      ],
+      "summary": "people you have a one-to-one chat with",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "contacts.list",
+      "entity": "contact"
+    },
+    {
+      "path": [
+        "contacts",
+        "show"
+      ],
+      "summary": "one person's profile, your alias and notes, and the chats you share",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "contacts.show",
+      "entity": "contact"
+    },
+    {
+      "path": [
+        "contacts",
+        "context"
+      ],
+      "summary": "what the local archive knows about a person",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "contacts.context",
+      "entity": "contact_context"
+    },
+    {
+      "path": [
+        "contacts",
+        "prepare"
+      ],
+      "summary": "what to know before you talk to someone, each item with its reference",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "contacts.prepare",
+      "entity": "contact_preparation"
+    },
+    {
+      "path": [
+        "contacts",
+        "events"
+      ],
+      "summary": "one person's activity across their linked identities",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "contacts.events",
+      "entity": "contact_activity"
+    },
+    {
+      "path": [
+        "contacts",
+        "check"
+      ],
+      "summary": "check a person's profile and messages for signs of abuse",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "contacts.check",
+      "entity": "contact_check"
+    },
+    {
+      "path": [
+        "contacts",
+        "link"
+      ],
+      "summary": "link identities that belong to one person",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "contacts.link",
+      "entity": "linked_person"
+    },
+    {
+      "path": [
+        "contacts",
+        "unlink"
+      ],
+      "summary": "undo contacts link for one identity: it is a person of its own again",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "contacts.unlink",
+      "entity": "linked_person"
+    },
+    {
+      "path": [
+        "contacts",
+        "lookup"
+      ],
+      "summary": "find an account by a phone number",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "contacts.lookup",
+      "entity": "contact_lookup"
+    },
+    {
+      "path": [
+        "contacts",
+        "sync"
+      ],
+      "summary": "take the whole contact list from the messenger into the local store",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      },
+      "permission": "contacts.sync",
+      "entity": "contact_sync"
+    },
+    {
+      "path": [
+        "contacts",
+        "aliases",
+        "set"
+      ],
+      "summary": "your own name for a person in this account; kept on this machine, never sent",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "contacts.aliases.set",
+      "entity": "contact_alias"
+    },
+    {
+      "path": [
+        "contacts",
+        "aliases",
+        "remove"
+      ],
+      "summary": "drop your local name for a person; their own name shows again",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "contacts.aliases.remove",
+      "entity": "contact_alias"
+    },
+    {
+      "path": [
+        "contacts",
+        "notes",
+        "list"
+      ],
+      "summary": "every private note you keep on a person, oldest first",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "contacts.notes.list",
+      "entity": "contact_note"
+    },
+    {
+      "path": [
+        "contacts",
+        "notes",
+        "show"
+      ],
+      "summary": "one private note on a person, with its revision for edit",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "contacts.notes.show",
+      "entity": "contact_note"
+    },
+    {
+      "path": [
+        "contacts",
+        "notes",
+        "add"
+      ],
+      "summary": "add a private note on a person from stdin or --text-file; never sent",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "contacts.notes.add",
+      "entity": "contact_note"
+    },
+    {
+      "path": [
+        "contacts",
+        "notes",
+        "edit"
+      ],
+      "summary": "replace a note's text; --revision must match the one you read",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "contacts.notes.edit",
+      "entity": "contact_note"
+    },
+    {
+      "path": [
+        "contacts",
+        "notes",
+        "remove"
+      ],
+      "summary": "delete one private note on a person",
+      "effects": {
+        "remote": "none",
+        "local": "write"
+      },
+      "permission": "contacts.notes.remove",
+      "entity": "contact_note_removal"
+    },
+    {
+      "path": [
+        "contacts",
+        "block"
+      ],
+      "summary": "stop a person from writing to you — they need not be a contact",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "contacts.block",
+      "entity": "contact_state_change"
+    },
+    {
+      "path": [
+        "contacts",
+        "unblock"
+      ],
+      "summary": "let a blocked person write to you again",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "contacts.unblock",
+      "entity": "contact_state_change"
+    },
+    {
+      "path": [
+        "messages",
+        "evidence"
+      ],
+      "summary": "a recent-chat evidence packet from stored messages",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "messages.evidence",
+      "entity": "evidence_packet"
+    },
+    {
+      "path": [
+        "messages",
+        "list"
+      ],
+      "summary": "a chat's messages, oldest to newest",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "messages.list",
+      "entity": "message"
+    },
+    {
+      "path": [
+        "messages",
+        "send"
+      ],
+      "summary": "send a text message; without [text], the text is read from stdin",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "messages.send",
+      "entity": "message_write"
+    },
+    {
+      "path": [
+        "messages",
+        "show"
+      ],
+      "summary": "one message, by its chat and id or by its msg: locator",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "messages.show",
+      "entity": "message"
+    },
+    {
+      "path": [
+        "messages",
+        "context"
+      ],
+      "summary": "a message and what came either side of it, oldest first",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "messages.context",
+      "entity": "message_context"
+    },
+    {
+      "path": [
+        "messages",
+        "download"
+      ],
+      "summary": "download files attached to stored messages",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      },
+      "permission": "messages.download",
+      "entity": "message_download"
+    },
+    {
+      "path": [
+        "messages",
+        "transcribe"
+      ],
+      "summary": "transcribe one voice message",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "messages.transcribe",
+      "entity": "message_transcript"
+    },
+    {
+      "path": [
+        "messages",
+        "edit"
+      ],
+      "summary": "change the text of your own message; the other side may have read it already",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "messages.edit",
+      "entity": "message_write"
+    },
+    {
+      "path": [
+        "messages",
+        "delete"
+      ],
+      "summary": "delete messages for you only; with --for-everyone, for everyone in the chat",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "messages.delete",
+      "entity": "message_deletion"
+    },
+    {
+      "path": [
+        "messages",
+        "forward"
+      ],
+      "summary": "forward one message to another chat",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "messages.forward",
+      "entity": "message_write"
+    },
+    {
+      "path": [
+        "messages",
+        "pin"
+      ],
+      "summary": "pin a message in a chat, quietly unless --notify",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "messages.pin",
+      "entity": "message_pin"
+    },
+    {
+      "path": [
+        "messages",
+        "unpin"
+      ],
+      "summary": "unpin a message in a chat",
+      "effects": {
+        "remote": "write",
+        "local": "write"
+      },
+      "permission": "messages.unpin",
+      "entity": "message_pin"
+    },
+    {
+      "path": [
+        "messages",
+        "link"
+      ],
+      "summary": "a message permalink when supported, and its account-scoped locator",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "messages.link",
+      "entity": "message_link"
+    },
+    {
+      "path": [
+        "messages",
+        "links"
+      ],
+      "summary": "why a message belongs to its conversation",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "messages.links",
+      "entity": "message_links"
+    },
+    {
+      "path": [
+        "messages",
+        "sync"
+      ],
+      "summary": "fetch and save a chat's message history",
+      "effects": {
+        "remote": "read",
+        "local": "write"
+      },
+      "permission": "messages.sync",
+      "entity": "message_sync"
+    },
+    {
+      "path": [
+        "search",
+        "all"
+      ],
+      "summary": "search stored messages, notes, calendar events and meetings",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "search.all",
+      "entity": "hit"
+    },
+    {
+      "path": [
+        "search",
+        "messages"
+      ],
+      "summary": "find messages by words and filters",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "search.messages",
+      "entity": "message"
+    },
+    {
+      "path": [
+        "search",
+        "notes"
+      ],
+      "summary": "find stored notes by words and filters",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "search.notes",
+      "entity": "note"
+    },
+    {
+      "path": [
+        "search",
+        "conversations"
+      ],
+      "summary": "find conversations by words and meaning",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "search.conversations",
+      "entity": "conversation_hit"
+    },
+    {
+      "path": [
+        "search",
+        "runs"
+      ],
+      "summary": "search recorded diagnostic metadata and events",
+      "effects": {
+        "remote": "none",
+        "local": "read"
+      },
+      "permission": "search.runs",
+      "entity": "run"
+    },
+    {
+      "path": [
         "api",
         "list"
       ],
@@ -2367,27 +3415,140 @@
     }
   ],
   "entities": {
-    "api_operation": {
+    "account_profile": {
       "fields": [
-        "effect",
-        "tag"
+        "profile",
+        "current",
+        "account",
+        "name",
+        "signed_in"
+      ]
+    },
+    "chat": {
+      "fields": [
+        "id",
+        "title",
+        "kind",
+        "unread_count",
+        "last_message_at",
+        "participants_count"
+      ]
+    },
+    "chat_event": {
+      "fields": [
+        "chat_id",
+        "time",
+        "type",
+        "message_id",
+        "title"
+      ]
+    },
+    "document_link": {
+      "fields": [
+        "ref",
+        "url",
+        "document_id",
+        "title",
+        "in_store",
+        "sent_at"
+      ]
+    },
+    "member": {
+      "fields": [
+        "id",
+        "name",
+        "username",
+        "role",
+        "last_seen_at",
+        "registered_at",
+        "joined_at",
+        "invited_by",
+        "is_bot",
+        "deleted",
+        "flagged",
+        "has_photo",
+        "score",
+        "reasons"
+      ]
+    },
+    "tracked_chat": {
+      "fields": [
+        "chat_id",
+        "title"
+      ]
+    },
+    "join_request": {
+      "fields": [
+        "person_id",
+        "name",
+        "username",
+        "requested_at",
+        "about"
+      ]
+    },
+    "contact": {
+      "fields": [
+        "ref",
+        "id",
+        "name",
+        "username",
+        "alias",
+        "display_name",
+        "description",
+        "last_messaged_at",
+        "email",
+        "usernames",
+        "birthday",
+        "phone",
+        "seen",
+        "contact",
+        "mutual_contact",
+        "common_chats_count",
+        "has_photo"
+      ]
+    },
+    "contact_activity": {
+      "fields": [
+        "scope",
+        "at"
+      ]
+    },
+    "contact_note": {
+      "fields": [
+        "id",
+        "contact",
+        "text",
+        "revision",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "message": {
+      "fields": [
+        "id",
+        "date",
+        "topic"
       ]
     },
     "run": {
       "fields": [
+        "started_at",
+        "text",
+        "status",
+        "error_code",
+        "operation",
+        "profile",
+        "kind",
+        "table",
         "run_id",
         "command",
-        "profile",
-        "started_at",
         "completed_at",
-        "status",
         "requests",
         "duration_ms",
         "cli_version",
         "runtime",
         "platform",
         "arch",
-        "error_code",
         "provider_error",
         "kept_because_failed",
         "operations",
@@ -2402,11 +3563,18 @@
         "event_count",
         "events_truncated"
       ]
+    },
+    "api_operation": {
+      "fields": [
+        "effect",
+        "tag"
+      ]
     }
   },
   "network": {
     "hosts": [
       "slack.com",
+      "files.slack.com",
       "registry.npmjs.org",
       "huggingface.co",
       "*.huggingface.co",
@@ -2419,7 +3587,7 @@
     "tagline": "Read and search your Slack channels, DMs and threads",
     "profiles": {
       "args": [
-        "session",
+        "account",
         "list",
         "--no-record",
         "--json"
@@ -2455,8 +3623,7 @@
     "search": null,
     "setup": [
       "{profile}",
-      "session",
-      "start"
+      "setup"
     ],
     "signIn": {
       "gives": "Lets your agent read and write your Slack workspace as you.",
@@ -2552,7 +3719,27 @@
         "--record",
         "--json"
       ],
-      "remove": null,
+      "remove": {
+        "minVersion": "0.0.0",
+        "keepData": [
+          "{profile}",
+          "account",
+          "remove",
+          "--keep-data",
+          "--record",
+          "--json"
+        ],
+        "deleteData": [
+          "{profile}",
+          "account",
+          "remove",
+          "--delete-data",
+          "--record",
+          "--json"
+        ],
+        "dryRun": "--dry-run",
+        "confirm": "--yes"
+      },
       "removes": [
         "signIn"
       ],

@@ -107,6 +107,1688 @@ slack session list
 
 **Example:** `slack session list`, `slack session list --json`
 
+## `slack setup`
+
+connect this profile to slack: the same questions WireCat Desktop shows, asked in the terminal, checked, and saved only when the check succeeds; show, apply and run are the same flow for programs
+
+### `slack setup show`
+
+print the connection flow as a WireCat setup document: steps, texts in every language, and each setting's own JSON Schema; with a profile it adds the profile's current values, a secret only as { set: true }
+
+```sh
+slack setup show
+```
+
+**Example:** `slack personal setup show --json`, `slack office setup show --json`
+
+### `slack setup apply`
+
+read the answers as one JSON object on stdin (input id → value), keep only those on the path they lead to, check each with its setting's own schema, then run the CLI's check and save the settings and secrets; --dry-run only checks and saves nothing
+
+**Changes something on this computer only.**
+
+```sh
+slack setup apply [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--dry-run` | check the answers, and save nothing. |
+
+**Example:** `slack office setup apply --dry-run --json`, `slack office setup apply --json`
+
+### `slack setup run`
+
+run one run step of the flow: apply checks the answers, runs the CLI's check and saves; the sign-in events go to stderr as JSON lines and the result to stdout; with --answer-stdin the answers are stdin's first line
+
+**Changes something on this computer only.**
+
+```sh
+slack setup run <action> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `action` | required | the step's action: apply. |
+
+| Option | What it does |
+|---|---|
+| `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
+
+**Example:** `slack office setup run apply --json --answer-stdin`
+
+## `slack account`
+
+the logged-in account
+
+### `slack account list`
+
+every account profile on this computer, and the account each is logged in as; a name that is only a bot is left out (`bot list` has it), one that is a bot too says `bot: true`; asks the messenger nothing
+
+```sh
+slack account list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** account profile — profile, current, account, name, signed_in, bot; every field: slack commands info account list
+
+**Example:** `slack personal account list`
+
+### `slack account show`
+
+who this profile is logged in as, with the phone number
+
+```sh
+slack account show [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--hide-phone` | leave the phone number out. |
+
+**Returns:** account — provider, id, name, username, phone, scope; every field: slack commands info account show
+
+**Example:** `slack personal account show`
+
+### `slack account update`
+
+change the name, the description or the photo everyone sees on your profile
+
+**Changes something in the service.**
+
+```sh
+slack account update [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--first-name <name>` | your first name. |
+| `--last-name <name>` | your last name. |
+| `--description <text>` | about you. |
+| `--photo <file>` | a new profile photo — an image file. |
+| `--hide-phone` | leave the phone number out of the answer. |
+
+**Returns:** account change — operation_id, account; every field: slack commands info account update
+
+**Example:** `slack personal account update --first-name Alex`
+
+### `slack account sessions`
+
+where else this account is logged in — not `slack session`, which is this tool's own login
+
+```sh
+slack account sessions
+```
+
+### `slack account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes something in the service.**
+
+```sh
+slack account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: slack commands info account remove
+
+**Example:** `slack personal account remove --keep-data --dry-run`, `slack personal account remove --delete-data --yes`
+
+## `slack chats`
+
+the account's chats
+
+### `slack chats list`
+
+chats, newest first, archived ones included; the query is answered from the local store, so online, where the messenger filters nothing, it needs --offline
+
+```sh
+slack chats list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
+
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: slack commands info chats list
+
+**Next usually:** `slack chats events <chat> [query]`, `slack chats show <chat>`, `slack chats documents list <chat> [query]`
+
+**Example:** `slack personal chats list --limit 10`
+
+### `slack chats events`
+
+who joined, left, was added or removed, and by whom — from the chat's service messages; the last 7 days unless the query names time
+
+```sh
+slack chats events <chat> [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: slack commands info chats events
+
+**Example:** `slack personal chats events "Book club"`
+
+### `slack chats show`
+
+one chat: its kind, unread count, last message time and who is in it
+
+```sh
+slack chats show <chat>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: slack commands info chats show
+
+**Next usually:** `slack chats events <chat> [query]`, `slack chats documents list <chat> [query]`, `slack chats members list <chat> [query]`
+
+**Example:** `slack personal chats show "Book club"`
+
+### `slack chats documents`
+
+the Google Docs and Drive documents linked in a chat's stored messages
+
+#### `slack chats documents list`
+
+every document link in the chat, newest first, and whether the store has it
+
+```sh
+slack chats documents list <chat> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+
+**Returns:** document link — ref, url, document_id, title, in_store, sent_at, sender; every field: slack commands info chats documents list
+
+**Example:** `slack personal chats documents list "Project room" --limit 10`
+
+### `slack chats members`
+
+who is in a group
+
+#### `slack chats members list`
+
+everyone in a group, a page at a time, with their role and when they were last seen
+
+```sh
+slack chats members list <chat> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
+
+**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: slack commands info chats members list
+
+**Next usually:** `slack contacts show <person>`, `slack contacts context <person>`, `slack contacts prepare <person>`
+
+**Example:** `slack personal chats members list "Book club"`
+
+#### `slack chats members check`
+
+members that look like bots, each with its reasons — read from the member list and the local store; never one request per person, and it removes nobody
+
+```sh
+slack chats members check <chat> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
+| `--deep <n>` | also check the top n in full — profile, photos and everything they wrote — one person a second; the public ban lists cover Telegram only, so nothing is sent. |
+
+**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: slack commands info chats members check
+
+**Next usually:** `slack contacts show <person>`, `slack contacts context <person>`, `slack contacts prepare <person>`
+
+**Example:** `slack personal chats members check "Book club"`
+
+#### `slack chats members history`
+
+who joined, who left and whose profile changed, oldest first — what chats members fetch recorded in the local store; never asks the messenger
+
+```sh
+slack chats members history <chat> [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: slack commands info chats members history
+
+**Example:** `slack personal chats members history "Book club"`
+
+#### `slack chats members fetch`
+
+read a group's whole member list into the local store's member history: who joined, who left, daily counts and profile changes; someone is recorded as gone only when every member was read
+
+**Changes something on this computer only.**
+
+```sh
+slack chats members fetch <chat> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+| Option | What it does |
+|---|---|
+| `--track` | also fetch it daily while serve runs; chats tracking lists and edits those chats. |
+| `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
+
+**Returns:** chat members fetch — chat_id, joined, gone, changed, read, participants, complete, more, and 1 more; every field: slack commands info chats members fetch
+
+**Example:** `slack personal chats members fetch "Book club"`
+
+#### `slack chats members add`
+
+add people; they are told
+
+**Changes something in the service.**
+
+```sh
+slack chats members add <chat> <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `person` | required | an id, or part of a name. |
+
+**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: slack commands info chats members add
+
+**Example:** `slack personal chats members add "Book club" "Alex Example"`
+
+#### `slack chats members remove`
+
+remove people; their messages stay
+
+**Changes something in the service.**
+
+```sh
+slack chats members remove <chat> <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `person` | required | an id, or part of a name. |
+
+**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: slack commands info chats members remove
+
+**Example:** `slack personal chats members remove "Book club" "Alex Example"`
+
+### `slack chats mark-read`
+
+mark a chat read; the other side sees that you read it
+
+**Changes something in the service.**
+
+```sh
+slack chats mark-read <chat> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+| Option | What it does |
+|---|---|
+| `--until-id <id>` | only up to this message id; the newest by default. |
+| `--topic <id>` | mark only this forum topic read. |
+
+**Returns:** chat read — operation_id, chat_id, until, thread_id; every field: slack commands info chats mark-read
+
+**Example:** `slack personal chats mark-read "Book club" --until-id 101`
+
+### `slack chats tracking`
+
+the chats whose member lists serve fetches daily into the local store — chats members fetch --track adds one
+
+#### `slack chats tracking list`
+
+every tracked chat: since when, and its last member count
+
+```sh
+slack chats tracking list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** tracked chat — chat_id, title, tracked_at, last_count; every field: slack commands info chats tracking list
+
+**Example:** `slack personal chats tracking list`
+
+#### `slack chats tracking show`
+
+one chat: whether it is tracked, and its member count per day for the last 30 days
+
+```sh
+slack chats tracking show <chat>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+**Returns:** tracked chat history — chat_id, tracked_at, counts; every field: slack commands info chats tracking show
+
+**Example:** `slack personal chats tracking show "Book club"`
+
+#### `slack chats tracking add`
+
+fetch this chat's member list daily while serve runs, from its next run
+
+**Changes something on this computer only.**
+
+```sh
+slack chats tracking add <chat>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+**Returns:** chat tracking — chat_id, tracked; every field: slack commands info chats tracking add
+
+**Example:** `slack personal chats tracking add "Book club"`
+
+#### `slack chats tracking remove`
+
+stop fetching it daily; the history already kept stays
+
+**Changes something on this computer only.**
+
+```sh
+slack chats tracking remove <chat>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+**Returns:** chat tracking — chat_id, tracked; every field: slack commands info chats tracking remove
+
+**Example:** `slack personal chats tracking remove "Book club"`
+
+### `slack chats create`
+
+create a group or a channel; the people added are told
+
+**Changes something in the service.**
+
+```sh
+slack chats create <title> [person] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `title` | required | the group's name. |
+| `person` | optional | people to add: an id, or part of a name. |
+
+| Option | What it does |
+|---|---|
+| `--channel` | a private channel instead of a group; people join it by its link. |
+
+**Returns:** chat group change — operation_id, chat, requested; every field: slack commands info chats create
+
+**Example:** `slack personal chats create "Book club" "Alex Example"`
+
+### `slack chats join`
+
+join a group or channel by its link; the others in it see that you joined
+
+**Changes something in the service.**
+
+```sh
+slack chats join <link>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `link` | required | an invite link, or a public one. |
+
+**Returns:** chat group change — operation_id, chat, requested; every field: slack commands info chats join
+
+**Example:** `slack personal chats join https://example.com/invite/book-club`
+
+### `slack chats leave`
+
+leave a group or channel; the others in it see that you left
+
+**Changes something in the service.**
+
+```sh
+slack chats leave <chat>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+**Returns:** chat removal — operation_id, chat_id; every field: slack commands info chats leave
+
+**Example:** `slack personal chats leave "Book club"`
+
+### `slack chats update`
+
+rename a group or channel, change its description, or turn one of its settings on or off
+
+**Changes something in the service.**
+
+```sh
+slack chats update <chat> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the new name. |
+| `--description <text>` | the new description. |
+| `--all-can-pin <on\|off>` | every member may pin messages. |
+| `--only-admins-add <on\|off>` | only admins may add members. |
+| `--only-admins-call <on\|off>` | only admins may start a call. |
+| `--only-owner-edits-info <on\|off>` | only the owner may change the name and photo. |
+| `--members-see-link <on\|off>` | members may see the invite link. |
+
+**Returns:** chat group change — operation_id, chat, requested; every field: slack commands info chats update
+
+**Example:** `slack personal chats update "Book club" --title "Reading group"`
+
+### `slack chats links`
+
+a group's invite link
+
+#### `slack chats links show`
+
+the invite link, if you may see it
+
+```sh
+slack chats links show <chat>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+**Returns:** chat invite — chat_id, title, link; every field: slack commands info chats links show
+
+**Example:** `slack personal chats links show "Book club"`
+
+#### `slack chats links reset`
+
+replace the invite link; the old one stops working
+
+**Changes something in the service.**
+
+```sh
+slack chats links reset <chat>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+**Returns:** chat group change — operation_id, chat, requested; every field: slack commands info chats links reset
+
+**Example:** `slack personal chats links reset "Book club"`
+
+### `slack chats requests`
+
+requests to join a group that needs an admin's approval
+
+#### `slack chats requests list`
+
+who asked to join, newest first; only admins see them, and reading tells nobody
+
+```sh
+slack chats requests list <chat> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+
+**Returns:** join request — person_id, name, username, requested_at, about; every field: slack commands info chats requests list
+
+**Example:** `slack personal chats requests list "Book club"`
+
+#### `slack chats requests confirm`
+
+let them in; the group sees them join
+
+**Changes something in the service.**
+
+```sh
+slack chats requests confirm <chat> <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `person` | required | who asked: an id from `chats requests list`. |
+
+**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: slack commands info chats requests confirm
+
+**Example:** `slack personal chats requests confirm "Book club" "Alex Example"`
+
+#### `slack chats requests reject`
+
+turn the request away
+
+**Changes something in the service.**
+
+```sh
+slack chats requests reject <chat> <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `person` | required | who asked: an id from `chats requests list`. |
+
+**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: slack commands info chats requests reject
+
+**Example:** `slack personal chats requests reject "Book club" "Alex Example"`
+
+### `slack chats admins`
+
+give or take back a member's admin rights
+
+#### `slack chats admins add`
+
+make a member an admin with these rights
+
+**Changes something in the service.**
+
+```sh
+slack chats admins add <chat> <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `person` | required | an id, or part of a name. |
+
+| Option | What it does |
+|---|---|
+| `--can <rights>` | what they may do, comma-separated: read, members, admins, info, pin, link, post, edit, delete. |
+
+**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: slack commands info chats admins add
+
+**Example:** `slack personal chats admins add "Book club" "Alex Example" --can info`
+
+#### `slack chats admins remove`
+
+take an admin's rights back; they stay a member
+
+**Changes something in the service.**
+
+```sh
+slack chats admins remove <chat> <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `person` | required | an id, or part of a name. |
+
+**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: slack commands info chats admins remove
+
+**Example:** `slack personal chats admins remove "Book club" "Alex Example"`
+
+### `slack chats folders`
+
+your chat folders
+
+```sh
+slack chats folders
+```
+
+### `slack chats rules`
+
+what `chats moderate` judges a group by, kept in a file of this profile
+
+#### `slack chats rules show`
+
+the group's rules; the defaults, marked not saved, if it has none yet
+
+```sh
+slack chats rules show <chat>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slack commands info chats rules show
+
+**Example:** `slack personal chats rules show "Book club"`
+
+#### `slack chats rules set`
+
+change one rule; the group's first change writes every rule with its default
+
+**Changes something on this computer only.**
+
+```sh
+slack chats rules set <chat> <key> <value>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
+| `value` | required | the new value; a list is comma-separated. |
+
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slack commands info chats rules set
+
+**Example:** `slack personal chats rules set "Book club" links report`
+
+#### `slack chats rules unset`
+
+put one rule back to its default
+
+**Changes something on this computer only.**
+
+```sh
+slack chats rules unset <chat> <key>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
+
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slack commands info chats rules unset
+
+**Example:** `slack personal chats rules unset "Book club" links`
+
+### `slack chats moderate`
+
+judge a group's new messages and members by its rules, and act as they allow
+
+**Changes something in the service.**
+
+```sh
+slack chats moderate <chat> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | judge what came after this ISO 8601 time, or 2h / 1d ago; the saved point stays. |
+| `--dry-run` | judge and plan; do nothing. |
+| `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
+| `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
+
+**Returns:** chat moderation — chat_id, rows; every field: slack commands info chats moderate
+
+**Example:** `slack personal chats moderate "Book club" --dry-run`
+
+## `slack contacts`
+
+people this account has a one-to-one chat with
+
+### `slack contacts list`
+
+people you have a one-to-one chat with; name: matches the name, your local alias or the @username, notes: your private notes about them
+
+```sh
+slack contacts list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
+| `--all` | every row, no paging. |
+| `--order <recent\|name>` | newest conversation first, or alphabetical. Default: `recent`. |
+
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: slack commands info contacts list
+
+**Next usually:** `slack contacts show <person>`, `slack contacts context <person>`, `slack contacts prepare <person>`
+
+**Example:** `slack personal contacts list --limit 10`
+
+### `slack contacts show`
+
+one person: what the messenger says about them — handles, flags, last seen, phone, when they registered — your alias, the chats you share, how many of their messages the store holds in each, and the earlier names and usernames the store saw them with; --offline answers from the store alone
+
+```sh
+slack contacts show <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | their id, @username, or part of their name. |
+
+| Option | What it does |
+|---|---|
+| `--with-notes` | include your private notes, subject to contacts.notes.list permission. |
+| `--hide-phone` | leave the phone number out. |
+
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: slack commands info contacts show
+
+**Next usually:** `slack contacts context <person>`, `slack contacts prepare <person>`, `slack contacts events <person> [query]`
+
+**Example:** `slack personal contacts show "Alex Example"`
+
+### `slack contacts context`
+
+what the store holds about one person, in every messenger linked to them, read only in accounts of this account's scope (personal or work): shared chats, the last messages each way, their recent messages, where others mentioned them — never connects
+
+```sh
+slack contacts context <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | their id, @username, or part of their name. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | at most this many messages in each list; 10 if not given. |
+| `--since-time <time>` | nothing older than this ISO 8601 time, or 2h / 1d ago. |
+| `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
+| `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
+
+**Returns:** contact context — person, accounts, shared, last, recent, mentions, limits, complete, and 4 more; every field: slack commands info contacts context
+
+**Example:** `slack personal contacts context "Alex Example" --limit 10`
+
+### `slack contacts prepare`
+
+before you talk to someone: what contacts context gives, plus the one-to-one chats where they wrote last, open tasks, accepted facts, your notes and their recent meetings, each with its reference; never connects
+
+```sh
+slack contacts prepare <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | their id, @username, or part of their name. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | at most this many messages, and items in each section; 10 if not given. |
+| `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 2h / 1d ago. |
+
+**Returns:** contact preparation — person, accounts, shared, last, recent, mentions, limits, complete, and 4 more; every field: slack commands info contacts prepare
+
+**Example:** `slack personal contacts prepare Ana`
+
+### `slack contacts events`
+
+everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; only in this account's scope, personal or work, and scope: of the other one is refused; never connects
+
+```sh
+slack contacts events <person> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | their id, @username, or part of their name. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | at most this many; 50 if not given. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it, with the same filters. |
+
+**Returns:** contact activity — at, subject, subject_id, role, scope, provider, account, chat_id, and 2 more; every field: slack commands info contacts events
+
+**Example:** `slack personal contacts events "Alex Example" --limit 10`
+
+### `slack contacts check`
+
+whether one person looks like a bot, a fake or a spammer: their profile and what they wrote in the store — a hint, never a verdict; the public ban lists cover Telegram only, so nothing is sent
+
+```sh
+slack contacts check <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | their id, @username, or part of their name. |
+
+| Option | What it does |
+|---|---|
+| `--no-registries` | do not ask the public ban lists; nothing about them leaves this machine. |
+
+**Returns:** contact check — person, score, reasons, registries, unknown, checked_at; every field: slack commands info contacts check
+
+**Example:** `slack personal contacts check "Alex Example"`
+
+### `slack contacts link`
+
+record that two people in the store are one person — the same name is never enough
+
+**Changes something on this computer only.**
+
+```sh
+slack contacts link <person> <other> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | their id, @username, or part of their name. |
+| `other` | required | the same in another messenger of the store, as <messenger>:<person> — max:Ana; me: it is you, as zoom:<id> me. |
+
+| Option | What it does |
+|---|---|
+| `--reason <text>` | why they are one person; an agent's link is a proposal and needs it. |
+
+**Returns:** linked person — uid, name, identities, display_name, proposal; every field: slack commands info contacts link
+
+**Example:** `slack personal contacts link "Alex Example" zoom:101`
+
+### `slack contacts unlink`
+
+undo contacts link for one identity: it is a person of its own again
+
+**Changes something on this computer only.**
+
+```sh
+slack contacts unlink <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | their id, @username, or part of their name; <messenger>:<person> for another messenger. |
+
+| Option | What it does |
+|---|---|
+| `--from <person>` | the person it leaves, person:<uid> or person:me; refused when it sits on another. |
+
+**Returns:** linked person — uid, name, identities, display_name, proposal; every field: slack commands info contacts unlink
+
+**Example:** `slack personal contacts unlink "Alex Example" --from person:me`
+
+### `slack contacts lookup`
+
+who has this phone number — asks for it, or reads it from stdin; never an argument
+
+```sh
+slack contacts lookup
+```
+
+**Returns:** contact lookup — id, name, username; every field: slack commands info contacts lookup
+
+**Example:** `slack personal contacts lookup`
+
+### `slack contacts sync`
+
+take the whole contact list from the messenger into the local store
+
+**Changes something on this computer only.**
+
+```sh
+slack contacts sync
+```
+
+**Returns:** contact sync — added, changed, known; every field: slack commands info contacts sync
+
+**Example:** `slack personal contacts sync`
+
+### `slack contacts aliases`
+
+a private local display name in the selected account
+
+#### `slack contacts aliases set`
+
+your own name for a person in this account; kept on this machine, never sent
+
+**Changes something on this computer only.**
+
+```sh
+slack contacts aliases set <person> <alias>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the person's id, reference or known name. |
+| `alias` | required | the private name to use for this person. |
+
+**Returns:** contact alias — person_id, alias; every field: slack commands info contacts aliases set
+
+**Example:** `slack personal contacts aliases set "Alex Example" "Reading partner"`
+
+#### `slack contacts aliases remove`
+
+drop your local name for a person; their own name shows again
+
+**Changes something on this computer only.**
+
+```sh
+slack contacts aliases remove <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the person's id, reference or known name. |
+
+**Returns:** contact alias — person_id, alias; every field: slack commands info contacts aliases remove
+
+**Example:** `slack personal contacts aliases remove "Alex Example"`
+
+### `slack contacts notes`
+
+your private notes on a stored contact, the same in every account that sees them
+
+#### `slack contacts notes list`
+
+every private note you keep on a person, oldest first
+
+```sh
+slack contacts notes list <person> [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the person's id, reference or known name. |
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slack commands info contacts notes list
+
+**Example:** `slack personal contacts notes list "Alex Example"`
+
+#### `slack contacts notes show`
+
+one private note on a person, with its revision for edit
+
+```sh
+slack contacts notes show <person> <id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the person's id, reference or known name. |
+| `id` | required | the note id from contacts notes list. |
+
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slack commands info contacts notes show
+
+**Example:** `slack personal contacts notes show "Alex Example" 1`
+
+#### `slack contacts notes add`
+
+add a private note on a person from stdin or --text-file; never sent
+
+**Changes something on this computer only.**
+
+```sh
+slack contacts notes add <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the person's id, reference or known name. |
+
+| Option | What it does |
+|---|---|
+| `--text-file <path>` | read note text from a file; omitted or - reads stdin. |
+
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slack commands info contacts notes add
+
+**Example:** `slack personal contacts notes add "Alex Example" --text-file ./note.txt`
+
+#### `slack contacts notes edit`
+
+replace a note's text; --revision must match the one you read
+
+**Changes something on this computer only.**
+
+```sh
+slack contacts notes edit <person> <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the person's id, reference or known name. |
+| `id` | required | the note id from contacts notes list. |
+
+| Option | What it does |
+|---|---|
+| `--text-file <path>` | read note text from a file; omitted or - reads stdin. |
+| `--revision <n>` | the revision you read before editing. |
+
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slack commands info contacts notes edit
+
+**Example:** `slack personal contacts notes edit "Alex Example" 1 --revision 1 --text-file ./note.txt`
+
+#### `slack contacts notes remove`
+
+delete one private note on a person
+
+**Changes something on this computer only.**
+
+```sh
+slack contacts notes remove <person> <id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the person's id, reference or known name. |
+| `id` | required | the note id from contacts notes list. |
+
+**Returns:** contact note removal — id, person_id, removed; every field: slack commands info contacts notes remove
+
+**Example:** `slack personal contacts notes remove "Alex Example" 1`
+
+### `slack contacts block`
+
+stop a person from writing to you — they need not be a contact
+
+**Changes something in the service.**
+
+```sh
+slack contacts block <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
+
+**Returns:** contact state change — operation_id, person_id; every field: slack commands info contacts block
+
+**Example:** `slack personal contacts block "Alex Example"`
+
+### `slack contacts unblock`
+
+let a blocked person write to you again
+
+**Changes something in the service.**
+
+```sh
+slack contacts unblock <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
+
+**Returns:** contact state change — operation_id, person_id; every field: slack commands info contacts unblock
+
+**Example:** `slack personal contacts unblock "Alex Example"`
+
+## `slack messages`
+
+read and send messages
+
+### `slack messages evidence`
+
+general chat context, newest first, with references, coverage and fingerprints for verification
+
+```sh
+slack messages evidence <chat> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many, 1–100. |
+| `--cursor <cursor>` | go on from where page.next says the last packet stopped. |
+
+**Returns:** evidence packet — schema_version, id, kind, source, fingerprint, limits, content_bytes, coverage, and 1 more; every field: slack commands info messages evidence
+
+**Example:** `slack personal messages evidence "Book club" --limit 10`
+
+### `slack messages list`
+
+a chat's messages, oldest to newest
+
+```sh
+slack messages list <chat> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `query` | optional | where to start or which window, and which topic: id<42, date>=2026-10-01 date<2026-10-20, topic:12. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
+| `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
+
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 31 more; every field: slack commands info messages list
+
+**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack messages show <chat> [message]`
+
+**Example:** `slack personal messages list "Book club" --limit 20`
+
+### `slack messages send`
+
+send a text message; without [text], the text is read from stdin
+
+**Changes something in the service.**
+
+```sh
+slack messages send <chat> [text] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `text` | optional | the message. |
+
+| Option | What it does |
+|---|---|
+| `--topic <id>` | send to this forum topic. |
+| `--reply-to <message>` | answer this message, by its id in the same chat. |
+| `--operation-id <id>` | repeat a send whose outcome was unknown, without risking a second copy. |
+| `--no-preview` | no preview card for a link in the text. |
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+| `--file <file>` | attach a file; the text becomes its caption; repeat it for an album. Default: ``. |
+| `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption; repeat it for an album. Default: ``. |
+| `--as-file` | send each --file as a file to download, a video included. |
+| `--voice <file>` | send an Ogg Opus file as a voice message, alone, with no text. |
+| `--allow-any-file` | send a file even from credential folders or this CLI's own folders. |
+
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slack commands info messages send
+
+**Example:** `slack personal messages send "Book club" "The meeting starts at 10."`
+
+### `slack messages show`
+
+one message, by its chat and id or by its msg: locator
+
+```sh
+slack messages show <chat> [message]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…); or a msg: locator, with no message id after it. |
+| `message` | optional | the message id. |
+
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 31 more; every field: slack commands info messages show
+
+**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack messages context <chat> [message]`
+
+**Example:** `slack personal messages show "Book club" 101`
+
+### `slack messages context`
+
+a message and what came either side of it, oldest first
+
+```sh
+slack messages context <chat> [message] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…); or a msg: locator, with no message id after it. |
+| `message` | optional | the message id. |
+
+| Option | What it does |
+|---|---|
+| `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
+| `--thread-hops <n>` | at most this many links from the hit (default: 8). |
+| `--thread-messages <n>` | at most this many messages in each thread context (default: 50). |
+| `--thread-bytes <n>` | at most this many bytes of whole messages and links in each context (default: 65536). |
+| `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
+| `--before-n <n>` | how many before it. Default: `5`. |
+| `--after-n <n>` | how many after it. Default: `5`. |
+
+**Returns:** message context — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 42 more; every field: slack commands info messages context
+
+**Example:** `slack personal messages context "Book club" 101 --before-n 3 --after-n 3`
+
+### `slack messages download`
+
+save a message's photos, files, videos and voice notes to a folder — or a whole chat's with --all; with --offline, copy the ones this computer already holds, one by --attachment
+
+**Changes something on this computer only.**
+
+```sh
+slack messages download <chat> [message] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…); or a msg: locator, with no message id after it. |
+| `message` | optional | the message id; left out with --all or a locator. |
+
+| Option | What it does |
+|---|---|
+| `--output-dir <dir>` | where to save them; created if missing. Default: `.`. |
+| `--attachment <n>` | which file of the message, from 1; needed when it has more than one. |
+| `--all` | every file of the chat, newest first; run it again to continue where it stopped. |
+| `--pause <duration>` | with --all, a pause between pages, to stay under the provider's limits. Default: `1s`. |
+| `--extract` | read text layers from the files this download maps into the local content index. |
+
+**Returns:** message download — files, extraction, complete, batch, chat, saved, existing, stopped; every field: slack commands info messages download
+
+**Example:** `slack personal messages download "Book club" 101 --output-dir ./downloads`, `slack personal messages download msg:slack/me/500/101 --attachment 1 --offline`
+
+### `slack messages transcribe`
+
+a voice message as text — by Slack where it can, else by a model on this machine
+
+```sh
+slack messages transcribe <chat> <message> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `message` | required | the id of a voice message. |
+
+| Option | What it does |
+|---|---|
+| `--local` | use the model on this machine, never the messenger. |
+| `--model <model>` | which downloaded model; implies --local (`models list`). |
+
+**Returns:** message transcript — message_id, text, pending, via, model; every field: slack commands info messages transcribe
+
+**Example:** `slack personal messages transcribe "Book club" 101`
+
+### `slack messages edit`
+
+change the text of your own message; the other side may have read it already
+
+**Changes something in the service.**
+
+```sh
+slack messages edit <chat> <message> [text] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `message` | required | the id of your own message. |
+| `text` | optional | the new text; without it, read from stdin. |
+
+| Option | What it does |
+|---|---|
+| `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
+
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slack commands info messages edit
+
+**Example:** `slack personal messages edit "Book club" 101 "The meeting starts at 11."`
+
+### `slack messages delete`
+
+delete messages for you only; with --for-everyone, for everyone in the chat
+
+**Changes something in the service.**
+
+```sh
+slack messages delete <chat> <message> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `message` | required | the message ids, by spaces or commas, at most 10. |
+
+| Option | What it does |
+|---|---|
+| `--for-everyone` | delete for everyone in the chat, not only for you — they cannot get it back. |
+| `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
+
+**Returns:** message deletion — operation_id, chat_id, deleted, for_everyone; every field: slack commands info messages delete
+
+**Example:** `slack personal messages delete "Book club" 101`
+
+### `slack messages forward`
+
+forward one message to another chat
+
+**Changes something in the service.**
+
+```sh
+slack messages forward <chat> <message> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | the chat the message is in: a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `message` | required | the message id. |
+
+| Option | What it does |
+|---|---|
+| `--to <chat>` | where it goes: a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `--operation-id <id>` | repeat a forward whose outcome was unknown, without risking a second copy. |
+
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slack commands info messages forward
+
+**Example:** `slack personal messages forward "Book club" 101 --to "Project room"`
+
+### `slack messages pin`
+
+pin a message in a chat, quietly unless --notify
+
+**Changes something in the service.**
+
+```sh
+slack messages pin <chat> <message> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `message` | required | the message id. |
+
+| Option | What it does |
+|---|---|
+| `--notify` | tell the chat's members about the pin. |
+
+**Returns:** message pin — operation_id, chat_id, message_id, pinned; every field: slack commands info messages pin
+
+**Example:** `slack personal messages pin <chat> <message>`, `slack personal messages pin <chat> <message> --notify`
+
+### `slack messages unpin`
+
+unpin a message in a chat
+
+**Changes something in the service.**
+
+```sh
+slack messages unpin <chat> <message>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `message` | required | the message id. |
+
+**Returns:** message pin — operation_id, chat_id, message_id, pinned; every field: slack commands info messages unpin
+
+**Example:** `slack personal messages unpin <chat> <message>`
+
+### `slack messages link`
+
+a message permalink when supported, and its account-scoped locator
+
+```sh
+slack messages link <chat> [message]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…); or a msg: locator, with no message id after it. |
+| `message` | optional | the message id. |
+
+**Returns:** message link — ref, url, access, reason, files; every field: slack commands info messages link
+
+**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack messages show <chat> [message]`
+
+**Example:** `slack personal messages link "Book club" 101`
+
+### `slack messages links`
+
+why a message is in its conversation: each link it has, and the chain of answers back to the start
+
+```sh
+slack messages links <chat> <message>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `message` | required | the message id. |
+
+**Returns:** message links — chat, message, links, chain; every field: slack commands info messages links
+
+**Example:** `slack personal messages links "Book club" 101`
+
+### `slack messages sync`
+
+bring a chat's history in the local store up to date, newest first; run it again to continue; --all syncs every chat; with --json, stderr carries progress lines: {"event":"progress","step":"sync","chats","chats_done","fetched"}, counts only
+
+**Changes something on this computer only.**
+
+```sh
+slack messages sync [chat] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `chat` | optional | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+
+| Option | What it does |
+|---|---|
+| `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last; muted chats only with --with-muted or history_muted true. |
+| `--limit <n>` | at most this many messages in this run, per chat with --all; 2000 if not given. |
+| `--page-size <n>` | how many messages one request asks for; 200 if not given. |
+| `--pause <duration>` | pause between pages, to stay under the provider's limits. Default: `1s`. |
+| `--since-time <time>` | stop once it reaches messages older than this: ISO 8601, or 2h / 1d ago. |
+| `--last <n>` | stop once the newest n messages are held. |
+| `--catch-up` | prepare local search after this run; overrides search_catch_up. |
+| `--no-catch-up` | skip local preparation after this run. |
+| `--catch-up-chunks <n>` | at most this many local vector chunks. |
+| `--catch-up-messages <n>` | skip a graph rebuild larger than this many messages. |
+| `--catch-up-time <duration>` | local preparation time budget, 30s by default. |
+| `--full-history` | read and keep this chat's history in full from now on, past the history limits (history_* settings). |
+| `--with-muted` | with --all: also read the chats the owner muted, as history_muted true does. |
+| `--background` | run as a job that outlives this command; `store jobs show` follows it. |
+| `--dry-run` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
+
+**Returns:** message sync — chat, held, ranges, missing, requests, runs, seconds, fetched, and 17 more; every field: slack commands info messages sync
+
+**Example:** `slack personal messages sync "Book club" --last 100`
+
+## `slack search`
+
+find things by text: one resource when you know it (messages, notes), or search all across messages and notes; for mail, the separate memo CLI: memo search mail
+
+### `slack search all`
+
+search messenger messages and notes in the local store, calendar events when the store holds a calendar, and meeting transcripts, chat and summaries when it holds a meeting account — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
+
+```sh
+slack search all <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges. |
+
+| Option | What it does |
+|---|---|
+| `--only <resources>` | only these resources, separated by commas: messages, notes, events, meetings. |
+| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind. |
+| `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
+| `--exact` | bare words and quotes match their exact form only, as exact:word does. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: slack commands info search all
+
+**Example:** `slack personal search all draft`
+
+### `slack search messages`
+
+search messenger messages in the local store — what was read, fetched or kept by serve; optionally fetches new messages with --sync-first; --discover searches the archive only
+
+```sh
+slack search messages [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | strict Lucene query: words, "phrases", AND/OR/NOT, field groups and date ranges; with --saved, more words AND-ed to it. |
+
+| Option | What it does |
+|---|---|
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--max-chats <n>` | refresh at most this many chats (default: 5). |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--thread` | the stored reply chain and replies instead of time neighbours; falls back when no graph exists. |
+| `--thread-hops <n>` | at most this many links from the hit (default: 8). |
+| `--thread-messages <n>` | at most this many messages in each thread context (default: 50). |
+| `--thread-bytes <n>` | at most this many bytes of whole messages and links in each context (default: 65536). |
+| `--thread-within <duration>` | messages within this long either side of the hit (default: 1d). |
+| `--source <accounts>` | every account of this messenger held in the store; personal, bots or all — the same as in: in the query; or a list: group:work,telegram:Alice. |
+| `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
+| `--newest` | newest first instead of best first. |
+| `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
+| `--context <n>` | messages before and after each hit; 2 in the terminal, 0 otherwise. |
+| `--discover` | find partial word matches, eligible replies and, once messages have vectors, messages close in meaning in the local archive; results are evidence, not confirmed answers. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+| `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
+
+**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 9 more; every field: slack commands info search messages
+
+**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack messages show <chat> [message]`
+
+**Example:** `slack personal search messages draft --limit 10`
+
+### `slack search notes`
+
+search the notes — written in memo, or imported from a notes folder — by words and, with the local text model, by meaning; each hit says which found it and what it links to
+
+```sh
+slack search notes <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | strict Lucene query: words, "phrases", AND/OR/NOT, tag:, source:internal (written in memo) or source:file (from a notes folder) and date ranges. |
+
+| Option | What it does |
+|---|---|
+| `--source <accounts>` | only these notes accounts, separated by commas: notes:internal for notes written in memo, notes:<folder id> as a hit shows it, notes, documents or group:<name>. |
+| `--filter <query>` | a query every hit must also match, found by words or by meaning. |
+| `--limit <n>` | how many. |
+| `--page <n>` | which page, starting at 1. |
+| `--exact` | words as written only; meaning is not searched. |
+| `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
+
+**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 6 more; every field: slack commands info search notes
+
+**Example:** `slack personal search notes draft --limit 10`
+
+### `slack search conversations`
+
+the conversations nearest to a query in meaning and in words, best first, in one chat or every one — meaning after `conversations embed`; runs on this machine
+
+**Reads from an outside service.**
+
+```sh
+slack search conversations <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | what to look for, in your own words, in any language the model reads. |
+
+| Option | What it does |
+|---|---|
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
+| `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
+| `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
+| `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
+| `--max-chats <n>` | at most this many chats; 5 with --sync-first, 20 with --catch-up if not given. |
+| `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
+| `--sync-first` | first fetch new messages within the chat, time and message bounds. |
+| `--sync-time <duration>` | stop fetching after this long (default: 30s). |
+| `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--chat <chat>` | only this chat: a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
+| `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
+| `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
+| `--source <accounts>` | accounts to search: personal, bots, all, a provider, or a list like group:work,telegram:Alice,email:me@example.com; defaults to the active account. |
+| `--timezone <zone>` | IANA timezone for filter dates; system timezone by default. |
+| `--limit <n>` | how many. |
+| `--catch-up` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
+
+**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in; every field: slack commands info search conversations
+
+**Example:** `slack personal search conversations "Reviewing the project draft"`
+
+### `slack search runs`
+
+search recorded diagnostic metadata and events; literal words and field:value terms joined by AND; no message contents
+
+```sh
+slack search runs [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | matches per page, at most 100. |
+| `--page <n>` | result page. |
+
+**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 21 more; every field: slack commands info search runs
+
+**Example:** `slack personal search runs timeout status:failed --limit 10`
+
 ## `slack api`
 
 the raw Slack API, one command per operation of its OpenAPI document
@@ -2861,7 +4543,7 @@ slack mcp serve [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like api.chat.post-message=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.list=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 | `--http` | serve over HTTP on 127.0.0.1 for ChatGPT and Claude in the browser, behind your tunnel; the profile's permissions decide. |
 | `--port <port>` | the local port for --http (default 8765). |
@@ -2948,7 +4630,7 @@ slack mcp config [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like api.chat.post-message=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.list=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
 **Example:** `slack personal mcp config`, `slack mcp config --profiles all`
@@ -2970,7 +4652,7 @@ slack mcp add <client> [options]
 | Option | What it does |
 |---|---|
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
-| `--permission <key=level>` | make a permission stricter for this server only, like api.chat.post-message=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.list=deny; it never loosens the profile; repeat for more keys. |
 
 **Example:** `slack personal mcp add codex --allow-writes`
 
@@ -2984,7 +4666,7 @@ slack mcp check [options]
 
 | Option | What it does |
 |---|---|
-| `--permission <key=level>` | make a permission stricter for this server only, like api.chat.post-message=deny; it never loosens the profile; repeat for more keys. |
+| `--permission <key=level>` | make a permission stricter for this server only, like messages.list=deny; it never loosens the profile; repeat for more keys. |
 
 **Example:** `slack personal mcp check`
 
@@ -3034,7 +4716,7 @@ slack config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, thread_window_days, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -3057,7 +4739,7 @@ slack config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, thread_window_days, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 
 | Option | What it does |
 |---|---|
