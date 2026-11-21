@@ -20,8 +20,8 @@
 
 ## `slack api apps permissions-request [options]`
 
-- What: apps\_permissions\_request — read (GET /apps.permissions.request)
-- Call: `GET /apps.permissions.request`, effect: read
+- What: apps\_permissions\_request — write (GET /apps.permissions.request)
+- Call: `GET /apps.permissions.request`, effect: write
 
 | Flag | Required | What |
 |---|---|---|
@@ -57,8 +57,8 @@
 
 ## `slack api apps permissions-users-request [options]`
 
-- What: apps\_permissions\_users\_request — read (GET /apps.permissions.users.request)
-- Call: `GET /apps.permissions.users.request`, effect: read
+- What: apps\_permissions\_users\_request — write (GET /apps.permissions.users.request)
+- Call: `GET /apps.permissions.users.request`, effect: write
 
 | Flag | Required | What |
 |---|---|---|

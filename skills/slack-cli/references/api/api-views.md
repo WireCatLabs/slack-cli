@@ -4,8 +4,8 @@
 
 ## `slack api views open [options]`
 
-- What: views\_open — read (GET /views.open)
-- Call: `GET /views.open`, effect: read
+- What: views\_open — write (GET /views.open)
+- Call: `GET /views.open`, effect: write
 
 | Flag | Required | What |
 |---|---|---|
@@ -14,8 +14,8 @@
 
 ## `slack api views publish [options]`
 
-- What: views\_publish — read (GET /views.publish)
-- Call: `GET /views.publish`, effect: read
+- What: views\_publish — write (GET /views.publish)
+- Call: `GET /views.publish`, effect: write
 
 | Flag | Required | What |
 |---|---|---|
@@ -25,8 +25,8 @@
 
 ## `slack api views push [options]`
 
-- What: views\_push — read (GET /views.push)
-- Call: `GET /views.push`, effect: read
+- What: views\_push — write (GET /views.push)
+- Call: `GET /views.push`, effect: write
 
 | Flag | Required | What |
 |---|---|---|
@@ -35,8 +35,8 @@
 
 ## `slack api views update [options]`
 
-- What: views\_update — read (GET /views.update)
-- Call: `GET /views.update`, effect: read
+- What: views\_update — write (GET /views.update)
+- Call: `GET /views.update`, effect: write
 
 | Flag | Required | What |
 |---|---|---|

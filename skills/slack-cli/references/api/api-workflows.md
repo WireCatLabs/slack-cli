@@ -4,8 +4,8 @@
 
 ## `slack api workflows step-completed [options]`
 
-- What: workflows\_stepCompleted — read (GET /workflows.stepCompleted)
-- Call: `GET /workflows.stepCompleted`, effect: read
+- What: workflows\_stepCompleted — write (GET /workflows.stepCompleted)
+- Call: `GET /workflows.stepCompleted`, effect: write
 
 | Flag | Required | What |
 |---|---|---|
@@ -14,8 +14,8 @@
 
 ## `slack api workflows step-failed [options]`
 
-- What: workflows\_stepFailed — read (GET /workflows.stepFailed)
-- Call: `GET /workflows.stepFailed`, effect: read
+- What: workflows\_stepFailed — write (GET /workflows.stepFailed)
+- Call: `GET /workflows.stepFailed`, effect: write
 
 | Flag | Required | What |
 |---|---|---|
@@ -24,8 +24,8 @@
 
 ## `slack api workflows update-step [options]`
 
-- What: workflows\_updateStep — read (GET /workflows.updateStep)
-- Call: `GET /workflows.updateStep`, effect: read
+- What: workflows\_updateStep — write (GET /workflows.updateStep)
+- Call: `GET /workflows.updateStep`, effect: write
 
 | Flag | Required | What |
 |---|---|---|

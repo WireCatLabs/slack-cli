@@ -53,6 +53,28 @@ const DELETES = Object.fromEntries(
   ]),
 )
 
+// GETs in the spec that change something: each sends, opens, shares or publishes (Slack's docs of each).
+const WRITING: Record<string, string> = {
+  apps_permissions_request: "asks the workspace for more scopes",
+  apps_permissions_users_request: "asks a person for more scopes",
+  dialog_open: "opens a dialog to a person",
+  files_remote_share: "shares a remote file into channels",
+  views_open: "opens a view to a person",
+  views_publish: "publishes a Home tab view",
+  views_push: "pushes a view onto a person's stack",
+  views_update: "changes a view",
+  workflows_stepCompleted: "marks a workflow step done",
+  workflows_stepFailed: "marks a workflow step failed",
+  workflows_updateStep: "changes a workflow step",
+}
+
+const WRITES = Object.fromEntries(
+  Object.entries(WRITING).map(([id, does]) => [
+    id,
+    { effect: "write" as const, reason: `${does}, a GET in the spec (<${DOCS}${id.replaceAll("_", ".")}/>)` },
+  ]),
+)
+
 const cursor = (items: string) => ({
   style: "cursor" as const,
   cursor: { in: "query" as const, name: "cursor" },
@@ -127,7 +149,7 @@ const artifacts = generate(
   ],
   {
     banner: ["Source: spec/slack/, checked against provenance.json", "Run: pnpm generate"],
-    overrides: { ...DELETES, ...PAGED, ...FILES_PAGED },
+    overrides: { ...DELETES, ...WRITES, ...PAGED, ...FILES_PAGED },
     readingPosts: false,
     // The operation id in kebab case is Slack's method name (`chat_postMessage` → `chat-post-message`), grouped by
     // its first word: `api conversations history`. `fromPath` would add a `list` to every GET.

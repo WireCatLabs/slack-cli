@@ -12,16 +12,16 @@ Effects: `read` changes nothing; `write` changes the service; `destructive` dele
 |---|---|---|---|---|---|
 | admin | `slack skill show api-admin` | 48 | 18 | 24 | 6 |
 | api | `slack skill show api-api` | 1 | 1 | 0 | 0 |
-| apps | `slack skill show api-apps` | 8 | 7 | 0 | 1 |
+| apps | `slack skill show api-apps` | 8 | 5 | 2 | 1 |
 | auth | `slack skill show api-auth` | 2 | 1 | 0 | 1 |
 | bots | `slack skill show api-bots` | 1 | 1 | 0 | 0 |
 | calls | `slack skill show api-calls` | 6 | 1 | 4 | 1 |
 | chat | `slack skill show api-chat` | 10 | 2 | 6 | 2 |
 | conversations | `slack skill show api-conversations` | 18 | 5 | 10 | 3 |
-| dialog | `slack skill show api-dialog` | 1 | 1 | 0 | 0 |
+| dialog | `slack skill show api-dialog` | 1 | 0 | 1 | 0 |
 | dnd | `slack skill show api-dnd` | 4 | 2 | 2 | 0 |
 | emoji | `slack skill show api-emoji` | 1 | 1 | 0 | 0 |
-| files | `slack skill show api-files` | 9 | 5 | 1 | 3 |
+| files | `slack skill show api-files` | 9 | 4 | 2 | 3 |
 | migration | `slack skill show api-migration` | 1 | 1 | 0 | 0 |
 | pins | `slack skill show api-pins` | 3 | 1 | 1 | 1 |
 | reactions | `slack skill show api-reactions` | 4 | 2 | 1 | 1 |
@@ -31,5 +31,5 @@ Effects: `read` changes nothing; `write` changes the service; `destructive` dele
 | team | `slack skill show api-team` | 5 | 5 | 0 | 0 |
 | usergroups | `slack skill show api-usergroups` | 7 | 2 | 4 | 1 |
 | users | `slack skill show api-users` | 10 | 7 | 3 | 0 |
-| views | `slack skill show api-views` | 4 | 4 | 0 | 0 |
-| workflows | `slack skill show api-workflows` | 3 | 3 | 0 | 0 |
+| views | `slack skill show api-views` | 4 | 0 | 4 | 0 |
+| workflows | `slack skill show api-workflows` | 3 | 0 | 3 | 0 |

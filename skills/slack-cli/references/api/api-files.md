@@ -84,8 +84,8 @@
 
 ## `slack api files remote-share [options]`
 
-- What: files\_remote\_share — read (GET /files.remote.share)
-- Call: `GET /files.remote.share`, effect: read
+- What: files\_remote\_share — write (GET /files.remote.share)
+- Call: `GET /files.remote.share`, effect: write
 
 | Flag | Required | What |
 |---|---|---|

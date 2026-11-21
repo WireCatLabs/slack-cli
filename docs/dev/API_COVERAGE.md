@@ -69,11 +69,11 @@ Run: pnpm generate
 | `api_test` | `GET /api.test` | `slack <profile> api api-test` | read | — | generated |  |
 | `apps_event_authorizations_list` | `GET /apps.event.authorizations.list` | `slack <profile> api apps event-authorizations-list` | read | — | generated |  |
 | `apps_permissions_info` | `GET /apps.permissions.info` | `slack <profile> api apps permissions-info` | read | — | generated |  |
-| `apps_permissions_request` | `GET /apps.permissions.request` | `slack <profile> api apps permissions-request` | read | — | generated |  |
+| `apps_permissions_request` | `GET /apps.permissions.request` | `slack <profile> api apps permissions-request` | write | — | generated |  |
 | `apps_permissions_resources_list` | `GET /apps.permissions.resources.list` | `slack <profile> api apps permissions-resources-list` | read | — | generated |  |
 | `apps_permissions_scopes_list` | `GET /apps.permissions.scopes.list` | `slack <profile> api apps permissions-scopes-list` | read | — | generated |  |
 | `apps_permissions_users_list` | `GET /apps.permissions.users.list` | `slack <profile> api apps permissions-users-list` | read | — | generated |  |
-| `apps_permissions_users_request` | `GET /apps.permissions.users.request` | `slack <profile> api apps permissions-users-request` | read | — | generated |  |
+| `apps_permissions_users_request` | `GET /apps.permissions.users.request` | `slack <profile> api apps permissions-users-request` | write | — | generated |  |
 | `apps_uninstall` | `GET /apps.uninstall` | `slack <profile> api apps uninstall` | destructive | — | generated |  |
 | `auth_revoke` | `GET /auth.revoke` | `slack <profile> api auth revoke` | destructive | — | generated |  |
 | `auth_test` | `GET /auth.test` | `slack <profile> api auth test` | read | — | generated |  |
@@ -112,7 +112,7 @@ Run: pnpm generate
 | `conversations_setPurpose` | `POST /conversations.setPurpose` | `slack <profile> api conversations set-purpose` | write | contract | generated |  |
 | `conversations_setTopic` | `POST /conversations.setTopic` | `slack <profile> api conversations set-topic` | write | contract | generated |  |
 | `conversations_unarchive` | `POST /conversations.unarchive` | `slack <profile> api conversations unarchive` | write | contract | generated |  |
-| `dialog_open` | `GET /dialog.open` | `slack <profile> api dialog-open` | read | — | generated |  |
+| `dialog_open` | `GET /dialog.open` | `slack <profile> api dialog-open` | write | — | generated |  |
 | `dnd_endDnd` | `POST /dnd.endDnd` | `slack <profile> api dnd end-dnd` | write | — | generated |  |
 | `dnd_endSnooze` | `POST /dnd.endSnooze` | `slack <profile> api dnd end-snooze` | write | — | generated |  |
 | `dnd_info` | `GET /dnd.info` | `slack <profile> api dnd info` | read | — | generated |  |
@@ -127,7 +127,7 @@ Run: pnpm generate
 | `files_remote_info` | `GET /files.remote.info` | `slack <profile> api files remote-info` | read | — | generated |  |
 | `files_remote_list` | `GET /files.remote.list` | `slack <profile> api files remote-list` | read | — | generated |  |
 | `files_remote_remove` | `POST /files.remote.remove` | `left out: it sends application/x-www-form-urlencoded, which the generated command cannot send` | destructive | contract | generated |  |
-| `files_remote_share` | `GET /files.remote.share` | `slack <profile> api files remote-share` | read | — | generated |  |
+| `files_remote_share` | `GET /files.remote.share` | `slack <profile> api files remote-share` | write | — | generated |  |
 | `files_remote_update` | `POST /files.remote.update` | `left out: it sends application/x-www-form-urlencoded, which the generated command cannot send` | write | contract | generated |  |
 | `files_revokePublicURL` | `POST /files.revokePublicURL` | `slack <profile> api files revoke-public-url` | destructive | contract | generated |  |
 | `files_sharedPublicURL` | `POST /files.sharedPublicURL` | `slack <profile> api files shared-public-url` | write | contract | generated |  |
@@ -177,13 +177,13 @@ Run: pnpm generate
 | `users_setActive` | `POST /users.setActive` | `slack <profile> api users set-active` | write | — | generated |  |
 | `users_setPhoto` | `POST /users.setPhoto` | `left out: it sends application/x-www-form-urlencoded, which the generated command cannot send` | write | contract | generated |  |
 | `users_setPresence` | `POST /users.setPresence` | `slack <profile> api users set-presence` | write | contract | generated |  |
-| `views_open` | `GET /views.open` | `slack <profile> api views open` | read | — | generated |  |
-| `views_publish` | `GET /views.publish` | `slack <profile> api views publish` | read | — | generated |  |
-| `views_push` | `GET /views.push` | `slack <profile> api views push` | read | — | generated |  |
-| `views_update` | `GET /views.update` | `slack <profile> api views update` | read | — | generated |  |
-| `workflows_stepCompleted` | `GET /workflows.stepCompleted` | `slack <profile> api workflows step-completed` | read | — | generated |  |
-| `workflows_stepFailed` | `GET /workflows.stepFailed` | `slack <profile> api workflows step-failed` | read | — | generated |  |
-| `workflows_updateStep` | `GET /workflows.updateStep` | `slack <profile> api workflows update-step` | read | — | generated |  |
+| `views_open` | `GET /views.open` | `slack <profile> api views open` | write | — | generated |  |
+| `views_publish` | `GET /views.publish` | `slack <profile> api views publish` | write | — | generated |  |
+| `views_push` | `GET /views.push` | `slack <profile> api views push` | write | — | generated |  |
+| `views_update` | `GET /views.update` | `slack <profile> api views update` | write | — | generated |  |
+| `workflows_stepCompleted` | `GET /workflows.stepCompleted` | `slack <profile> api workflows step-completed` | write | — | generated |  |
+| `workflows_stepFailed` | `GET /workflows.stepFailed` | `slack <profile> api workflows step-failed` | write | — | generated |  |
+| `workflows_updateStep` | `GET /workflows.updateStep` | `slack <profile> api workflows update-step` | write | — | generated |  |
 
 ## Effects not taken from the HTTP method
 
@@ -197,6 +197,8 @@ Run: pnpm generate
 | `admin_users_remove` | destructive | override: removes a person from the workspace (<https://docs.slack.dev/reference/methods/admin.users.remove/>) |
 | `admin_users_session_invalidate` | destructive | override: ends a person's session (<https://docs.slack.dev/reference/methods/admin.users.session.invalidate/>) |
 | `admin_users_session_reset` | destructive | override: signs a person out of every session (<https://docs.slack.dev/reference/methods/admin.users.session.reset/>) |
+| `apps_permissions_request` | write | override: asks the workspace for more scopes, a GET in the spec (<https://docs.slack.dev/reference/methods/apps.permissions.request/>) |
+| `apps_permissions_users_request` | write | override: asks a person for more scopes, a GET in the spec (<https://docs.slack.dev/reference/methods/apps.permissions.users.request/>) |
 | `apps_uninstall` | destructive | override: uninstalls the app from the workspace, a GET in the spec (<https://docs.slack.dev/reference/methods/apps.uninstall/>) |
 | `auth_revoke` | destructive | override: revokes the token, a GET in the spec (<https://docs.slack.dev/reference/methods/auth.revoke/>) |
 | `calls_participants_remove` | destructive | override: removes participants from a call (<https://docs.slack.dev/reference/methods/calls.participants.remove/>) |
@@ -205,9 +207,11 @@ Run: pnpm generate
 | `conversations_archive` | destructive | override: archives a channel for everyone in it (<https://docs.slack.dev/reference/methods/conversations.archive/>) |
 | `conversations_kick` | destructive | override: removes a person from a channel (<https://docs.slack.dev/reference/methods/conversations.kick/>) |
 | `conversations_leave` | destructive | override: leaves a channel (<https://docs.slack.dev/reference/methods/conversations.leave/>) |
+| `dialog_open` | write | override: opens a dialog to a person, a GET in the spec (<https://docs.slack.dev/reference/methods/dialog.open/>) |
 | `files_comments_delete` | destructive | override: deletes a file comment (<https://docs.slack.dev/reference/methods/files.comments.delete/>) |
 | `files_delete` | destructive | override: deletes a file (<https://docs.slack.dev/reference/methods/files.delete/>) |
 | `files_remote_remove` | destructive | override: removes a remote file (<https://docs.slack.dev/reference/methods/files.remote.remove/>) |
+| `files_remote_share` | write | override: shares a remote file into channels, a GET in the spec (<https://docs.slack.dev/reference/methods/files.remote.share/>) |
 | `files_revokePublicURL` | destructive | override: revokes a file's public link (<https://docs.slack.dev/reference/methods/files.revokePublicURL/>) |
 | `pins_remove` | destructive | override: unpins a message (<https://docs.slack.dev/reference/methods/pins.remove/>) |
 | `reactions_remove` | destructive | override: removes a reaction (<https://docs.slack.dev/reference/methods/reactions.remove/>) |
@@ -215,6 +219,13 @@ Run: pnpm generate
 | `stars_remove` | destructive | override: removes a saved item (<https://docs.slack.dev/reference/methods/stars.remove/>) |
 | `usergroups_disable` | destructive | override: disables a user group (<https://docs.slack.dev/reference/methods/usergroups.disable/>) |
 | `users_deletePhoto` | destructive | override: deletes the profile photo (<https://docs.slack.dev/reference/methods/users.deletePhoto/>) |
+| `views_open` | write | override: opens a view to a person, a GET in the spec (<https://docs.slack.dev/reference/methods/views.open/>) |
+| `views_publish` | write | override: publishes a Home tab view, a GET in the spec (<https://docs.slack.dev/reference/methods/views.publish/>) |
+| `views_push` | write | override: pushes a view onto a person's stack, a GET in the spec (<https://docs.slack.dev/reference/methods/views.push/>) |
+| `views_update` | write | override: changes a view, a GET in the spec (<https://docs.slack.dev/reference/methods/views.update/>) |
+| `workflows_stepCompleted` | write | override: marks a workflow step done, a GET in the spec (<https://docs.slack.dev/reference/methods/workflows.stepCompleted/>) |
+| `workflows_stepFailed` | write | override: marks a workflow step failed, a GET in the spec (<https://docs.slack.dev/reference/methods/workflows.stepFailed/>) |
+| `workflows_updateStep` | write | override: changes a workflow step, a GET in the spec (<https://docs.slack.dev/reference/methods/workflows.updateStep/>) |
 
 ## Pagination
 

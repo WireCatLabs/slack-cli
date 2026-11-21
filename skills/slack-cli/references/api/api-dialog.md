@@ -4,8 +4,8 @@
 
 ## `slack api dialog-open [options]`
 
-- What: dialog\_open — read (GET /dialog.open)
-- Call: `GET /dialog.open`, effect: read
+- What: dialog\_open — write (GET /dialog.open)
+- Call: `GET /dialog.open`, effect: write
 
 | Flag | Required | What |
 |---|---|---|

@@ -1887,7 +1887,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/apps.permissions.request",
     },
-    effect: "read",
+    effect: "write",
     description: "Allows an app to request additional scopes",
     tags: ["apps.permissions", "apps"],
     parameters: [
@@ -2031,7 +2031,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/apps.permissions.users.request",
     },
-    effect: "read",
+    effect: "write",
     description: "Enables an app to trigger a permissions modal to grant an app access to a user access scope.",
     tags: ["apps.permissions.users", "apps"],
     parameters: [
@@ -3334,7 +3334,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/dialog.open",
     },
-    effect: "read",
+    effect: "write",
     description: "Open a dialog with a user",
     tags: ["dialog"],
     parameters: [
@@ -3895,7 +3895,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/files.remote.share",
     },
-    effect: "read",
+    effect: "write",
     description: "Share a remote file into a channel.",
     tags: ["files.remote", "files"],
     parameters: [
@@ -5719,7 +5719,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/views.open",
     },
-    effect: "read",
+    effect: "write",
     description: "Open a view for a user.",
     tags: ["views"],
     parameters: [
@@ -5757,7 +5757,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/views.publish",
     },
-    effect: "read",
+    effect: "write",
     description: "Publish a static view for a User.",
     tags: ["views"],
     parameters: [
@@ -5804,7 +5804,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/views.push",
     },
-    effect: "read",
+    effect: "write",
     description: "Push a view onto the stack of a root view.",
     tags: ["views"],
     parameters: [
@@ -5842,7 +5842,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/views.update",
     },
-    effect: "read",
+    effect: "write",
     description: "Update an existing view.",
     tags: ["views"],
     parameters: [
@@ -5899,7 +5899,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/workflows.stepCompleted",
     },
-    effect: "read",
+    effect: "write",
     description: "Indicate that an app's step in a workflow completed execution.",
     tags: ["workflows"],
     parameters: [
@@ -5937,7 +5937,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/workflows.stepFailed",
     },
-    effect: "read",
+    effect: "write",
     description: "Indicate that an app's step in a workflow failed to execute.",
     tags: ["workflows"],
     parameters: [
@@ -5975,7 +5975,7 @@ export const operations: readonly ManifestOperation[] = [
       method: "GET",
       path: "/workflows.updateStep",
     },
-    effect: "read",
+    effect: "write",
     description: "Update the configuration for a workflow extension step.",
     tags: ["workflows"],
     parameters: [
