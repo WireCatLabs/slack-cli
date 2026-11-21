@@ -28,7 +28,13 @@ const items = (ran: { json: () => Record<string, unknown> }) => ran.json().items
 
 const byId = (list: Item[], id: string) => list.find((one) => one.id === id)
 
-beforeEach(() => remembered())
+// Each test reads its own local store: --offline answers from what earlier tests synced otherwise.
+beforeEach(() => {
+  const state = mkdtempSync(join(tmpdir(), "slack-state-"))
+  process.env.SLACK_STATE_DIR = state
+  process.env.MESSAGING_STORE = join(state, "wirecat.db")
+  remembered()
+})
 
 describe("chats", () => {
   it("**lists the conversations the person is in**, a DM as a dialog named after the person and every channel as a group", async () => {
@@ -213,7 +219,7 @@ const busyChannel = (rootTs: string, count: number): FakeWorkspace => {
   const world = workspace()
   world.messages[GENERAL] = [
     { ts: rootTs, user: ANNA, text: "An old question" },
-    ...Array.from({ length: count }, (_, at) => ({ ts: daysAgo(1, at + 1), user: BORIS, text: `news ${at}` })),
+    ...Array.from({ length: count }, (_, at) => ({ ts: daysAgo(1, (at + 1) * 1000), user: BORIS, text: `news ${at}` })),
   ]
   return world
 }
@@ -229,11 +235,12 @@ describe("messages sync", () => {
     const sync = () =>
       runCli(["personal", "messages", "sync", "general", "--page-size", "2", "--pause", "1ms", "--json"], { service })
     expect((await sync()).code).toBe(0)
-    expect((await stored(service)).map((one) => one.id)).toContain(root)
+    expect((await stored(service)).length).toBe(6)
 
     const reply = daysAgo(0, 7)
     thread(world, root, { ts: reply, user: ME, text: "Answered at last" })
     expect((await sync()).code).toBe(0)
+    // The store answers a message's thread by thread_id only; thread_root_id is its own row link, never read back.
     expect(byId(await stored(service), reply)).toMatchObject({ thread_id: root, text: "Answered at last" })
 
     const before = (await stored(service)).length
@@ -249,9 +256,15 @@ describe("messages sync", () => {
     expect(
       (await runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })).code,
     ).toBe(0)
-    expect((await stored(service)).map((one) => one.id)).toEqual(
-      expect.arrayContaining([ts(10), ts(20), ts(30), ts(31), ts(32), ts(40), ts(50)]),
-    )
+    expect((await stored(service)).map((one) => one.id)).toEqual([
+      ts(10),
+      ts(20),
+      ts(30),
+      ts(31),
+      ts(32),
+      ts(40),
+      ts(50),
+    ])
   })
 
   it("**never marks a message deleted because Slack stopped showing it**", async () => {

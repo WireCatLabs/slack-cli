@@ -56,5 +56,21 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   `users.list`, `reactions.list`) and Tier 3 (`conversations.history`, `conversations.replies`, `users.conversations`,
   50 a minute); cli-core's `Pacer` keeps one pace per profile, so it takes the lowest. A 429 holds every process of
   the profile for its `Retry-After`.
+- **Messenger reads (2026-11-21):** the messenger commands are cli-core's, over one adapter
+  (`src/slack/adapter.ts`), with every Slack answer mapped in `src/slack/map.ts`. A DM is a dialog; a group DM and
+  every channel are groups, told apart by `provider_metadata.slack_kind` (`public`, `private`, `mpim`, `im`), with
+  `slack_shared` for Slack Connect. A message id is Slack's `ts` as a string, so held stretches are keyed by time
+  (`orderBy: "time"`). Service subtypes are chat events, never messages. Slack gives no deletion signal in
+  `conversations.history`, so a message is never marked deleted.
+- **Threads:** read with `messages list <chat> topic:<root ts>`, through cli-core's topic read. Slack has no list of
+  threads, so the topic commands stay hidden. `messages sync` calls `history` and never `historyAfter`, so a sync
+  page also carries the new replies of its own roots, and of roots up to `thread_window_days` (14) old once the page
+  reaches them; a reply never lowers a page's oldest key. A thread holding fewer replies than Slack's `reply_count`
+  is read whole.
+- **What stays the app's own:** `doctor` and `mcp`. cli-core's messenger MCP server checks `--permission` against
+  messenger keys only and refuses the `api` group's. There is no `inbox`: Slack's conversation list carries no unread
+  count or last message, and cli-core refuses `inbox --offline`.
+- **Hidden and refused:** what Slack has no primitive for is in `SLACK.never`. Sessions and folders are in `lacks`
+  instead, since `never` would leave `account sessions` and `chats folders` in sight with nothing under them.
 
 ## Open questions for the owner
