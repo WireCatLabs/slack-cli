@@ -3,6 +3,7 @@ import { defineSetup, refuseOffline, type SetupCheck } from "@wirecat/cli-core/c
 import { configuration } from "../config.js"
 import { slackFor } from "../context.js"
 import { IDENTITY, SERVICE } from "../identity.js"
+import { APP_LINK } from "../slack/app-manifest.js"
 import { refuseOtherTokens, whoAmI } from "../slack/tokens.js"
 import { en } from "./texts.js"
 
@@ -27,6 +28,8 @@ export const slackSetup = defineSetup({
       blocks: [
         { type: "text", text: "app.intro" },
         { type: "text", text: "app.steps" },
+        { type: "link", href: APP_LINK, text: "app.link" },
+        { type: "text", text: "app.by-hand" },
         { type: "note", role: "tip", text: "app.admin" },
       ],
       next: "token",

@@ -41,16 +41,17 @@ starts with a profile, a name you choose: `slk personal config show`.
 
 ## Sign in with your own Slack app
 
-slack reads and writes as you, with the user token of a Slack app you make in your own workspace. An app that only
+slk reads and writes as you, with the user token of a Slack app you make in your own workspace. An app that only
 your workspace uses keeps Slack's full limits for reading history; one shared outside it gets one call a minute.
 
-1. Open [api.slack.com/apps](https://api.slack.com/apps), choose **Create New App**, then **From a manifest**, and
-   pick your workspace.
-2. Paste [docs/slack-app-manifest.json](docs/slack-app-manifest.json). It asks only for the user scopes the commands
-   use: reading channels, direct messages, people, files, reactions and pins, searching, and sending as you.
-3. Choose **Install to Workspace** and allow it. An admin may have to approve the app first.
-4. On **OAuth & Permissions**, copy the **User OAuth Token**. It starts with `xoxp-`.
-5. Run `slk personal session start` and paste the token at the hidden prompt. slack checks it with Slack
+1. Open [Create the app in Slack](https://api.slack.com/apps?new_app=1&manifest_json=%7B%22_metadata%22%3A%7B%22major_version%22%3A2%2C%22minor_version%22%3A1%7D%2C%22display_information%22%3A%7B%22name%22%3A%22WireCat%20slk%22%2C%22description%22%3A%22Your%20own%20Slack%2C%20read%20and%20written%20as%20you%20by%20the%20slk%20CLI%20on%20your%20computer.%22%7D%2C%22oauth_config%22%3A%7B%22scopes%22%3A%7B%22user%22%3A%5B%22channels%3Ahistory%22%2C%22groups%3Ahistory%22%2C%22im%3Ahistory%22%2C%22mpim%3Ahistory%22%2C%22channels%3Aread%22%2C%22groups%3Aread%22%2C%22im%3Aread%22%2C%22mpim%3Aread%22%2C%22users%3Aread%22%2C%22users%3Aread.email%22%2C%22search%3Aread%22%2C%22reactions%3Aread%22%2C%22files%3Aread%22%2C%22pins%3Aread%22%2C%22usergroups%3Aread%22%2C%22chat%3Awrite%22%2C%22reactions%3Awrite%22%2C%22files%3Awrite%22%2C%22pins%3Awrite%22%2C%22channels%3Awrite%22%2C%22groups%3Awrite%22%2C%22im%3Awrite%22%2C%22mpim%3Awrite%22%5D%7D%7D%2C%22settings%22%3A%7B%22org_deploy_enabled%22%3Afalse%2C%22socket_mode_enabled%22%3Afalse%2C%22token_rotation_enabled%22%3Afalse%7D%7D). Slack opens **Create New App** with
+   [docs/slack-app-manifest.json](docs/slack-app-manifest.json) filled in; pick your workspace and choose **Create**.
+   It asks only for the user scopes the commands use: reading channels, direct messages, people, files, reactions
+   and pins, searching, and sending as you. To do it by hand: **Create New App** → **From a manifest** at
+   [api.slack.com/apps](https://api.slack.com/apps), and paste the file.
+2. Choose **Install to Workspace** and allow it. An admin may have to approve the app first.
+3. On **OAuth & Permissions**, copy the **User OAuth Token**. It starts with `xoxp-`.
+4. Run `slk personal session start` and paste the token at the hidden prompt. slk checks it with Slack
    (`auth.test`) and keeps it in the system keyring. A bot token (`xoxb-`) is refused, because it cannot read as you.
 
 `slk doctor --online` asks Slack whose each saved token is. To sign out on this computer, run

@@ -4,8 +4,8 @@
     "minor_version": 1
   },
   "display_information": {
-    "name": "WireCat slack",
-    "description": "Your own Slack, read and written as you by the slack CLI on your computer."
+    "name": "WireCat slk",
+    "description": "Your own Slack, read and written as you by the slk CLI on your computer."
   },
   "oauth_config": {
     "scopes": {
