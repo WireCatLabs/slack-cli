@@ -422,7 +422,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       const { wires, hasMore } = await newestFirst(chatId, limit, latest ? { latest } : {})
       return page(chatId, wires, hasMore, latest !== undefined)
     },
-    threadReplies: async (chatId, window) => threads.read(chatId, window),
+    threadReplies: (chatId, window) => threads.read(chatId, window),
     searchMessages,
     historyAfter: async (chat, { limit, after }) => {
       const chatId = await idOf(chat)
