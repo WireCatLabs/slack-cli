@@ -7,7 +7,7 @@ This page explains how a command is built, and how an agent uses the tool. Read 
 A profile is a name you choose for one account. It is the first word of every command that uses an account:
 
 ```sh
-slack personal config show
+slk personal config show
 ```
 
 `SLACK_PROFILE=personal` does the same for one shell session. No profile is ever assumed, not even the only one: a
@@ -20,20 +20,20 @@ on. The [command reference](commands.md) lists the codes.
 
 ## Agents
 
-`slack skill install` puts the tool's skill where Claude Code, Codex, Gemini CLI and OpenClaw look for it.
-`slack skill install --for hermes` also adds that folder to Hermes Agent's own settings, so a bare `skill install`
-leaves Hermes out. `slack personal mcp serve` serves the profile's commands over MCP, on stdin and stdout:
+`slk skill install` puts the tool's skill where Claude Code, Codex, Gemini CLI and OpenClaw look for it.
+`slk skill install --for hermes` also adds that folder to Hermes Agent's own settings, so a bare `skill install`
+leaves Hermes out. `slk personal mcp serve` serves the profile's commands over MCP, on stdin and stdout:
 
 ```sh
-claude mcp add slack -- slack personal mcp serve
+claude mcp add slack -- slk personal mcp serve
 ```
 
 The server offers every command, the ones that write included. The profile's permissions decide what runs; see
 [settings](configuration.md#permissions).
 
 For ChatGPT and Claude in the browser,
-`slack personal mcp serve --http --public-url https://laptop.example.ts.net` serves on `127.0.0.1` (port 8765, or
+`slk personal mcp serve --http --public-url https://laptop.example.ts.net` serves on `127.0.0.1` (port 8765, or
 `--port`) behind your own tunnel. A browser app logs in with a one-time code that the command prints;
-`slack personal mcp revoke` ends every login. `slack personal mcp server start` runs the same
+`slk personal mcp revoke` ends every login. `slk personal mcp server start` runs the same
 server in the background, `mcp server status` shows its port, the login code and the apps logged in, and
 `mcp server stop` ends it.

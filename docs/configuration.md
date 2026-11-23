@@ -1,12 +1,12 @@
 # Settings
 
-Settings live in one file, `config.json`, in the folder `slack doctor` shows. Each profile has its own part,
+Settings live in one file, `config.json`, in the folder `slk doctor` shows. Each profile has its own part,
 and `defaults` apply to every profile. This page lists how to see and change them.
 
 ```sh
-slack personal config show
-slack personal config set limit 50
-slack personal config unset limit
+slk personal config show
+slk personal config set limit 50
+slk personal config unset limit
 ```
 
 `config show` lists each setting and where it came from: the file, a variable or the default.
@@ -19,7 +19,7 @@ the permissions say.
 
 ## Run records
 
-A command that fails is kept as a run, for `slack runs list` and `runs show`. A command you add that does its work
+A command that fails is kept as a run, for `slk runs list` and `runs show`. A command you add that does its work
 in `context.run` is kept when it succeeds too, unless `record` is `false` (then only failures) or it ran with
 `--no-record`. `api` commands, `session start`, `session status --check` and `doctor --online` do their work in a run, so `--record` keeps them. `record_input` decides whether a run
 keeps the words you typed; it is `true` unless you set it to `false`. Secrets are masked either way; see

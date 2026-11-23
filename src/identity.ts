@@ -8,7 +8,7 @@ export const SERVICE = "Slack"
 export const PACKAGE = "@wirecat/slack-cli"
 
 export const IDENTITY: AppIdentity = {
-  command: "slack",
+  command: "slk",
   appName: "slack-cli",
   envPrefix: "SLACK",
   description: "Your Slack workspace from the command line, for you and your AI agents",

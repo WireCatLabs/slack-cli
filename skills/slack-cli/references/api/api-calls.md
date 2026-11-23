@@ -2,7 +2,7 @@
 
 # Slack API: calls
 
-## `slack api calls add [options]`
+## `slk api calls add [options]`
 
 - What: calls\_add — write (POST /calls.add)
 - Call: `POST /calls.add`, effect: write
@@ -13,7 +13,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api calls end [options]`
+## `slk api calls end [options]`
 
 - What: calls\_end — write (POST /calls.end)
 - Call: `POST /calls.end`, effect: write
@@ -24,7 +24,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api calls info [options]`
+## `slk api calls info [options]`
 
 - What: calls\_info — read (GET /calls.info)
 - Call: `GET /calls.info`, effect: read
@@ -33,7 +33,7 @@
 |---|---|---|
 | `--id <value>` | yes | \`id\` of the Call returned by the \[\`calls.add\`\](https://api.slack.com/methods/calls.add) method. |
 
-## `slack api calls participants-add [options]`
+## `slk api calls participants-add [options]`
 
 - What: calls\_participants\_add — write (POST /calls.participants.add)
 - Call: `POST /calls.participants.add`, effect: write
@@ -44,7 +44,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api calls participants-remove [options]`
+## `slk api calls participants-remove [options]`
 
 - What: calls\_participants\_remove — destructive (POST /calls.participants.remove)
 - Call: `POST /calls.participants.remove`, effect: destructive
@@ -56,7 +56,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api calls update [options]`
+## `slk api calls update [options]`
 
 - What: calls\_update — write (POST /calls.update)
 - Call: `POST /calls.update`, effect: write

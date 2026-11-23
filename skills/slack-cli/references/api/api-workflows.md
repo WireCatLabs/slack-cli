@@ -2,7 +2,7 @@
 
 # Slack API: workflows
 
-## `slack api workflows step-completed [options]`
+## `slk api workflows step-completed [options]`
 
 - What: workflows\_stepCompleted — write (GET /workflows.stepCompleted)
 - Call: `GET /workflows.stepCompleted`, effect: write
@@ -12,7 +12,7 @@
 | `--workflow-step-execute-id <value>` | yes | Context identifier that maps to the correct workflow step execution. |
 | `--outputs <value>` | no | Key-value object of outputs from your step. Keys of this object reflect the configured \`key\` properties of your \[\`outputs\`\](https://api.slack.com/reference/workflows/workflow\_step#output) array from your \`workflow\_step\` object. |
 
-## `slack api workflows step-failed [options]`
+## `slk api workflows step-failed [options]`
 
 - What: workflows\_stepFailed — write (GET /workflows.stepFailed)
 - Call: `GET /workflows.stepFailed`, effect: write
@@ -22,7 +22,7 @@
 | `--workflow-step-execute-id <value>` | yes | Context identifier that maps to the correct workflow step execution. |
 | `--error <value>` | yes | A JSON-based object with a \`message\` property that should contain a human readable error message. |
 
-## `slack api workflows update-step [options]`
+## `slk api workflows update-step [options]`
 
 - What: workflows\_updateStep — write (GET /workflows.updateStep)
 - Call: `GET /workflows.updateStep`, effect: write

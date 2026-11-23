@@ -62,7 +62,7 @@ it("doctor reports an unknown setting with the command that removes it", async (
   await withConfig('{ "defaults": { "limt": 3 } }', (config) =>
     expect(config).toMatchObject({
       found: true,
-      issues: [{ kind: "unknown_setting", key: "limt", fix: "slack config unset --defaults limt" }],
+      issues: [{ kind: "unknown_setting", key: "limt", fix: "slk config unset --defaults limt" }],
     }),
   )
 })
@@ -180,7 +180,7 @@ it("runs list --compact prints one plain line per run and the next page as a # l
   expect(code).toBe(0)
   expect(out.trim().split("\n")).toEqual([
     expect.stringContaining("failed"),
-    "# more: slack runs list --page 2 --limit 1 --compact",
+    "# more: slk runs list --page 2 --limit 1 --compact",
   ])
   expect(() => JSON.parse(out)).toThrow()
 })

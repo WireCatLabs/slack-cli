@@ -2,7 +2,7 @@
 
 # Slack API: conversations
 
-## `slack api conversations archive [options]`
+## `slk api conversations archive [options]`
 
 - What: conversations\_archive — destructive (POST /conversations.archive)
 - Call: `POST /conversations.archive`, effect: destructive
@@ -14,7 +14,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations close [options]`
+## `slk api conversations close [options]`
 
 - What: conversations\_close — write (POST /conversations.close)
 - Call: `POST /conversations.close`, effect: write
@@ -25,7 +25,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations create [options]`
+## `slk api conversations create [options]`
 
 - What: conversations\_create — write (POST /conversations.create)
 - Call: `POST /conversations.create`, effect: write
@@ -37,7 +37,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations history [options]`
+## `slk api conversations history [options]`
 
 - What: conversations\_history — read (GET /conversations.history)
 - Call: `GET /conversations.history`, effect: read
@@ -54,7 +54,7 @@
 | `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api conversations info [options]`
+## `slk api conversations info [options]`
 
 - What: conversations\_info — read (GET /conversations.info)
 - Call: `GET /conversations.info`, effect: read
@@ -65,7 +65,7 @@
 | `--include-locale <value>` | no | Set this to \`true\` to receive the locale for this conversation. Defaults to \`false\` |
 | `--include-num-members <value>` | no | Set to \`true\` to include the member count for the specified conversation. Defaults to \`false\` |
 
-## `slack api conversations invite [options]`
+## `slk api conversations invite [options]`
 
 - What: conversations\_invite — write (POST /conversations.invite)
 - Call: `POST /conversations.invite`, effect: write
@@ -77,7 +77,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations join [options]`
+## `slk api conversations join [options]`
 
 - What: conversations\_join — write (POST /conversations.join)
 - Call: `POST /conversations.join`, effect: write
@@ -89,7 +89,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations kick [options]`
+## `slk api conversations kick [options]`
 
 - What: conversations\_kick — destructive (POST /conversations.kick)
 - Call: `POST /conversations.kick`, effect: destructive
@@ -101,7 +101,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations leave [options]`
+## `slk api conversations leave [options]`
 
 - What: conversations\_leave — destructive (POST /conversations.leave)
 - Call: `POST /conversations.leave`, effect: destructive
@@ -113,7 +113,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations list [options]`
+## `slk api conversations list [options]`
 
 - What: conversations\_list — read (GET /conversations.list)
 - Call: `GET /conversations.list`, effect: read
@@ -127,7 +127,7 @@
 | `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api conversations mark [options]`
+## `slk api conversations mark [options]`
 
 - What: conversations\_mark — write (POST /conversations.mark)
 - Call: `POST /conversations.mark`, effect: write
@@ -139,7 +139,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations members [options]`
+## `slk api conversations members [options]`
 
 - What: conversations\_members — read (GET /conversations.members)
 - Call: `GET /conversations.members`, effect: read
@@ -152,7 +152,7 @@
 | `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api conversations open [options]`
+## `slk api conversations open [options]`
 
 - What: conversations\_open — write (POST /conversations.open)
 - Call: `POST /conversations.open`, effect: write
@@ -163,7 +163,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations rename [options]`
+## `slk api conversations rename [options]`
 
 - What: conversations\_rename — write (POST /conversations.rename)
 - Call: `POST /conversations.rename`, effect: write
@@ -175,7 +175,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations replies [options]`
+## `slk api conversations replies [options]`
 
 - What: conversations\_replies — read (GET /conversations.replies)
 - Call: `GET /conversations.replies`, effect: read
@@ -193,7 +193,7 @@
 | `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api conversations set-purpose [options]`
+## `slk api conversations set-purpose [options]`
 
 - What: conversations\_setPurpose — write (POST /conversations.setPurpose)
 - Call: `POST /conversations.setPurpose`, effect: write
@@ -205,7 +205,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations set-topic [options]`
+## `slk api conversations set-topic [options]`
 
 - What: conversations\_setTopic — write (POST /conversations.setTopic)
 - Call: `POST /conversations.setTopic`, effect: write
@@ -217,7 +217,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api conversations unarchive [options]`
+## `slk api conversations unarchive [options]`
 
 - What: conversations\_unarchive — write (POST /conversations.unarchive)
 - Call: `POST /conversations.unarchive`, effect: write

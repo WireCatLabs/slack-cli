@@ -2,7 +2,7 @@
 
 # Slack API: chat
 
-## `slack api chat delete [options]`
+## `slk api chat delete [options]`
 
 - What: chat\_delete — destructive (POST /chat.delete)
 - Call: `POST /chat.delete`, effect: destructive
@@ -14,7 +14,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api chat delete-scheduled-message [options]`
+## `slk api chat delete-scheduled-message [options]`
 
 - What: chat\_deleteScheduledMessage — destructive (POST /chat.deleteScheduledMessage)
 - Call: `POST /chat.deleteScheduledMessage`, effect: destructive
@@ -26,7 +26,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api chat get-permalink [options]`
+## `slk api chat get-permalink [options]`
 
 - What: chat\_getPermalink — read (GET /chat.getPermalink)
 - Call: `GET /chat.getPermalink`, effect: read
@@ -36,7 +36,7 @@
 | `--channel <value>` | yes | The ID of the conversation or channel containing the message |
 | `--message-ts <value>` | yes | A message's \`ts\` value, uniquely identifying it within a channel |
 
-## `slack api chat me-message [options]`
+## `slk api chat me-message [options]`
 
 - What: chat\_meMessage — write (POST /chat.meMessage)
 - Call: `POST /chat.meMessage`, effect: write
@@ -48,7 +48,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api chat post-ephemeral [options]`
+## `slk api chat post-ephemeral [options]`
 
 - What: chat\_postEphemeral — write (POST /chat.postEphemeral)
 - Call: `POST /chat.postEphemeral`, effect: write
@@ -60,7 +60,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api chat post-message [options]`
+## `slk api chat post-message [options]`
 
 - What: chat\_postMessage — write (POST /chat.postMessage)
 - Call: `POST /chat.postMessage`, effect: write
@@ -72,7 +72,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api chat schedule-message [options]`
+## `slk api chat schedule-message [options]`
 
 - What: chat\_scheduleMessage — write (POST /chat.scheduleMessage)
 - Call: `POST /chat.scheduleMessage`, effect: write
@@ -84,7 +84,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api chat scheduled-messages-list [options]`
+## `slk api chat scheduled-messages-list [options]`
 
 - What: chat\_scheduledMessages\_list — read (GET /chat.scheduledMessages.list)
 - Call: `GET /chat.scheduledMessages.list`, effect: read
@@ -99,7 +99,7 @@
 | `--cursor <value>` | no | For pagination purposes, this is the \`cursor\` value returned from a previous call to \`chat.scheduledmessages.list\` indicating where you want to start this call from. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api chat unfurl [options]`
+## `slk api chat unfurl [options]`
 
 - What: chat\_unfurl — write (POST /chat.unfurl)
 - Call: `POST /chat.unfurl`, effect: write
@@ -110,7 +110,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api chat update [options]`
+## `slk api chat update [options]`
 
 - What: chat\_update — write (POST /chat.update)
 - Call: `POST /chat.update`, effect: write

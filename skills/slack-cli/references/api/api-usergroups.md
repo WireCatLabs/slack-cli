@@ -2,7 +2,7 @@
 
 # Slack API: usergroups
 
-## `slack api usergroups create [options]`
+## `slk api usergroups create [options]`
 
 - What: usergroups\_create — write (POST /usergroups.create)
 - Call: `POST /usergroups.create`, effect: write
@@ -13,7 +13,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api usergroups disable [options]`
+## `slk api usergroups disable [options]`
 
 - What: usergroups\_disable — destructive (POST /usergroups.disable)
 - Call: `POST /usergroups.disable`, effect: destructive
@@ -25,7 +25,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api usergroups enable [options]`
+## `slk api usergroups enable [options]`
 
 - What: usergroups\_enable — write (POST /usergroups.enable)
 - Call: `POST /usergroups.enable`, effect: write
@@ -36,7 +36,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api usergroups list [options]`
+## `slk api usergroups list [options]`
 
 - What: usergroups\_list — read (GET /usergroups.list)
 - Call: `GET /usergroups.list`, effect: read
@@ -47,7 +47,7 @@
 | `--include-count <value>` | no | Include the number of users in each User Group. |
 | `--include-disabled <value>` | no | Include disabled User Groups. |
 
-## `slack api usergroups update [options]`
+## `slk api usergroups update [options]`
 
 - What: usergroups\_update — write (POST /usergroups.update)
 - Call: `POST /usergroups.update`, effect: write
@@ -58,7 +58,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api usergroups users-list [options]`
+## `slk api usergroups users-list [options]`
 
 - What: usergroups\_users\_list — read (GET /usergroups.users.list)
 - Call: `GET /usergroups.users.list`, effect: read
@@ -68,7 +68,7 @@
 | `--include-disabled <value>` | no | Allow results that involve disabled User Groups. |
 | `--usergroup <value>` | yes | The encoded ID of the User Group to update. |
 
-## `slack api usergroups users-update [options]`
+## `slk api usergroups users-update [options]`
 
 - What: usergroups\_users\_update — write (POST /usergroups.users.update)
 - Call: `POST /usergroups.users.update`, effect: write

@@ -65,7 +65,7 @@ export const slackSetup = defineSetup({
       title: "done.title",
       blocks: [
         { type: "text", text: "done.body" },
-        { type: "code", code: "slack <profile> chats list\nslack <profile> messages sync '#general'", copy: true },
+        { type: "code", code: "slk <profile> chats list\nslack <profile> messages sync '#general'", copy: true },
       ],
     },
   },

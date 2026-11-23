@@ -2,7 +2,7 @@
 
 # Slack API: dialog
 
-## `slack api dialog-open [options]`
+## `slk api dialog-open [options]`
 
 - What: dialog\_open — write (GET /dialog.open)
 - Call: `GET /dialog.open`, effect: write

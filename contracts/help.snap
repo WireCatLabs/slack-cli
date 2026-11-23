@@ -1,6 +1,6 @@
-slack — Your Slack workspace from the command line, for you and your AI agents
+slk — Your Slack workspace from the command line, for you and your AI agents
 
-Usage: slack <profile> <command> [options]
+Usage: slk <profile> <command> [options]
 Account commands start with your profile, a name you choose; none is ever assumed.
 
 Works with:
@@ -20,8 +20,8 @@ Works with:
   wordpress               WordPress posts and pages, searchable with your other WireCat data
   linear                  Linear issues and projects, searchable with your other WireCat data
 
-Start here:   slack personal setup  (any profile name works)
-              slack account list    your profiles and their logged-in accounts
-Next:         slack commands        every command, by section
-              slack help options    output, offline, timeouts, dry run
-For agents:   slack skill show      rules and the discovery loop
+Start here:   slk personal setup  (any profile name works)
+              slk account list    your profiles and their logged-in accounts
+Next:         slk commands        every command, by section
+              slk help options    output, offline, timeouts, dry run
+For agents:   slk skill show      rules and the discovery loop

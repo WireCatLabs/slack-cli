@@ -2,7 +2,7 @@
 
 # Slack API: views
 
-## `slack api views open [options]`
+## `slk api views open [options]`
 
 - What: views\_open — write (GET /views.open)
 - Call: `GET /views.open`, effect: write
@@ -12,7 +12,7 @@
 | `--trigger-id <value>` | yes | Exchange a trigger to post to the user. |
 | `--view <value>` | yes | A \[view payload\](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 
-## `slack api views publish [options]`
+## `slk api views publish [options]`
 
 - What: views\_publish — write (GET /views.publish)
 - Call: `GET /views.publish`, effect: write
@@ -23,7 +23,7 @@
 | `--view <value>` | yes | A \[view payload\](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 | `--hash <value>` | no | A string that represents view state to protect against possible race conditions. |
 
-## `slack api views push [options]`
+## `slk api views push [options]`
 
 - What: views\_push — write (GET /views.push)
 - Call: `GET /views.push`, effect: write
@@ -33,7 +33,7 @@
 | `--trigger-id <value>` | yes | Exchange a trigger to post to the user. |
 | `--view <value>` | yes | A \[view payload\](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 
-## `slack api views update [options]`
+## `slk api views update [options]`
 
 - What: views\_update — write (GET /views.update)
 - Call: `GET /views.update`, effect: write

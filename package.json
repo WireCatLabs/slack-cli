@@ -14,8 +14,8 @@
   },
   "packageManager": "pnpm@11.28.8",
   "bin": {
-    "slack": "dist/bin/slack.js",
-    "wcat-slack": "dist/bin/slack.js"
+    "slk": "dist/bin/slack.js",
+    "wcat-slk": "dist/bin/slack.js"
   },
   "files": [
     "dist",

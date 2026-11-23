@@ -1,22 +1,22 @@
 # Security
 
 What WireCat CLIs share — the keyring, permissions, MCP and what never reaches a log — is on the
-[shared security page](https://wirecat.dev/en/docs/security). This page keeps only what is particular to `slack`.
+[shared security page](https://wirecat.dev/en/docs/security). This page keeps only what is particular to `slk`.
 
-`slack` keeps its settings in `config.json` and its state in the folders `slack doctor` shows.
+`slk` keeps its settings in `config.json` and its state in the folders `slk doctor` shows.
 It reaches only `slack.com`. `session start` keeps the Slack user token in the OS
 keyring, or in a private file where no keyring works; the token goes only into the request's Authorization header,
 never into an address, an answer, a run record or the send journal.
 
-`slack personal mcp serve --http` listens on `127.0.0.1` only, for browser apps that reach it through your own
+`slk personal mcp serve --http` listens on `127.0.0.1` only, for browser apps that reach it through your own
 tunnel. Each app logs in with a one-time code, and the server keeps a hash of each login it gives, in the state
-folder, readable by you only. `slack personal mcp revoke` forgets every one of them.
+folder, readable by you only. `slk personal mcp revoke` forgets every one of them.
 
-A run record keeps the command line as you typed it, so `slack runs show` tells you what was run. A secret is still
+A run record keeps the command line as you typed it, so `slk runs show` tells you what was run. A secret is still
 stored as `[redacted]`: an option named like a token or password, a password in a link, a long opaque string. A
 phone number is replaced by `[redacted]` inside the word you typed, message text included: one written with its "+" and
 country code, or 11 to 15 digits in a row, so a long id of that length is hidden as well. To keep none of the words
-you type, run `slack personal config set record_input false`.
+you type, run `slk personal config set record_input false`.
 
 A secret is also found by what it looks like, in a run record and in a kept error message: a token in a known
 format (GitHub, OpenAI, Slack, AWS, Stripe, npm and the like), a `Bearer` credential, a random-looking string of 20 or
@@ -28,6 +28,6 @@ password typed without a secret name before it, and a secret inside a link or a 
 format or after a secret name.
 
 `config.json` is saved readable by you only (`0600`), and its folder is created for you only (`0700`). A file or
-folder made by an older version may be open to other users of the computer: `slack doctor` lists each under
+folder made by an older version may be open to other users of the computer: `slk doctor` lists each under
 `files.problems` and prints the `chmod` that fixes it. Windows is not checked. Report a vulnerability as [SECURITY.md](https://github.com/WireCatLabs/slack-cli/blob/main/SECURITY.md)
 says.

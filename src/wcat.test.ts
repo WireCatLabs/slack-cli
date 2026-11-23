@@ -10,7 +10,7 @@ describe("WCAT", () => {
     const manifest = buildManifest({
       identity: WCAT,
       commands: describeProgram(createProgram()),
-      pkg: { name: "@wirecat/slack-cli", bin: { "wcat-slack": "dist/bin/slack.js" } },
+      pkg: { name: "@wirecat/slack-cli", bin: { "wcat-slk": "dist/bin/slack.js" } },
       skills: true,
     })
 

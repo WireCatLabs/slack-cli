@@ -2,7 +2,7 @@
 
 # Slack API: users
 
-## `slack api users conversations [options]`
+## `slk api users conversations [options]`
 
 - What: users\_conversations — read (GET /users.conversations)
 - Call: `GET /users.conversations`, effect: read
@@ -17,7 +17,7 @@
 | `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api users get-presence [options]`
+## `slk api users get-presence [options]`
 
 - What: users\_getPresence — read (GET /users.getPresence)
 - Call: `GET /users.getPresence`, effect: read
@@ -26,12 +26,12 @@
 |---|---|---|
 | `--user <value>` | no | User to get presence info on. Defaults to the authed user. |
 
-## `slack api users identity`
+## `slk api users identity`
 
 - What: users\_identity — read (GET /users.identity)
 - Call: `GET /users.identity`, effect: read
 
-## `slack api users info [options]`
+## `slk api users info [options]`
 
 - What: users\_info — read (GET /users.info)
 - Call: `GET /users.info`, effect: read
@@ -41,7 +41,7 @@
 | `--include-locale <value>` | no | Set this to \`true\` to receive the locale for this user. Defaults to \`false\` |
 | `--user <value>` | no | User to get info on |
 
-## `slack api users list [options]`
+## `slk api users list [options]`
 
 - What: users\_list — read (GET /users.list)
 - Call: `GET /users.list`, effect: read
@@ -54,7 +54,7 @@
 | `--include-locale <value>` | no | Set this to \`true\` to receive the locale for users. Defaults to \`false\` |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api users lookup-by-email [options]`
+## `slk api users lookup-by-email [options]`
 
 - What: users\_lookupByEmail — read (GET /users.lookupByEmail)
 - Call: `GET /users.lookupByEmail`, effect: read
@@ -63,7 +63,7 @@
 |---|---|---|
 | `--email <value>` | yes | An email address belonging to a user in the workspace |
 
-## `slack api users profile-get [options]`
+## `slk api users profile-get [options]`
 
 - What: users\_profile\_get — read (GET /users.profile.get)
 - Call: `GET /users.profile.get`, effect: read
@@ -73,7 +73,7 @@
 | `--include-labels <value>` | no | Include labels for each ID in custom profile fields |
 | `--user <value>` | no | User to retrieve profile info for |
 
-## `slack api users profile-set [options]`
+## `slk api users profile-set [options]`
 
 - What: users\_profile\_set — write (POST /users.profile.set)
 - Call: `POST /users.profile.set`, effect: write
@@ -84,12 +84,12 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api users set-active`
+## `slk api users set-active`
 
 - What: users\_setActive — write (POST /users.setActive)
 - Call: `POST /users.setActive`, effect: write
 
-## `slack api users set-presence [options]`
+## `slk api users set-presence [options]`
 
 - What: users\_setPresence — write (POST /users.setPresence)
 - Call: `POST /users.setPresence`, effect: write

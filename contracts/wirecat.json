@@ -1,10 +1,10 @@
 {
   "wcat_manifest": 2,
-  "name": "slack",
+  "name": "slk",
   "description": "Your Slack workspace from the command line, for you and your AI agents",
   "docs_url": "https://github.com/WireCatLabs/slack-cli#readme",
   "package": "@wirecat/slack-cli",
-  "bin": "wcat-slack",
+  "bin": "wcat-slk",
   "commands": [
     {
       "path": [
@@ -4950,7 +4950,7 @@
       "path": [
         "complete"
       ],
-      "summary": "shell completion: `slack complete zsh` prints the script to source",
+      "summary": "shell completion: `slk complete zsh` prints the script to source",
       "effects": {
         "remote": "none",
         "local": "read"
@@ -5084,7 +5084,7 @@
       "path": [
         "upgrade"
       ],
-      "summary": "upgrade slack with the package manager that installed it; --check only looks",
+      "summary": "upgrade slk with the package manager that installed it; --check only looks",
       "effects": {
         "remote": "none",
         "local": "write"

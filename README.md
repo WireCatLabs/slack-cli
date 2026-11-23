@@ -1,7 +1,7 @@
-# slack: Slack CLI for AI agents
+# slk: Slack CLI for AI agents
 
 Read and search your Slack channels, DMs and threads from the terminal, and let Claude Code, Codex or any agent that
-speaks MCP do the same for you. slack signs in as you, with a Slack app you make in your own workspace, so it sees
+speaks MCP do the same for you. slk signs in as you, with a Slack app you make in your own workspace, so it sees
 what you see and nothing more.
 
 <p align="center">
@@ -10,7 +10,7 @@ what you see and nothing more.
   <a href="https://github.com/WireCatLabs/slack-cli/blob/main/docs/usage.md">Usage</a>
 </p>
 
-- **Every operation of the Slack Web API is a command.** `slack api list` shows them, each with its own
+- **Every operation of the Slack Web API is a command.** `slk api list` shows them, each with its own
   flags, help and `--json`.
 - **Your agent gets the same commands as tools.** An MCP server and an agent skill come with it, no second codebase.
 - **You decide what it may change.** Each profile allows, asks or denies each command, and a delete needs a key of
@@ -18,10 +18,10 @@ what you see and nothing more.
 
 ## What you get
 
-Ask your agent about Slack Web. It finds the right command with `slack commands --json`, runs it, and answers
-from the result. A command it may not run stops with a clear refusal before anything reaches Slack Web.
+Ask your agent about Slack. It finds the right command with `slk commands --json`, runs it, and answers
+from the result. A command it may not run stops with a clear refusal before anything reaches Slack.
 
-## Why slack
+## Why slk
 
 - The token stays in the system keyring, and every command names the profile it uses.
 - Every operation is tested against a strict fake built from the API description, in `src/api.test.ts`.
@@ -35,8 +35,9 @@ pnpm build
 node dist/bin/slack.js doctor
 ```
 
-Once it is on npm: `npm install -g @wirecat/slack-cli`, then `slack doctor`. Every command that uses an account
-starts with a profile, a name you choose: `slack personal config show`.
+Once it is on npm: `npm install -g @wirecat/slack-cli`, then `slk doctor`. The command is `slk`, and `wcat-slk`
+beside it; not `slack`, which [Slack's own developer CLI](https://docs.slack.dev/tools/slack-cli/) installs. Every command that uses an account
+starts with a profile, a name you choose: `slk personal config show`.
 
 ## Sign in with your own Slack app
 
@@ -49,44 +50,44 @@ your workspace uses keeps Slack's full limits for reading history; one shared ou
    use: reading channels, direct messages, people, files, reactions and pins, searching, and sending as you.
 3. Choose **Install to Workspace** and allow it. An admin may have to approve the app first.
 4. On **OAuth & Permissions**, copy the **User OAuth Token**. It starts with `xoxp-`.
-5. Run `slack personal session start` and paste the token at the hidden prompt. slack checks it with Slack
+5. Run `slk personal session start` and paste the token at the hidden prompt. slack checks it with Slack
    (`auth.test`) and keeps it in the system keyring. A bot token (`xoxb-`) is refused, because it cannot read as you.
 
-`slack doctor --online` asks Slack whose each saved token is. To sign out on this computer, run
-`slack personal session end`. To revoke the token, remove the app from the workspace.
+`slk doctor --online` asks Slack whose each saved token is. To sign out on this computer, run
+`slk personal session end`. To revoke the token, remove the app from the workspace.
 
 ## Use it with your agent
 
 ```sh
-slack personal mcp add claude-code
-slack skill install
+slk personal mcp add claude-code
+slk skill install
 ```
 
-`slack personal mcp check` shows the tools your agent gets. `mcp add` refuses a profile whose tools may write
-until you review its permissions and pass `--allow-writes`. `slack personal mcp config` prints the setup for
+`slk personal mcp check` shows the tools your agent gets. `mcp add` refuses a profile whose tools may write
+until you review its permissions and pass `--allow-writes`. `slk personal mcp config` prints the setup for
 any other MCP client.
 
 Over MCP nobody is there to answer `ask`, so the agent runs the API's writes and deletes without asking. Each
-one is kept as a run in `slack personal runs list`. To stop that, make the profile read-only with
-`slack personal config set permissions.api readonly`, or refuse one operation with
-`slack personal config set permissions.api.<operation> deny`. `slack api list` names the operations.
+one is kept as a run in `slk personal runs list`. To stop that, make the profile read-only with
+`slk personal config set permissions.api readonly`, or refuse one operation with
+`slk personal config set permissions.api.<operation> deny`. `slk api list` names the operations.
 
 ## What it can do
 
 Read your workspace with the same commands as every WireCat messenger CLI:
 
-- `slack personal chats list` lists the channels, DMs and group DMs you are in. `chats show '#general'` shows one,
+- `slk personal chats list` lists the channels, DMs and group DMs you are in. `chats show '#general'` shows one,
   with its members; a DM also shows its unread count. `chats members list '#general'` lists who is in a channel.
-- `slack personal messages list '#general'` reads recent messages as plain text, with names in place of user ids.
+- `slk personal messages list '#general'` reads recent messages as plain text, with names in place of user ids.
   `messages list '#general' topic:<ts>` reads one thread. `messages show` and `messages context` open one message
   and the messages around it.
-- `slack personal messages download '#general' <ts>` saves a message's files. They come only from
+- `slk personal messages download '#general' <ts>` saves a message's files. They come only from
   `files.slack.com`, and the token goes only there.
-- `slack personal messages sync '#general'` saves a channel's history on this computer, with new replies of threads
-  up to 14 days old (`thread_window_days`). `slack personal search all "invoice"` then searches it.
-- `slack personal chats events '#general'` shows who joined or left and what was renamed, from Slack's service
-  messages. `slack personal contacts show anna` shows a person.
-- `slack personal messages send '#general' "Ship it"` sends as you. `--reply-to <ts>` answers in the thread, `--md`
+- `slk personal messages sync '#general'` saves a channel's history on this computer, with new replies of threads
+  up to 14 days old (`thread_window_days`). `slk personal search all "invoice"` then searches it.
+- `slk personal chats events '#general'` shows who joined or left and what was renamed, from Slack's service
+  messages. `slk personal contacts show anna` shows a person.
+- `slk personal messages send '#general' "Ship it"` sends as you. `--reply-to <ts>` answers in the thread, `--md`
   turns Markdown into Slack's formatting, and `--file report.pdf` uploads a file. `messages edit`, `messages delete`,
   `messages pin`, `messages link`, `reactions add` and `chats mark-read`, `chats join` and `chats leave` change what
   you see in Slack and what others see.
@@ -98,7 +99,7 @@ Slack exits with `14` and is never sent again by itself: read the chat before yo
 
 ## Settings and permissions
 
-`slack personal config show` prints the profile's settings. See [docs/configuration.md](docs/configuration.md).
+`slk personal config show` prints the profile's settings. See [docs/configuration.md](docs/configuration.md).
 
 ## Security
 
@@ -106,7 +107,7 @@ See [docs/security.md](docs/security.md), and [SECURITY.md](SECURITY.md) to repo
 
 ## When something goes wrong
 
-Run `slack doctor` and see [docs/troubleshooting.md](docs/troubleshooting.md). Report a bug on
+Run `slk doctor` and see [docs/troubleshooting.md](docs/troubleshooting.md). Report a bug on
 [GitHub](https://github.com/WireCatLabs/slack-cli/issues).
 
 ## Development
