@@ -695,134 +695,6 @@ slk chats links show <chat>
 
 **Example:** `slk personal chats links show "Book club"`
 
-#### `slk chats links reset`
-
-replace the invite link; the old one stops working
-
-**Changes something in the service.**
-
-```sh
-slk chats links reset <chat>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
-
-**Returns:** chat group change — operation_id, chat, requested; every field: slk commands info chats links reset
-
-**Example:** `slk personal chats links reset "Book club"`
-
-### `slk chats requests`
-
-requests to join a group that needs an admin's approval
-
-#### `slk chats requests list`
-
-who asked to join, newest first; only admins see them, and reading tells nobody
-
-```sh
-slk chats requests list <chat> [query] [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
-
-| Option | What it does |
-|---|---|
-| `--limit <n>` | how many to show. |
-| `--page <n>` | which page, starting at 1. |
-
-**Returns:** join request — person_id, name, username, requested_at, about; every field: slk commands info chats requests list
-
-**Example:** `slk personal chats requests list "Book club"`
-
-#### `slk chats requests confirm`
-
-let them in; the group sees them join
-
-**Changes something in the service.**
-
-```sh
-slk chats requests confirm <chat> <person>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
-| `person` | required | who asked: an id from `chats requests list`. |
-
-**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: slk commands info chats requests confirm
-
-**Example:** `slk personal chats requests confirm "Book club" "Alex Example"`
-
-#### `slk chats requests reject`
-
-turn the request away
-
-**Changes something in the service.**
-
-```sh
-slk chats requests reject <chat> <person>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
-| `person` | required | who asked: an id from `chats requests list`. |
-
-**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: slk commands info chats requests reject
-
-**Example:** `slk personal chats requests reject "Book club" "Alex Example"`
-
-### `slk chats admins`
-
-give or take back a member's admin rights
-
-#### `slk chats admins add`
-
-make a member an admin with these rights
-
-**Changes something in the service.**
-
-```sh
-slk chats admins add <chat> <person> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
-| `person` | required | an id, or part of a name. |
-
-| Option | What it does |
-|---|---|
-| `--can <rights>` | what they may do, comma-separated: read, members, admins, info, pin, link, post, edit, delete. |
-
-**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: slk commands info chats admins add
-
-**Example:** `slk personal chats admins add "Book club" "Alex Example" --can info`
-
-#### `slk chats admins remove`
-
-take an admin's rights back; they stay a member
-
-**Changes something in the service.**
-
-```sh
-slk chats admins remove <chat> <person>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
-| `person` | required | an id, or part of a name. |
-
-**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: slk commands info chats admins remove
-
-**Example:** `slk personal chats admins remove "Book club" "Alex Example"`
-
 ### `slk chats folders`
 
 your chat folders
@@ -1364,42 +1236,6 @@ slk contacts notes remove <person> <id>
 
 **Example:** `slk personal contacts notes remove "Alex Example" 1`
 
-### `slk contacts block`
-
-stop a person from writing to you — they need not be a contact
-
-**Changes something in the service.**
-
-```sh
-slk contacts block <person>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
-
-**Returns:** contact state change — operation_id, person_id; every field: slk commands info contacts block
-
-**Example:** `slk personal contacts block "Alex Example"`
-
-### `slk contacts unblock`
-
-let a blocked person write to you again
-
-**Changes something in the service.**
-
-```sh
-slk contacts unblock <person>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
-
-**Returns:** contact state change — operation_id, person_id; every field: slk commands info contacts unblock
-
-**Example:** `slk personal contacts unblock "Alex Example"`
-
 ## `slk messages`
 
 read and send messages
@@ -1626,30 +1462,6 @@ slk messages delete <chat> <message> [options]
 **Returns:** message deletion — operation_id, chat_id, deleted, for_everyone; every field: slk commands info messages delete
 
 **Example:** `slk personal messages delete "Book club" 101`
-
-### `slk messages forward`
-
-forward one message to another chat
-
-**Changes something in the service.**
-
-```sh
-slk messages forward <chat> <message> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `chat` | required | the chat the message is in: a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
-| `message` | required | the message id. |
-
-| Option | What it does |
-|---|---|
-| `--to <chat>` | where it goes: a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
-| `--operation-id <id>` | repeat a forward whose outcome was unknown, without risking a second copy. |
-
-**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slk commands info messages forward
-
-**Example:** `slk personal messages forward "Book club" 101 --to "Project room"`
 
 ### `slk messages pin`
 
