@@ -7,12 +7,12 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**384 ✅ · 931 ⛔ · 0 ❌** — 404 commands, 911 options.
+**17 ✅ · 1049 ⛔ · 255 ❌** — 405 commands, 916 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
-| `commands` |  | ✅ |  |
-| `commands info` |  | ✅ |  |
+| `commands` |  | ❌ |  |
+| `commands info` |  | ❌ |  |
 | `session start` |  | ✅ |  |
 | `session start` | `--credential-storage` | ✅ |  |
 | `session status` |  | ✅ |  |
@@ -26,7 +26,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `setup run` |  | ✅ |  |
 | `setup run` | `--answer-stdin` | ✅ |  |
 | `account list` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `account show` |  | ✅ |  |
+| `account show` |  | ❌ |  |
 | `account show` | `--hide-phone` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `account update` |  | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `account update` | `--first-name` | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
@@ -45,13 +45,13 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `chats list` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats list` | `--page` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats list` | `--all` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `chats events` |  | ✅ |  |
+| `chats events` |  | ❌ |  |
 | `chats inspect` |  | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `chats show` |  | ✅ |  |
+| `chats show` |  | ❌ |  |
 | `chats documents list` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats documents list` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats documents list` | `--page` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `chats members list` |  | ✅ |  |
+| `chats members list` |  | ❌ |  |
 | `chats members list` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats members list` | `--page` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats members list` | `--all` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -64,17 +64,17 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `chats members fetch` | `--max-pages` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats members add` |  | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats members remove` |  | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `chats mark-read` |  | ✅ |  |
-| `chats mark-read` | `--until-id` | ✅ |  |
-| `chats mark-read` | `--topic` | ✅ |  |
+| `chats mark-read` |  | ❌ |  |
+| `chats mark-read` | `--until-id` | ❌ |  |
+| `chats mark-read` | `--topic` | ❌ |  |
 | `chats tracking list` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats tracking show` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats tracking add` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats tracking remove` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `chats create` |  | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats create` | `--channel` | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `chats join` |  | ✅ |  |
-| `chats leave` |  | ✅ |  |
+| `chats join` |  | ❌ |  |
+| `chats leave` |  | ❌ |  |
 | `chats update` |  | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats update` | `--title` | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats update` | `--description` | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
@@ -110,12 +110,12 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `chats moderate` | `--dry-run` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats moderate` | `--allow-dangerous` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `chats moderate` | `--max-actions` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `contacts list` |  | ✅ |  |
+| `contacts list` |  | ❌ |  |
 | `contacts list` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `contacts list` | `--page` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `contacts list` | `--all` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `contacts list` | `--order` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `contacts show` |  | ✅ |  |
+| `contacts show` |  | ❌ |  |
 | `contacts show` | `--with-notes` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `contacts show` | `--hide-phone` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `contacts context` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -156,34 +156,34 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages evidence` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages evidence` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages evidence` | `--cursor` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `messages list` |  | ✅ |  |
-| `messages list` | `--limit` | ✅ |  |
+| `messages list` |  | ❌ |  |
+| `messages list` | `--limit` | ❌ |  |
 | `messages list` | `--cursor` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages list` | `--transcribe` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages list` | `--model` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages send` |  | ✅ |  |
-| `messages send` | `--topic` | ✅ |  |
-| `messages send` | `--reply-to` | ✅ |  |
-| `messages send` | `--operation-id` | ✅ |  |
-| `messages send` | `--no-preview` | ✅ |  |
-| `messages send` | `--md` | ✅ |  |
-| `messages send` | `--file` | ✅ |  |
-| `messages send` | `--photo` | ✅ |  |
-| `messages send` | `--as-file` | ✅ |  |
-| `messages send` | `--voice` | ✅ |  |
+| `messages send` |  | ❌ |  |
+| `messages send` | `--topic` | ❌ |  |
+| `messages send` | `--reply-to` | ❌ |  |
+| `messages send` | `--operation-id` | ❌ |  |
+| `messages send` | `--no-preview` | ❌ |  |
+| `messages send` | `--md` | ❌ |  |
+| `messages send` | `--file` | ❌ |  |
+| `messages send` | `--photo` | ❌ |  |
+| `messages send` | `--as-file` | ❌ |  |
+| `messages send` | `--voice` | ❌ |  |
 | `messages send` | `--allow-any-file` | ⛔ | cli-core's guard on files from credential and app folders, the same in every messenger CLI; tested in cli-core's send tests, and slack's own file sends run in src/writes.test.ts |
-| `messages send` | `--also-to-channel` | ✅ |  |
-| `messages show` |  | ✅ |  |
-| `messages context` |  | ✅ |  |
+| `messages send` | `--also-to-channel` | ❌ |  |
+| `messages show` |  | ❌ |  |
+| `messages context` |  | ❌ |  |
 | `messages context` | `--thread` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages context` | `--thread-hops` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages context` | `--thread-messages` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages context` | `--thread-bytes` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages context` | `--thread-within` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `messages context` | `--before-n` | ✅ |  |
-| `messages context` | `--after-n` | ✅ |  |
-| `messages download` |  | ✅ |  |
-| `messages download` | `--output-dir` | ✅ |  |
+| `messages context` | `--before-n` | ❌ |  |
+| `messages context` | `--after-n` | ❌ |  |
+| `messages download` |  | ❌ |  |
+| `messages download` | `--output-dir` | ❌ |  |
 | `messages download` | `--attachment` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages download` | `--all` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages download` | `--pause` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -191,27 +191,27 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages transcribe` |  | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages transcribe` | `--local` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages transcribe` | `--model` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages edit` |  | ✅ |  |
-| `messages edit` | `--md` | ✅ |  |
-| `messages delete` |  | ✅ |  |
-| `messages delete` | `--for-everyone` | ✅ |  |
+| `messages edit` |  | ❌ |  |
+| `messages edit` | `--md` | ❌ |  |
+| `messages delete` |  | ❌ |  |
+| `messages delete` | `--for-everyone` | ❌ |  |
 | `messages delete` | `--allow-dangerous` | ⛔ | cli-core's switch past an ask level's question before a deletion; tested in cli-core's messages delete command tests, and slack's deletes run with --yes in src/writes.test.ts |
 | `messages forward` |  | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages forward` | `--to` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages forward` | `--operation-id` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
-| `messages pin` |  | ✅ |  |
-| `messages pin` | `--notify` | ✅ |  |
-| `messages unpin` |  | ✅ |  |
-| `messages link` |  | ✅ |  |
+| `messages pin` |  | ❌ |  |
+| `messages pin` | `--notify` | ❌ |  |
+| `messages unpin` |  | ❌ |  |
+| `messages link` |  | ❌ |  |
 | `messages comments` |  | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages comments` | `--limit` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages comments` | `--cursor` | ⛔ | something a Slack user token has no way to do (folders, sessions, join requests, moderation, forwarding, transcripts, comments, contact lists), so the adapter has no method for it and cli-core refuses it, before connecting where SLACK.lacks or SLACK.never names it; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |
 | `messages links` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `messages sync` |  | ✅ |  |
+| `messages sync` |  | ❌ |  |
 | `messages sync` | `--all` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `messages sync` | `--limit` | ✅ |  |
-| `messages sync` | `--page-size` | ✅ |  |
-| `messages sync` | `--pause` | ✅ |  |
+| `messages sync` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
+| `messages sync` | `--page-size` | ❌ |  |
+| `messages sync` | `--pause` | ❌ |  |
 | `messages sync` | `--since-time` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` | `--last` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` | `--catch-up` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -223,8 +223,8 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages sync` | `--with-muted` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` | `--background` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` | `--dry-run` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `reactions add` |  | ✅ |  |
-| `reactions remove` |  | ✅ |  |
+| `reactions add` |  | ❌ |  |
+| `reactions remove` |  | ❌ |  |
 | `models keys set` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
 | `models keys remove` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
 | `models chats show` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
@@ -236,6 +236,12 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `models set` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
 | `models add` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
 | `models add` | `--payload` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
+| `inbox` |  | ✅ |  |
+| `inbox` | `--new` | ❌ |  |
+| `inbox` | `--limit` | ❌ |  |
+| `inbox` | `--all` | ❌ |  |
+| `inbox` | `--transcribe` | ❌ |  |
+| `inbox` | `--model` | ❌ |  |
 | `review` |  | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
 | `review` | `--unanswered` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
 | `review` | `--all` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
@@ -631,7 +637,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `tasks close` | `--as-owner` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
 | `tasks reject` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
 | `tasks reject` | `--as-owner` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/tasks.test.ts |
-| `search all` |  | ✅ |  |
+| `search all` |  | ❌ |  |
 | `search all` | `--only` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search all` | `--source` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search all` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -640,7 +646,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `search all` | `--timezone` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search all` | `--backend` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search all` | `--server-time` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `search messages` |  | ✅ |  |
+| `search messages` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--sync-first` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--max-chats` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--sync-time` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -650,7 +656,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `search messages` | `--thread-messages` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--thread-bytes` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--thread-within` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `search messages` | `--backend` | ✅ |  |
+| `search messages` | `--backend` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--server-time` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--source` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -717,65 +723,65 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `sends list` | `--limit` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts and src/sends/journal.test.ts |
 | `sends list` | `--page` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts and src/sends/journal.test.ts |
 | `sends list` | `--all` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/messenger.test.ts and src/sends/journal.test.ts |
-| `api list` |  | ✅ |  |
-| `api show` |  | ✅ |  |
-| `api admin apps-approve` |  | ✅ |  |
-| `api admin apps-approve` | `--body` | ✅ |  |
+| `api list` |  | ❌ |  |
+| `api show` |  | ❌ |  |
+| `api admin apps-approve` |  | ❌ |  |
+| `api admin apps-approve` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-approve` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin apps-approved-list` |  | ✅ |  |
+| `api admin apps-approved-list` |  | ❌ |  |
 | `api admin apps-approved-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-approved-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-approved-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-approved-list` | `--enterprise-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin apps-requests-list` |  | ✅ |  |
+| `api admin apps-requests-list` |  | ❌ |  |
 | `api admin apps-requests-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-requests-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-requests-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin apps-restrict` |  | ✅ |  |
-| `api admin apps-restrict` | `--body` | ✅ |  |
+| `api admin apps-restrict` |  | ❌ |  |
+| `api admin apps-restrict` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-restrict` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin apps-restricted-list` |  | ✅ |  |
+| `api admin apps-restricted-list` |  | ❌ |  |
 | `api admin apps-restricted-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-restricted-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-restricted-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin apps-restricted-list` | `--enterprise-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-archive` |  | ✅ |  |
-| `api admin conversations-archive` | `--body` | ✅ |  |
+| `api admin conversations-archive` |  | ❌ |  |
+| `api admin conversations-archive` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-archive` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-convert-to-private` |  | ✅ |  |
-| `api admin conversations-convert-to-private` | `--body` | ✅ |  |
+| `api admin conversations-convert-to-private` |  | ❌ |  |
+| `api admin conversations-convert-to-private` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-convert-to-private` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-create` |  | ✅ |  |
-| `api admin conversations-create` | `--body` | ✅ |  |
+| `api admin conversations-create` |  | ❌ |  |
+| `api admin conversations-create` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-create` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-delete` |  | ✅ |  |
-| `api admin conversations-delete` | `--body` | ✅ |  |
+| `api admin conversations-delete` |  | ❌ |  |
+| `api admin conversations-delete` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-delete` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-disconnect-shared` |  | ✅ |  |
-| `api admin conversations-disconnect-shared` | `--body` | ✅ |  |
+| `api admin conversations-disconnect-shared` |  | ❌ |  |
+| `api admin conversations-disconnect-shared` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-disconnect-shared` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-ekm-list-original-connected-channel-info` |  | ✅ |  |
+| `api admin conversations-ekm-list-original-connected-channel-info` |  | ❌ |  |
 | `api admin conversations-ekm-list-original-connected-channel-info` | `--channel-ids` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-ekm-list-original-connected-channel-info` | `--team-ids` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-ekm-list-original-connected-channel-info` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-ekm-list-original-connected-channel-info` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-get-conversation-prefs` |  | ✅ |  |
-| `api admin conversations-get-conversation-prefs` | `--channel-id` | ✅ |  |
-| `api admin conversations-get-teams` |  | ✅ |  |
-| `api admin conversations-get-teams` | `--channel-id` | ✅ |  |
+| `api admin conversations-get-conversation-prefs` |  | ❌ |  |
+| `api admin conversations-get-conversation-prefs` | `--channel-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api admin conversations-get-teams` |  | ❌ |  |
+| `api admin conversations-get-teams` | `--channel-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-get-teams` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-get-teams` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-get-teams` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-invite` |  | ✅ |  |
-| `api admin conversations-invite` | `--body` | ✅ |  |
+| `api admin conversations-invite` |  | ❌ |  |
+| `api admin conversations-invite` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-invite` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-rename` |  | ✅ |  |
-| `api admin conversations-rename` | `--body` | ✅ |  |
+| `api admin conversations-rename` |  | ❌ |  |
+| `api admin conversations-rename` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-rename` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-restrict-access-list-groups` |  | ✅ |  |
-| `api admin conversations-restrict-access-list-groups` | `--channel-id` | ✅ |  |
+| `api admin conversations-restrict-access-list-groups` |  | ❌ |  |
+| `api admin conversations-restrict-access-list-groups` | `--channel-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-restrict-access-list-groups` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-search` |  | ✅ |  |
+| `api admin conversations-search` |  | ❌ |  |
 | `api admin conversations-search` | `--team-ids` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-search` | `--query` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-search` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
@@ -784,282 +790,282 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `api admin conversations-search` | `--sort` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-search` | `--sort-dir` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-search` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-set-conversation-prefs` |  | ✅ |  |
-| `api admin conversations-set-conversation-prefs` | `--body` | ✅ |  |
+| `api admin conversations-set-conversation-prefs` |  | ❌ |  |
+| `api admin conversations-set-conversation-prefs` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-set-conversation-prefs` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-set-teams` |  | ✅ |  |
-| `api admin conversations-set-teams` | `--body` | ✅ |  |
+| `api admin conversations-set-teams` |  | ❌ |  |
+| `api admin conversations-set-teams` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-set-teams` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin conversations-unarchive` |  | ✅ |  |
-| `api admin conversations-unarchive` | `--body` | ✅ |  |
+| `api admin conversations-unarchive` |  | ❌ |  |
+| `api admin conversations-unarchive` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin conversations-unarchive` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin emoji-list` |  | ✅ |  |
+| `api admin emoji-list` |  | ❌ |  |
 | `api admin emoji-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin emoji-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin invite-requests-approve` |  | ✅ |  |
-| `api admin invite-requests-approve` | `--body` | ✅ |  |
+| `api admin invite-requests-approve` |  | ❌ |  |
+| `api admin invite-requests-approve` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin invite-requests-approve` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin invite-requests-approved-list` |  | ✅ |  |
+| `api admin invite-requests-approved-list` |  | ❌ |  |
 | `api admin invite-requests-approved-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin invite-requests-approved-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin invite-requests-approved-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin invite-requests-denied-list` |  | ✅ |  |
+| `api admin invite-requests-denied-list` |  | ❌ |  |
 | `api admin invite-requests-denied-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin invite-requests-denied-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin invite-requests-denied-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin invite-requests-deny` |  | ✅ |  |
-| `api admin invite-requests-deny` | `--body` | ✅ |  |
+| `api admin invite-requests-deny` |  | ❌ |  |
+| `api admin invite-requests-deny` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin invite-requests-deny` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin invite-requests-list` |  | ✅ |  |
+| `api admin invite-requests-list` |  | ❌ |  |
 | `api admin invite-requests-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin invite-requests-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin invite-requests-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin teams-admins-list` |  | ✅ |  |
+| `api admin teams-admins-list` |  | ❌ |  |
 | `api admin teams-admins-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin teams-admins-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin teams-admins-list` | `--team-id` | ✅ |  |
-| `api admin teams-create` |  | ✅ |  |
-| `api admin teams-create` | `--body` | ✅ |  |
+| `api admin teams-admins-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api admin teams-create` |  | ❌ |  |
+| `api admin teams-create` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin teams-create` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin teams-list` |  | ✅ |  |
+| `api admin teams-list` |  | ❌ |  |
 | `api admin teams-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin teams-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin teams-owners-list` |  | ✅ |  |
-| `api admin teams-owners-list` | `--team-id` | ✅ |  |
+| `api admin teams-owners-list` |  | ❌ |  |
+| `api admin teams-owners-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin teams-owners-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin teams-owners-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin teams-settings-info` |  | ✅ |  |
-| `api admin teams-settings-info` | `--team-id` | ✅ |  |
-| `api admin teams-settings-set-description` |  | ✅ |  |
-| `api admin teams-settings-set-description` | `--body` | ✅ |  |
+| `api admin teams-settings-info` |  | ❌ |  |
+| `api admin teams-settings-info` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api admin teams-settings-set-description` |  | ❌ |  |
+| `api admin teams-settings-set-description` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin teams-settings-set-description` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin teams-settings-set-discoverability` |  | ✅ |  |
-| `api admin teams-settings-set-discoverability` | `--body` | ✅ |  |
+| `api admin teams-settings-set-discoverability` |  | ❌ |  |
+| `api admin teams-settings-set-discoverability` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin teams-settings-set-discoverability` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin teams-settings-set-name` |  | ✅ |  |
-| `api admin teams-settings-set-name` | `--body` | ✅ |  |
+| `api admin teams-settings-set-name` |  | ❌ |  |
+| `api admin teams-settings-set-name` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin teams-settings-set-name` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin usergroups-add-channels` |  | ✅ |  |
-| `api admin usergroups-add-channels` | `--body` | ✅ |  |
+| `api admin usergroups-add-channels` |  | ❌ |  |
+| `api admin usergroups-add-channels` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin usergroups-add-channels` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin usergroups-add-teams` |  | ✅ |  |
-| `api admin usergroups-add-teams` | `--body` | ✅ |  |
+| `api admin usergroups-add-teams` |  | ❌ |  |
+| `api admin usergroups-add-teams` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin usergroups-add-teams` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin usergroups-list-channels` |  | ✅ |  |
-| `api admin usergroups-list-channels` | `--usergroup-id` | ✅ |  |
+| `api admin usergroups-list-channels` |  | ❌ |  |
+| `api admin usergroups-list-channels` | `--usergroup-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin usergroups-list-channels` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin usergroups-list-channels` | `--include-num-members` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin usergroups-remove-channels` |  | ✅ |  |
-| `api admin usergroups-remove-channels` | `--body` | ✅ |  |
+| `api admin usergroups-remove-channels` |  | ❌ |  |
+| `api admin usergroups-remove-channels` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin usergroups-remove-channels` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-assign` |  | ✅ |  |
-| `api admin users-assign` | `--body` | ✅ |  |
+| `api admin users-assign` |  | ❌ |  |
+| `api admin users-assign` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-assign` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-invite` |  | ✅ |  |
-| `api admin users-invite` | `--body` | ✅ |  |
+| `api admin users-invite` |  | ❌ |  |
+| `api admin users-invite` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-invite` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-list` |  | ✅ |  |
-| `api admin users-list` | `--team-id` | ✅ |  |
+| `api admin users-list` |  | ❌ |  |
+| `api admin users-list` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-remove` |  | ✅ |  |
-| `api admin users-remove` | `--body` | ✅ |  |
+| `api admin users-remove` |  | ❌ |  |
+| `api admin users-remove` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-remove` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-session-invalidate` |  | ✅ |  |
-| `api admin users-session-invalidate` | `--body` | ✅ |  |
+| `api admin users-session-invalidate` |  | ❌ |  |
+| `api admin users-session-invalidate` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-session-invalidate` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-session-reset` |  | ✅ |  |
-| `api admin users-session-reset` | `--body` | ✅ |  |
+| `api admin users-session-reset` |  | ❌ |  |
+| `api admin users-session-reset` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-session-reset` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-set-admin` |  | ✅ |  |
-| `api admin users-set-admin` | `--body` | ✅ |  |
+| `api admin users-set-admin` |  | ❌ |  |
+| `api admin users-set-admin` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-set-admin` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-set-expiration` |  | ✅ |  |
-| `api admin users-set-expiration` | `--body` | ✅ |  |
+| `api admin users-set-expiration` |  | ❌ |  |
+| `api admin users-set-expiration` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-set-expiration` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-set-owner` |  | ✅ |  |
-| `api admin users-set-owner` | `--body` | ✅ |  |
+| `api admin users-set-owner` |  | ❌ |  |
+| `api admin users-set-owner` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-set-owner` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api admin users-set-regular` |  | ✅ |  |
-| `api admin users-set-regular` | `--body` | ✅ |  |
+| `api admin users-set-regular` |  | ❌ |  |
+| `api admin users-set-regular` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api admin users-set-regular` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api api-test` |  | ✅ |  |
+| `api api-test` |  | ❌ |  |
 | `api api-test` | `--error` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api api-test` | `--foo` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api apps event-authorizations-list` |  | ✅ |  |
-| `api apps event-authorizations-list` | `--event-context` | ✅ |  |
+| `api apps event-authorizations-list` |  | ❌ |  |
+| `api apps event-authorizations-list` | `--event-context` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api apps event-authorizations-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api apps event-authorizations-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api apps permissions-info` |  | ✅ |  |
-| `api apps permissions-request` |  | ✅ |  |
-| `api apps permissions-request` | `--scopes` | ✅ |  |
-| `api apps permissions-request` | `--trigger-id` | ✅ |  |
-| `api apps permissions-resources-list` |  | ✅ |  |
+| `api apps permissions-info` |  | ❌ |  |
+| `api apps permissions-request` |  | ❌ |  |
+| `api apps permissions-request` | `--scopes` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api apps permissions-request` | `--trigger-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api apps permissions-resources-list` |  | ❌ |  |
 | `api apps permissions-resources-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api apps permissions-resources-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api apps permissions-resources-list` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api apps permissions-scopes-list` |  | ✅ |  |
-| `api apps permissions-users-list` |  | ✅ |  |
+| `api apps permissions-scopes-list` |  | ❌ |  |
+| `api apps permissions-users-list` |  | ❌ |  |
 | `api apps permissions-users-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api apps permissions-users-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api apps permissions-users-request` |  | ✅ |  |
-| `api apps permissions-users-request` | `--scopes` | ✅ |  |
-| `api apps permissions-users-request` | `--trigger-id` | ✅ |  |
-| `api apps permissions-users-request` | `--user` | ✅ |  |
-| `api apps uninstall` |  | ✅ |  |
+| `api apps permissions-users-request` |  | ❌ |  |
+| `api apps permissions-users-request` | `--scopes` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api apps permissions-users-request` | `--trigger-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api apps permissions-users-request` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api apps uninstall` |  | ❌ |  |
 | `api apps uninstall` | `--client-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api apps uninstall` | `--client-secret` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api auth revoke` |  | ✅ |  |
+| `api auth revoke` |  | ❌ |  |
 | `api auth revoke` | `--test` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api auth test` |  | ✅ |  |
-| `api bots-info` |  | ✅ |  |
+| `api bots-info` |  | ❌ |  |
 | `api bots-info` | `--bot` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api calls add` |  | ✅ |  |
-| `api calls add` | `--body` | ✅ |  |
+| `api calls add` |  | ❌ |  |
+| `api calls add` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api calls add` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api calls end` |  | ✅ |  |
-| `api calls end` | `--body` | ✅ |  |
+| `api calls end` |  | ❌ |  |
+| `api calls end` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api calls end` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api calls info` |  | ✅ |  |
-| `api calls info` | `--id` | ✅ |  |
-| `api calls participants-add` |  | ✅ |  |
-| `api calls participants-add` | `--body` | ✅ |  |
+| `api calls info` |  | ❌ |  |
+| `api calls info` | `--id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api calls participants-add` |  | ❌ |  |
+| `api calls participants-add` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api calls participants-add` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api calls participants-remove` |  | ✅ |  |
-| `api calls participants-remove` | `--body` | ✅ |  |
+| `api calls participants-remove` |  | ❌ |  |
+| `api calls participants-remove` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api calls participants-remove` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api calls update` |  | ✅ |  |
-| `api calls update` | `--body` | ✅ |  |
+| `api calls update` |  | ❌ |  |
+| `api calls update` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api calls update` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat delete` |  | ✅ |  |
-| `api chat delete` | `--body` | ✅ |  |
+| `api chat delete` |  | ❌ |  |
+| `api chat delete` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat delete` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat delete-scheduled-message` |  | ✅ |  |
-| `api chat delete-scheduled-message` | `--body` | ✅ |  |
+| `api chat delete-scheduled-message` |  | ❌ |  |
+| `api chat delete-scheduled-message` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat delete-scheduled-message` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat get-permalink` |  | ✅ |  |
-| `api chat get-permalink` | `--channel` | ✅ |  |
-| `api chat get-permalink` | `--message-ts` | ✅ |  |
-| `api chat me-message` |  | ✅ |  |
-| `api chat me-message` | `--body` | ✅ |  |
+| `api chat get-permalink` |  | ❌ |  |
+| `api chat get-permalink` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api chat get-permalink` | `--message-ts` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api chat me-message` |  | ❌ |  |
+| `api chat me-message` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat me-message` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat post-ephemeral` |  | ✅ |  |
-| `api chat post-ephemeral` | `--body` | ✅ |  |
+| `api chat post-ephemeral` |  | ❌ |  |
+| `api chat post-ephemeral` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat post-ephemeral` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat post-message` |  | ✅ |  |
-| `api chat post-message` | `--body` | ✅ |  |
+| `api chat post-message` |  | ❌ |  |
+| `api chat post-message` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat post-message` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat schedule-message` |  | ✅ |  |
-| `api chat schedule-message` | `--body` | ✅ |  |
+| `api chat schedule-message` |  | ❌ |  |
+| `api chat schedule-message` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat schedule-message` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat scheduled-messages-list` |  | ✅ |  |
+| `api chat scheduled-messages-list` |  | ❌ |  |
 | `api chat scheduled-messages-list` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat scheduled-messages-list` | `--latest` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat scheduled-messages-list` | `--oldest` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat scheduled-messages-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat scheduled-messages-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat scheduled-messages-list` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat unfurl` |  | ✅ |  |
-| `api chat unfurl` | `--body` | ✅ |  |
+| `api chat unfurl` |  | ❌ |  |
+| `api chat unfurl` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat unfurl` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api chat update` |  | ✅ |  |
-| `api chat update` | `--body` | ✅ |  |
+| `api chat update` |  | ❌ |  |
+| `api chat update` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api chat update` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations archive` |  | ✅ |  |
-| `api conversations archive` | `--body` | ✅ |  |
+| `api conversations archive` |  | ❌ |  |
+| `api conversations archive` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations archive` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations close` |  | ✅ |  |
-| `api conversations close` | `--body` | ✅ |  |
+| `api conversations close` |  | ❌ |  |
+| `api conversations close` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations close` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations create` |  | ✅ |  |
-| `api conversations create` | `--body` | ✅ |  |
+| `api conversations create` |  | ❌ |  |
+| `api conversations create` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations create` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations history` |  | ✅ |  |
-| `api conversations history` | `--channel` | ✅ |  |
+| `api conversations history` |  | ❌ |  |
+| `api conversations history` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations history` | `--latest` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations history` | `--oldest` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations history` | `--inclusive` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations history` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations history` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations history` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations info` |  | ✅ |  |
-| `api conversations info` | `--channel` | ✅ |  |
+| `api conversations info` |  | ❌ |  |
+| `api conversations info` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations info` | `--include-locale` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations info` | `--include-num-members` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations invite` |  | ✅ |  |
-| `api conversations invite` | `--body` | ✅ |  |
+| `api conversations invite` |  | ❌ |  |
+| `api conversations invite` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations invite` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations join` |  | ✅ |  |
-| `api conversations join` | `--body` | ✅ |  |
+| `api conversations join` |  | ❌ |  |
+| `api conversations join` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations join` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations kick` |  | ✅ |  |
-| `api conversations kick` | `--body` | ✅ |  |
+| `api conversations kick` |  | ❌ |  |
+| `api conversations kick` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations kick` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations leave` |  | ✅ |  |
-| `api conversations leave` | `--body` | ✅ |  |
+| `api conversations leave` |  | ❌ |  |
+| `api conversations leave` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations leave` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations list` |  | ✅ |  |
+| `api conversations list` |  | ❌ |  |
 | `api conversations list` | `--exclude-archived` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations list` | `--types` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations list` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations mark` |  | ✅ |  |
-| `api conversations mark` | `--body` | ✅ |  |
+| `api conversations mark` |  | ❌ |  |
+| `api conversations mark` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations mark` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations members` |  | ✅ |  |
-| `api conversations members` | `--channel` | ✅ |  |
+| `api conversations members` |  | ❌ |  |
+| `api conversations members` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations members` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations members` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations members` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations open` |  | ✅ |  |
-| `api conversations open` | `--body` | ✅ |  |
+| `api conversations open` |  | ❌ |  |
+| `api conversations open` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations open` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations rename` |  | ✅ |  |
-| `api conversations rename` | `--body` | ✅ |  |
+| `api conversations rename` |  | ❌ |  |
+| `api conversations rename` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations rename` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations replies` |  | ✅ |  |
-| `api conversations replies` | `--channel` | ✅ |  |
-| `api conversations replies` | `--ts` | ✅ |  |
+| `api conversations replies` |  | ❌ |  |
+| `api conversations replies` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api conversations replies` | `--ts` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations replies` | `--latest` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations replies` | `--oldest` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations replies` | `--inclusive` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations replies` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations replies` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations replies` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations set-purpose` |  | ✅ |  |
-| `api conversations set-purpose` | `--body` | ✅ |  |
+| `api conversations set-purpose` |  | ❌ |  |
+| `api conversations set-purpose` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations set-purpose` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations set-topic` |  | ✅ |  |
-| `api conversations set-topic` | `--body` | ✅ |  |
+| `api conversations set-topic` |  | ❌ |  |
+| `api conversations set-topic` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations set-topic` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api conversations unarchive` |  | ✅ |  |
-| `api conversations unarchive` | `--body` | ✅ |  |
+| `api conversations unarchive` |  | ❌ |  |
+| `api conversations unarchive` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api conversations unarchive` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api dialog-open` |  | ✅ |  |
-| `api dialog-open` | `--dialog` | ✅ |  |
-| `api dialog-open` | `--trigger-id` | ✅ |  |
-| `api dnd end-dnd` |  | ✅ |  |
-| `api dnd end-snooze` |  | ✅ |  |
-| `api dnd info` |  | ✅ |  |
+| `api dialog-open` |  | ❌ |  |
+| `api dialog-open` | `--dialog` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api dialog-open` | `--trigger-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api dnd end-dnd` |  | ❌ |  |
+| `api dnd end-snooze` |  | ❌ |  |
+| `api dnd info` |  | ❌ |  |
 | `api dnd info` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api dnd team-info` |  | ✅ |  |
+| `api dnd team-info` |  | ❌ |  |
 | `api dnd team-info` | `--users` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api emoji-list` |  | ✅ |  |
-| `api files comments-delete` |  | ✅ |  |
-| `api files comments-delete` | `--body` | ✅ |  |
+| `api emoji-list` |  | ❌ |  |
+| `api files comments-delete` |  | ❌ |  |
+| `api files comments-delete` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files comments-delete` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api files delete` |  | ✅ |  |
-| `api files delete` | `--body` | ✅ |  |
+| `api files delete` |  | ❌ |  |
+| `api files delete` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files delete` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api files info` |  | ✅ |  |
+| `api files info` |  | ❌ |  |
 | `api files info` | `--file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files info` | `--count` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files info` | `--page` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files info` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files info` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files info` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api files list` |  | ✅ |  |
+| `api files list` |  | ❌ |  |
 | `api files list` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files list` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files list` | `--ts-from` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
@@ -1069,47 +1075,47 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `api files list` | `--page` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files list` | `--show-files-hidden-by-limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files list` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api files remote-info` |  | ✅ |  |
+| `api files remote-info` |  | ❌ |  |
 | `api files remote-info` | `--file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files remote-info` | `--external-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api files remote-list` |  | ✅ |  |
+| `api files remote-list` |  | ❌ |  |
 | `api files remote-list` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files remote-list` | `--ts-from` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files remote-list` | `--ts-to` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files remote-list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files remote-list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api files remote-share` |  | ✅ |  |
+| `api files remote-share` |  | ❌ |  |
 | `api files remote-share` | `--file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files remote-share` | `--external-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files remote-share` | `--channels` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api files revoke-public-url` |  | ✅ |  |
-| `api files revoke-public-url` | `--body` | ✅ |  |
+| `api files revoke-public-url` |  | ❌ |  |
+| `api files revoke-public-url` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files revoke-public-url` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api files shared-public-url` |  | ✅ |  |
-| `api files shared-public-url` | `--body` | ✅ |  |
+| `api files shared-public-url` |  | ❌ |  |
+| `api files shared-public-url` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api files shared-public-url` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api migration-exchange` |  | ✅ |  |
-| `api migration-exchange` | `--users` | ✅ |  |
+| `api migration-exchange` |  | ❌ |  |
+| `api migration-exchange` | `--users` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api migration-exchange` | `--team-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api migration-exchange` | `--to-old` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api pins add` |  | ✅ |  |
-| `api pins add` | `--body` | ✅ |  |
+| `api pins add` |  | ❌ |  |
+| `api pins add` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api pins add` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api pins list` |  | ✅ |  |
-| `api pins list` | `--channel` | ✅ |  |
-| `api pins remove` |  | ✅ |  |
-| `api pins remove` | `--body` | ✅ |  |
+| `api pins list` |  | ❌ |  |
+| `api pins list` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api pins remove` |  | ❌ |  |
+| `api pins remove` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api pins remove` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reactions add` |  | ✅ |  |
-| `api reactions add` | `--body` | ✅ |  |
+| `api reactions add` |  | ❌ |  |
+| `api reactions add` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions add` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reactions get` |  | ✅ |  |
+| `api reactions get` |  | ❌ |  |
 | `api reactions get` | `--channel` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions get` | `--file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions get` | `--file-comment` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions get` | `--full` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions get` | `--timestamp` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reactions list` |  | ✅ |  |
+| `api reactions list` |  | ❌ |  |
 | `api reactions list` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions list` | `--full` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions list` | `--count` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
@@ -1117,132 +1123,132 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `api reactions list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions list` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reactions remove` |  | ✅ |  |
-| `api reactions remove` | `--body` | ✅ |  |
+| `api reactions remove` |  | ❌ |  |
+| `api reactions remove` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reactions remove` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reminders add` |  | ✅ |  |
-| `api reminders add` | `--body` | ✅ |  |
+| `api reminders add` |  | ❌ |  |
+| `api reminders add` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reminders add` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reminders complete` |  | ✅ |  |
-| `api reminders complete` | `--body` | ✅ |  |
+| `api reminders complete` |  | ❌ |  |
+| `api reminders complete` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reminders complete` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reminders delete` |  | ✅ |  |
-| `api reminders delete` | `--body` | ✅ |  |
+| `api reminders delete` |  | ❌ |  |
+| `api reminders delete` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api reminders delete` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reminders info` |  | ✅ |  |
+| `api reminders info` |  | ❌ |  |
 | `api reminders info` | `--reminder` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api reminders list` |  | ✅ |  |
-| `api search-messages` |  | ✅ |  |
+| `api reminders list` |  | ❌ |  |
+| `api search-messages` |  | ❌ |  |
 | `api search-messages` | `--count` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api search-messages` | `--highlight` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api search-messages` | `--page` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api search-messages` | `--query` | ✅ |  |
+| `api search-messages` | `--query` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api search-messages` | `--sort` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api search-messages` | `--sort-dir` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api stars add` |  | ✅ |  |
-| `api stars add` | `--body` | ✅ |  |
+| `api stars add` |  | ❌ |  |
+| `api stars add` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api stars add` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api stars list` |  | ✅ |  |
+| `api stars list` |  | ❌ |  |
 | `api stars list` | `--count` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api stars list` | `--page` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api stars list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api stars list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api stars list` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api stars remove` |  | ✅ |  |
-| `api stars remove` | `--body` | ✅ |  |
+| `api stars remove` |  | ❌ |  |
+| `api stars remove` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api stars remove` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api team access-logs` |  | ✅ |  |
+| `api team access-logs` |  | ❌ |  |
 | `api team access-logs` | `--before` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api team access-logs` | `--count` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api team access-logs` | `--page` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api team billable-info` |  | ✅ |  |
+| `api team billable-info` |  | ❌ |  |
 | `api team billable-info` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api team info` |  | ✅ |  |
+| `api team info` |  | ❌ |  |
 | `api team info` | `--team` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api team integration-logs` |  | ✅ |  |
+| `api team integration-logs` |  | ❌ |  |
 | `api team integration-logs` | `--app-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api team integration-logs` | `--change-type` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api team integration-logs` | `--count` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api team integration-logs` | `--page` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api team integration-logs` | `--service-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api team integration-logs` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api team profile-get` |  | ✅ |  |
+| `api team profile-get` |  | ❌ |  |
 | `api team profile-get` | `--visibility` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api usergroups create` |  | ✅ |  |
-| `api usergroups create` | `--body` | ✅ |  |
+| `api usergroups create` |  | ❌ |  |
+| `api usergroups create` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api usergroups create` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api usergroups disable` |  | ✅ |  |
-| `api usergroups disable` | `--body` | ✅ |  |
+| `api usergroups disable` |  | ❌ |  |
+| `api usergroups disable` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api usergroups disable` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api usergroups enable` |  | ✅ |  |
-| `api usergroups enable` | `--body` | ✅ |  |
+| `api usergroups enable` |  | ❌ |  |
+| `api usergroups enable` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api usergroups enable` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api usergroups list` |  | ✅ |  |
+| `api usergroups list` |  | ❌ |  |
 | `api usergroups list` | `--include-users` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api usergroups list` | `--include-count` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api usergroups list` | `--include-disabled` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api usergroups update` |  | ✅ |  |
-| `api usergroups update` | `--body` | ✅ |  |
+| `api usergroups update` |  | ❌ |  |
+| `api usergroups update` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api usergroups update` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api usergroups users-list` |  | ✅ |  |
+| `api usergroups users-list` |  | ❌ |  |
 | `api usergroups users-list` | `--include-disabled` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api usergroups users-list` | `--usergroup` | ✅ |  |
-| `api usergroups users-update` |  | ✅ |  |
-| `api usergroups users-update` | `--body` | ✅ |  |
+| `api usergroups users-list` | `--usergroup` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api usergroups users-update` |  | ❌ |  |
+| `api usergroups users-update` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api usergroups users-update` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api users conversations` |  | ✅ |  |
+| `api users conversations` |  | ❌ |  |
 | `api users conversations` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users conversations` | `--types` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users conversations` | `--exclude-archived` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users conversations` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users conversations` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users conversations` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api users get-presence` |  | ✅ |  |
+| `api users get-presence` |  | ❌ |  |
 | `api users get-presence` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api users identity` |  | ✅ |  |
-| `api users info` |  | ✅ |  |
+| `api users identity` |  | ❌ |  |
+| `api users info` |  | ❌ |  |
 | `api users info` | `--include-locale` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users info` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api users list` |  | ✅ |  |
+| `api users list` |  | ❌ |  |
 | `api users list` | `--limit` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users list` | `--cursor` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users list` | `--include-locale` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users list` | `--all` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api users lookup-by-email` |  | ✅ |  |
-| `api users lookup-by-email` | `--email` | ✅ |  |
-| `api users profile-get` |  | ✅ |  |
+| `api users lookup-by-email` |  | ❌ |  |
+| `api users lookup-by-email` | `--email` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api users profile-get` |  | ❌ |  |
 | `api users profile-get` | `--include-labels` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users profile-get` | `--user` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api users profile-set` |  | ✅ |  |
-| `api users profile-set` | `--body` | ✅ |  |
+| `api users profile-set` |  | ❌ |  |
+| `api users profile-set` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users profile-set` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api users set-active` |  | ✅ |  |
-| `api users set-presence` |  | ✅ |  |
-| `api users set-presence` | `--body` | ✅ |  |
+| `api users set-active` |  | ❌ |  |
+| `api users set-presence` |  | ❌ |  |
+| `api users set-presence` | `--body` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api users set-presence` | `--body-file` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api views open` |  | ✅ |  |
-| `api views open` | `--trigger-id` | ✅ |  |
-| `api views open` | `--view` | ✅ |  |
-| `api views publish` |  | ✅ |  |
-| `api views publish` | `--user-id` | ✅ |  |
-| `api views publish` | `--view` | ✅ |  |
+| `api views open` |  | ❌ |  |
+| `api views open` | `--trigger-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api views open` | `--view` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api views publish` |  | ❌ |  |
+| `api views publish` | `--user-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api views publish` | `--view` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api views publish` | `--hash` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api views push` |  | ✅ |  |
-| `api views push` | `--trigger-id` | ✅ |  |
-| `api views push` | `--view` | ✅ |  |
-| `api views update` |  | ✅ |  |
+| `api views push` |  | ❌ |  |
+| `api views push` | `--trigger-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api views push` | `--view` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api views update` |  | ❌ |  |
 | `api views update` | `--view-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api views update` | `--external-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api views update` | `--view` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api views update` | `--hash` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api workflows step-completed` |  | ✅ |  |
-| `api workflows step-completed` | `--workflow-step-execute-id` | ✅ |  |
+| `api workflows step-completed` |  | ❌ |  |
+| `api workflows step-completed` | `--workflow-step-execute-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api workflows step-completed` | `--outputs` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
-| `api workflows step-failed` |  | ✅ |  |
-| `api workflows step-failed` | `--workflow-step-execute-id` | ✅ |  |
-| `api workflows step-failed` | `--error` | ✅ |  |
-| `api workflows update-step` |  | ✅ |  |
-| `api workflows update-step` | `--workflow-step-edit-id` | ✅ |  |
+| `api workflows step-failed` |  | ❌ |  |
+| `api workflows step-failed` | `--workflow-step-execute-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api workflows step-failed` | `--error` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
+| `api workflows update-step` |  | ❌ |  |
+| `api workflows update-step` | `--workflow-step-edit-id` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api workflows update-step` | `--inputs` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api workflows update-step` | `--outputs` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
 | `api workflows update-step` | `--step-name` | ⛔ | generated from Slack's Swagger; src/api.test.ts sends every operation once with its required flags through fakeApi, which checks every flag it gets against the spec |
@@ -1254,18 +1260,18 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `doctor reports create` | `--run` | ⛔ | cli-core's messenger doctorCommand; cli-core's doctor tests create and show a report |
 | `doctor reports create` | `--output` | ⛔ | cli-core's messenger doctorCommand; cli-core's doctor tests create and show a report |
 | `complete` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/complete-command.test.ts |
-| `skill show` |  | ✅ |  |
-| `skill show` | `--for` | ✅ |  |
-| `skill install` |  | ✅ |  |
-| `skill install` | `--for` | ✅ |  |
-| `skill status` |  | ✅ |  |
-| `mcp serve` |  | ✅ |  |
-| `mcp serve` | `--permission` | ✅ |  |
-| `mcp serve` | `--profiles` | ✅ |  |
+| `skill show` |  | ❌ |  |
+| `skill show` | `--for` | ❌ |  |
+| `skill install` |  | ❌ |  |
+| `skill install` | `--for` | ❌ |  |
+| `skill status` |  | ❌ |  |
+| `mcp serve` |  | ❌ |  |
+| `mcp serve` | `--permission` | ❌ |  |
+| `mcp serve` | `--profiles` | ❌ |  |
 | `mcp serve` | `--http` | ⛔ | starts an HTTP server or a background process that runs until stopped; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
 | `mcp serve` | `--port` | ⛔ | starts an HTTP server or a background process that runs until stopped; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
 | `mcp serve` | `--public-url` | ⛔ | starts an HTTP server or a background process that runs until stopped; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
-| `mcp revoke` |  | ✅ |  |
+| `mcp revoke` |  | ❌ |  |
 | `mcp revoke` | `--profiles` | ⛔ | cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
 | `mcp server start` |  | ⛔ | starts a detached `mcp serve --http` from the built entry; cli-core tests mcpServerCommand, and the background run was checked by hand against dist/ |
 | `mcp server start` | `--port` | ⛔ | starts a detached `mcp serve --http` from the built entry; cli-core tests mcpServerCommand, and the background run was checked by hand against dist/ |
@@ -1276,53 +1282,53 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `mcp server stop` | `--profiles` | ⛔ | stops the detached server that `mcp server start` wrote a pid file for; cli-core tests mcpServerCommand, and no live scenario starts a server to stop |
 | `mcp server status` |  | ⛔ | starts an HTTP server or a background process that runs until stopped; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
 | `mcp server status` | `--profiles` | ⛔ | starts an HTTP server or a background process that runs until stopped; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
-| `mcp config` |  | ✅ |  |
-| `mcp config` | `--permission` | ✅ |  |
-| `mcp config` | `--profiles` | ✅ |  |
+| `mcp config` |  | ❌ |  |
+| `mcp config` | `--permission` | ❌ |  |
+| `mcp config` | `--profiles` | ❌ |  |
 | `mcp add` |  | ⛔ | writes Codex's or Claude Code's own MCP settings; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
 | `mcp add` | `--allow-writes` | ⛔ | writes Codex's or Claude Code's own MCP settings; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
 | `mcp add` | `--permission` | ⛔ | writes Codex's or Claude Code's own MCP settings; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
 | `mcp check` |  | ⛔ | starts the installed CLI as a child process, as the agent would; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
 | `mcp check` | `--permission` | ⛔ | starts the installed CLI as a child process, as the agent would; cli-core's appMcpCommand; its app-mcp-command and mcp-server-command tests drive it, and src/mcp.test.ts runs this CLI's own server, config, revoke and refusals |
-| `upgrade` |  | ✅ |  |
-| `upgrade` | `--check` | ✅ |  |
-| `config show` |  | ✅ |  |
-| `config show` | `--bot` | ✅ |  |
-| `config set` |  | ✅ |  |
-| `config set` | `--defaults` | ✅ |  |
-| `config set` | `--personal` | ✅ |  |
-| `config set` | `--bot` | ✅ |  |
-| `config unset` |  | ✅ |  |
-| `config unset` | `--defaults` | ✅ |  |
-| `config unset` | `--personal` | ✅ |  |
-| `config unset` | `--bot` | ✅ |  |
-| `config migrate` |  | ✅ |  |
-| `config repair` |  | ✅ |  |
-| `config repair` | `--dry-run` | ✅ |  |
+| `upgrade` |  | ❌ |  |
+| `upgrade` | `--check` | ❌ |  |
+| `config show` |  | ❌ |  |
+| `config show` | `--bot` | ❌ |  |
+| `config set` |  | ❌ |  |
+| `config set` | `--defaults` | ❌ |  |
+| `config set` | `--personal` | ❌ |  |
+| `config set` | `--bot` | ❌ |  |
+| `config unset` |  | ❌ |  |
+| `config unset` | `--defaults` | ❌ |  |
+| `config unset` | `--personal` | ❌ |  |
+| `config unset` | `--bot` | ❌ |  |
+| `config migrate` |  | ❌ |  |
+| `config repair` |  | ❌ |  |
+| `config repair` | `--dry-run` | ❌ |  |
 | `runs list` |  | ✅ |  |
-| `runs list` | `--limit` | ✅ |  |
-| `runs list` | `--page` | ✅ |  |
+| `runs list` | `--limit` | ❌ |  |
+| `runs list` | `--page` | ❌ |  |
 | `runs show` |  | ✅ |  |
-| `runs show` | `--problems` | ✅ |  |
-| `runs path` |  | ✅ |  |
-| `help` |  | ✅ |  |
+| `runs show` | `--problems` | ❌ |  |
+| `runs path` |  | ❌ |  |
+| `help` |  | ❌ |  |
 | *global* | `--version` | ⛔ | Commander answers before any command runs, so the trace never sees it; `pnpm version:check` checks it |
-| *global* | `--verbose` | ✅ |  |
+| *global* | `--verbose` | ❌ |  |
 | *global* | `--json` | ✅ |  |
-| *global* | `--jsonl` | ✅ |  |
-| *global* | `--quiet` | ✅ |  |
-| *global* | `--trace` | ✅ |  |
-| *global* | `--debug` | ✅ |  |
-| *global* | `--timeout` | ✅ |  |
-| *global* | `--offline` | ✅ |  |
-| *global* | `--no-input` | ✅ |  |
-| *global* | `--max-input-bytes` | ✅ |  |
-| *global* | `--max-output-bytes` | ✅ |  |
-| *global* | `--brief` | ✅ |  |
-| *global* | `--full` | ✅ |  |
-| *global* | `--compact` | ✅ |  |
-| *global* | `--dry-run` | ✅ |  |
-| *global* | `--yes` | ✅ |  |
+| *global* | `--jsonl` | ❌ |  |
+| *global* | `--quiet` | ❌ |  |
+| *global* | `--trace` | ❌ |  |
+| *global* | `--debug` | ❌ |  |
+| *global* | `--timeout` | ❌ |  |
+| *global* | `--offline` | ❌ |  |
+| *global* | `--no-input` | ❌ |  |
+| *global* | `--max-input-bytes` | ❌ |  |
+| *global* | `--max-output-bytes` | ❌ |  |
+| *global* | `--brief` | ❌ |  |
+| *global* | `--full` | ❌ |  |
+| *global* | `--compact` | ❌ |  |
+| *global* | `--dry-run` | ❌ |  |
+| *global* | `--yes` | ❌ |  |
 | *global* | `--record` | ✅ |  |
-| *global* | `--no-record` | ✅ |  |
+| *global* | `--no-record` | ❌ |  |
 | *global* | `--help-all` | ⛔ | Commander answers before any command runs, so the trace never sees it; contracts/help.snap covers help |

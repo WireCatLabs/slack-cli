@@ -13,6 +13,7 @@ import { GENERAL, workspace } from "./testing/workspace.js"
 
 const READS: Record<string, readonly string[]> = {
   "account show": ["personal", "account", "show"],
+  inbox: ["personal", "inbox"],
   "chats list": ["personal", "chats", "list"],
   "chats show": ["personal", "chats", "show", "general"],
   "chats events": ["personal", "chats", "events", "general"],
