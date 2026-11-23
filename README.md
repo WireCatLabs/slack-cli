@@ -84,7 +84,8 @@ Read your workspace with the same commands as every WireCat messenger CLI:
 - `slk personal messages download '#general' <ts>` saves a message's files. They come only from
   `files.slack.com`, and the token goes only there.
 - `slk personal messages sync '#general'` saves a channel's history on this computer, with new replies of threads
-  up to 14 days old (`thread_window_days`). `slk personal search all "invoice"` then searches it.
+  up to 14 days old (`thread_window_days`). `slk personal search messages "invoice"` asks Slack's own search and
+  that copy at once; `search all` does too, and adds notes and other tools' messages from the copy.
 - `slk personal chats events '#general'` shows who joined or left and what was renamed, from Slack's service
   messages. `slk personal contacts show anna` shows a person.
 - `slk personal messages send '#general' "Ship it"` sends as you. `--reply-to <ts>` answers in the thread, `--md`

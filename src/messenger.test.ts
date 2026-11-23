@@ -529,3 +529,44 @@ it("**keeps the keyring's own error for a profile this computer knows**", async 
   })
   expect(ran.json()).toMatchObject({ error: { code: "configuration_error" } })
 })
+
+describe("server search", () => {
+  const refs = (ran: { json: () => Record<string, unknown> }) =>
+    items(ran).map((one) => String(one.ref).split("/").pop())
+
+  it("**finds what Slack's search finds** before any sync, with the chat's name", async () => {
+    const service = slackOf()
+    const ran = await runCli(["personal", "search", "messages", "numbers", "--backend", "server", "--json"], {
+      service,
+    })
+    expect(ran.code).toBe(0)
+    expect(refs(ran)).toEqual([ts(30)])
+    expect(items(ran)[0]).toMatchObject({ chat_title: "general", found_in: "server" })
+    expect(service.calls.find((one) => one.method === "search.messages")?.args).toMatchObject({
+      query: "numbers",
+      sort: "timestamp",
+      sort_dir: "desc",
+    })
+  })
+
+  it("**asks Slack for one chat with in:** once the chat is known", async () => {
+    const service = slackOf()
+    await runCli(["personal", "chats", "list", "--json"], { service })
+    const ran = await runCli(
+      ["personal", "search", "messages", "chat:general", "numbers", "--backend", "server", "--json"],
+      {
+        service,
+      },
+    )
+    expect(ran.code).toBe(0)
+    expect(refs(ran)).toEqual([ts(30)])
+    expect(service.calls.findLast((one) => one.method === "search.messages")?.args.query).toBe("numbers in:general")
+  })
+
+  it("**answers from the store and says the server search failed** when the app has no search:read", async () => {
+    const world = { ...workspace(), scopes: ["channels:history", "channels:read", "users:read"] }
+    const ran = await runCli(["personal", "search", "messages", "numbers", "--json"], { service: slackOf(world) })
+    expect(ran.code).toBe(0)
+    expect(ran.err).toContain("server search incomplete: search_failed")
+  })
+})

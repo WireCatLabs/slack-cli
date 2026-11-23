@@ -36,6 +36,7 @@ import {
   usersAnswer,
   type WireMessage,
 } from "./map.js"
+import { serverSearch } from "./search.js"
 import { append, threadReplies } from "./threads.js"
 import { slackWrites } from "./writes.js"
 
@@ -233,6 +234,17 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return { items: (await mapped(chatId, wires)).sort(byTs), hasMore }
   }
 
+  const searchMessages = serverSearch({
+    slack,
+    conversationOf,
+    listed,
+    chatOf: (one) => chatOf(one, names),
+    hit: async (chatId, wire) => {
+      await learn(peopleIn(wire))
+      return messageOf(chatId, wire, me, names)
+    },
+  })
+
   const threads = threadReplies({
     slack,
     windowDays: options.threadWindowDays,
@@ -387,6 +399,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       return page(chatId, wires, hasMore, latest !== undefined)
     },
     threadReplies: async (chatId, window) => threads.read(chatId, window),
+    searchMessages,
     historyAfter: async (chat, { limit, after }) => {
       const chatId = await idOf(chat)
       const from = "id" in after ? after.id : tsOf((after as Extract<After, { time: number }>).time)

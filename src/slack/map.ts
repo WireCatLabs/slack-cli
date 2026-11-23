@@ -170,6 +170,8 @@ const message = v.looseObject({
 
 export type WireMessage = v.InferOutput<typeof message>
 
+export const wireMessage = message
+
 export const historyAnswer = v.looseObject({
   ok: v.literal(true),
   messages: v.array(message),

@@ -85,6 +85,10 @@ const METHODS: Record<string, { takes: readonly string[]; needs?: readonly strin
     needs: ["channel", "ts"],
   },
   "conversations.members": { takes: ["channel", "cursor", "limit"], needs: ["channel"] },
+  "search.messages": {
+    takes: ["query", "count", "highlight", "page", "cursor", "sort", "sort_dir", "team_id"],
+    needs: ["query"],
+  },
   "users.info": { takes: ["user", "include_locale"], needs: ["user"] },
   "users.list": { takes: ["cursor", "include_locale", "limit", "team_id"] },
   "conversations.list": { takes: ["cursor", "exclude_archived", "limit", "team_id", "types"] },
@@ -146,6 +150,7 @@ const ALL_SCOPES = [
   ...Object.values(WRITE_SCOPE),
   ...Object.values(WRITE_NEEDS),
   "users:read",
+  "search:read",
 ]
 
 const num = (ts: string) => Number(ts)
@@ -356,6 +361,69 @@ export const fakeSlack = (
     return done()
   }
 
+  /**
+   * Slack's search as its pages describe it: every word in the text, and `in:<name>`, `in:<@U…>`, `from:<@U…>`,
+   * `after:` and `before:` (whole UTC days here, exclusive), over what the person can read. A match carries no
+   * `thread_ts`; a reply's permalink names its root.
+   */
+  const search = (args: Record<string, string>): Response => {
+    if (!scopes().includes("search:read"))
+      return refuse("search without search:read", "missing_scope", { needed: "search:read" })
+    const count = Number(args.count ?? 20)
+    const page = Number(args.page ?? 1)
+    if (count > 100 || page > 100) return refuse("count or page past 100", "invalid_arguments")
+    const words: string[] = []
+    const filters: ((channel: FakeChannel, one: FakeMessage) => boolean)[] = []
+    for (const word of (args.query ?? "").split(/\s+/).filter(Boolean)) {
+      const [key, value = ""] = word.includes(":")
+        ? [word.slice(0, word.indexOf(":")), word.slice(word.indexOf(":") + 1)]
+        : [word]
+      const person = /^<@([UW][A-Z0-9]+)>$/.exec(value)?.[1]
+      if (key === "in")
+        filters.push((channel) =>
+          person ? channel.kind === "im" && channel.user === person : channel.name === value.replace(/^#/, ""),
+        )
+      else if (key === "from") filters.push((_, one) => one.user === person)
+      else if (key === "after") filters.push((_, one) => num(one.ts) * 1000 >= Date.parse(value) + 86_400_000)
+      else if (key === "before") filters.push((_, one) => num(one.ts) * 1000 < Date.parse(value))
+      else words.push(word.toLowerCase())
+    }
+    const found = workspace.channels
+      .filter((channel) => channel.members.includes(self) || channel.kind === "public")
+      .flatMap((channel) =>
+        messagesOf(channel.id)
+          .filter(
+            (one) =>
+              (!one.subtype || one.subtype === "thread_broadcast" || one.subtype === "bot_message") &&
+              words.every((word) => (one.text ?? "").toLowerCase().includes(word)),
+          )
+          .filter((one) => filters.every((keep) => keep(channel, one)))
+          .map((one) => ({ channel, one })),
+      )
+      .sort((one, other) => num(other.one.ts) - num(one.one.ts))
+    const pages = Math.max(1, Math.ceil(found.length / count))
+    const matches = found.slice((page - 1) * count, page * count).map(({ channel, one }) => {
+      const { thread_ts: thread, reply_count: _count, ...rest } = one
+      const link = `https://synth-team.slack.com/archives/${channel.id}/p${one.ts.replace(".", "")}`
+      return {
+        ...rest,
+        type: "message",
+        channel: {
+          id: channel.id,
+          name: channel.kind === "im" ? channel.user : channel.name,
+          is_private: channel.kind !== "public",
+          is_mpim: channel.kind === "mpim",
+        },
+        permalink: isReply(one) ? `${link}?thread_ts=${thread}&cid=${channel.id}` : link,
+      }
+    })
+    return Response.json({
+      ok: true,
+      query: args.query,
+      messages: { matches, paging: { count, page, pages, total: found.length }, total: found.length },
+    })
+  }
+
   const answer = (method: string, args: Record<string, string>): Response => {
     if (method === "auth.test") return Response.json(AUTH_TEST)
     if (method.startsWith("users.") && !scopes().includes("users:read"))
@@ -406,6 +474,7 @@ export const fakeSlack = (
         response_metadata: page.response_metadata,
       })
     }
+    if (method === "search.messages") return search(args)
     if (method === "files.getUploadURLExternal") {
       if (!scopes().includes("files:write"))
         return refuse("upload without files:write", "missing_scope", { needed: "files:write" })

@@ -47,18 +47,21 @@ for the owner**; ask which, unless the task says. The examples use `personal`.
 - **One message, and around it:** `slk personal messages show '#general' <ts> --json` (a reply too), and
   `slk personal messages context '#general' <ts> --before-n 3 --after-n 3 --json`. Cite the `msg:` locator from
   `ref` in an answer; `messages show <ref>` opens it again.
-- **Search:** `slk personal messages sync '#general'` first, then
-  `slk personal search all "invoice march" --json` or `search messages "deposit paid?" --json`. Search reads only
-  what a sync saved on this computer. Slack's own search is not used. `messages sync --all` saves every chat's recent
-  messages, and a later sync continues where it stopped; it also brings in new replies of threads up to
-  `thread_window_days` (14 by default) old.
+- **Search:** `slk personal search messages "deposit paid?" --json` asks Slack's own search and the local copy at
+  once, with no sync first; `found_in` says where a hit came from. `--backend server` asks Slack only, `--backend
+  archive` the local copy only. `chat:general` narrows it to one chat once `chats list` has named it. `search all`
+  asks Slack for messages the same way; notes and `--discover` read only the local copy.
+  `slk personal messages sync '#general'` saves a chat, `--all` every
+  chat's recent messages, and a later sync continues where it stopped; it also brings in new replies of threads up
+  to `thread_window_days` (14 by default) old. Slack's search needs the `search:read` scope; without it the answer
+  comes from the local copy and warns `server search incomplete`.
 - **Who joined or left, topic and name changes:** `slk personal chats events '#general' --json`. These are never
   listed as messages.
 - **Files:** a message's `attachments` list its files. `slk personal messages download '#general' <ts>
   --output-dir <dir>` saves them. The file's Slack link is never printed.
 - **Bots:** a bot's message has `provider_metadata.slack_bot: true` and the bot's name as `sender_name`.
 - **Missing is not absent.** Empty results never prove a message did not exist. `messages list` is a window, not the
-  whole history, and search sees only what was synced. A message deleted in Slack after a sync stays in the local
+  whole history, and the local search sees only what was synced. A message deleted in Slack after a sync stays in the local
   copy: Slack does not say a message was deleted, it just stops showing it.
 - **Unread counts:** Slack gives `unread_count` for a DM in `chats show`, not for a channel, and not in `chats list`.
   There is no `inbox` command for Slack.
