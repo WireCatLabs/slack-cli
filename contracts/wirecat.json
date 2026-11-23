@@ -32,7 +32,7 @@
         "session",
         "start"
       ],
-      "summary": "sign in to Slack with its user token",
+      "summary": "sign in to Slack with its User OAuth Token (xoxp-…)",
       "effects": {
         "remote": "read",
         "local": "write"
@@ -1026,6 +1026,18 @@
       },
       "permission": "models.add",
       "entity": "model"
+    },
+    {
+      "path": [
+        "inbox"
+      ],
+      "summary": "unread chats and their newest messages",
+      "effects": {
+        "remote": "read",
+        "local": "read"
+      },
+      "permission": "inbox",
+      "entity": "message"
     },
     {
       "path": [

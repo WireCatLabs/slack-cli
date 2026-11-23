@@ -369,4 +369,11 @@ export const UNTESTED: { command: string; option?: string; reason: string }[] = 
     reason:
       "cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts",
   })),
+  ...["--new", "--limit", "--all", "--transcribe", "--model"].map((option) => ({
+    command: "inbox",
+    option,
+    reason:
+      "cli-core's shared inbox, mounted unchanged; tested in cli-core src/cli/messenger/inbox.test.ts. slk's own part, " +
+      "unreadChats, is tested in src/slack/inbox.test.ts",
+  })),
 ]
