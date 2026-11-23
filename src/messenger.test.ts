@@ -565,8 +565,12 @@ describe("server search", () => {
 
   it("**answers from the store and says the server search failed** when the app has no search:read", async () => {
     const world = { ...workspace(), scopes: ["channels:history", "channels:read", "users:read"] }
-    const ran = await runCli(["personal", "search", "messages", "numbers", "--json"], { service: slackOf(world) })
+    const service = slackOf(world)
+    await runCli(["personal", "messages", "sync", "#general", "--json"], { service })
+    const ran = await runCli(["personal", "search", "messages", "numbers", "--json"], { service })
     expect(ran.code).toBe(0)
+    expect(refs(ran)).toEqual([ts(30)])
+    expect(items(ran)[0]).toMatchObject({ found_in: "archive" })
     expect(ran.err).toContain("server search incomplete: search_failed")
   })
 })

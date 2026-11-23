@@ -237,12 +237,9 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
   const searchMessages = serverSearch({
     slack,
     conversationOf,
-    listed,
+    learn,
     chatOf: (one) => chatOf(one, names),
-    hit: async (chatId, wire) => {
-      await learn(peopleIn(wire))
-      return messageOf(chatId, wire, me, names)
-    },
+    messageOf: (chatId, wire) => messageOf(chatId, wire, me, names),
   })
 
   const threads = threadReplies({

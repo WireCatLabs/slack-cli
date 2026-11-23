@@ -2,7 +2,7 @@ import type { Chat, MessageHit, Page } from "@wirecat/cli-core"
 import type { ServerQuery } from "@wirecat/cli-core/cli"
 import * as v from "valibot"
 import type { SlackClient } from "./client.js"
-import { type Conversation, DAY, type WireMessage, wireMessage } from "./map.js"
+import { type Conversation, DAY, peopleIn, type WireMessage, wireMessage } from "./map.js"
 
 /** At most 100 a page (https://docs.slack.dev/reference/methods/search.messages/). */
 const COUNT_MOST = 100
@@ -34,12 +34,32 @@ type Match = v.InferOutput<typeof match>
 export interface ServerSearchOptions {
   slack: SlackClient
   conversationOf: (typed: string) => Promise<Conversation>
-  listed: () => Promise<Conversation[]>
-  hit: (chatId: string, wire: WireMessage) => Promise<Omit<MessageHit, "chatTitle">>
+  /** Names for every person the hits name, looked up once for the page. */
+  learn: (ids: string[]) => Promise<void>
+  messageOf: (chatId: string, wire: WireMessage) => Omit<MessageHit, "chatTitle">
   chatOf: (one: Conversation) => Chat
 }
 
 const day = (ms: number) => new Date(ms).toISOString().slice(0, 10)
+
+// For a DM, Slack sets `type` to "im" and `channel.name` to the other person's id.
+const conversationOfMatch = (one: Match): Conversation => {
+  const dm = one.channel.is_im === true || one.type === "im" || one.channel.id.startsWith("D")
+  return {
+    id: one.channel.id,
+    ...(dm ? { is_im: true, ...(one.channel.name ? { user: one.channel.name } : {}) } : {}),
+    ...(!dm && one.channel.name ? { name: one.channel.name } : {}),
+    ...(one.channel.is_mpim ? { is_mpim: true } : {}),
+    ...(one.channel.is_private ? { is_private: true } : {}),
+  }
+}
+
+// A bot's match carries `user: ""` beside its `username`.
+const wireOf = (one: Match): WireMessage => {
+  const thread = threadOf(one)
+  const { user, ...rest } = one
+  return { ...rest, ...(user ? { user } : {}), ...(thread && !one.thread_ts ? { thread_ts: thread } : {}) }
+}
 
 // A match carries no thread_ts; a reply's permalink names its root
 // (https://docs.slack.dev/reference/methods/chat.getPermalink/).
@@ -53,10 +73,11 @@ const threadOf = (one: Match) => {
  * the person's own time zone (https://slack.com/help/articles/202528808), so the days asked reach two past each end
  * and the moments are kept here; a chat is kept here too, by id, whatever `in:` matched.
  */
-export const serverSearch = ({ slack, conversationOf, listed, hit, chatOf }: ServerSearchOptions) => {
+export const serverSearch = ({ slack, conversationOf, learn, messageOf, chatOf }: ServerSearchOptions) => {
   const inOf = (one: Conversation) => (one.is_im && one.user ? `in:<@${one.user}>` : `in:${one.name ?? one.id}`)
 
   return async (query: ServerQuery, { limit }: { limit: number }): Promise<Page<MessageHit> & { chats: Chat[] }> => {
+    if (limit <= 0) return { items: [], hasMore: false, chats: [] }
     const chat = query.chat === undefined ? undefined : await conversationOf(query.chat)
     const words = [
       query.text,
@@ -85,20 +106,19 @@ export const serverSearch = ({ slack, conversationOf, listed, hit, chatOf }: Ser
       )
       for (const one of answer.messages.matches) if (kept(one)) found.push(one)
       more = page < (answer.messages.paging?.pages ?? page)
-      if (found.length > limit || !more) break
+      if (found.length >= limit || !more) break
     }
-    const shown = found.slice(0, limit)
-    const held = new Map((await listed()).map((one) => [one.id, one]))
-    const chats = new Map<string, Chat>()
-    for (const one of shown)
-      if (!chats.has(one.channel.id))
-        chats.set(one.channel.id, chatOf(held.get(one.channel.id) ?? (one.channel as Conversation)))
-    const items: MessageHit[] = []
-    for (const one of shown) {
-      const thread = threadOf(one)
-      const wire = thread && !one.thread_ts ? { ...one, thread_ts: thread } : one
-      items.push({ ...(await hit(one.channel.id, wire)), chatTitle: chats.get(one.channel.id)?.title ?? null })
-    }
+    const shown = found
+      .slice(0, limit)
+      .map((one) => ({ one, wire: wireOf(one), conversation: conversationOfMatch(one) }))
+    await learn(
+      shown.flatMap(({ wire, conversation }) => [...peopleIn(wire), ...(conversation.user ? [conversation.user] : [])]),
+    )
+    const chats = new Map(shown.map(({ conversation }) => [conversation.id, chatOf(conversation)]))
+    const items = shown.map(({ one, wire }) => ({
+      ...messageOf(one.channel.id, wire),
+      chatTitle: chats.get(one.channel.id)?.title ?? null,
+    }))
     return { items, hasMore: found.length > limit || more, chats: [...chats.values()] }
   }
 }
