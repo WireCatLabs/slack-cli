@@ -7,5 +7,7 @@
 
 ### Fixed
 
-- **`slk session start` asks for the User OAuth Token (`xoxp-…`) by name**, and the README says where Slack shows it: on
-  **OAuth & Permissions**, not on **Basic Information**.
+- **Signing in no longer needs help.** `slk session start` prints the steps to the token before it asks: why an app of
+  your own, the link that makes it, where **Install to Workspace** and the **User OAuth Token** (`xoxp-…`) are, and
+  what to do when only an administrator may install apps. `slk <profile> setup`, WireCat Desktop and the README show
+  the same steps.
