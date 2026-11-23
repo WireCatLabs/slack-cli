@@ -183,8 +183,17 @@ const cursorPage = <T>(items: readonly T[], args: Record<string, string>, fallba
 const isReply = (one: FakeMessage) => one.thread_ts !== undefined && one.thread_ts !== one.ts
 
 /** A root as history shows it: its reply count and newest reply worked out from the thread. */
-const withThread = (one: FakeMessage, all: readonly FakeMessage[]): FakeMessage => {
-  const replies = all.filter((other) => other.thread_ts === one.ts && other.ts !== one.ts)
+/** Each root's replies, read once per request: a busy chat would otherwise cost every message per message. */
+const repliesByRoot = (all: readonly FakeMessage[]) => {
+  const roots = new Map<string, FakeMessage[]>()
+  for (const one of all)
+    if (one.thread_ts !== undefined && one.thread_ts !== one.ts)
+      roots.set(one.thread_ts, [...(roots.get(one.thread_ts) ?? []), one])
+  return roots
+}
+
+const withThread = (one: FakeMessage, roots: ReadonlyMap<string, readonly FakeMessage[]>): FakeMessage => {
+  const replies = roots.get(one.ts) ?? []
   if (replies.length === 0) return one
   const latest = replies.reduce((at, other) => (num(other.ts) > num(at) ? other.ts : at), replies[0]?.ts ?? one.ts)
   return {
@@ -517,12 +526,12 @@ export const fakeSlack = (
     if (method === "conversations.history") {
       const top = all
         .filter((one) => (!isReply(one) || one.subtype === "thread_broadcast") && inside(one.ts))
-        .map((one) => withThread(one, all))
         .sort((one, other) => num(other.ts) - num(one.ts))
       const page = cursorPage(top, args, 100, 999)
+      const roots = repliesByRoot(all)
       return Response.json({
         ok: true,
-        messages: page.shown.map(metadataIf(args)),
+        messages: page.shown.map((one) => withThread(one, roots)).map(metadataIf(args)),
         has_more: page.more,
         response_metadata: page.response_metadata,
       })
@@ -535,7 +544,7 @@ export const fakeSlack = (
     const replies = all
       .filter((one) => one.thread_ts === rootTs && one.ts !== rootTs && inside(one.ts))
       .sort((one, other) => num(one.ts) - num(other.ts))
-    const page = cursorPage([withThread(root, all), ...replies], args, 10, 1000)
+    const page = cursorPage([withThread(root, repliesByRoot(all)), ...replies], args, 10, 1000)
     return Response.json({
       ok: true,
       messages: page.shown.map(metadataIf(args)),
