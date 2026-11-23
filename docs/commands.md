@@ -53,7 +53,7 @@ slack commands info [path]
 
 ## `slack session`
 
-keep this profile's Slack token in the OS keyring
+keep this profile's Slack user token in the OS keyring
 
 ### `slack session start`
 
@@ -2524,7 +2524,7 @@ slack conversations related <chat> <message> [options]
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 
-**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in; every field: slack commands info conversations related
+**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in, and 3 more; every field: slack commands info conversations related
 
 **Example:** `slack personal conversations related "Book club" 101`
 
@@ -4360,6 +4360,7 @@ slack search conversations <query> [options]
 | `--sync-first` | first fetch new messages within the chat, time and message bounds. |
 | `--sync-time <duration>` | stop fetching after this long (default: 30s). |
 | `--max-messages <n>` | fetch at most this many messages total (default: 500). |
+| `--like <text>` | a made-up reply that would answer the query, one sentence: searched by meaning too, which finds an answer worded unlike the question. |
 | `--chat <chat>` | only this chat: a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
 | `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
@@ -4368,7 +4369,7 @@ slack search conversations <query> [options]
 | `--limit <n>` | how many. |
 | `--catch-up` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
 
-**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in; every field: slack commands info search conversations
+**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in, and 3 more; every field: slack commands info search conversations
 
 **Example:** `slack personal search conversations "Reviewing the project draft"`
 

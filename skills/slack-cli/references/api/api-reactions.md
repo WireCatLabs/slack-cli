@@ -18,6 +18,7 @@
 
 - What: reactions\_get — read (GET /reactions.get)
 - Call: `GET /reactions.get`, effect: read
+- Permission keys: `messages.list`
 
 | Flag | Required | What |
 |---|---|---|
@@ -31,6 +32,7 @@
 
 - What: reactions\_list — read (GET /reactions.list)
 - Call: `GET /reactions.list`, effect: read
+- Permission keys: `messages.list`
 - Pages: cursor: send `cursor` (query), read the next one from `response_metadata.next_cursor`; items in `items`; page size in `limit` (query)
 
 | Flag | Required | What |

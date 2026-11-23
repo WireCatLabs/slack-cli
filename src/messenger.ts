@@ -12,12 +12,12 @@ import type { Command } from "commander"
 import { whoAmI } from "./commands/session.js"
 import { configuration, type SlackSettings, THREAD_WINDOW_DAYS } from "./config.js"
 import { PACE, type ServiceEnvironment, slackFor, tokenFromEnvironment, tokenOf } from "./context.js"
-import { IDENTITY, SERVICE, SKILL } from "./identity.js"
+import { IDENTITY, PROVIDER, SERVICE, SKILL } from "./identity.js"
 import { HISTORY_MOST, slackAdapter } from "./slack/adapter.js"
 import type { SlackClient } from "./slack/client.js"
 import { selfOf } from "./slack/map.js"
 
-export const PROVIDER = "slack"
+export { PROVIDER }
 
 /** What every other WireCat CLI's search reads to know a `slack` account holds messages. */
 export const PROVIDER_ENTRY: ProviderEntry = {
@@ -196,7 +196,6 @@ export const SLACK: Messenger = {
       slack,
       token,
       self: selfOf(account),
-      stored: options.stored,
       threadWindowDays:
         (base.settings as typeof base.settings & Partial<SlackSettings>).threadWindowDays ?? THREAD_WINDOW_DAYS,
       fetch,

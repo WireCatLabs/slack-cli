@@ -34,3 +34,6 @@ export const DESKTOP = {
 } satisfies ManifestIdentity
 
 export const SKILL = new URL("../skills/slack-cli/SKILL.md", import.meta.url)
+
+/** The provider name in the shared store and in cli-core's registry. */
+export const PROVIDER = "slack"

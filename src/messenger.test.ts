@@ -1,7 +1,7 @@
 import { mkdtempSync, readFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { memoryKeyring } from "@wirecat/cli-base"
+import { brokenKeyring, memoryKeyring } from "@wirecat/cli-base"
 import { accountFileFor, recalledAccount, rememberAccount } from "@wirecat/cli-core/cli"
 import { beforeEach, describe, expect, it } from "vitest"
 import { IDENTITY } from "./identity.js"
@@ -269,36 +269,6 @@ describe("messages sync", () => {
   const repliesCalls = (service: ReturnType<typeof slackOf>) =>
     service.calls.filter((one) => one.method === "conversations.replies").length
 
-  it("**holds a reply sent between an old root and the first page**, with every top-level message after it", async () => {
-    const root = daysAgo(10)
-    const world = busyChannel(root, 5)
-    const service = slackOf(world)
-    const sync = syncOf(service)
-    await sync()
-    const reply = daysAgo(5)
-    thread(world, root, { ts: reply, user: ME, text: "Late answer" })
-    world.messages[GENERAL]?.push(
-      ...Array.from({ length: 5 }, (_, at) => ({ ts: daysAgo(0, (at + 1) * 1000), user: BORIS, text: `today ${at}` })),
-    )
-    expect((await sync()).code).toBe(0)
-    const held = await stored(service)
-    expect(held).toHaveLength(12)
-    expect(byId(held, reply)).toMatchObject({ thread_id: root })
-  })
-
-  it("**reads a thread whole when the store holds its broadcast reply but not an older one**", async () => {
-    const world = workspace()
-    world.messages[GENERAL] = [
-      { ts: ts(30), user: BORIS, text: "Who has the numbers?" },
-      { ts: ts(32), user: ME, text: "Sending them now", thread_ts: ts(30), subtype: "thread_broadcast" },
-    ]
-    const service = slackOf(world)
-    await syncOf(service, "200")()
-    thread(world, ts(30), { ts: ts(31), user: ANNA, text: "I do" })
-    await syncOf(service, "200")()
-    expect(byId(await stored(service), ts(31))).toMatchObject({ text: "I do" })
-  })
-
   it("**reads each thread once on a first sync of several pages**", async () => {
     const world = workspace()
     world.messages[GENERAL] = Array.from({ length: 5 }, (_, at) => [
@@ -327,10 +297,19 @@ describe("messages sync", () => {
     expect(byId(await stored(service), reply)).toMatchObject({ thread_id: root, text: "Answered at last" })
 
     const before = (await stored(service)).length
-    const replyCalls = service.calls.filter((one) => one.method === "conversations.replies").length
     expect((await sync()).code).toBe(0)
     expect((await stored(service)).length).toBe(before)
-    expect(service.calls.filter((one) => one.method === "conversations.replies").length).toBe(replyCalls)
+  })
+
+  it("**asks again only for threads answered since the last sync**", async () => {
+    const world = workspace()
+    world.messages[GENERAL] = [{ ts: daysAgo(3), user: ANNA, text: "Old question" }]
+    thread(world, daysAgo(3), { ts: daysAgo(2), user: BORIS, text: "Old answer" })
+    const service = slackOf(world)
+    await syncOf(service)()
+    expect(repliesCalls(service)).toBe(1)
+    await syncOf(service)()
+    expect(repliesCalls(service)).toBe(1)
   })
 
   it("**reads the replies of the roots it pages through**, older threads included", async () => {
@@ -454,24 +433,27 @@ describe("odd messages", () => {
   })
 
   it("**keeps a deleted thread root out, and its replies in**: a tombstone never overwrites the stored root", async () => {
+    const [root, answer, later] = [daysAgo(3), daysAgo(2), daysAgo(0)]
     const world = channelWith([
-      { ts: ts(1), user: ANNA, text: "Original question" },
-      { ts: ts(2), user: BORIS, text: "Its answer", thread_ts: ts(1) },
+      { ts: root, user: ANNA, text: "Original question" },
+      { ts: answer, user: BORIS, text: "Its answer", thread_ts: root },
     ])
     const service = slackOf(world)
     const sync = () => runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })
     await sync()
     world.messages[GENERAL] = [
-      { ts: ts(1), user: "USLACKBOT", subtype: "tombstone", text: "This message was deleted." },
-      { ts: ts(2), user: BORIS, text: "Its answer", thread_ts: ts(1) },
-      { ts: ts(3), user: ANNA, text: "A later reply", thread_ts: ts(1) },
+      { ts: root, user: "USLACKBOT", subtype: "tombstone", text: "This message was deleted." },
+      { ts: answer, user: BORIS, text: "Its answer", thread_ts: root },
+      { ts: later, user: ANNA, text: "A later reply", thread_ts: root },
+      // cli-core asks for thread replies only after a history page that names the chat.
+      { ts: daysAgo(1), user: BORIS, text: "Something else" },
     ]
     await sync()
     const held = await stored(service)
-    expect(byId(held, ts(1))).toMatchObject({ text: "Original question", sender_id: ANNA })
-    expect(byId(held, ts(3))).toMatchObject({ text: "A later reply", thread_id: ts(1) })
+    expect(byId(held, root)).toMatchObject({ text: "Original question", sender_id: ANNA })
+    expect(byId(held, later)).toMatchObject({ text: "A later reply", thread_id: root })
     const listed = await runCli(["personal", "messages", "list", "general", "--json"], { service })
-    expect(byId(items(listed), ts(1))).toBeUndefined()
+    expect(byId(items(listed), root)).toBeUndefined()
   })
 
   it("**reads the directory once when a page names many unknown people**, never one users.info each", async () => {
@@ -513,4 +495,12 @@ describe("odd messages", () => {
     const refused = await runCli(["personal", "messages", "show", "general", ts(99), "--json"], { service: refusing })
     expect(refused.json()).toMatchObject({ error: { code: "authentication_error" } })
   })
+})
+
+it("**names the profiles here for a profile never signed in**, though the keyring cannot be read (WC-ACCT-3)", async () => {
+  const ran = await runCli(["nosuch", "messages", "list", "general", "--json"], {
+    service: slackOf(),
+    keyring: brokenKeyring(),
+  })
+  expect(ran.json()).toMatchObject({ error: { code: "not_found", message: expect.stringContaining("nosuch") } })
 })

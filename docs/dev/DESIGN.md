@@ -63,10 +63,13 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   (`orderBy: "time"`). Service subtypes are chat events, never messages. Slack gives no deletion signal in
   `conversations.history`, so a message is never marked deleted.
 - **Threads:** read with `messages list <chat> topic:<root ts>`, through cli-core's topic read. Slack has no list of
-  threads, so the topic commands stay hidden. `messages sync` calls `history` and never `historyAfter`, so a sync
-  page also carries the new replies of its own roots, and of roots up to `thread_window_days` (14) old once the page
-  reaches them; a reply never lowers a page's oldest key. A thread holding fewer replies than Slack's `reply_count`
-  is read whole.
+  threads, so the topic commands stay hidden. `messages sync` saves replies through cli-core's `threadReplies`
+  after a chat's history: the roots the run's history pages showed and those up to `thread_window_days` (14) old.
+  After the first read only roots whose `latest_reply` is newer than the last read are asked, from a minute before
+  it, since the last read is this machine's time and `ts` is Slack's. A new reply to a root older than the window is
+  not saved; a larger `thread_window_days` reaches it.
+- **No `deny` block in `contracts/plan.json`**, as in whatsapp-cli, tg-cli and max-cli: cli-core's `chats moderate
+  --dry-run` judges a group, so it reaches Slack, and signed out it cannot name its key.
 - **Commands mounted as whatsapp-cli mounts them:** reactions, the store-only reads (store, conversations,
   attachments, tags, mentions, metadata, stats, tasks, searches), models, review, recipients, sends, flood,
   complete and cli-core's messenger `doctor`. `mcp` stays the app's own: cli-core's messenger MCP server checks

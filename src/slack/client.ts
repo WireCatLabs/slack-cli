@@ -119,6 +119,14 @@ export const slackFailure = (code: string, writes: boolean, needed?: string): Cl
   return new CliError("provider_error", `${SERVICE} refused the call (${code})`, details)
 }
 
+/** The error a Slack answer of HTTP 200 carries, or undefined when it says `ok: true`. */
+export const refusalOf = (body: unknown, writes: boolean): CliError | undefined => {
+  const refused = v.safeParse(failureAnswer, body)
+  if (!refused.success) return undefined
+  const { error, not_in_channel, needed } = refused.output
+  return slackFailure(error ?? (not_in_channel ? "not_in_channel" : "unknown"), writes, needed)
+}
+
 const statusFailure = (status: number, writes: boolean, retryAfterMs: number | undefined): CliError => {
   if (status === 429)
     return new CliError("rate_limited", `${SERVICE} asked to slow down; retry later`, {
@@ -217,16 +225,8 @@ export const slackClient = (options: SlackClientOptions) => {
         200,
       )
     }
-    const refused = v.safeParse(failureAnswer, body)
-    if (refused.success)
-      return fail(
-        slackFailure(
-          refused.output.error ?? (refused.output.not_in_channel ? "not_in_channel" : "unknown"),
-          writes,
-          refused.output.needed,
-        ),
-        200,
-      )
+    const refused = refusalOf(body, writes)
+    if (refused) return fail(refused, 200)
     const parsed = v.safeParse(answer, body)
     if (!parsed.success)
       return fail(

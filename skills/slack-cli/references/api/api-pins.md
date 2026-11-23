@@ -18,6 +18,7 @@
 
 - What: pins\_list — read (GET /pins.list)
 - Call: `GET /pins.list`, effect: read
+- Permission keys: `messages.list`
 
 | Flag | Required | What |
 |---|---|---|

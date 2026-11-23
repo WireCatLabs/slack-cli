@@ -151,6 +151,18 @@ const MESSENGER_KEYS: Record<string, string> = {
   stars_remove: "messages.unstar",
   reactions_add: "reactions.add",
   reactions_remove: "reactions.remove",
+  // What people wrote, or who sent what, is checked as `messages` too (WC-PERM-4).
+  conversations_history: "messages.list",
+  conversations_replies: "messages.list",
+  search_messages: "messages.list",
+  search_all: "messages.list",
+  search_files: "messages.list",
+  files_list: "messages.list",
+  files_info: "messages.list",
+  pins_list: "messages.list",
+  stars_list: "messages.list",
+  reactions_get: "messages.list",
+  reactions_list: "messages.list",
 }
 const SHARES = ["files_sharedPublicURL"]
 

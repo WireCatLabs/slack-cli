@@ -6,6 +6,7 @@
 
 - What: search\_messages — read (GET /search.messages)
 - Call: `GET /search.messages`, effect: read
+- Permission keys: `messages.list`
 
 | Flag | Required | What |
 |---|---|---|

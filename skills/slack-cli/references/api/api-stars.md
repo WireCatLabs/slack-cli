@@ -18,6 +18,7 @@
 
 - What: stars\_list — read (GET /stars.list)
 - Call: `GET /stars.list`, effect: read
+- Permission keys: `messages.list`
 - Pages: cursor: send `cursor` (query), read the next one from `response_metadata.next_cursor`; items in `items`; page size in `limit` (query)
 
 | Flag | Required | What |

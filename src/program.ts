@@ -13,6 +13,7 @@ import {
   conversationsCommand,
   createProgram as createSharedProgram,
   doctorCommand,
+  environmentOf,
   floodCommand,
   mentionsCommand,
   messagesCommand,
@@ -88,6 +89,8 @@ const slackMessages = () => {
   messages.commands
     .find((one) => one.name() === "delete")
     ?.hook("preAction", (command) => {
+      // An agent is refused by cli-core's delete itself, as a permission and not a missing flag (WC-PERM-11).
+      if (environmentOf(command).agent) return
       if (command.opts().forEveryone !== true)
         throw new CliError(
           "validation_error",

@@ -41,6 +41,7 @@
 
 - What: conversations\_history — read (GET /conversations.history)
 - Call: `GET /conversations.history`, effect: read
+- Permission keys: `messages.list`
 - Pages: cursor: send `cursor` (query), read the next one from `response_metadata.next_cursor`; items in `messages`; page size in `limit` (query)
 
 | Flag | Required | What |
@@ -178,6 +179,7 @@
 
 - What: conversations\_replies — read (GET /conversations.replies)
 - Call: `GET /conversations.replies`, effect: read
+- Permission keys: `messages.list`
 - Pages: cursor: send `cursor` (query), read the next one from `response_metadata.next_cursor`; items in `messages`; page size in `limit` (query)
 
 | Flag | Required | What |

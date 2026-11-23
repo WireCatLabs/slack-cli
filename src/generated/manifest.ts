@@ -2768,6 +2768,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Fetches a conversation's history of messages and events.",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -3232,6 +3237,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Retrieve a thread of messages posted to a conversation",
     tags: ["conversations"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -3640,6 +3650,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets information about a file.",
     tags: ["files"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -3716,6 +3731,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "List for a team, in a channel, or from a user with applied filters.",
     tags: ["files"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     pagination: {
       style: "page",
       page: {
@@ -4388,6 +4408,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists items pinned to a channel.",
     tags: ["pins"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     parameters: [
       {
         name: "channel",
@@ -4475,6 +4500,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Gets reactions for an item.",
     tags: ["reactions"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     parameters: [
       {
         name: "channel",
@@ -4539,6 +4569,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists reactions made by a user.",
     tags: ["reactions"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     pagination: {
       style: "cursor",
       cursor: {
@@ -4814,6 +4849,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Searches for messages matching a query.",
     tags: ["search"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     parameters: [
       {
         name: "count",
@@ -4914,6 +4954,11 @@ export const operations: readonly ManifestOperation[] = [
     effect: "read",
     description: "Lists stars for a user.",
     tags: ["stars"],
+    permissions: [
+      {
+        key: "messages.list",
+      },
+    ],
     pagination: {
       style: "cursor",
       cursor: {

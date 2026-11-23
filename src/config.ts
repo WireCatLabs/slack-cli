@@ -5,6 +5,7 @@ import {
   serviceApiPermissions,
   settingsFor,
 } from "@wirecat/cli-core/cli"
+import { levelFor } from "@wirecat/cli-core/sends"
 import * as v from "valibot"
 import * as manifest from "./generated/manifest.js"
 import { IDENTITY, SERVICE } from "./identity.js"
@@ -20,7 +21,18 @@ export const API = {
   excluded: left,
 }
 
-export const permissions = commandPermissions(serviceApiPermissions(API))
+const apiPermissions = serviceApiPermissions(API)
+
+// cli-core asks for every key an api operation names unless the CLI's defaults say otherwise; a messenger key
+// (`messages.list`, `chats.leave`) keeps the level its own command has, so `api conversations history` is no stricter than `messages list` (WC-PERM-6).
+export const permissions = commandPermissions({
+  ...apiPermissions,
+  defaults: Object.fromEntries(
+    Object.entries(apiPermissions.defaults).map(([key, level]) =>
+      key.startsWith("api.") || key.startsWith("slack.") ? [key, level] : [key, levelFor({}, key).level],
+    ),
+  ),
+})
 
 /** How many days back `messages sync` looks for threads with new replies (plan.md, "Sync and threads"). */
 export const THREAD_WINDOW_DAYS = 14

@@ -7,8 +7,9 @@
   Bot messages are marked, and service messages (joins, renames, topics) are chat events, not messages.
 - **Threads:** `slack <profile> messages list <chat> topic:<root ts>` reads one thread, root first. A reply sent also
   to the channel is kept once.
-- **`slack <profile> messages sync`** saves a chat's history for search, with new replies of threads up to
-  `thread_window_days` (14 by default) old. A message Slack stops showing is never marked deleted.
+- **`slack <profile> messages sync`** saves a chat's history for search, with the new replies of threads it pages
+  through and of threads up to `thread_window_days` (14 by default) old, through cli-core's `threadReplies`. A
+  message Slack stops showing is never marked deleted.
 - **`slack <profile> setup`** signs in step by step, with the same token checks as `session start`.
 - **Files** download from `files.slack.com` only, with the token in the header.
 - **Write to Slack with the messenger commands.** `messages send|edit|delete|pin|unpin|link`, `reactions add|remove`
@@ -17,3 +18,8 @@
   unknown and never sent twice; a repeat with its `--operation-id` finds the copy Slack kept. A message to a person
   with no DM yet opens one. Slack's refusals carry a reason of their own, such as `message.not-yours` and
   `chat.not-joined`, with Slack's code in `details.slack_error`.
+- **The `api` group answers by the messenger's keys.** A deny on `messages` stops `api conversations history`,
+  `replies`, the searches, files, pins, stars and reactions lists too, and those keep `messages list`'s level instead
+  of asking. A refusal Slack sends with HTTP 200 is the run's error. An agent never runs an `api` delete, and its
+  `messages delete` is refused as a permission. A profile never signed in is named as unknown with the profiles here,
+  even when the keyring cannot be read.

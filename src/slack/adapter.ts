@@ -1,7 +1,7 @@
 import { CliError, isCliError } from "@wirecat/cli-base"
 import { type FetchLike, hostFetch } from "@wirecat/cli-base/http"
 import type { ChatCard, Message, Page, PersonCard, WindowedMessage } from "@wirecat/cli-core"
-import type { After, MessengerAdapter, RemoteFile, StoredMessages } from "@wirecat/cli-core/cli"
+import type { After, MessengerAdapter, RemoteFile } from "@wirecat/cli-core/cli"
 import { DESKTOP, SERVICE } from "../identity.js"
 import type { SlackArgs, SlackClient } from "./client.js"
 import {
@@ -36,7 +36,7 @@ import {
   usersAnswer,
   type WireMessage,
 } from "./map.js"
-import { append, threadSync } from "./threads.js"
+import { append, threadReplies } from "./threads.js"
 import { slackWrites } from "./writes.js"
 
 /** Slack's own cap on `conversations.history` (https://docs.slack.dev/reference/methods/conversations.history/). */
@@ -49,7 +49,6 @@ export interface SlackAdapterOptions {
   slack: SlackClient
   token: string
   self: Self | undefined
-  stored?: StoredMessages | undefined
   /** How many days back a sync looks for threads with new replies. */
   threadWindowDays: number
   fetch?: FetchLike | undefined
@@ -223,14 +222,13 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return { wires: [], hasMore: false }
   }
 
-  const page = async (chatId: string, wires: readonly WireMessage[], hasMore: boolean): Promise<Page<Message>> => ({
-    items: (await mapped(chatId, wires)).sort(byTs),
-    hasMore,
-  })
+  const page = async (chatId: string, wires: readonly WireMessage[], hasMore: boolean): Promise<Page<Message>> => {
+    threads.seen(chatId, wires)
+    return { items: (await mapped(chatId, wires)).sort(byTs), hasMore }
+  }
 
-  const threads = threadSync({
+  const threads = threadReplies({
     slack,
-    stored: options.stored,
     windowDays: options.threadWindowDays,
     now,
     mapped,
@@ -375,17 +373,13 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       const end = limit === undefined ? all.length : offset + limit
       return { items: all.slice(offset, end), hasMore: all.length > end }
     },
-    history: async (chat, { limit, before, reactions }) => {
+    history: async (chat, { limit, before }) => {
       const chatId = await idOf(chat)
       const latest = before === undefined ? undefined : isTs(before) ? before : tsOf(Date.parse(before))
       const { wires, hasMore } = await newestFirst(chatId, limit, latest ? { latest } : {})
-      const top = await page(chatId, wires, hasMore)
-      // cli-core passes `reactions: false` only from `messages sync`: only a sync gathers new thread replies.
-      if (reactions !== false) return top
-      const replies = await threads.repliesFor(chatId, { wires, hasMore, latest })
-      const ids = new Set(top.items.map((one) => one.id))
-      return { items: [...top.items, ...replies.filter((one) => !ids.has(one.id))].sort(byTs), hasMore }
+      return page(chatId, wires, hasMore)
     },
+    threadReplies: async (chatId, window) => threads.read(chatId, window),
     historyAfter: async (chat, { limit, after }) => {
       const chatId = await idOf(chat)
       const from = "id" in after ? after.id : tsOf((after as Extract<After, { time: number }>).time)

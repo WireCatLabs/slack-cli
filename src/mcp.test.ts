@@ -96,3 +96,26 @@ it("a denied command is offered as unavailable and refused before any request (W
     rmSync(file, { force: true })
   }
 })
+
+it("an agent never deletes for everyone: messages delete and the raw api deletes are refused as permissions (WC-PERM-11)", async () => {
+  const file = join(process.env.SLACK_CONFIG_DIR ?? "", "config.json")
+  mkdirSync(join(file, ".."), { recursive: true })
+  writeFileSync(file, JSON.stringify({ profiles: { personal: { permissions: { api: "allow", messages: "allow" } } } }))
+  const service = fakeSlack()
+  const options: RunOptions & ServiceEnvironment = { tty: false, keyring: signedIn(), fetch: service.fetch }
+  const mcp = await mcpOverStdio((streams) => run(["personal", "mcp", "serve"], { ...options, ...streams }))
+  try {
+    for (const [command, args] of [
+      ["messages delete", { chat: "C0SYNTH01", message: ["1700000030.000100"] }],
+      ["api chat delete", { body: JSON.stringify({ channel: "C0SYNTH01", ts: "1700000030.000100" }) }],
+    ] as const) {
+      const refused = await mcp.call("slack_write", { command, arguments: args })
+      expect(refused.isError, command).toBe(true)
+      expect(JSON.stringify(refused.body), command).toContain("permission_error")
+    }
+    expect(service.calls.filter((one) => one.method.includes("delete"))).toEqual([])
+  } finally {
+    expect(await mcp.close()).toBe(0)
+    rmSync(file, { force: true })
+  }
+})

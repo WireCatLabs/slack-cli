@@ -30,6 +30,7 @@
 
 - What: files\_info — read (GET /files.info)
 - Call: `GET /files.info`, effect: read
+- Permission keys: `messages.list`
 - Pages: cursor: send `cursor` (query), read the next one from `response_metadata.next_cursor`; page size in `limit` (query)
 
 | Flag | Required | What |
@@ -45,6 +46,7 @@
 
 - What: files\_list — read (GET /files.list)
 - Call: `GET /files.list`, effect: read
+- Permission keys: `messages.list`
 - Pages: page number: send `page` (query), one more for each page; items in `files`; page size in `count` (query)
 
 | Flag | Required | What |
