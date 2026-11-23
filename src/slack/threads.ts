@@ -55,19 +55,19 @@ export const threadReplies = ({ slack, windowDays, now, mapped, between }: Threa
         if (isRoot(root)) roots.set(root.ts, { root, whole: whole || roots.get(root.ts)?.whole === true })
       paged.set(chatId, roots)
     },
-    read: async (chatId: string, { since }: { since?: number }): Promise<Message[]> => {
+    /** One thread's replies at a time, so cli-core saves each as it comes and a stopped sync keeps them (WC-LIFE-12). */
+    read: async function* (chatId: string, { since }: { since?: number }): AsyncGenerator<Message[]> {
       const after = since === undefined ? undefined : tsOf(since - SKEW_MS)
       const roots = new Map(paged.get(chatId))
       paged.delete(chatId)
       for (const root of await between(chatId, tsOf(now() - windowDays * DAY)))
         if (isRoot(root) && !roots.has(root.ts)) roots.set(root.ts, { root, whole: false })
-      const wires: WireMessage[] = []
       for (const { root, whole } of roots.values()) {
-        if (after === undefined || whole) append(wires, await repliesOf(chatId, root, undefined))
-        else if (root.latest_reply !== undefined && later(root.latest_reply, after))
-          append(wires, await repliesOf(chatId, root, after))
+        const moved = root.latest_reply !== undefined && after !== undefined && later(root.latest_reply, after)
+        if (after !== undefined && !whole && !moved) continue
+        const wires = await repliesOf(chatId, root, after === undefined || whole ? undefined : after)
+        if (wires.length > 0) yield (await mapped(chatId, wires)).sort(byTs)
       }
-      return (await mapped(chatId, wires)).sort(byTs)
     },
   }
 }
