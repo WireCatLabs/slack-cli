@@ -160,34 +160,6 @@
     {
       "path": [
         "account",
-        "sessions",
-        "list"
-      ],
-      "summary": "every device and app logged in to this account; nothing is ended",
-      "effects": {
-        "remote": "read",
-        "local": "read"
-      },
-      "permission": "account.sessions.list",
-      "entity": "account_session"
-    },
-    {
-      "path": [
-        "account",
-        "sessions",
-        "end"
-      ],
-      "summary": "log out every other device, your phone included; this one stays",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "account.sessions.end",
-      "entity": "ended_account_sessions"
-    },
-    {
-      "path": [
-        "account",
         "remove"
       ],
       "summary": "sign this profile out and forget it, keeping or deleting its data",
@@ -455,174 +427,6 @@
       },
       "permission": "chats.update",
       "entity": "chat_group_change"
-    },
-    {
-      "path": [
-        "chats",
-        "links",
-        "show"
-      ],
-      "summary": "the invite link, if you may see it",
-      "effects": {
-        "remote": "read",
-        "local": "read"
-      },
-      "permission": "chats.links.show",
-      "entity": "chat_invite"
-    },
-    {
-      "path": [
-        "chats",
-        "links",
-        "reset"
-      ],
-      "summary": "replace the invite link; the old one stops working",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "chats.links.reset",
-      "entity": "chat_group_change"
-    },
-    {
-      "path": [
-        "chats",
-        "requests",
-        "list"
-      ],
-      "summary": "who asked to join, newest first; only admins see them, and reading tells nobody",
-      "effects": {
-        "remote": "read",
-        "local": "read"
-      },
-      "permission": "chats.requests.list",
-      "entity": "join_request"
-    },
-    {
-      "path": [
-        "chats",
-        "requests",
-        "confirm"
-      ],
-      "summary": "let them in; the group sees them join",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "chats.requests.confirm",
-      "entity": "chat_request_change"
-    },
-    {
-      "path": [
-        "chats",
-        "requests",
-        "reject"
-      ],
-      "summary": "turn the request away",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "chats.requests.reject",
-      "entity": "chat_request_change"
-    },
-    {
-      "path": [
-        "chats",
-        "admins",
-        "add"
-      ],
-      "summary": "make a member an admin with these rights",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "chats.admins.add",
-      "entity": "chat_admin_change"
-    },
-    {
-      "path": [
-        "chats",
-        "admins",
-        "remove"
-      ],
-      "summary": "take an admin's rights back; they stay a member",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "chats.admins.remove",
-      "entity": "chat_admin_change"
-    },
-    {
-      "path": [
-        "chats",
-        "folders",
-        "list"
-      ],
-      "summary": "your chat folders, in the order the app shows them",
-      "effects": {
-        "remote": "read",
-        "local": "read"
-      },
-      "permission": "chats.folders.list",
-      "entity": "folder"
-    },
-    {
-      "path": [
-        "chats",
-        "folders",
-        "show"
-      ],
-      "summary": "one chat folder, with the names of the chats in it",
-      "effects": {
-        "remote": "read",
-        "local": "read"
-      },
-      "permission": "chats.folders.show",
-      "entity": "folder"
-    },
-    {
-      "path": [
-        "chats",
-        "folders",
-        "create"
-      ],
-      "summary": "create a chat folder",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "chats.folders.create",
-      "entity": "chat_folder_change"
-    },
-    {
-      "path": [
-        "chats",
-        "folders",
-        "update"
-      ],
-      "summary": "rename a folder, or change which chats are in it",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "chats.folders.update",
-      "entity": "chat_folder_change"
-    },
-    {
-      "path": [
-        "chats",
-        "folders",
-        "delete"
-      ],
-      "summary": "delete a folder; the chats in it stay",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "chats.folders.delete",
-      "entity": "chat_folder_removal"
     },
     {
       "path": [
@@ -909,32 +713,6 @@
     },
     {
       "path": [
-        "contacts",
-        "block"
-      ],
-      "summary": "stop a person from writing to you — they need not be a contact",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "contacts.block",
-      "entity": "contact_state_change"
-    },
-    {
-      "path": [
-        "contacts",
-        "unblock"
-      ],
-      "summary": "let a blocked person write to you again",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "contacts.unblock",
-      "entity": "contact_state_change"
-    },
-    {
-      "path": [
         "messages",
         "evidence"
       ],
@@ -1049,19 +827,6 @@
       },
       "permission": "messages.delete",
       "entity": "message_deletion"
-    },
-    {
-      "path": [
-        "messages",
-        "forward"
-      ],
-      "summary": "forward one message to another chat",
-      "effects": {
-        "remote": "write",
-        "local": "write"
-      },
-      "permission": "messages.forward",
-      "entity": "message_write"
     },
     {
       "path": [
@@ -5192,16 +4957,6 @@
         "signed_in"
       ]
     },
-    "account_session": {
-      "fields": [
-        "current",
-        "client",
-        "device",
-        "location",
-        "last_active_at",
-        "created_at"
-      ]
-    },
     "chat": {
       "fields": [
         "id",
@@ -5253,27 +5008,6 @@
       "fields": [
         "chat_id",
         "title"
-      ]
-    },
-    "join_request": {
-      "fields": [
-        "person_id",
-        "name",
-        "username",
-        "requested_at",
-        "about"
-      ]
-    },
-    "folder": {
-      "fields": [
-        "id",
-        "title",
-        "chat_ids",
-        "emoji",
-        "include",
-        "skip",
-        "excluded_chat_ids",
-        "pinned_chat_ids"
       ]
     },
     "contact": {
@@ -5653,7 +5387,8 @@
     ],
     "signIn": {
       "gives": "Lets your agent read and write your Slack workspace as you.",
-      "asks": "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from the manifest slack gives."
+      "asks": "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from the manifest slack gives.",
+      "setupFrom": "0.0.0"
     },
     "skill": {
       "status": [

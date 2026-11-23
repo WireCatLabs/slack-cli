@@ -72,7 +72,7 @@ it("a refusal with HTTP 200 keeps Slack's code and the scope it needs, never its
   const failure = slackClient({ token: FAKE_TOKEN, fetch: slack.fetch })("auth.test", {}, anything)
   await expect(failure).rejects.toMatchObject({
     code: "permission_error",
-    details: { slack_error: "missing_scope", needed: "channels:history" },
+    details: { slack_error: "missing_scope", reason: "oauth.scope-missing", needed: "channels:history" },
   })
   await expect(failure).rejects.not.toThrow("free text")
 })
