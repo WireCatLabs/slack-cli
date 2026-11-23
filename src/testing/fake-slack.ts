@@ -545,6 +545,8 @@ export const fakeSlack = (
   }
 
   const fetch = async (input: string | URL | Request, init: RequestInit = {}): Promise<Response> => {
+    // As fetch does: a stopped request is never sent.
+    if (init.signal?.aborted) throw init.signal.reason ?? new DOMException("This operation was aborted", "AbortError")
     const url = new URL(input instanceof Request ? input.url : input)
     const headers = new Headers(input instanceof Request ? input.headers : init.headers)
     if (url.host === "files.slack.com" && url.pathname.startsWith("/upload/v1/")) {

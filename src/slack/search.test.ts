@@ -109,3 +109,11 @@ it("asks Slack nothing for a limit of none", async () => {
   })
   expect(service.calls).toEqual([])
 })
+
+it("stops at cli-core's bound: a stopped search asks Slack nothing more", async () => {
+  const { adapter, service } = adapterOf()
+  const stop = new AbortController()
+  stop.abort()
+  await expect(adapter.searchMessages?.({ text: "numbers" }, { limit: 5, signal: stop.signal })).rejects.toThrow()
+  expect(service.calls.filter((one) => one.method === "search.messages")).toEqual([])
+})

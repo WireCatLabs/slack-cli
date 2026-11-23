@@ -174,8 +174,11 @@ export const slackClient = (options: SlackClientOptions) => {
     method: string,
     args: SlackArgs,
     answer: v.GenericSchema<unknown, T>,
-    { writes = false }: { writes?: boolean } = {},
+    { writes = false, signal: stop }: { writes?: boolean; signal?: AbortSignal | undefined } = {},
   ): Promise<T> => {
+    // A call may also have its own end, as cli-core's bound on a server search does.
+    const signals = [options.signal, stop].filter((one): one is AbortSignal => one !== undefined)
+    const signal = signals.length > 1 ? AbortSignal.any(signals) : signals[0]
     const end = providerRequest(method, options.events, { method: "POST", transport: "http" })
     const fail = (failure: CliError, status?: number): never => {
       end({
@@ -196,7 +199,7 @@ export const slackClient = (options: SlackClientOptions) => {
         },
         body: formOf(args),
         redirect: "error",
-        ...(options.signal ? { signal: options.signal } : {}),
+        ...(signal ? { signal } : {}),
       })
     } catch (error) {
       if (isCliError(error) && error.details.sent === false) return fail(error)
@@ -206,7 +209,7 @@ export const slackClient = (options: SlackClientOptions) => {
             retryable: false,
           }),
         )
-      if (options.signal?.aborted) return fail(new CliError("cancelled", `the ${SERVICE} call was stopped`))
+      if (signal?.aborted) return fail(new CliError("cancelled", `the ${SERVICE} call was stopped`))
       return fail(isCliError(error) ? error : new CliError("network_error", `${SERVICE} could not be reached`))
     }
     if (!response.ok)
@@ -215,7 +218,7 @@ export const slackClient = (options: SlackClientOptions) => {
     try {
       body = await readJsonResponse(response, {
         maxBytes: LARGEST_ANSWER,
-        ...(options.signal ? { signal: options.signal } : {}),
+        ...(signal ? { signal } : {}),
       })
     } catch {
       return fail(
