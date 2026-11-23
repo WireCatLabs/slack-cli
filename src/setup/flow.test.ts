@@ -38,9 +38,10 @@ describe("the setup flow", () => {
 
   it("**gives session start the same steps and links as the flow**, in plain text for a terminal", () => {
     for (const link of [APP_LINK, APPS_LINK, "https://slack.com/signin"]) expect(TOKEN_GUIDE).toContain(link)
-    for (const where of ["OAuth & Permissions", "Install to Workspace", "User OAuth Token", "Request to Install"])
+    for (const where of ["OAuth & Permissions", "Install to Workspace", "User OAuth Token", "administrator"])
       expect(TOKEN_GUIDE).toContain(where)
-    expect(TOKEN_GUIDE).not.toMatch(/\*\*|`/)
+    expect(TOKEN_GUIDE).not.toMatch(/\*\*|`|\]\(/)
+    expect(JSON.stringify(slackSetup.document)).not.toMatch(/\bslack <profile>/)
   })
 
   it("**keeps a user token that auth.test accepts**, and never prints it", async () => {

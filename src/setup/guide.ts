@@ -1,7 +1,6 @@
+import { plainSetupText } from "@wirecat/cli-core/cli"
 import { APP_LINK, APPS_LINK } from "../slack/app-manifest.js"
 import { en } from "./texts.js"
-
-const plain = (text: string) => text.replaceAll("**", "").replaceAll("`", "")
 
 /** The setup flow's steps as one text for `session start`, so the terminal and WireCat Desktop say the same. */
 export const TOKEN_GUIDE = [
@@ -14,5 +13,5 @@ export const TOKEN_GUIDE = [
   en["install.admin"],
   `${en["token.where"]} ${en["token.bot"]}`,
 ]
-  .map(plain)
+  .map(plainSetupText)
   .join("\n\n")

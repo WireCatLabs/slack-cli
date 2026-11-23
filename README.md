@@ -43,7 +43,8 @@ starts with a profile, a name you choose: `slk personal config show`.
 
 Slack lets a program read your messages only through an app installed in your workspace, so you make a small app
 for slk yourself. It takes about three minutes, it belongs to you, and only you use it. An app made in your own
-workspace keeps Slack's full speed for reading history; one shared from outside it gets one read a minute.
+workspace keeps Slack's full speed for reading history: Slack slows an app another company publishes outside its
+Marketplace to [one read of 15 messages a minute](https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps).
 `slk personal setup` walks you through the same steps one at a time, and `slk personal session start` prints them
 before it asks for the token.
 
@@ -53,13 +54,14 @@ before it asks for the token.
    until you see **Create**, then click **Create**. The app asks only for what the commands use: reading channels,
    direct messages, people, files, reactions and pins, searching, and sending as you. If the link does not open the
    form: **Create New App** → **From a manifest** at [api.slack.com/apps](https://api.slack.com/apps), choose the
-   workspace, and paste the file.
+   workspace, and replace the text there with the file (**Copy raw file** on its GitHub page copies it).
 3. Slack opens the app's **Basic Information** page. Its Client ID, Client Secret, Signing Secret and Verification
    Token are not needed. In the menu on the left, click **OAuth & Permissions**, then **Install to Workspace**, then
-   **Allow**. If Slack shows **Request to Install**, only an administrator may install apps there: send the request,
-   and click **Install to Workspace** once Slack says they allowed it.
+   **Allow**. If Slack offers to send a request in place of installing, only an administrator may install apps there:
+   send the request, and once they approve it, click **Install to Workspace** again.
 4. Back on **OAuth & Permissions**, under **OAuth Tokens**, copy the **User OAuth Token**. It starts with `xoxp-`.
-   Not the **Bot User OAuth Token** (`xoxb-`): a bot sees only the channels it is added to, and slk reads as you.
+   Copy only the token that starts with `xoxp-`: slk refuses a bot token (`xoxb-`), which sees only the channels it
+   is added to.
 5. Run `slk personal session start` and paste the token at the hidden prompt. slk checks it with Slack
    (`auth.test`) and keeps it in the system keyring.
 
