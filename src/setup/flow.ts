@@ -3,7 +3,7 @@ import { defineSetup, refuseOffline, type SetupCheck } from "@wirecat/cli-core/c
 import { configuration } from "../config.js"
 import { slackFor } from "../context.js"
 import { IDENTITY, SERVICE } from "../identity.js"
-import { APP_LINK } from "../slack/app-manifest.js"
+import { APP_LINK, APPS_LINK } from "../slack/app-manifest.js"
 import { refuseOtherTokens, whoAmI } from "../slack/tokens.js"
 import { en } from "./texts.js"
 
@@ -30,7 +30,15 @@ export const slackSetup = defineSetup({
         { type: "text", text: "app.steps" },
         { type: "link", href: APP_LINK, text: "app.link" },
         { type: "text", text: "app.by-hand" },
-        { type: "note", role: "tip", text: "app.admin" },
+      ],
+      next: "install",
+    },
+    install: {
+      title: "install.title",
+      blocks: [
+        { type: "text", text: "install.steps" },
+        { type: "link", href: APPS_LINK, text: "install.link" },
+        { type: "note", role: "tip", text: "install.admin" },
       ],
       next: "token",
     },
@@ -38,8 +46,8 @@ export const slackSetup = defineSetup({
       title: "token.title",
       blocks: [
         { type: "text", text: "token.where" },
-        { type: "input", id: "token", secret: "token", input: "password", label: "token.label", hint: "token.hint" },
         { type: "note", role: "warning", text: "token.bot" },
+        { type: "input", id: "token", secret: "token", input: "password", label: "token.label", hint: "token.hint" },
       ],
       next: "check",
     },

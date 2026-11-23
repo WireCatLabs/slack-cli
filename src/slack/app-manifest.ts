@@ -47,3 +47,5 @@ export const APP_MANIFEST = {
 
 /** Slack's "Create New App" with the manifest filled in (https://docs.slack.dev/app-manifests/configuring-apps-with-app-manifests#sharing). */
 export const APP_LINK = `https://api.slack.com/apps?new_app=1&manifest_json=${encodeURIComponent(JSON.stringify(APP_MANIFEST))}`
+/** The person's own Slack apps, where an app made earlier is found again. */
+export const APPS_LINK = "https://api.slack.com/apps"
