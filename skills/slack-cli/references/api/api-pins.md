@@ -2,7 +2,7 @@
 
 # Slack API: pins
 
-## `slack api pins add [options]`
+## `slk api pins add [options]`
 
 - What: pins\_add — write (POST /pins.add)
 - Call: `POST /pins.add`, effect: write
@@ -14,7 +14,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api pins list [options]`
+## `slk api pins list [options]`
 
 - What: pins\_list — read (GET /pins.list)
 - Call: `GET /pins.list`, effect: read
@@ -24,7 +24,7 @@
 |---|---|---|
 | `--channel <value>` | yes | Channel to get pinned items for. |
 
-## `slack api pins remove [options]`
+## `slk api pins remove [options]`
 
 - What: pins\_remove — destructive (POST /pins.remove)
 - Call: `POST /pins.remove`, effect: destructive

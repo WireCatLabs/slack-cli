@@ -2,7 +2,7 @@
 
 # Slack API: migration
 
-## `slack api migration-exchange [options]`
+## `slk api migration-exchange [options]`
 
 - What: migration\_exchange — read (GET /migration.exchange)
 - Call: `GET /migration.exchange`, effect: read

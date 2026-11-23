@@ -14,8 +14,8 @@
   },
   "packageManager": "pnpm@11.28.8",
   "bin": {
-    "slack": "dist/bin/slack.js",
-    "wcat-slack": "dist/bin/slack.js"
+    "slk": "dist/bin/slack.js",
+    "wcat-slk": "dist/bin/slack.js"
   },
   "files": [
     "dist",
@@ -34,7 +34,7 @@
     "test:coverage": "vitest run --coverage",
     "test:slow": "vitest run --reporter=json --outputFile=coverage/tests.json >/dev/null; cli-dev slow-tests",
     "test:matrix": "vitest run >/dev/null && pnpm build >/dev/null && pnpm test:matrix:check",
-    "test:matrix:check": "cli-dev test-matrix --program scripts/command-program.ts --untested scripts/test-matrix-untested.ts --name slack --check && git diff --exit-code -- docs/dev/test-matrix.md",
+    "test:matrix:check": "cli-dev test-matrix --program scripts/command-program.ts --untested scripts/test-matrix-untested.ts --name slk --check && git diff --exit-code -- docs/dev/test-matrix.md",
     "generate": "node --experimental-strip-types scripts/generate.ts && node --experimental-strip-types scripts/emoji.ts && pnpm build && node --experimental-strip-types scripts/commands.ts && cli-dev manifest --program dist/program.js --identity dist/wcat.js",
     "generate:check": "node --experimental-strip-types scripts/generate.ts --check && node --experimental-strip-types scripts/emoji.ts --check && pnpm build && node --experimental-strip-types scripts/commands.ts --check && cli-dev manifest --program dist/program.js --identity dist/wcat.js --check",
     "smoke": "node --experimental-strip-types scripts/smoke.ts",

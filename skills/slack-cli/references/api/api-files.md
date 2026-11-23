@@ -2,7 +2,7 @@
 
 # Slack API: files
 
-## `slack api files comments-delete [options]`
+## `slk api files comments-delete [options]`
 
 - What: files\_comments\_delete — destructive (POST /files.comments.delete)
 - Call: `POST /files.comments.delete`, effect: destructive
@@ -14,7 +14,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api files delete [options]`
+## `slk api files delete [options]`
 
 - What: files\_delete — destructive (POST /files.delete)
 - Call: `POST /files.delete`, effect: destructive
@@ -26,7 +26,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api files info [options]`
+## `slk api files info [options]`
 
 - What: files\_info — read (GET /files.info)
 - Call: `GET /files.info`, effect: read
@@ -42,7 +42,7 @@
 | `--cursor <value>` | no | Parameter for pagination. File comments are paginated for a single file. Set \`cursor\` equal to the \`next\_cursor\` attribute returned by the previous request's \`response\_metadata\`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection of comments. See \[pagination\](https://api.slack.com/docs/pagination) for more details. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api files list [options]`
+## `slk api files list [options]`
 
 - What: files\_list — read (GET /files.list)
 - Call: `GET /files.list`, effect: read
@@ -61,7 +61,7 @@
 | `--show-files-hidden-by-limit <value>` | no | Show truncated file info for files hidden due to being too old, and the team who owns the file being over the file limit. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api files remote-info [options]`
+## `slk api files remote-info [options]`
 
 - What: files\_remote\_info — read (GET /files.remote.info)
 - Call: `GET /files.remote.info`, effect: read
@@ -71,7 +71,7 @@
 | `--file <value>` | no | Specify a file by providing its ID. |
 | `--external-id <value>` | no | Creator defined GUID for the file. |
 
-## `slack api files remote-list [options]`
+## `slk api files remote-list [options]`
 
 - What: files\_remote\_list — read (GET /files.remote.list)
 - Call: `GET /files.remote.list`, effect: read
@@ -84,7 +84,7 @@
 | `--limit <value>` | no | The maximum number of items to return. |
 | `--cursor <value>` | no | Paginate through collections of data by setting the \`cursor\` parameter to a \`next\_cursor\` attribute returned by a previous request's \`response\_metadata\`. Default value fetches the first "page" of the collection. See \[pagination\](https://api.slack.com/docs/pagination) for more detail. |
 
-## `slack api files remote-share [options]`
+## `slk api files remote-share [options]`
 
 - What: files\_remote\_share — write (GET /files.remote.share)
 - Call: `GET /files.remote.share`, effect: write
@@ -95,7 +95,7 @@
 | `--external-id <value>` | no | The globally unique identifier (GUID) for the file, as set by the app registering the file with Slack.  Either this field or \`file\` or both are required. |
 | `--channels <value>` | no | Comma-separated list of channel IDs where the file will be shared. |
 
-## `slack api files revoke-public-url [options]`
+## `slk api files revoke-public-url [options]`
 
 - What: files\_revokePublicURL — destructive (POST /files.revokePublicURL)
 - Call: `POST /files.revokePublicURL`, effect: destructive
@@ -107,7 +107,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api files shared-public-url [options]`
+## `slk api files shared-public-url [options]`
 
 - What: files\_sharedPublicURL — write (POST /files.sharedPublicURL)
 - Call: `POST /files.sharedPublicURL`, effect: write

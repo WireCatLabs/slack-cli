@@ -2,7 +2,7 @@
 
 # Slack API: admin
 
-## `slack api admin apps-approve [options]`
+## `slk api admin apps-approve [options]`
 
 - What: admin\_apps\_approve — write (POST /admin.apps.approve)
 - Call: `POST /admin.apps.approve`, effect: write
@@ -13,7 +13,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin apps-approved-list [options]`
+## `slk api admin apps-approved-list [options]`
 
 - What: admin\_apps\_approved\_list — read (GET /admin.apps.approved.list)
 - Call: `GET /admin.apps.approved.list`, effect: read
@@ -25,7 +25,7 @@
 | `--team-id <value>` | no | team\_id |
 | `--enterprise-id <value>` | no | enterprise\_id |
 
-## `slack api admin apps-requests-list [options]`
+## `slk api admin apps-requests-list [options]`
 
 - What: admin\_apps\_requests\_list — read (GET /admin.apps.requests.list)
 - Call: `GET /admin.apps.requests.list`, effect: read
@@ -36,7 +36,7 @@
 | `--cursor <value>` | no | Set \`cursor\` to \`next\_cursor\` returned by the previous call to list items in the next page |
 | `--team-id <value>` | no | team\_id |
 
-## `slack api admin apps-restrict [options]`
+## `slk api admin apps-restrict [options]`
 
 - What: admin\_apps\_restrict — write (POST /admin.apps.restrict)
 - Call: `POST /admin.apps.restrict`, effect: write
@@ -47,7 +47,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin apps-restricted-list [options]`
+## `slk api admin apps-restricted-list [options]`
 
 - What: admin\_apps\_restricted\_list — read (GET /admin.apps.restricted.list)
 - Call: `GET /admin.apps.restricted.list`, effect: read
@@ -59,7 +59,7 @@
 | `--team-id <value>` | no | team\_id |
 | `--enterprise-id <value>` | no | enterprise\_id |
 
-## `slack api admin conversations-archive [options]`
+## `slk api admin conversations-archive [options]`
 
 - What: admin\_conversations\_archive — destructive (POST /admin.conversations.archive)
 - Call: `POST /admin.conversations.archive`, effect: destructive
@@ -71,7 +71,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-convert-to-private [options]`
+## `slk api admin conversations-convert-to-private [options]`
 
 - What: admin\_conversations\_convertToPrivate — write (POST…
 - Call: `POST /admin.conversations.convertToPrivate`, effect: write
@@ -82,7 +82,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-create [options]`
+## `slk api admin conversations-create [options]`
 
 - What: admin\_conversations\_create — write (POST /admin.conversations.create)
 - Call: `POST /admin.conversations.create`, effect: write
@@ -93,7 +93,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-delete [options]`
+## `slk api admin conversations-delete [options]`
 
 - What: admin\_conversations\_delete — destructive (POST /admin.conversations.delete)
 - Call: `POST /admin.conversations.delete`, effect: destructive
@@ -105,7 +105,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-disconnect-shared [options]`
+## `slk api admin conversations-disconnect-shared [options]`
 
 - What: admin\_conversations\_disconnectShared — write (POST…
 - Call: `POST /admin.conversations.disconnectShared`, effect: write
@@ -116,7 +116,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-ekm-list-original-connected-channel-info [options]`
+## `slk api admin conversations-ekm-list-original-connected-channel-info [options]`
 
 - What: admin\_conversations\_ekm\_listOriginalConnectedChannelInfo — read (GET…
 - Call: `GET /admin.conversations.ekm.listOriginalConnectedChannelInfo`, effect: read
@@ -128,7 +128,7 @@
 | `--limit <value>` | no | The maximum number of items to return. Must be between 1 - 1000 both inclusive. |
 | `--cursor <value>` | no | Set \`cursor\` to \`next\_cursor\` returned by the previous call to list items in the next page. |
 
-## `slack api admin conversations-get-conversation-prefs [options]`
+## `slk api admin conversations-get-conversation-prefs [options]`
 
 - What: admin\_conversations\_getConversationPrefs — read (GET…
 - Call: `GET /admin.conversations.getConversationPrefs`, effect: read
@@ -137,7 +137,7 @@
 |---|---|---|
 | `--channel-id <value>` | yes | The channel to get preferences for. |
 
-## `slack api admin conversations-get-teams [options]`
+## `slk api admin conversations-get-teams [options]`
 
 - What: admin\_conversations\_getTeams — read (GET /admin.conversations.getTeams)
 - Call: `GET /admin.conversations.getTeams`, effect: read
@@ -150,7 +150,7 @@
 | `--limit <value>` | no | The maximum number of items to return. Must be between 1 - 1000 both inclusive. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api admin conversations-invite [options]`
+## `slk api admin conversations-invite [options]`
 
 - What: admin\_conversations\_invite — write (POST /admin.conversations.invite)
 - Call: `POST /admin.conversations.invite`, effect: write
@@ -161,7 +161,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-rename [options]`
+## `slk api admin conversations-rename [options]`
 
 - What: admin\_conversations\_rename — write (POST /admin.conversations.rename)
 - Call: `POST /admin.conversations.rename`, effect: write
@@ -172,7 +172,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-restrict-access-list-groups [options]`
+## `slk api admin conversations-restrict-access-list-groups [options]`
 
 - What: admin\_conversations\_restrictAccess\_listGroups — read (GET…
 - Call: `GET /admin.conversations.restrictAccess.listGroups`, effect: read
@@ -182,7 +182,7 @@
 | `--channel-id <value>` | yes | channel\_id |
 | `--team-id <value>` | no | The workspace where the channel exists. This argument is required for channels only tied to one workspace, and optional for channels that are shared across an organization. |
 
-## `slack api admin conversations-search [options]`
+## `slk api admin conversations-search [options]`
 
 - What: admin\_conversations\_search — read (GET /admin.conversations.search)
 - Call: `GET /admin.conversations.search`, effect: read
@@ -199,7 +199,7 @@
 | `--sort-dir <value>` | no | Sort direction. Possible values are \`asc\` for ascending order like (1, 2, 3) or (a, b, c), and \`desc\` for descending order like (3, 2, 1) or (c, b, a) |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api admin conversations-set-conversation-prefs [options]`
+## `slk api admin conversations-set-conversation-prefs [options]`
 
 - What: admin\_conversations\_setConversationPrefs — write (POST…
 - Call: `POST /admin.conversations.setConversationPrefs`, effect: write
@@ -210,7 +210,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-set-teams [options]`
+## `slk api admin conversations-set-teams [options]`
 
 - What: admin\_conversations\_setTeams — write (POST /admin.conversations.setTeams)
 - Call: `POST /admin.conversations.setTeams`, effect: write
@@ -221,7 +221,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin conversations-unarchive [options]`
+## `slk api admin conversations-unarchive [options]`
 
 - What: admin\_conversations\_unarchive — write (POST /admin.conversations.unarchive)
 - Call: `POST /admin.conversations.unarchive`, effect: write
@@ -232,7 +232,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin emoji-list [options]`
+## `slk api admin emoji-list [options]`
 
 - What: admin\_emoji\_list — read (GET /admin.emoji.list)
 - Call: `GET /admin.emoji.list`, effect: read
@@ -242,7 +242,7 @@
 | `--cursor <value>` | no | Set \`cursor\` to \`next\_cursor\` returned by the previous call to list items in the next page |
 | `--limit <value>` | no | The maximum number of items to return. Must be between 1 - 1000 both inclusive. |
 
-## `slack api admin invite-requests-approve [options]`
+## `slk api admin invite-requests-approve [options]`
 
 - What: admin\_inviteRequests\_approve — write (POST /admin.inviteRequests.approve)
 - Call: `POST /admin.inviteRequests.approve`, effect: write
@@ -253,7 +253,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin invite-requests-approved-list [options]`
+## `slk api admin invite-requests-approved-list [options]`
 
 - What: admin\_inviteRequests\_approved\_list — read (GET…
 - Call: `GET /admin.inviteRequests.approved.list`, effect: read
@@ -264,7 +264,7 @@
 | `--cursor <value>` | no | Value of the \`next\_cursor\` field sent as part of the previous API response |
 | `--limit <value>` | no | The number of results that will be returned by the API on each invocation. Must be between 1 - 1000, both inclusive |
 
-## `slack api admin invite-requests-denied-list [options]`
+## `slk api admin invite-requests-denied-list [options]`
 
 - What: admin\_inviteRequests\_denied\_list — read (GET /admin.inviteRequests.denied.list)
 - Call: `GET /admin.inviteRequests.denied.list`, effect: read
@@ -275,7 +275,7 @@
 | `--cursor <value>` | no | Value of the \`next\_cursor\` field sent as part of the previous api response |
 | `--limit <value>` | no | The number of results that will be returned by the API on each invocation. Must be between 1 - 1000 both inclusive |
 
-## `slack api admin invite-requests-deny [options]`
+## `slk api admin invite-requests-deny [options]`
 
 - What: admin\_inviteRequests\_deny — write (POST /admin.inviteRequests.deny)
 - Call: `POST /admin.inviteRequests.deny`, effect: write
@@ -286,7 +286,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin invite-requests-list [options]`
+## `slk api admin invite-requests-list [options]`
 
 - What: admin\_inviteRequests\_list — read (GET /admin.inviteRequests.list)
 - Call: `GET /admin.inviteRequests.list`, effect: read
@@ -297,7 +297,7 @@
 | `--cursor <value>` | no | Value of the \`next\_cursor\` field sent as part of the previous API response |
 | `--limit <value>` | no | The number of results that will be returned by the API on each invocation. Must be between 1 - 1000, both inclusive |
 
-## `slack api admin teams-admins-list [options]`
+## `slk api admin teams-admins-list [options]`
 
 - What: admin\_teams\_admins\_list — read (GET /admin.teams.admins.list)
 - Call: `GET /admin.teams.admins.list`, effect: read
@@ -308,7 +308,7 @@
 | `--cursor <value>` | no | Set \`cursor\` to \`next\_cursor\` returned by the previous call to list items in the next page. |
 | `--team-id <value>` | yes | team\_id |
 
-## `slack api admin teams-create [options]`
+## `slk api admin teams-create [options]`
 
 - What: admin\_teams\_create — write (POST /admin.teams.create)
 - Call: `POST /admin.teams.create`, effect: write
@@ -319,7 +319,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin teams-list [options]`
+## `slk api admin teams-list [options]`
 
 - What: admin\_teams\_list — read (GET /admin.teams.list)
 - Call: `GET /admin.teams.list`, effect: read
@@ -329,7 +329,7 @@
 | `--limit <value>` | no | The maximum number of items to return. Must be between 1 - 100 both inclusive. |
 | `--cursor <value>` | no | Set \`cursor\` to \`next\_cursor\` returned by the previous call to list items in the next page. |
 
-## `slack api admin teams-owners-list [options]`
+## `slk api admin teams-owners-list [options]`
 
 - What: admin\_teams\_owners\_list — read (GET /admin.teams.owners.list)
 - Call: `GET /admin.teams.owners.list`, effect: read
@@ -340,7 +340,7 @@
 | `--limit <value>` | no | The maximum number of items to return. Must be between 1 - 1000 both inclusive. |
 | `--cursor <value>` | no | Set \`cursor\` to \`next\_cursor\` returned by the previous call to list items in the next page. |
 
-## `slack api admin teams-settings-info [options]`
+## `slk api admin teams-settings-info [options]`
 
 - What: admin\_teams\_settings\_info — read (GET /admin.teams.settings.info)
 - Call: `GET /admin.teams.settings.info`, effect: read
@@ -349,7 +349,7 @@
 |---|---|---|
 | `--team-id <value>` | yes | team\_id |
 
-## `slack api admin teams-settings-set-description [options]`
+## `slk api admin teams-settings-set-description [options]`
 
 - What: admin\_teams\_settings\_setDescription — write (POST…
 - Call: `POST /admin.teams.settings.setDescription`, effect: write
@@ -360,7 +360,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin teams-settings-set-discoverability [options]`
+## `slk api admin teams-settings-set-discoverability [options]`
 
 - What: admin\_teams\_settings\_setDiscoverability — write (POST…
 - Call: `POST /admin.teams.settings.setDiscoverability`, effect: write
@@ -371,7 +371,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin teams-settings-set-name [options]`
+## `slk api admin teams-settings-set-name [options]`
 
 - What: admin\_teams\_settings\_setName — write (POST /admin.teams.settings.setName)
 - Call: `POST /admin.teams.settings.setName`, effect: write
@@ -382,7 +382,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin usergroups-add-channels [options]`
+## `slk api admin usergroups-add-channels [options]`
 
 - What: admin\_usergroups\_addChannels — write (POST /admin.usergroups.addChannels)
 - Call: `POST /admin.usergroups.addChannels`, effect: write
@@ -393,7 +393,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin usergroups-add-teams [options]`
+## `slk api admin usergroups-add-teams [options]`
 
 - What: admin\_usergroups\_addTeams — write (POST /admin.usergroups.addTeams)
 - Call: `POST /admin.usergroups.addTeams`, effect: write
@@ -404,7 +404,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin usergroups-list-channels [options]`
+## `slk api admin usergroups-list-channels [options]`
 
 - What: admin\_usergroups\_listChannels — read (GET /admin.usergroups.listChannels)
 - Call: `GET /admin.usergroups.listChannels`, effect: read
@@ -415,7 +415,7 @@
 | `--team-id <value>` | no | ID of the the workspace. |
 | `--include-num-members <value>` | no | Flag to include or exclude the count of members per channel. |
 
-## `slack api admin usergroups-remove-channels [options]`
+## `slk api admin usergroups-remove-channels [options]`
 
 - What: admin\_usergroups\_removeChannels — destructive (POST…
 - Call: `POST /admin.usergroups.removeChannels`, effect: destructive
@@ -427,7 +427,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-assign [options]`
+## `slk api admin users-assign [options]`
 
 - What: admin\_users\_assign — write (POST /admin.users.assign)
 - Call: `POST /admin.users.assign`, effect: write
@@ -438,7 +438,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-invite [options]`
+## `slk api admin users-invite [options]`
 
 - What: admin\_users\_invite — write (POST /admin.users.invite)
 - Call: `POST /admin.users.invite`, effect: write
@@ -449,7 +449,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-list [options]`
+## `slk api admin users-list [options]`
 
 - What: admin\_users\_list — read (GET /admin.users.list)
 - Call: `GET /admin.users.list`, effect: read
@@ -460,7 +460,7 @@
 | `--cursor <value>` | no | Set \`cursor\` to \`next\_cursor\` returned by the previous call to list items in the next page. |
 | `--limit <value>` | no | Limit for how many users to be retrieved per page |
 
-## `slack api admin users-remove [options]`
+## `slk api admin users-remove [options]`
 
 - What: admin\_users\_remove — destructive (POST /admin.users.remove)
 - Call: `POST /admin.users.remove`, effect: destructive
@@ -472,7 +472,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-session-invalidate [options]`
+## `slk api admin users-session-invalidate [options]`
 
 - What: admin\_users\_session\_invalidate — destructive (POST…
 - Call: `POST /admin.users.session.invalidate`, effect: destructive
@@ -484,7 +484,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-session-reset [options]`
+## `slk api admin users-session-reset [options]`
 
 - What: admin\_users\_session\_reset — destructive (POST /admin.users.session.reset)
 - Call: `POST /admin.users.session.reset`, effect: destructive
@@ -496,7 +496,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-set-admin [options]`
+## `slk api admin users-set-admin [options]`
 
 - What: admin\_users\_setAdmin — write (POST /admin.users.setAdmin)
 - Call: `POST /admin.users.setAdmin`, effect: write
@@ -507,7 +507,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-set-expiration [options]`
+## `slk api admin users-set-expiration [options]`
 
 - What: admin\_users\_setExpiration — write (POST /admin.users.setExpiration)
 - Call: `POST /admin.users.setExpiration`, effect: write
@@ -518,7 +518,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-set-owner [options]`
+## `slk api admin users-set-owner [options]`
 
 - What: admin\_users\_setOwner — write (POST /admin.users.setOwner)
 - Call: `POST /admin.users.setOwner`, effect: write
@@ -529,7 +529,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api admin users-set-regular [options]`
+## `slk api admin users-set-regular [options]`
 
 - What: admin\_users\_setRegular — write (POST /admin.users.setRegular)
 - Call: `POST /admin.users.setRegular`, effect: write

@@ -2,7 +2,7 @@
 
 # Slack API: stars
 
-## `slack api stars add [options]`
+## `slk api stars add [options]`
 
 - What: stars\_add — write (POST /stars.add)
 - Call: `POST /stars.add`, effect: write
@@ -14,7 +14,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api stars list [options]`
+## `slk api stars list [options]`
 
 - What: stars\_list — read (GET /stars.list)
 - Call: `GET /stars.list`, effect: read
@@ -29,7 +29,7 @@
 | `--limit <value>` | no | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api stars remove [options]`
+## `slk api stars remove [options]`
 
 - What: stars\_remove — destructive (POST /stars.remove)
 - Call: `POST /stars.remove`, effect: destructive

@@ -2,7 +2,7 @@
 
 # Slack API: emoji
 
-## `slack api emoji-list`
+## `slk api emoji-list`
 
 - What: emoji\_list — read (GET /emoji.list)
 - Call: `GET /emoji.list`, effect: read

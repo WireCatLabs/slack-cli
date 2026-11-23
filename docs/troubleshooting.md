@@ -5,9 +5,9 @@ support request.
 
 | Symptom | What to do |
 | --- | --- |
-| Not sure what is set up | Run `slack doctor`. It reads no keyring and uses no network. |
-| `slack` is not found | Open a new terminal, and check that npm's global folder is on `PATH`. |
-| "name a profile" | Put the profile first, as in `slack personal config show`, or set `SLACK_PROFILE`. |
+| Not sure what is set up | Run `slk doctor`. It reads no keyring and uses no network. |
+| `slk` is not found | Open a new terminal, and check that npm's global folder is on `PATH`. |
+| "name a profile" | Put the profile first, as in `slk personal config show`, or set `SLACK_PROFILE`. |
 | The settings file does not read | `doctor` lists every problem in the file under `config.issues`. Run the `config unset` each one gives, or fix the file by hand. |
 | `doctor` lists `files.problems` | Other users of the computer can read `config.json` or enter its folder. Run each `chmod` that `doctor` prints after "to make it private:". `doctor` never changes a file mode itself. |
 | A write is refused | The profile's permissions or `SLACK_READ_ONLY` stop it; see [settings](configuration.md#permissions). |

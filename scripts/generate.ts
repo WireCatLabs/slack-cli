@@ -201,7 +201,7 @@ const artifacts = generate(
       // What cli-core leaves out, with its reason, in place of a command it does not offer.
       command: (operation) =>
         serviceApiOperations({ operations: [operation] } as never).left[0]?.reason.replace(/^/, "left out: ") ??
-        `slack <profile> api ${apiCommandPath(operation).join(" ")}`,
+        `slk <profile> api ${apiCommandPath(operation).join(" ")}`,
     }),
   ],
   {

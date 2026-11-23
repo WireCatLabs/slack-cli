@@ -2,7 +2,7 @@
 
 # Slack API: bots
 
-## `slack api bots-info [options]`
+## `slk api bots-info [options]`
 
 - What: bots\_info — read (GET /bots.info)
 - Call: `GET /bots.info`, effect: read

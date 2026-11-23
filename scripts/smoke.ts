@@ -81,7 +81,7 @@ try {
   const run = (args: string[]) =>
     execFileSync(process.execPath, [bin, ...args], { cwd: temp, env, encoding: "utf8", timeout: 20000 })
   assert.equal(run(["--version"]).trim(), version)
-  assert.match(run(["--help"]), /Usage: slack/)
+  assert.match(run(["--help"]), /Usage: slk/)
   const tree: unknown = JSON.parse(run(["commands", "--json"]))
   const names =
     isRecord(tree) && Array.isArray(tree.commands)

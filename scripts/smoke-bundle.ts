@@ -10,7 +10,9 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
-const COMMAND = "slack"
+const COMMAND = "slk"
+// The bin file keeps the package's name; the command it installs is `slk`.
+const BIN = "slack"
 const PREFIX = "SLACK"
 
 const runtime = "Bun" in globalThis ? "bun" : "node"
@@ -22,7 +24,7 @@ const check = (what: string, condition: boolean) => {
 // Overridden directories also move the keyring entry, so nothing here reads the owner's accounts or store.
 const isolated = mkdtempSync(join(tmpdir(), `${COMMAND}-bundle-smoke-`))
 const run = (args: string[], env: Record<string, string> = {}) =>
-  spawnSync(process.execPath, [`dist/bin/${COMMAND}.js`, ...args], {
+  spawnSync(process.execPath, [`dist/bin/${BIN}.js`, ...args], {
     encoding: "utf8",
     env: {
       ...process.env,
@@ -36,8 +38,8 @@ const run = (args: string[], env: Record<string, string> = {}) =>
     },
   })
 
-const loader = readFileSync(`dist/bin/${COMMAND}.js`, "utf8")
-check("the bin starts the bundle", loader.includes(`import("../bundle/${COMMAND}.js")`))
+const loader = readFileSync(`dist/bin/${BIN}.js`, "utf8")
+check("the bin starts the bundle", loader.includes(`import("../bundle/${BIN}.js")`))
 const preloaded = [...loader.matchAll(/"\.\.\/bundle\/([^"]+)"/g)].map(([, chunk]) => chunk ?? "")
 check(
   "a server preloads only chunks the bundle has",

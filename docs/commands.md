@@ -3,9 +3,9 @@
 # Commands
 
 Every command, option and exit code, generated from the program itself. For the same list as JSON, run
-`slack commands --json`.
+`slk commands --json`.
 
-**The first word is the profile**, a name you choose: `slack personal config show`. `SLACK_PROFILE`
+**The first word is the profile**, a name you choose: `slk personal config show`. `SLACK_PROFILE`
 does the same for a whole shell session. No profile is assumed: a command that uses an account stops without one and
 lists the profiles on this computer.
 
@@ -33,118 +33,118 @@ lists the profiles on this computer.
 | `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
 | `--no-record` | do not keep this run, even if it fails. |
 
-## `slack commands`
+## `slk commands`
 
 every command by section; --json prints its contract, one path per call
 
-### `slack commands info`
+### `slk commands info`
 
 one command contract, or all schemas, error reasons and explicit overrides
 
 ```sh
-slack commands info [path]
+slk commands info [path]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `path` | optional | one command path; without one, export schemas, error reasons and explicit overrides. |
 
-**Example:** `slack commands info messages list`
+**Example:** `slk commands info messages list`
 
-## `slack session`
+## `slk session`
 
 keep this profile's Slack user token in the OS keyring
 
-### `slack session start`
+### `slk session start`
 
 sign this profile in: the Slack user token is asked hidden or read from stdin, never taken as an argument, checked with Slack, and only then kept in the keyring, or in a private file. Paste the User OAuth Token (xoxp-…) of your own Slack app, made from docs/slack-app-manifest.json; a bot token is refused
 
 **Changes something on this computer only.**
 
 ```sh
-slack session start [options]
+slk session start [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--credential-storage <storage>` | where the token is kept: keyring, which falls back to a private file by itself, or file. Default: `keyring`. |
 
-**Example:** `slack personal session start`, `slack personal session start --credential-storage file`
+**Example:** `slk personal session start`, `slk personal session start --credential-storage file`
 
-### `slack session status`
+### `slk session status`
 
 show where this profile's token comes from: SLACK_TOKEN, the keyring or a file, never the token; --check asks Slack whose token it is
 
 ```sh
-slack session status [options]
+slk session status [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--check` | ask Slack whether the token still works, and whose it is. |
 
-**Example:** `slack personal session status`, `slack personal session status --check --json`
+**Example:** `slk personal session status`, `slk personal session status --check --json`
 
-### `slack session end`
+### `slk session end`
 
 forget this profile's token on this computer; the token itself stays valid in Slack. The app stays installed in the workspace; remove it there to revoke the token
 
 **Changes something on this computer only.**
 
 ```sh
-slack session end
+slk session end
 ```
 
-**Example:** `slack personal session end`
+**Example:** `slk personal session end`
 
-### `slack session list`
+### `slk session list`
 
 list the profiles on this computer and whether each has a token; picks none
 
 ```sh
-slack session list
+slk session list
 ```
 
-**Example:** `slack session list`, `slack session list --json`
+**Example:** `slk session list`, `slk session list --json`
 
-## `slack setup`
+## `slk setup`
 
-connect this profile to slack: the same questions WireCat Desktop shows, asked in the terminal, checked, and saved only when the check succeeds; show, apply and run are the same flow for programs
+connect this profile to slk: the same questions WireCat Desktop shows, asked in the terminal, checked, and saved only when the check succeeds; show, apply and run are the same flow for programs
 
-### `slack setup show`
+### `slk setup show`
 
 print the connection flow as a WireCat setup document: steps, texts in every language, and each setting's own JSON Schema; with a profile it adds the profile's current values, a secret only as { set: true }
 
 ```sh
-slack setup show
+slk setup show
 ```
 
-**Example:** `slack personal setup show --json`, `slack office setup show --json`
+**Example:** `slk personal setup show --json`, `slk office setup show --json`
 
-### `slack setup apply`
+### `slk setup apply`
 
 read the answers as one JSON object on stdin (input id → value), keep only those on the path they lead to, check each with its setting's own schema, then run the CLI's check and save the settings and secrets; --dry-run only checks and saves nothing
 
 **Changes something on this computer only.**
 
 ```sh
-slack setup apply [options]
+slk setup apply [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--dry-run` | check the answers, and save nothing. |
 
-**Example:** `slack office setup apply --dry-run --json`, `slack office setup apply --json`
+**Example:** `slk office setup apply --dry-run --json`, `slk office setup apply --json`
 
-### `slack setup run`
+### `slk setup run`
 
 run one run step of the flow: apply checks the answers, runs the CLI's check and saves; the sign-in events go to stderr as JSON lines and the result to stdout; with --answer-stdin the answers are stdin's first line
 
 **Changes something on this computer only.**
 
 ```sh
-slack setup run <action> [options]
+slk setup run <action> [options]
 ```
 
 | Argument | | What it is |
@@ -155,52 +155,52 @@ slack setup run <action> [options]
 |---|---|
 | `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
 
-**Example:** `slack office setup run apply --json --answer-stdin`
+**Example:** `slk office setup run apply --json --answer-stdin`
 
-## `slack account`
+## `slk account`
 
 the logged-in account
 
-### `slack account list`
+### `slk account list`
 
 every account profile on this computer, and the account each is logged in as; a name that is only a bot is left out (`bot list` has it), one that is a bot too says `bot: true`; asks the messenger nothing
 
 ```sh
-slack account list [query]
+slk account list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** account profile — profile, current, account, name, signed_in, bot; every field: slack commands info account list
+**Returns:** account profile — profile, current, account, name, signed_in, bot; every field: slk commands info account list
 
-**Example:** `slack personal account list`
+**Example:** `slk personal account list`
 
-### `slack account show`
+### `slk account show`
 
 who this profile is logged in as, with the phone number
 
 ```sh
-slack account show [options]
+slk account show [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--hide-phone` | leave the phone number out. |
 
-**Returns:** account — provider, id, name, username, phone, scope; every field: slack commands info account show
+**Returns:** account — provider, id, name, username, phone, scope; every field: slk commands info account show
 
-**Example:** `slack personal account show`
+**Example:** `slk personal account show`
 
-### `slack account update`
+### `slk account update`
 
 change the name, the description or the photo everyone sees on your profile
 
 **Changes something in the service.**
 
 ```sh
-slack account update [options]
+slk account update [options]
 ```
 
 | Option | What it does |
@@ -211,56 +211,56 @@ slack account update [options]
 | `--photo <file>` | a new profile photo — an image file. |
 | `--hide-phone` | leave the phone number out of the answer. |
 
-**Returns:** account change — operation_id, account; every field: slack commands info account update
+**Returns:** account change — operation_id, account; every field: slk commands info account update
 
-**Example:** `slack personal account update --first-name Alex`
+**Example:** `slk personal account update --first-name Alex`
 
-### `slack account sessions`
+### `slk account sessions`
 
-where else this account is logged in — not `slack session`, which is this tool's own login
+where else this account is logged in — not `slk session`, which is this tool's own login
 
-#### `slack account sessions list`
+#### `slk account sessions list`
 
 every device and app logged in to this account; nothing is ended
 
 ```sh
-slack account sessions list [query]
+slk account sessions list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** account session — current, client, device, location, last_active_at, created_at; every field: slack commands info account sessions list
+**Returns:** account session — current, client, device, location, last_active_at, created_at; every field: slk commands info account sessions list
 
-**Example:** `slack personal account sessions list`
+**Example:** `slk personal account sessions list`
 
-#### `slack account sessions end`
+#### `slk account sessions end`
 
 log out every other device, your phone included; this one stays
 
 **Changes something in the service.**
 
 ```sh
-slack account sessions end [options]
+slk account sessions end [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--others` | every session but this one. |
 
-**Returns:** ended account sessions — operation_id, sessions; every field: slack commands info account sessions end
+**Returns:** ended account sessions — operation_id, sessions; every field: slk commands info account sessions end
 
-**Example:** `slack personal account sessions end --others`
+**Example:** `slk personal account sessions end --others`
 
-### `slack account remove`
+### `slk account remove`
 
 sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
 
 **Changes something in the service.**
 
 ```sh
-slack account remove [options]
+slk account remove [options]
 ```
 
 | Option | What it does |
@@ -269,20 +269,20 @@ slack account remove [options]
 | `--delete-data` | delete what the store and the tool's own files hold of this account. |
 | `--dry-run` | list what it would remove and keep, and change nothing. |
 
-**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: slack commands info account remove
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: slk commands info account remove
 
-**Example:** `slack personal account remove --keep-data --dry-run`, `slack personal account remove --delete-data --yes`
+**Example:** `slk personal account remove --keep-data --dry-run`, `slk personal account remove --delete-data --yes`
 
-## `slack chats`
+## `slk chats`
 
 the account's chats
 
-### `slack chats list`
+### `slk chats list`
 
 chats, newest first, archived ones included; the query is answered from the local store, so online, where the messenger filters nothing, it needs --offline
 
 ```sh
-slack chats list [query] [options]
+slk chats list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -295,18 +295,18 @@ slack chats list [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: slack commands info chats list
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: slk commands info chats list
 
-**Next usually:** `slack chats events <chat> [query]`, `slack chats show <chat>`, `slack chats documents list <chat> [query]`
+**Next usually:** `slk chats events <chat> [query]`, `slk chats show <chat>`, `slk chats documents list <chat> [query]`
 
-**Example:** `slack personal chats list --limit 10`
+**Example:** `slk personal chats list --limit 10`
 
-### `slack chats events`
+### `slk chats events`
 
 who joined, left, was added or removed, and by whom — from the chat's service messages; the last 7 days unless the query names time
 
 ```sh
-slack chats events <chat> [query]
+slk chats events <chat> [query]
 ```
 
 | Argument | | What it is |
@@ -314,38 +314,38 @@ slack chats events <chat> [query]
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: slack commands info chats events
+**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: slk commands info chats events
 
-**Example:** `slack personal chats events "Book club"`
+**Example:** `slk personal chats events "Book club"`
 
-### `slack chats show`
+### `slk chats show`
 
 one chat: its kind, unread count, last message time and who is in it
 
 ```sh
-slack chats show <chat>
+slk chats show <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: slack commands info chats show
+**Returns:** chat — ref, id, title, kind, unread_count, last_message_at, participants_count, provider, and 14 more; every field: slk commands info chats show
 
-**Next usually:** `slack chats events <chat> [query]`, `slack chats documents list <chat> [query]`, `slack chats members list <chat> [query]`
+**Next usually:** `slk chats events <chat> [query]`, `slk chats documents list <chat> [query]`, `slk chats members list <chat> [query]`
 
-**Example:** `slack personal chats show "Book club"`
+**Example:** `slk personal chats show "Book club"`
 
-### `slack chats documents`
+### `slk chats documents`
 
 the Google Docs and Drive documents linked in a chat's stored messages
 
-#### `slack chats documents list`
+#### `slk chats documents list`
 
 every document link in the chat, newest first, and whether the store has it
 
 ```sh
-slack chats documents list <chat> [query] [options]
+slk chats documents list <chat> [query] [options]
 ```
 
 | Argument | | What it is |
@@ -358,20 +358,20 @@ slack chats documents list <chat> [query] [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 
-**Returns:** document link — ref, url, document_id, title, in_store, sent_at, sender; every field: slack commands info chats documents list
+**Returns:** document link — ref, url, document_id, title, in_store, sent_at, sender; every field: slk commands info chats documents list
 
-**Example:** `slack personal chats documents list "Project room" --limit 10`
+**Example:** `slk personal chats documents list "Project room" --limit 10`
 
-### `slack chats members`
+### `slk chats members`
 
 who is in a group
 
-#### `slack chats members list`
+#### `slk chats members list`
 
 everyone in a group, a page at a time, with their role and when they were last seen
 
 ```sh
-slack chats members list <chat> [query] [options]
+slk chats members list <chat> [query] [options]
 ```
 
 | Argument | | What it is |
@@ -385,18 +385,18 @@ slack chats members list <chat> [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: slack commands info chats members list
+**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: slk commands info chats members list
 
-**Next usually:** `slack contacts show <person>`, `slack contacts context <person>`, `slack contacts prepare <person>`
+**Next usually:** `slk contacts show <person>`, `slk contacts context <person>`, `slk contacts prepare <person>`
 
-**Example:** `slack personal chats members list "Book club"`
+**Example:** `slk personal chats members list "Book club"`
 
-#### `slack chats members check`
+#### `slk chats members check`
 
 members that look like bots, each with its reasons — read from the member list and the local store; never one request per person, and it removes nobody
 
 ```sh
-slack chats members check <chat> [query] [options]
+slk chats members check <chat> [query] [options]
 ```
 
 | Argument | | What it is |
@@ -409,18 +409,18 @@ slack chats members check <chat> [query] [options]
 | `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
 | `--deep <n>` | also check the top n in full — profile, photos and everything they wrote — one person a second; the public ban lists cover Telegram only, so nothing is sent. |
 
-**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: slack commands info chats members check
+**Returns:** member — id, name, username, role, last_seen_at, registered_at, joined_at, invited_by, and 7 more; every field: slk commands info chats members check
 
-**Next usually:** `slack contacts show <person>`, `slack contacts context <person>`, `slack contacts prepare <person>`
+**Next usually:** `slk contacts show <person>`, `slk contacts context <person>`, `slk contacts prepare <person>`
 
-**Example:** `slack personal chats members check "Book club"`
+**Example:** `slk personal chats members check "Book club"`
 
-#### `slack chats members history`
+#### `slk chats members history`
 
 who joined, who left and whose profile changed, oldest first — what chats members fetch recorded in the local store; never asks the messenger
 
 ```sh
-slack chats members history <chat> [query]
+slk chats members history <chat> [query]
 ```
 
 | Argument | | What it is |
@@ -428,18 +428,18 @@ slack chats members history <chat> [query]
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: slack commands info chats members history
+**Returns:** chat event — chat_id, time, type, people, message_id, by, title, before; every field: slk commands info chats members history
 
-**Example:** `slack personal chats members history "Book club"`
+**Example:** `slk personal chats members history "Book club"`
 
-#### `slack chats members fetch`
+#### `slk chats members fetch`
 
 read a group's whole member list into the local store's member history: who joined, who left, daily counts and profile changes; someone is recorded as gone only when every member was read
 
 **Changes something on this computer only.**
 
 ```sh
-slack chats members fetch <chat> [options]
+slk chats members fetch <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -451,18 +451,18 @@ slack chats members fetch <chat> [options]
 | `--track` | also fetch it daily while serve runs; chats tracking lists and edits those chats. |
 | `--max-pages <pages>` | at most this many pages of 200 members, a pause between them (default: 10). |
 
-**Returns:** chat members fetch — chat_id, joined, gone, changed, read, participants, complete, more, and 1 more; every field: slack commands info chats members fetch
+**Returns:** chat members fetch — chat_id, joined, gone, changed, read, participants, complete, more, and 1 more; every field: slk commands info chats members fetch
 
-**Example:** `slack personal chats members fetch "Book club"`
+**Example:** `slk personal chats members fetch "Book club"`
 
-#### `slack chats members add`
+#### `slk chats members add`
 
 add people; they are told
 
 **Changes something in the service.**
 
 ```sh
-slack chats members add <chat> <person>
+slk chats members add <chat> <person>
 ```
 
 | Argument | | What it is |
@@ -470,18 +470,18 @@ slack chats members add <chat> <person>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `person` | required | an id, or part of a name. |
 
-**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: slack commands info chats members add
+**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: slk commands info chats members add
 
-**Example:** `slack personal chats members add "Book club" "Alex Example"`
+**Example:** `slk personal chats members add "Book club" "Alex Example"`
 
-#### `slack chats members remove`
+#### `slk chats members remove`
 
 remove people; their messages stay
 
 **Changes something in the service.**
 
 ```sh
-slack chats members remove <chat> <person>
+slk chats members remove <chat> <person>
 ```
 
 | Argument | | What it is |
@@ -489,18 +489,18 @@ slack chats members remove <chat> <person>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `person` | required | an id, or part of a name. |
 
-**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: slack commands info chats members remove
+**Returns:** chat members change — operation_id, chat_id, added, not_added, removed; every field: slk commands info chats members remove
 
-**Example:** `slack personal chats members remove "Book club" "Alex Example"`
+**Example:** `slk personal chats members remove "Book club" "Alex Example"`
 
-### `slack chats mark-read`
+### `slk chats mark-read`
 
 mark a chat read; the other side sees that you read it
 
 **Changes something in the service.**
 
 ```sh
-slack chats mark-read <chat> [options]
+slk chats mark-read <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -512,90 +512,90 @@ slack chats mark-read <chat> [options]
 | `--until-id <id>` | only up to this message id; the newest by default. |
 | `--topic <id>` | mark only this forum topic read. |
 
-**Returns:** chat read — operation_id, chat_id, until, thread_id; every field: slack commands info chats mark-read
+**Returns:** chat read — operation_id, chat_id, until, thread_id; every field: slk commands info chats mark-read
 
-**Example:** `slack personal chats mark-read "Book club" --until-id 101`
+**Example:** `slk personal chats mark-read "Book club" --until-id 101`
 
-### `slack chats tracking`
+### `slk chats tracking`
 
 the chats whose member lists serve fetches daily into the local store — chats members fetch --track adds one
 
-#### `slack chats tracking list`
+#### `slk chats tracking list`
 
 every tracked chat: since when, and its last member count
 
 ```sh
-slack chats tracking list [query]
+slk chats tracking list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** tracked chat — chat_id, title, tracked_at, last_count; every field: slack commands info chats tracking list
+**Returns:** tracked chat — chat_id, title, tracked_at, last_count; every field: slk commands info chats tracking list
 
-**Example:** `slack personal chats tracking list`
+**Example:** `slk personal chats tracking list`
 
-#### `slack chats tracking show`
+#### `slk chats tracking show`
 
 one chat: whether it is tracked, and its member count per day for the last 30 days
 
 ```sh
-slack chats tracking show <chat>
+slk chats tracking show <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** tracked chat history — chat_id, tracked_at, counts; every field: slack commands info chats tracking show
+**Returns:** tracked chat history — chat_id, tracked_at, counts; every field: slk commands info chats tracking show
 
-**Example:** `slack personal chats tracking show "Book club"`
+**Example:** `slk personal chats tracking show "Book club"`
 
-#### `slack chats tracking add`
+#### `slk chats tracking add`
 
 fetch this chat's member list daily while serve runs, from its next run
 
 **Changes something on this computer only.**
 
 ```sh
-slack chats tracking add <chat>
+slk chats tracking add <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** chat tracking — chat_id, tracked; every field: slack commands info chats tracking add
+**Returns:** chat tracking — chat_id, tracked; every field: slk commands info chats tracking add
 
-**Example:** `slack personal chats tracking add "Book club"`
+**Example:** `slk personal chats tracking add "Book club"`
 
-#### `slack chats tracking remove`
+#### `slk chats tracking remove`
 
 stop fetching it daily; the history already kept stays
 
 **Changes something on this computer only.**
 
 ```sh
-slack chats tracking remove <chat>
+slk chats tracking remove <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** chat tracking — chat_id, tracked; every field: slack commands info chats tracking remove
+**Returns:** chat tracking — chat_id, tracked; every field: slk commands info chats tracking remove
 
-**Example:** `slack personal chats tracking remove "Book club"`
+**Example:** `slk personal chats tracking remove "Book club"`
 
-### `slack chats create`
+### `slk chats create`
 
 create a group or a channel; the people added are told
 
 **Changes something in the service.**
 
 ```sh
-slack chats create <title> [person] [options]
+slk chats create <title> [person] [options]
 ```
 
 | Argument | | What it is |
@@ -607,54 +607,54 @@ slack chats create <title> [person] [options]
 |---|---|
 | `--channel` | a private channel instead of a group; people join it by its link. |
 
-**Returns:** chat group change — operation_id, chat, requested; every field: slack commands info chats create
+**Returns:** chat group change — operation_id, chat, requested; every field: slk commands info chats create
 
-**Example:** `slack personal chats create "Book club" "Alex Example"`
+**Example:** `slk personal chats create "Book club" "Alex Example"`
 
-### `slack chats join`
+### `slk chats join`
 
 join a group or channel by its link; the others in it see that you joined
 
 **Changes something in the service.**
 
 ```sh
-slack chats join <link>
+slk chats join <link>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `link` | required | an invite link, or a public one. |
 
-**Returns:** chat group change — operation_id, chat, requested; every field: slack commands info chats join
+**Returns:** chat group change — operation_id, chat, requested; every field: slk commands info chats join
 
-**Example:** `slack personal chats join '#general'`
+**Example:** `slk personal chats join '#general'`
 
-### `slack chats leave`
+### `slk chats leave`
 
 leave a group or channel; the others in it see that you left
 
 **Changes something in the service.**
 
 ```sh
-slack chats leave <chat>
+slk chats leave <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** chat removal — operation_id, chat_id; every field: slack commands info chats leave
+**Returns:** chat removal — operation_id, chat_id; every field: slk commands info chats leave
 
-**Example:** `slack personal chats leave "Book club"`
+**Example:** `slk personal chats leave "Book club"`
 
-### `slack chats update`
+### `slk chats update`
 
 rename a group or channel, change its description, or turn one of its settings on or off
 
 **Changes something in the service.**
 
 ```sh
-slack chats update <chat> [options]
+slk chats update <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -671,58 +671,58 @@ slack chats update <chat> [options]
 | `--only-owner-edits-info <on\|off>` | only the owner may change the name and photo. |
 | `--members-see-link <on\|off>` | members may see the invite link. |
 
-**Returns:** chat group change — operation_id, chat, requested; every field: slack commands info chats update
+**Returns:** chat group change — operation_id, chat, requested; every field: slk commands info chats update
 
-**Example:** `slack personal chats update "Book club" --title "Reading group"`
+**Example:** `slk personal chats update "Book club" --title "Reading group"`
 
-### `slack chats links`
+### `slk chats links`
 
 a group's invite link
 
-#### `slack chats links show`
+#### `slk chats links show`
 
 the invite link, if you may see it
 
 ```sh
-slack chats links show <chat>
+slk chats links show <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** chat invite — chat_id, title, link; every field: slack commands info chats links show
+**Returns:** chat invite — chat_id, title, link; every field: slk commands info chats links show
 
-**Example:** `slack personal chats links show "Book club"`
+**Example:** `slk personal chats links show "Book club"`
 
-#### `slack chats links reset`
+#### `slk chats links reset`
 
 replace the invite link; the old one stops working
 
 **Changes something in the service.**
 
 ```sh
-slack chats links reset <chat>
+slk chats links reset <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** chat group change — operation_id, chat, requested; every field: slack commands info chats links reset
+**Returns:** chat group change — operation_id, chat, requested; every field: slk commands info chats links reset
 
-**Example:** `slack personal chats links reset "Book club"`
+**Example:** `slk personal chats links reset "Book club"`
 
-### `slack chats requests`
+### `slk chats requests`
 
 requests to join a group that needs an admin's approval
 
-#### `slack chats requests list`
+#### `slk chats requests list`
 
 who asked to join, newest first; only admins see them, and reading tells nobody
 
 ```sh
-slack chats requests list <chat> [query] [options]
+slk chats requests list <chat> [query] [options]
 ```
 
 | Argument | | What it is |
@@ -735,18 +735,18 @@ slack chats requests list <chat> [query] [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 
-**Returns:** join request — person_id, name, username, requested_at, about; every field: slack commands info chats requests list
+**Returns:** join request — person_id, name, username, requested_at, about; every field: slk commands info chats requests list
 
-**Example:** `slack personal chats requests list "Book club"`
+**Example:** `slk personal chats requests list "Book club"`
 
-#### `slack chats requests confirm`
+#### `slk chats requests confirm`
 
 let them in; the group sees them join
 
 **Changes something in the service.**
 
 ```sh
-slack chats requests confirm <chat> <person>
+slk chats requests confirm <chat> <person>
 ```
 
 | Argument | | What it is |
@@ -754,18 +754,18 @@ slack chats requests confirm <chat> <person>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `person` | required | who asked: an id from `chats requests list`. |
 
-**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: slack commands info chats requests confirm
+**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: slk commands info chats requests confirm
 
-**Example:** `slack personal chats requests confirm "Book club" "Alex Example"`
+**Example:** `slk personal chats requests confirm "Book club" "Alex Example"`
 
-#### `slack chats requests reject`
+#### `slk chats requests reject`
 
 turn the request away
 
 **Changes something in the service.**
 
 ```sh
-slack chats requests reject <chat> <person>
+slk chats requests reject <chat> <person>
 ```
 
 | Argument | | What it is |
@@ -773,22 +773,22 @@ slack chats requests reject <chat> <person>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `person` | required | who asked: an id from `chats requests list`. |
 
-**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: slack commands info chats requests reject
+**Returns:** chat request change — operation_id, chat_id, person_id, accepted, already, counted; every field: slk commands info chats requests reject
 
-**Example:** `slack personal chats requests reject "Book club" "Alex Example"`
+**Example:** `slk personal chats requests reject "Book club" "Alex Example"`
 
-### `slack chats admins`
+### `slk chats admins`
 
 give or take back a member's admin rights
 
-#### `slack chats admins add`
+#### `slk chats admins add`
 
 make a member an admin with these rights
 
 **Changes something in the service.**
 
 ```sh
-slack chats admins add <chat> <person> [options]
+slk chats admins add <chat> <person> [options]
 ```
 
 | Argument | | What it is |
@@ -800,18 +800,18 @@ slack chats admins add <chat> <person> [options]
 |---|---|
 | `--can <rights>` | what they may do, comma-separated: read, members, admins, info, pin, link, post, edit, delete. |
 
-**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: slack commands info chats admins add
+**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: slk commands info chats admins add
 
-**Example:** `slack personal chats admins add "Book club" "Alex Example" --can info`
+**Example:** `slk personal chats admins add "Book club" "Alex Example" --can info`
 
-#### `slack chats admins remove`
+#### `slk chats admins remove`
 
 take an admin's rights back; they stay a member
 
 **Changes something in the service.**
 
 ```sh
-slack chats admins remove <chat> <person>
+slk chats admins remove <chat> <person>
 ```
 
 | Argument | | What it is |
@@ -819,58 +819,58 @@ slack chats admins remove <chat> <person>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `person` | required | an id, or part of a name. |
 
-**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: slack commands info chats admins remove
+**Returns:** chat admin change — operation_id, chat_id, person_id, rights; every field: slk commands info chats admins remove
 
-**Example:** `slack personal chats admins remove "Book club" "Alex Example"`
+**Example:** `slk personal chats admins remove "Book club" "Alex Example"`
 
-### `slack chats folders`
+### `slk chats folders`
 
 your chat folders
 
-#### `slack chats folders list`
+#### `slk chats folders list`
 
 your chat folders, in the order the app shows them
 
 ```sh
-slack chats folders list [query]
+slk chats folders list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: slack commands info chats folders list
+**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: slk commands info chats folders list
 
-**Next usually:** `slack chats folders show <folder>`, `slack chats folders update <folder>`, `slack chats folders delete <folder>`
+**Next usually:** `slk chats folders show <folder>`, `slk chats folders update <folder>`, `slk chats folders delete <folder>`
 
-**Example:** `slack personal chats folders list`
+**Example:** `slk personal chats folders list`
 
-#### `slack chats folders show`
+#### `slk chats folders show`
 
 one chat folder, with the names of the chats in it
 
 ```sh
-slack chats folders show <folder>
+slk chats folders show <folder>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `folder` | required | the folder's id, or its title exactly. |
 
-**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: slack commands info chats folders show
+**Returns:** folder — id, title, chat_ids, emoji, include, skip, excluded_chat_ids, pinned_chat_ids, and 3 more; every field: slk commands info chats folders show
 
-**Next usually:** `slack chats folders update <folder>`, `slack chats folders delete <folder>`
+**Next usually:** `slk chats folders update <folder>`, `slk chats folders delete <folder>`
 
-**Example:** `slack personal chats folders show "Reading"`
+**Example:** `slk personal chats folders show "Reading"`
 
-#### `slack chats folders create`
+#### `slk chats folders create`
 
 create a chat folder
 
 **Changes something in the service.**
 
 ```sh
-slack chats folders create <title> [options]
+slk chats folders create <title> [options]
 ```
 
 | Argument | | What it is |
@@ -881,18 +881,18 @@ slack chats folders create <title> [options]
 |---|---|
 | `--chat <chat>` | a chat to put in it, by id or name; repeat it for more. |
 
-**Returns:** chat folder change — operation_id, folder; every field: slack commands info chats folders create
+**Returns:** chat folder change — operation_id, folder; every field: slk commands info chats folders create
 
-**Example:** `slack personal chats folders create "Reading" --chat "Book club"`
+**Example:** `slk personal chats folders create "Reading" --chat "Book club"`
 
-#### `slack chats folders update`
+#### `slk chats folders update`
 
 rename a folder, or change which chats are in it
 
 **Changes something in the service.**
 
 ```sh
-slack chats folders update <folder> [options]
+slk chats folders update <folder> [options]
 ```
 
 | Argument | | What it is |
@@ -905,56 +905,56 @@ slack chats folders update <folder> [options]
 | `--add <chat>` | put a chat in it; repeat it for more. |
 | `--remove <chat>` | take a chat out of it, and off its excluded and pinned lists; repeat it for more. |
 
-**Returns:** chat folder change — operation_id, folder; every field: slack commands info chats folders update
+**Returns:** chat folder change — operation_id, folder; every field: slk commands info chats folders update
 
-**Example:** `slack personal chats folders update "Reading" --title "Books"`
+**Example:** `slk personal chats folders update "Reading" --title "Books"`
 
-#### `slack chats folders delete`
+#### `slk chats folders delete`
 
 delete a folder; the chats in it stay
 
 **Changes something in the service.**
 
 ```sh
-slack chats folders delete <folder>
+slk chats folders delete <folder>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `folder` | required | folder id, or its title exactly. |
 
-**Returns:** chat folder removal — operation_id, folder_id; every field: slack commands info chats folders delete
+**Returns:** chat folder removal — operation_id, folder_id; every field: slk commands info chats folders delete
 
-**Example:** `slack personal chats folders delete "Reading"`
+**Example:** `slk personal chats folders delete "Reading"`
 
-### `slack chats rules`
+### `slk chats rules`
 
 what `chats moderate` judges a group by, kept in a file of this profile
 
-#### `slack chats rules show`
+#### `slk chats rules show`
 
 the group's rules; the defaults, marked not saved, if it has none yet
 
 ```sh
-slack chats rules show <chat>
+slk chats rules show <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slack commands info chats rules show
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slk commands info chats rules show
 
-**Example:** `slack personal chats rules show "Book club"`
+**Example:** `slk personal chats rules show "Book club"`
 
-#### `slack chats rules set`
+#### `slk chats rules set`
 
 change one rule; the group's first change writes every rule with its default
 
 **Changes something on this computer only.**
 
 ```sh
-slack chats rules set <chat> <key> <value>
+slk chats rules set <chat> <key> <value>
 ```
 
 | Argument | | What it is |
@@ -963,18 +963,18 @@ slack chats rules set <chat> <key> <value>
 | `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
 | `value` | required | the new value; a list is comma-separated. |
 
-**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slack commands info chats rules set
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slk commands info chats rules set
 
-**Example:** `slack personal chats rules set "Book club" links report`
+**Example:** `slk personal chats rules set "Book club" links report`
 
-#### `slack chats rules unset`
+#### `slk chats rules unset`
 
 put one rule back to its default
 
 **Changes something on this computer only.**
 
 ```sh
-slack chats rules unset <chat> <key>
+slk chats rules unset <chat> <key>
 ```
 
 | Argument | | What it is |
@@ -982,18 +982,18 @@ slack chats rules unset <chat> <key>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `key` | required | one of: trusted, blocked, blockedNames, links, invites, forwards, blockedPeople, flood.messages, flood.minutes, flood.action, newAccount.days, newAccount.action, consent.delete, consent.remove. |
 
-**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slack commands info chats rules unset
+**Returns:** chat rules — chat_id, title, file, saved, rules; every field: slk commands info chats rules unset
 
-**Example:** `slack personal chats rules unset "Book club" links`
+**Example:** `slk personal chats rules unset "Book club" links`
 
-### `slack chats moderate`
+### `slk chats moderate`
 
 judge a group's new messages and members by its rules, and act as they allow
 
 **Changes something in the service.**
 
 ```sh
-slack chats moderate <chat> [options]
+slk chats moderate <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -1007,20 +1007,20 @@ slack chats moderate <chat> [options]
 | `--allow-dangerous` | yes to every action whose level in the group's rules is ask. |
 | `--max-actions <n>` | at most this many actions in one run; 10 if not given. |
 
-**Returns:** chat moderation — chat_id, rows; every field: slack commands info chats moderate
+**Returns:** chat moderation — chat_id, rows; every field: slk commands info chats moderate
 
-**Example:** `slack personal chats moderate "Book club" --dry-run`
+**Example:** `slk personal chats moderate "Book club" --dry-run`
 
-## `slack contacts`
+## `slk contacts`
 
 people this account has a one-to-one chat with
 
-### `slack contacts list`
+### `slk contacts list`
 
 people you have a one-to-one chat with; name: matches the name, your local alias or the @username, notes: your private notes about them
 
 ```sh
-slack contacts list [query] [options]
+slk contacts list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -1034,18 +1034,18 @@ slack contacts list [query] [options]
 | `--all` | every row, no paging. |
 | `--order <recent\|name>` | newest conversation first, or alphabetical. Default: `recent`. |
 
-**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: slack commands info contacts list
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: slk commands info contacts list
 
-**Next usually:** `slack contacts show <person>`, `slack contacts context <person>`, `slack contacts prepare <person>`
+**Next usually:** `slk contacts show <person>`, `slk contacts context <person>`, `slk contacts prepare <person>`
 
-**Example:** `slack personal contacts list --limit 10`
+**Example:** `slk personal contacts list --limit 10`
 
-### `slack contacts show`
+### `slk contacts show`
 
 one person: what the messenger says about them — handles, flags, last seen, phone, when they registered — your alias, the chats you share, how many of their messages the store holds in each, and the earlier names and usernames the store saw them with; --offline answers from the store alone
 
 ```sh
-slack contacts show <person> [options]
+slk contacts show <person> [options]
 ```
 
 | Argument | | What it is |
@@ -1057,18 +1057,18 @@ slack contacts show <person> [options]
 | `--with-notes` | include your private notes, subject to contacts.notes.list permission. |
 | `--hide-phone` | leave the phone number out. |
 
-**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: slack commands info contacts show
+**Returns:** contact — ref, id, name, username, description, last_messaged_at, alias, display_name, and 15 more; every field: slk commands info contacts show
 
-**Next usually:** `slack contacts context <person>`, `slack contacts prepare <person>`, `slack contacts events <person> [query]`
+**Next usually:** `slk contacts context <person>`, `slk contacts prepare <person>`, `slk contacts events <person> [query]`
 
-**Example:** `slack personal contacts show "Alex Example"`
+**Example:** `slk personal contacts show "Alex Example"`
 
-### `slack contacts context`
+### `slk contacts context`
 
 what the store holds about one person, in every messenger linked to them, read only in accounts of this account's scope (personal or work): shared chats, the last messages each way, their recent messages, where others mentioned them — never connects
 
 ```sh
-slack contacts context <person> [options]
+slk contacts context <person> [options]
 ```
 
 | Argument | | What it is |
@@ -1082,16 +1082,16 @@ slack contacts context <person> [options]
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
 | `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
 
-**Returns:** contact context — person, accounts, shared, last, recent, mentions, limits, complete, and 4 more; every field: slack commands info contacts context
+**Returns:** contact context — person, accounts, shared, last, recent, mentions, limits, complete, and 4 more; every field: slk commands info contacts context
 
-**Example:** `slack personal contacts context "Alex Example" --limit 10`
+**Example:** `slk personal contacts context "Alex Example" --limit 10`
 
-### `slack contacts prepare`
+### `slk contacts prepare`
 
 before you talk to someone: what contacts context gives, plus the one-to-one chats where they wrote last, open tasks, accepted facts, your notes and their recent meetings, each with its reference; never connects
 
 ```sh
-slack contacts prepare <person> [options]
+slk contacts prepare <person> [options]
 ```
 
 | Argument | | What it is |
@@ -1103,16 +1103,16 @@ slack contacts prepare <person> [options]
 | `--limit <n>` | at most this many messages, and items in each section; 10 if not given. |
 | `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 2h / 1d ago. |
 
-**Returns:** contact preparation — person, accounts, shared, last, recent, mentions, limits, complete, and 4 more; every field: slack commands info contacts prepare
+**Returns:** contact preparation — person, accounts, shared, last, recent, mentions, limits, complete, and 4 more; every field: slk commands info contacts prepare
 
-**Example:** `slack personal contacts prepare Ana`
+**Example:** `slk personal contacts prepare Ana`
 
-### `slack contacts events`
+### `slk contacts events`
 
 everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; only in this account's scope, personal or work, and scope: of the other one is refused; never connects
 
 ```sh
-slack contacts events <person> [query] [options]
+slk contacts events <person> [query] [options]
 ```
 
 | Argument | | What it is |
@@ -1125,16 +1125,16 @@ slack contacts events <person> [query] [options]
 | `--limit <n>` | at most this many; 50 if not given. |
 | `--cursor <cursor>` | go on from where the last page stopped; page.next gives it, with the same filters. |
 
-**Returns:** contact activity — at, subject, subject_id, role, scope, provider, account, chat_id, and 2 more; every field: slack commands info contacts events
+**Returns:** contact activity — at, subject, subject_id, role, scope, provider, account, chat_id, and 2 more; every field: slk commands info contacts events
 
-**Example:** `slack personal contacts events "Alex Example" --limit 10`
+**Example:** `slk personal contacts events "Alex Example" --limit 10`
 
-### `slack contacts check`
+### `slk contacts check`
 
 whether one person looks like a bot, a fake or a spammer: their profile and what they wrote in the store — a hint, never a verdict; the public ban lists cover Telegram only, so nothing is sent
 
 ```sh
-slack contacts check <person> [options]
+slk contacts check <person> [options]
 ```
 
 | Argument | | What it is |
@@ -1145,18 +1145,18 @@ slack contacts check <person> [options]
 |---|---|
 | `--no-registries` | do not ask the public ban lists; nothing about them leaves this machine. |
 
-**Returns:** contact check — person, score, reasons, registries, unknown, checked_at; every field: slack commands info contacts check
+**Returns:** contact check — person, score, reasons, registries, unknown, checked_at; every field: slk commands info contacts check
 
-**Example:** `slack personal contacts check "Alex Example"`
+**Example:** `slk personal contacts check "Alex Example"`
 
-### `slack contacts link`
+### `slk contacts link`
 
 record that two people in the store are one person — the same name is never enough
 
 **Changes something on this computer only.**
 
 ```sh
-slack contacts link <person> <other> [options]
+slk contacts link <person> <other> [options]
 ```
 
 | Argument | | What it is |
@@ -1168,18 +1168,18 @@ slack contacts link <person> <other> [options]
 |---|---|
 | `--reason <text>` | why they are one person; an agent's link is a proposal and needs it. |
 
-**Returns:** linked person — uid, name, identities, display_name, proposal; every field: slack commands info contacts link
+**Returns:** linked person — uid, name, identities, display_name, proposal; every field: slk commands info contacts link
 
-**Example:** `slack personal contacts link "Alex Example" zoom:101`
+**Example:** `slk personal contacts link "Alex Example" zoom:101`
 
-### `slack contacts unlink`
+### `slk contacts unlink`
 
 undo contacts link for one identity: it is a person of its own again
 
 **Changes something on this computer only.**
 
 ```sh
-slack contacts unlink <person> [options]
+slk contacts unlink <person> [options]
 ```
 
 | Argument | | What it is |
@@ -1190,48 +1190,48 @@ slack contacts unlink <person> [options]
 |---|---|
 | `--from <person>` | the person it leaves, person:<uid> or person:me; refused when it sits on another. |
 
-**Returns:** linked person — uid, name, identities, display_name, proposal; every field: slack commands info contacts unlink
+**Returns:** linked person — uid, name, identities, display_name, proposal; every field: slk commands info contacts unlink
 
-**Example:** `slack personal contacts unlink "Alex Example" --from person:me`
+**Example:** `slk personal contacts unlink "Alex Example" --from person:me`
 
-### `slack contacts lookup`
+### `slk contacts lookup`
 
 who has this phone number — asks for it, or reads it from stdin; never an argument
 
 ```sh
-slack contacts lookup
+slk contacts lookup
 ```
 
-**Returns:** contact lookup — id, name, username; every field: slack commands info contacts lookup
+**Returns:** contact lookup — id, name, username; every field: slk commands info contacts lookup
 
-**Example:** `slack personal contacts lookup`
+**Example:** `slk personal contacts lookup`
 
-### `slack contacts sync`
+### `slk contacts sync`
 
 take the whole contact list from the messenger into the local store
 
 **Changes something on this computer only.**
 
 ```sh
-slack contacts sync
+slk contacts sync
 ```
 
-**Returns:** contact sync — added, changed, known; every field: slack commands info contacts sync
+**Returns:** contact sync — added, changed, known; every field: slk commands info contacts sync
 
-**Example:** `slack personal contacts sync`
+**Example:** `slk personal contacts sync`
 
-### `slack contacts aliases`
+### `slk contacts aliases`
 
 a private local display name in the selected account
 
-#### `slack contacts aliases set`
+#### `slk contacts aliases set`
 
 your own name for a person in this account; kept on this machine, never sent
 
 **Changes something on this computer only.**
 
 ```sh
-slack contacts aliases set <person> <alias>
+slk contacts aliases set <person> <alias>
 ```
 
 | Argument | | What it is |
@@ -1239,38 +1239,38 @@ slack contacts aliases set <person> <alias>
 | `person` | required | the person's id, reference or known name. |
 | `alias` | required | the private name to use for this person. |
 
-**Returns:** contact alias — person_id, alias; every field: slack commands info contacts aliases set
+**Returns:** contact alias — person_id, alias; every field: slk commands info contacts aliases set
 
-**Example:** `slack personal contacts aliases set "Alex Example" "Reading partner"`
+**Example:** `slk personal contacts aliases set "Alex Example" "Reading partner"`
 
-#### `slack contacts aliases remove`
+#### `slk contacts aliases remove`
 
 drop your local name for a person; their own name shows again
 
 **Changes something on this computer only.**
 
 ```sh
-slack contacts aliases remove <person>
+slk contacts aliases remove <person>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `person` | required | the person's id, reference or known name. |
 
-**Returns:** contact alias — person_id, alias; every field: slack commands info contacts aliases remove
+**Returns:** contact alias — person_id, alias; every field: slk commands info contacts aliases remove
 
-**Example:** `slack personal contacts aliases remove "Alex Example"`
+**Example:** `slk personal contacts aliases remove "Alex Example"`
 
-### `slack contacts notes`
+### `slk contacts notes`
 
 your private notes on a stored contact, the same in every account that sees them
 
-#### `slack contacts notes list`
+#### `slk contacts notes list`
 
 every private note you keep on a person, oldest first
 
 ```sh
-slack contacts notes list <person> [query]
+slk contacts notes list <person> [query]
 ```
 
 | Argument | | What it is |
@@ -1278,16 +1278,16 @@ slack contacts notes list <person> [query]
 | `person` | required | the person's id, reference or known name. |
 | `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slack commands info contacts notes list
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slk commands info contacts notes list
 
-**Example:** `slack personal contacts notes list "Alex Example"`
+**Example:** `slk personal contacts notes list "Alex Example"`
 
-#### `slack contacts notes show`
+#### `slk contacts notes show`
 
 one private note on a person, with its revision for edit
 
 ```sh
-slack contacts notes show <person> <id>
+slk contacts notes show <person> <id>
 ```
 
 | Argument | | What it is |
@@ -1295,18 +1295,18 @@ slack contacts notes show <person> <id>
 | `person` | required | the person's id, reference or known name. |
 | `id` | required | the note id from contacts notes list. |
 
-**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slack commands info contacts notes show
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slk commands info contacts notes show
 
-**Example:** `slack personal contacts notes show "Alex Example" 1`
+**Example:** `slk personal contacts notes show "Alex Example" 1`
 
-#### `slack contacts notes add`
+#### `slk contacts notes add`
 
 add a private note on a person from stdin or --text-file; never sent
 
 **Changes something on this computer only.**
 
 ```sh
-slack contacts notes add <person> [options]
+slk contacts notes add <person> [options]
 ```
 
 | Argument | | What it is |
@@ -1317,18 +1317,18 @@ slack contacts notes add <person> [options]
 |---|---|
 | `--text-file <path>` | read note text from a file; omitted or - reads stdin. |
 
-**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slack commands info contacts notes add
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slk commands info contacts notes add
 
-**Example:** `slack personal contacts notes add "Alex Example" --text-file ./note.txt`
+**Example:** `slk personal contacts notes add "Alex Example" --text-file ./note.txt`
 
-#### `slack contacts notes edit`
+#### `slk contacts notes edit`
 
 replace a note's text; --revision must match the one you read
 
 **Changes something on this computer only.**
 
 ```sh
-slack contacts notes edit <person> <id> [options]
+slk contacts notes edit <person> <id> [options]
 ```
 
 | Argument | | What it is |
@@ -1341,18 +1341,18 @@ slack contacts notes edit <person> <id> [options]
 | `--text-file <path>` | read note text from a file; omitted or - reads stdin. |
 | `--revision <n>` | the revision you read before editing. |
 
-**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slack commands info contacts notes edit
+**Returns:** contact note — id, contact, text, revision, created_at, updated_at; every field: slk commands info contacts notes edit
 
-**Example:** `slack personal contacts notes edit "Alex Example" 1 --revision 1 --text-file ./note.txt`
+**Example:** `slk personal contacts notes edit "Alex Example" 1 --revision 1 --text-file ./note.txt`
 
-#### `slack contacts notes remove`
+#### `slk contacts notes remove`
 
 delete one private note on a person
 
 **Changes something on this computer only.**
 
 ```sh
-slack contacts notes remove <person> <id>
+slk contacts notes remove <person> <id>
 ```
 
 | Argument | | What it is |
@@ -1360,56 +1360,56 @@ slack contacts notes remove <person> <id>
 | `person` | required | the person's id, reference or known name. |
 | `id` | required | the note id from contacts notes list. |
 
-**Returns:** contact note removal — id, person_id, removed; every field: slack commands info contacts notes remove
+**Returns:** contact note removal — id, person_id, removed; every field: slk commands info contacts notes remove
 
-**Example:** `slack personal contacts notes remove "Alex Example" 1`
+**Example:** `slk personal contacts notes remove "Alex Example" 1`
 
-### `slack contacts block`
+### `slk contacts block`
 
 stop a person from writing to you — they need not be a contact
 
 **Changes something in the service.**
 
 ```sh
-slack contacts block <person>
+slk contacts block <person>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
-**Returns:** contact state change — operation_id, person_id; every field: slack commands info contacts block
+**Returns:** contact state change — operation_id, person_id; every field: slk commands info contacts block
 
-**Example:** `slack personal contacts block "Alex Example"`
+**Example:** `slk personal contacts block "Alex Example"`
 
-### `slack contacts unblock`
+### `slk contacts unblock`
 
 let a blocked person write to you again
 
 **Changes something in the service.**
 
 ```sh
-slack contacts unblock <person>
+slk contacts unblock <person>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `person` | required | person id — `contacts lookup` finds one — or part of a known name. |
 
-**Returns:** contact state change — operation_id, person_id; every field: slack commands info contacts unblock
+**Returns:** contact state change — operation_id, person_id; every field: slk commands info contacts unblock
 
-**Example:** `slack personal contacts unblock "Alex Example"`
+**Example:** `slk personal contacts unblock "Alex Example"`
 
-## `slack messages`
+## `slk messages`
 
 read and send messages
 
-### `slack messages evidence`
+### `slk messages evidence`
 
 general chat context, newest first, with references, coverage and fingerprints for verification
 
 ```sh
-slack messages evidence <chat> [options]
+slk messages evidence <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -1421,16 +1421,16 @@ slack messages evidence <chat> [options]
 | `--limit <n>` | how many, 1–100. |
 | `--cursor <cursor>` | go on from where page.next says the last packet stopped. |
 
-**Returns:** evidence packet — schema_version, id, kind, source, fingerprint, limits, content_bytes, coverage, and 1 more; every field: slack commands info messages evidence
+**Returns:** evidence packet — schema_version, id, kind, source, fingerprint, limits, content_bytes, coverage, and 1 more; every field: slk commands info messages evidence
 
-**Example:** `slack personal messages evidence "Book club" --limit 10`
+**Example:** `slk personal messages evidence "Book club" --limit 10`
 
-### `slack messages list`
+### `slk messages list`
 
 a chat's messages, oldest to newest
 
 ```sh
-slack messages list <chat> [query] [options]
+slk messages list <chat> [query] [options]
 ```
 
 | Argument | | What it is |
@@ -1445,20 +1445,20 @@ slack messages list <chat> [query] [options]
 | `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
 | `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 31 more; every field: slack commands info messages list
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 31 more; every field: slk commands info messages list
 
-**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack conversations related <chat> <message>`
+**Next usually:** `slk messages transcribe <chat> <message>`, `slk messages links <chat> <message>`, `slk conversations related <chat> <message>`
 
-**Example:** `slack personal messages list "Book club" --limit 20`
+**Example:** `slk personal messages list "Book club" --limit 20`
 
-### `slack messages send`
+### `slk messages send`
 
 send a text message; without [text], the text is read from stdin
 
 **Changes something in the service.**
 
 ```sh
-slack messages send <chat> [text] [options]
+slk messages send <chat> [text] [options]
 ```
 
 | Argument | | What it is |
@@ -1480,16 +1480,16 @@ slack messages send <chat> [text] [options]
 | `--allow-any-file` | send a file even from credential folders or this CLI's own folders. |
 | `--also-to-channel` | with --reply-to or --topic: show the reply in the channel too, as Slack's "Also send to #channel". |
 
-**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slack commands info messages send
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slk commands info messages send
 
-**Example:** `slack personal messages send "Book club" "The meeting starts at 10."`
+**Example:** `slk personal messages send "Book club" "The meeting starts at 10."`
 
-### `slack messages show`
+### `slk messages show`
 
 one message, by its chat and id or by its msg: locator
 
 ```sh
-slack messages show <chat> [message]
+slk messages show <chat> [message]
 ```
 
 | Argument | | What it is |
@@ -1497,18 +1497,18 @@ slack messages show <chat> [message]
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…); or a msg: locator, with no message id after it. |
 | `message` | optional | the message id. |
 
-**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 31 more; every field: slack commands info messages show
+**Returns:** message — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 31 more; every field: slk commands info messages show
 
-**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack conversations related <chat> <message>`
+**Next usually:** `slk messages transcribe <chat> <message>`, `slk messages links <chat> <message>`, `slk conversations related <chat> <message>`
 
-**Example:** `slack personal messages show "Book club" 101`
+**Example:** `slk personal messages show "Book club" 101`
 
-### `slack messages context`
+### `slk messages context`
 
 a message and what came either side of it, oldest first
 
 ```sh
-slack messages context <chat> [message] [options]
+slk messages context <chat> [message] [options]
 ```
 
 | Argument | | What it is |
@@ -1526,18 +1526,18 @@ slack messages context <chat> [message] [options]
 | `--before-n <n>` | how many before it. Default: `5`. |
 | `--after-n <n>` | how many after it. Default: `5`. |
 
-**Returns:** message context — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 42 more; every field: slack commands info messages context
+**Returns:** message context — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 42 more; every field: slk commands info messages context
 
-**Example:** `slack personal messages context "Book club" 101 --before-n 3 --after-n 3`
+**Example:** `slk personal messages context "Book club" 101 --before-n 3 --after-n 3`
 
-### `slack messages download`
+### `slk messages download`
 
 save a message's photos, files, videos and voice notes to a folder — or a whole chat's with --all; with --offline, copy the ones this computer already holds, one by --attachment
 
 **Changes something on this computer only.**
 
 ```sh
-slack messages download <chat> [message] [options]
+slk messages download <chat> [message] [options]
 ```
 
 | Argument | | What it is |
@@ -1553,16 +1553,16 @@ slack messages download <chat> [message] [options]
 | `--pause <duration>` | with --all, a pause between pages, to stay under the provider's limits. Default: `1s`. |
 | `--extract` | read text layers from the files this download maps into the local content index. |
 
-**Returns:** message download — files, extraction, complete, batch, chat, saved, existing, stopped; every field: slack commands info messages download
+**Returns:** message download — files, extraction, complete, batch, chat, saved, existing, stopped; every field: slk commands info messages download
 
-**Example:** `slack personal messages download "Book club" 101 --output-dir ./downloads`, `slack personal messages download msg:slack/me/500/101 --attachment 1 --offline`
+**Example:** `slk personal messages download "Book club" 101 --output-dir ./downloads`, `slk personal messages download msg:slack/me/500/101 --attachment 1 --offline`
 
-### `slack messages transcribe`
+### `slk messages transcribe`
 
 a voice message as text — by Slack where it can, else by a model on this machine
 
 ```sh
-slack messages transcribe <chat> <message> [options]
+slk messages transcribe <chat> <message> [options]
 ```
 
 | Argument | | What it is |
@@ -1575,18 +1575,18 @@ slack messages transcribe <chat> <message> [options]
 | `--local` | use the model on this machine, never the messenger. |
 | `--model <model>` | which downloaded model; implies --local (`models list`). |
 
-**Returns:** message transcript — message_id, text, pending, via, model; every field: slack commands info messages transcribe
+**Returns:** message transcript — message_id, text, pending, via, model; every field: slk commands info messages transcribe
 
-**Example:** `slack personal messages transcribe "Book club" 101`
+**Example:** `slk personal messages transcribe "Book club" 101`
 
-### `slack messages edit`
+### `slk messages edit`
 
 change the text of your own message; the other side may have read it already
 
 **Changes something in the service.**
 
 ```sh
-slack messages edit <chat> <message> [text] [options]
+slk messages edit <chat> <message> [text] [options]
 ```
 
 | Argument | | What it is |
@@ -1599,18 +1599,18 @@ slack messages edit <chat> <message> [text] [options]
 |---|---|
 | `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 
-**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slack commands info messages edit
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slk commands info messages edit
 
-**Example:** `slack personal messages edit "Book club" 101 "The meeting starts at 11."`
+**Example:** `slk personal messages edit "Book club" 101 "The meeting starts at 11."`
 
-### `slack messages delete`
+### `slk messages delete`
 
 delete messages for you only; with --for-everyone, for everyone in the chat
 
 **Changes something in the service.**
 
 ```sh
-slack messages delete <chat> <message> [options]
+slk messages delete <chat> <message> [options]
 ```
 
 | Argument | | What it is |
@@ -1623,18 +1623,18 @@ slack messages delete <chat> <message> [options]
 | `--for-everyone` | delete for everyone in the chat, not only for you — they cannot get it back. |
 | `--allow-dangerous` | go ahead without the question an ask level puts before a deletion. |
 
-**Returns:** message deletion — operation_id, chat_id, deleted, for_everyone; every field: slack commands info messages delete
+**Returns:** message deletion — operation_id, chat_id, deleted, for_everyone; every field: slk commands info messages delete
 
-**Example:** `slack personal messages delete "Book club" 101`
+**Example:** `slk personal messages delete "Book club" 101`
 
-### `slack messages forward`
+### `slk messages forward`
 
 forward one message to another chat
 
 **Changes something in the service.**
 
 ```sh
-slack messages forward <chat> <message> [options]
+slk messages forward <chat> <message> [options]
 ```
 
 | Argument | | What it is |
@@ -1647,18 +1647,18 @@ slack messages forward <chat> <message> [options]
 | `--to <chat>` | where it goes: a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `--operation-id <id>` | repeat a forward whose outcome was unknown, without risking a second copy. |
 
-**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slack commands info messages forward
+**Returns:** message write — operation_id, message, messages, scheduled_for; every field: slk commands info messages forward
 
-**Example:** `slack personal messages forward "Book club" 101 --to "Project room"`
+**Example:** `slk personal messages forward "Book club" 101 --to "Project room"`
 
-### `slack messages pin`
+### `slk messages pin`
 
 pin a message in a chat, quietly unless --notify
 
 **Changes something in the service.**
 
 ```sh
-slack messages pin <chat> <message> [options]
+slk messages pin <chat> <message> [options]
 ```
 
 | Argument | | What it is |
@@ -1670,18 +1670,18 @@ slack messages pin <chat> <message> [options]
 |---|---|
 | `--notify` | tell the chat's members about the pin. |
 
-**Returns:** message pin — operation_id, chat_id, message_id, pinned; every field: slack commands info messages pin
+**Returns:** message pin — operation_id, chat_id, message_id, pinned; every field: slk commands info messages pin
 
-**Example:** `slack personal messages pin <chat> <message>`, `slack personal messages pin <chat> <message> --notify`
+**Example:** `slk personal messages pin <chat> <message>`, `slk personal messages pin <chat> <message> --notify`
 
-### `slack messages unpin`
+### `slk messages unpin`
 
 unpin a message in a chat
 
 **Changes something in the service.**
 
 ```sh
-slack messages unpin <chat> <message>
+slk messages unpin <chat> <message>
 ```
 
 | Argument | | What it is |
@@ -1689,16 +1689,16 @@ slack messages unpin <chat> <message>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `message` | required | the message id. |
 
-**Returns:** message pin — operation_id, chat_id, message_id, pinned; every field: slack commands info messages unpin
+**Returns:** message pin — operation_id, chat_id, message_id, pinned; every field: slk commands info messages unpin
 
-**Example:** `slack personal messages unpin <chat> <message>`
+**Example:** `slk personal messages unpin <chat> <message>`
 
-### `slack messages link`
+### `slk messages link`
 
 a message permalink when supported, and its account-scoped locator
 
 ```sh
-slack messages link <chat> [message]
+slk messages link <chat> [message]
 ```
 
 | Argument | | What it is |
@@ -1706,18 +1706,18 @@ slack messages link <chat> [message]
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…); or a msg: locator, with no message id after it. |
 | `message` | optional | the message id. |
 
-**Returns:** message link — ref, url, access, reason, files; every field: slack commands info messages link
+**Returns:** message link — ref, url, access, reason, files; every field: slk commands info messages link
 
-**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack conversations related <chat> <message>`
+**Next usually:** `slk messages transcribe <chat> <message>`, `slk messages links <chat> <message>`, `slk conversations related <chat> <message>`
 
-**Example:** `slack personal messages link "Book club" 101`
+**Example:** `slk personal messages link "Book club" 101`
 
-### `slack messages links`
+### `slk messages links`
 
 why a message is in its conversation: each link it has, and the chain of answers back to the start
 
 ```sh
-slack messages links <chat> <message>
+slk messages links <chat> <message>
 ```
 
 | Argument | | What it is |
@@ -1725,18 +1725,18 @@ slack messages links <chat> <message>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `message` | required | the message id. |
 
-**Returns:** message links — chat, message, links, chain; every field: slack commands info messages links
+**Returns:** message links — chat, message, links, chain; every field: slk commands info messages links
 
-**Example:** `slack personal messages links "Book club" 101`
+**Example:** `slk personal messages links "Book club" 101`
 
-### `slack messages sync`
+### `slk messages sync`
 
 bring a chat's history in the local store up to date, newest first; run it again to continue; --all syncs every chat; with --json, stderr carries progress lines: {"event":"progress","step":"sync","chats","chats_done","fetched"}, counts only
 
 **Changes something on this computer only.**
 
 ```sh
-slack messages sync [chat] [options]
+slk messages sync [chat] [options]
 ```
 
 | Argument | | What it is |
@@ -1761,22 +1761,22 @@ slack messages sync [chat] [options]
 | `--background` | run as a job that outlives this command; `store jobs show` follows it. |
 | `--dry-run` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
-**Returns:** message sync — chat, held, ranges, missing, requests, runs, seconds, fetched, and 17 more; every field: slack commands info messages sync
+**Returns:** message sync — chat, held, ranges, missing, requests, runs, seconds, fetched, and 17 more; every field: slk commands info messages sync
 
-**Example:** `slack personal messages sync "Book club" --last 100`
+**Example:** `slk personal messages sync "Book club" --last 100`
 
-## `slack reactions`
+## `slk reactions`
 
 react to messages
 
-### `slack reactions add`
+### `slk reactions add`
 
 put your reaction on a message; it replaces the one you had
 
 **Changes something in the service.**
 
 ```sh
-slack reactions add <chat> <message> <emoji>
+slk reactions add <chat> <message> <emoji>
 ```
 
 | Argument | | What it is |
@@ -1785,18 +1785,18 @@ slack reactions add <chat> <message> <emoji>
 | `message` | required | the message id. |
 | `emoji` | required | one emoji, for example 👍. |
 
-**Returns:** reaction change — operation_id, chat_id, message_id, reaction; every field: slack commands info reactions add
+**Returns:** reaction change — operation_id, chat_id, message_id, reaction; every field: slk commands info reactions add
 
-**Example:** `slack personal reactions add "Book club" 101 👍`
+**Example:** `slk personal reactions add "Book club" 101 👍`
 
-### `slack reactions remove`
+### `slk reactions remove`
 
 take your reaction off a message
 
 **Changes something in the service.**
 
 ```sh
-slack reactions remove <chat> <message>
+slk reactions remove <chat> <message>
 ```
 
 | Argument | | What it is |
@@ -1804,78 +1804,78 @@ slack reactions remove <chat> <message>
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `message` | required | the message id. |
 
-**Returns:** reaction change — operation_id, chat_id, message_id, reaction; every field: slack commands info reactions remove
+**Returns:** reaction change — operation_id, chat_id, message_id, reaction; every field: slk commands info reactions remove
 
-**Example:** `slack personal reactions remove "Book club" 101`
+**Example:** `slk personal reactions remove "Book club" 101`
 
-## `slack models`
+## `slk models`
 
 models that run on this machine
 
-### `slack models keys`
+### `slk models keys`
 
 API keys for embedding and analysis providers
 
-#### `slack models keys set`
+#### `slk models keys set`
 
 store a key, typed at a hidden prompt or piped on stdin — never as an argument
 
 **Changes something on this computer only.**
 
 ```sh
-slack models keys set <provider>
+slk models keys set <provider>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `provider` | required | openai, anthropic, or the host of a --base-url server that wants a key. |
 
-**Returns:** model key stored — provider, stored; every field: slack commands info models keys set
+**Returns:** model key stored — provider, stored; every field: slk commands info models keys set
 
-**Example:** `slack personal models keys set openai`
+**Example:** `slk personal models keys set openai`
 
-#### `slack models keys remove`
+#### `slk models keys remove`
 
 forget a stored key
 
 **Changes something on this computer only.**
 
 ```sh
-slack models keys remove <provider>
+slk models keys remove <provider>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `provider` | required | openai, anthropic, or a server's host. |
 
-**Returns:** model key removed — provider, removed; every field: slack commands info models keys remove
+**Returns:** model key removed — provider, removed; every field: slk commands info models keys remove
 
-**Example:** `slack personal models keys remove openai`
+**Example:** `slk personal models keys remove openai`
 
-### `slack models chats`
+### `slk models chats`
 
 whether chat text may go to a model off this computer: allowed, ask or denied
 
-#### `slack models chats show`
+#### `slk models chats show`
 
 whether chat text may go to a model outside this computer, and since when
 
 ```sh
-slack models chats show
+slk models chats show
 ```
 
-**Returns:** chat sending — mode, meaning, since, changed; every field: slack commands info models chats show
+**Returns:** chat sending — mode, meaning, since, changed; every field: slk commands info models chats show
 
-**Example:** `slack personal models chats show`
+**Example:** `slk personal models chats show`
 
-#### `slack models chats set`
+#### `slk models chats set`
 
 allowed: no yes needed; ask: --yes needed, an agent may pass it; denied: refused even with --yes. Only you make it less strict
 
 **Changes something on this computer only.**
 
 ```sh
-slack models chats set <mode> [options]
+slk models chats set <mode> [options]
 ```
 
 | Argument | | What it is |
@@ -1886,36 +1886,36 @@ slack models chats set <mode> [options]
 |---|---|
 | `--from-app` | you did this in WireCat Desktop. |
 
-**Returns:** chat sending — mode, meaning, since, changed; every field: slack commands info models chats set
+**Returns:** chat sending — mode, meaning, since, changed; every field: slk commands info models chats set
 
-**Example:** `slack personal models chats set allowed`, `slack personal models chats set ask`, `slack personal models chats set denied`
+**Example:** `slk personal models chats set allowed`, `slk personal models chats set ask`, `slk personal models chats set denied`
 
-### `slack models list`
+### `slk models list`
 
 speech, embedding and reranker models: downloaded or not, each kind's default
 
 ```sh
-slack models list [query]
+slk models list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: slack commands info models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: slk commands info models list
 
-**Next usually:** `slack models download <model>`, `slack models set <model>`
+**Next usually:** `slk models download <model>`, `slk models set <model>`
 
-**Example:** `slack personal models list`, `slack personal models list kind:audio`
+**Example:** `slk personal models list`, `slk personal models list kind:audio`
 
-### `slack models download`
+### `slk models download`
 
 download and verify one speech, embedding or reranker model: tens to hundreds of MB, each size in models list
 
 **Reads from an outside service.**
 
 ```sh
-slack models download <model> [options]
+slk models download <model> [options]
 ```
 
 | Argument | | What it is |
@@ -1926,40 +1926,40 @@ slack models download <model> [options]
 |---|---|
 | `--accept-terms` | no longer needed; kept so older scripts still run. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: slack commands info models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: slk commands info models download
 
-**Next usually:** `slack models set <model>`
+**Next usually:** `slk models set <model>`
 
-**Example:** `slack personal models download embeddinggemma`, `slack personal models download mmarco`
+**Example:** `slk personal models download embeddinggemma`, `slk personal models download mmarco`
 
-### `slack models set`
+### `slk models set`
 
 make a downloaded text model the one every embed and every search by meaning uses, in every WireCat CLI. Each model keeps its own vectors: the next syncs embed what the new one lacks, and switching back is instant
 
 **Changes something on this computer only.**
 
 ```sh
-slack models set <model>
+slk models set <model>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `model` | required | a downloaded text model id from models list. |
 
-**Returns:** model chosen — id, kind, title, languages, size_bytes, downloaded, default, path, and 9 more; every field: slack commands info models set
+**Returns:** model chosen — id, kind, title, languages, size_bytes, downloaded, default, path, and 9 more; every field: slk commands info models set
 
-**Next usually:** `slack models download <model>`
+**Next usually:** `slk models download <model>`
 
-**Example:** `slack personal models set e5-large`
+**Example:** `slk personal models set e5-large`
 
-### `slack models add`
+### `slk models add`
 
 add an ONNX embedding model from Hugging Face, pinned and checked by sha256
 
 **Reads from an outside service.**
 
 ```sh
-slack models add <id> [options]
+slk models add <id> [options]
 ```
 
 | Argument | | What it is |
@@ -1970,18 +1970,18 @@ slack models add <id> [options]
 |---|---|
 | `--payload <json>` | where the model is and how to run it, as JSON (below). |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: slack commands info models add
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: slk commands info models add
 
-**Next usually:** `slack models download <model>`, `slack models set <model>`
+**Next usually:** `slk models download <model>`, `slk models set <model>`
 
-**Example:** `slack personal models add e5-base --payload '{"repository":"Xenova/multilingual-e5-base","onnx":"onnx/model_quantized.onnx","dims":768,"pooling":"mean","prefix":{"query":"query: ","passage":"passage: "}}'`
+**Example:** `slk personal models add e5-base --payload '{"repository":"Xenova/multilingual-e5-base","onnx":"onnx/model_quantized.onnx","dims":768,"pooling":"mean","prefix":{"query":"query: ","passage":"passage: "}}'`
 
-## `slack review`
+## `slk review`
 
 every message, yours too, in chats that changed since a point — for reviewing who owes what
 
 ```sh
-slack review [query] [options]
+slk review [query] [options]
 ```
 
 | Argument | | What it is |
@@ -1996,76 +1996,76 @@ slack review [query] [options]
 | `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
 | `--new` | what changed since the last `review --new`, a point per chat — for scheduled runs. |
 
-**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 4 more; every field: slack commands info review
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 4 more; every field: slk commands info review
 
-**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack conversations related <chat> <message>`
+**Next usually:** `slk messages transcribe <chat> <message>`, `slk messages links <chat> <message>`, `slk conversations related <chat> <message>`
 
-**Example:** `slack personal review "date>2h"`
+**Example:** `slk personal review "date>2h"`
 
-## `slack store`
+## `slk store`
 
 the local store of messages
 
-### `slack store status`
+### `slk store status`
 
 per chat: messages stored, the oldest and newest, and the stretches held completely
 
 ```sh
-slack store status [chat]
+slk store status [chat]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | optional | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** store chat status — chat_id, title, kind, messages, oldest_at, newest_at, last_stored_at, held; every field: slack commands info store status
+**Returns:** store chat status — chat_id, title, kind, messages, oldest_at, newest_at, last_stored_at, held; every field: slk commands info store status
 
-**Example:** `slack personal store status "Book club"`
+**Example:** `slk personal store status "Book club"`
 
-### `slack store chats`
+### `slk store chats`
 
 the account's chats as the store holds them
 
-#### `slack store chats status`
+#### `slk store chats status`
 
 over this account's searchable chats of every kind, channels included: fetched (back to the first message, up to date, no gaps), partial, never (no fetch recorded and no message held), and the oldest message held; reads the store only
 
 ```sh
-slack store chats status
+slk store chats status
 ```
 
-**Returns:** chat coverage — chats, fetched, partial, never, oldest_message_at; every field: slack commands info store chats status
+**Returns:** chat coverage — chats, fetched, partial, never, oldest_message_at; every field: slk commands info store chats status
 
-**Example:** `slack personal store chats status`
+**Example:** `slk personal store chats status`
 
-### `slack store gaps`
+### `slk store gaps`
 
 inspect recorded interior coverage gaps and explicitly fetch them
 
-#### `slack store gaps show`
+#### `slk store gaps show`
 
 local coverage plan; missing message ids alone do not imply missing history
 
 ```sh
-slack store gaps show <chat>
+slk store gaps show <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** store gap plan — version, scope, account, chat, ordering, held, gaps, unknown, and 2 more; every field: slack commands info store gaps show
+**Returns:** store gap plan — version, scope, account, chat, ordering, held, gaps, unknown, and 2 more; every field: slk commands info store gaps show
 
-**Example:** `slack personal store gaps show "Book club"`
+**Example:** `slk personal store gaps show "Book club"`
 
-#### `slack store gaps repair`
+#### `slk store gaps repair`
 
 fetch bounded interior gaps and recheck coverage; never delete unseen messages
 
 **Changes something on this computer only.**
 
 ```sh
-slack store gaps repair <chat> [options]
+slk store gaps repair <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -2087,20 +2087,20 @@ slack store gaps repair <chat> [options]
 | `--catch-up-time <duration>` | preparation time within the repair's remaining budget. |
 | `--background` | repair as an existing store job; inspect store jobs show. |
 
-**Returns:** store gap repair — job, pid, chat, log, version, scope, before, after, and 6 more; every field: slack commands info store gaps repair
+**Returns:** store gap repair — job, pid, chat, log, version, scope, before, after, and 6 more; every field: slk commands info store gaps repair
 
-**Example:** `slack personal store gaps repair "Book club" --limit 100`
+**Example:** `slk personal store gaps repair "Book club" --limit 100`
 
-### `slack store jobs`
+### `slk store jobs`
 
 background sync jobs
 
-#### `slack store jobs list`
+#### `slk store jobs list`
 
 background sync jobs, newest first
 
 ```sh
-slack store jobs list [query] [options]
+slk store jobs list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -2113,52 +2113,52 @@ slack store jobs list [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** job — id, chat, state, pid, started_at, fetched, finished_at, message_limit, and 5 more; every field: slack commands info store jobs list
+**Returns:** job — id, chat, state, pid, started_at, fetched, finished_at, message_limit, and 5 more; every field: slk commands info store jobs list
 
-**Example:** `slack personal store jobs list`
+**Example:** `slk personal store jobs list`
 
-#### `slack store jobs show`
+#### `slk store jobs show`
 
 one background job — the newest when none is named — and what the store now holds of its chat
 
 ```sh
-slack store jobs show [job]
+slk store jobs show [job]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `job` | optional | the job id `messages sync --background` printed. |
 
-**Returns:** store job details — chat, state, pid, started_at, fetched, job, profile, progress, and 11 more; every field: slack commands info store jobs show
+**Returns:** store job details — chat, state, pid, started_at, fetched, job, profile, progress, and 11 more; every field: slk commands info store jobs show
 
-**Example:** `slack personal store jobs show`
+**Example:** `slk personal store jobs show`
 
-#### `slack store jobs cancel`
+#### `slk store jobs cancel`
 
 stop a running background job after its current page; a later sync resumes where it stopped
 
 **Changes something on this computer only.**
 
 ```sh
-slack store jobs cancel <job>
+slk store jobs cancel <job>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `job` | required | the job id. |
 
-**Returns:** store job cancel — job, cancelled; every field: slack commands info store jobs cancel
+**Returns:** store job cancel — job, cancelled; every field: slk commands info store jobs cancel
 
-**Example:** `slack personal store jobs cancel job-101`
+**Example:** `slk personal store jobs cancel job-101`
 
-#### `slack store jobs retry`
+#### `slk store jobs retry`
 
 start a partial, failed or died job again, as a new job; the sync resumes where the store stopped
 
 **Changes something on this computer only.**
 
 ```sh
-slack store jobs retry [job] [options]
+slk store jobs retry [job] [options]
 ```
 
 | Argument | | What it is |
@@ -2169,32 +2169,32 @@ slack store jobs retry [job] [options]
 |---|---|
 | `--failed` | every chat whose newest job partial, failed or died. |
 
-**Returns:** store job retry — job, pid, chat, log, retried, error; every field: slack commands info store jobs retry
+**Returns:** store job retry — job, pid, chat, log, retried, error; every field: slk commands info store jobs retry
 
-**Example:** `slack personal store jobs retry --failed`
+**Example:** `slk personal store jobs retry --failed`
 
-#### `slack store jobs clear`
+#### `slk store jobs clear`
 
 forget finished jobs and remove their logs; a running job is kept
 
 **Changes something on this computer only.**
 
 ```sh
-slack store jobs clear
+slk store jobs clear
 ```
 
-**Returns:** store job clear — cleared; every field: slack commands info store jobs clear
+**Returns:** store job clear — cleared; every field: slk commands info store jobs clear
 
-**Example:** `slack personal store jobs clear`
+**Example:** `slk personal store jobs clear`
 
-### `slack store export`
+### `slk store export`
 
 a chat's stored messages, oldest first: --jsonl one message per line, --json the list envelope of messages; never asks the messenger
 
 **Changes something on this computer only.**
 
 ```sh
-slack store export [chat] [options]
+slk store export [chat] [options]
 ```
 
 | Argument | | What it is |
@@ -2211,18 +2211,18 @@ slack store export [chat] [options]
 | `--all` | with --output-dir: every stored chat of this account. |
 | `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
-**Returns:** store export — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 36 more; every field: slack commands info store export
+**Returns:** store export — ref, id, chat_id, sender_id, sender_name, sender_is_me, timestamp, edited_at, and 36 more; every field: slk commands info store export
 
-**Example:** `slack personal store export "Book club" --output ./messages.jsonl`
+**Example:** `slk personal store export "Book club" --output ./messages.jsonl`
 
-### `slack store clear`
+### `slk store clear`
 
 delete from the store the chats this account has left, with their messages
 
 **Changes something on this computer only.**
 
 ```sh
-slack store clear [options]
+slk store clear [options]
 ```
 
 | Option | What it does |
@@ -2231,88 +2231,88 @@ slack store clear [options]
 | `--allow-dangerous` | yes, delete — it cannot be undone, and a chat you left cannot be fetched again. |
 | `--dry-run` | list the chats it would delete, and delete nothing. |
 
-**Returns:** store clear — cleared, chats, messages, left, dry_run; every field: slack commands info store clear
+**Returns:** store clear — cleared, chats, messages, left, dry_run; every field: slk commands info store clear
 
-**Example:** `slack personal store clear --left --dry-run`
+**Example:** `slk personal store clear --left --dry-run`
 
-### `slack store import`
+### `slk store import`
 
 load a JSON file marked "synthetic": true (account, people, chats, members, messages) into this profile's account in the local store, as a sync would save them; the same file twice adds nothing and a changed message is updated in place. Refuses the owner's real store. Without --yes, says what it would load and changes nothing
 
 **Changes something on this computer only.**
 
 ```sh
-slack store import <file>
+slk store import <file>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `file` | required | the JSON file to load. |
 
-**Returns:** store import — store, profile, account, imported, file, added; every field: slack commands info store import
+**Returns:** store import — store, profile, account, imported, file, added; every field: slk commands info store import
 
-**Example:** `slack personal store import ./synthetic-chats.json --yes`
+**Example:** `slk personal store import ./synthetic-chats.json --yes`
 
-### `slack store info`
+### `slk store info`
 
 the store file: where it is, its size, its schema against the one this tool speaks, which tools used it and how many rows it holds, by provider, chat kind, account, year (UTC) and attachment kind, over every account; changes nothing
 
 ```sh
-slack store info
+slk store info
 ```
 
-**Returns:** store info — path, exists, schema, opens, error, bytes, journal_mode, pages, and 12 more; every field: slack commands info store info
+**Returns:** store info — path, exists, schema, opens, error, bytes, journal_mode, pages, and 12 more; every field: slk commands info store info
 
-**Example:** `slack personal store info`
+**Example:** `slk personal store info`
 
-### `slack store check`
+### `slk store check`
 
 whether the store is healthy — integrity, search indexes, disk, and which chats are behind
 
 ```sh
-slack store check
+slk store check
 ```
 
-**Returns:** store check — path, exists, ok, opens, error, checks, schema, integrity, and 11 more; every field: slack commands info store check
+**Returns:** store check — path, exists, ok, opens, error, checks, schema, integrity, and 11 more; every field: slk commands info store check
 
-**Example:** `slack personal store check`
+**Example:** `slk personal store check`
 
-### `slack store migrate`
+### `slk store migrate`
 
 bring the store up to this build's schema, then normalize, index and stem the messages and notes stored before it
 
 **Changes something on this computer only.**
 
 ```sh
-slack store migrate
+slk store migrate
 ```
 
-**Returns:** store migration — path, exists, from, to, normalized, indexed, terms, stemmed, and 1 more; every field: slack commands info store migrate
+**Returns:** store migration — path, exists, from, to, normalized, indexed, terms, stemmed, and 1 more; every field: slk commands info store migrate
 
-**Example:** `slack personal store migrate`
+**Example:** `slk personal store migrate`
 
-### `slack store rebuild`
+### `slk store rebuild`
 
 rebuild the word index, its typo vocabulary, the stems, the files' word index, the notes' indexes and who took part in what, from what is stored, and drop the vectors no stored text uses; loses nothing
 
 **Changes something on this computer only.**
 
 ```sh
-slack store rebuild
+slk store rebuild
 ```
 
-**Returns:** store reindex — path, exists, normalized, indexed, terms, stemmed, notes_indexed, file_texts, and 2 more; every field: slack commands info store rebuild
+**Returns:** store reindex — path, exists, normalized, indexed, terms, stemmed, notes_indexed, file_texts, and 2 more; every field: slk commands info store rebuild
 
-**Example:** `slack personal store rebuild`
+**Example:** `slk personal store rebuild`
 
-### `slack store backup`
+### `slk store backup`
 
 copy the store into a new file, while it is in use; never overwrites a file
 
 **Changes something on this computer only.**
 
 ```sh
-slack store backup <file> [options]
+slk store backup <file> [options]
 ```
 
 | Argument | | What it is |
@@ -2323,36 +2323,36 @@ slack store backup <file> [options]
 |---|---|
 | `--encrypt` | compress and encrypt with a password, typed at a hidden prompt or piped on stdin; it is never kept — lose it and the file cannot be opened. |
 
-**Returns:** store backup — path, from, bytes, schema, rows, encrypted; every field: slack commands info store backup
+**Returns:** store backup — path, from, bytes, schema, rows, encrypted; every field: slk commands info store backup
 
-**Example:** `slack personal store backup ./backup.db`
+**Example:** `slk personal store backup ./backup.db`
 
-### `slack store restore`
+### `slk store restore`
 
 put a backup in place of the store; the store it replaces is kept beside it, never deleted. Given a rollback copy (backups/<store>-rollback-schema-<version>-<time>.db, kept for a day before an upgrade older tools cannot open), put its tables back in the store and return it to that version instead
 
 **Changes something on this computer only.**
 
 ```sh
-slack store restore <file>
+slk store restore <file>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `file` | required | a file `store backup` wrote, or a rollback copy; one written with --encrypt asks for its password. |
 
-**Returns:** store restore — path, restored_from, kept_at, schema, rolled_back, was, tables, rebuilt, and 1 more; every field: slack commands info store restore
+**Returns:** store restore — path, restored_from, kept_at, schema, rolled_back, was, tables, rebuilt, and 1 more; every field: slk commands info store restore
 
-**Example:** `slack personal store restore ./backup.db`
+**Example:** `slk personal store restore ./backup.db`
 
-### `slack store decrypt`
+### `slk store decrypt`
 
 open a file written with --encrypt into a new file; asks for its password
 
 **Changes something on this computer only.**
 
 ```sh
-slack store decrypt <file> [options]
+slk store decrypt <file> [options]
 ```
 
 | Argument | | What it is |
@@ -2363,36 +2363,36 @@ slack store decrypt <file> [options]
 |---|---|
 | `--output <file>` | the new file, readable only by you. |
 
-**Returns:** store decrypt — path, from, bytes; every field: slack commands info store decrypt
+**Returns:** store decrypt — path, from, bytes; every field: slk commands info store decrypt
 
-**Example:** `slack personal store decrypt ./backup.enc --output ./restored.db`
+**Example:** `slk personal store decrypt ./backup.enc --output ./restored.db`
 
-### `slack store repair`
+### `slk store repair`
 
 bring every table to this build's shape, deleting nothing: a table of the wrong shape is kept as a copy beside a new one
 
 **Changes something on this computer only.**
 
 ```sh
-slack store repair [options]
+slk store repair [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--dry-run` | say what it would do, and change nothing. |
 
-**Returns:** store repair — path, exists, dry_run, repaired, indexes_created, triggers_created, mismatches, foreign_key_violations, and 1 more; every field: slack commands info store repair
+**Returns:** store repair — path, exists, dry_run, repaired, indexes_created, triggers_created, mismatches, foreign_key_violations, and 1 more; every field: slk commands info store repair
 
-**Example:** `slack personal store repair --dry-run`
+**Example:** `slk personal store repair --dry-run`
 
-### `slack store reset`
+### `slk store reset`
 
 back the store up beside itself, then delete it and start an empty one at this build's schema; asks first, or --yes
 
 **Changes something on this computer only.**
 
 ```sh
-slack store reset [options]
+slk store reset [options]
 ```
 
 | Option | What it does |
@@ -2400,78 +2400,78 @@ slack store reset [options]
 | `--no-backup` | delete the store without backing it up first. |
 | `--dry-run` | list every table it would empty, with its rows, and delete nothing. |
 
-**Returns:** store reset — path, exists, reset, dry_run, files, bytes, schema, tables, and 4 more; every field: slack commands info store reset
+**Returns:** store reset — path, exists, reset, dry_run, files, bytes, schema, tables, and 4 more; every field: slk commands info store reset
 
-**Example:** `slack personal store reset`
+**Example:** `slk personal store reset`
 
-### `slack store copies`
+### `slk store copies`
 
 the tables `store repair` kept as copies
 
-#### `slack store copies delete`
+#### `slk store copies delete`
 
 delete one copy `store repair` kept, named exactly; refuses any other table
 
 **Changes something on this computer only.**
 
 ```sh
-slack store copies delete <name>
+slk store copies delete <name>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `name` | required | the copy's name, as `store repair` printed it. |
 
-**Returns:** store copy removal — path, deleted; every field: slack commands info store copies delete
+**Returns:** store copy removal — path, deleted; every field: slk commands info store copies delete
 
-**Example:** `slack personal store copies delete messages_copy_1`
+**Example:** `slk personal store copies delete messages_copy_1`
 
-### `slack store tables`
+### `slk store tables`
 
 the tables of the local store
 
-#### `slack store tables list`
+#### `slk store tables list`
 
 every table of the local archive: its kind (data, search index, part of a search index, internal) and its rows, a search index's rows not counted; --full adds each table's size on disk, which reads the whole file (about ten seconds for 3 GB); changes nothing
 
 ```sh
-slack store tables list [query]
+slk store tables list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** store table — name, kind, rows, bytes; every field: slack commands info store tables list
+**Returns:** store table — name, kind, rows, bytes; every field: slk commands info store tables list
 
-**Example:** `slack personal store tables list`, `slack personal store tables list kind:data`, `slack personal store tables list --full --json`
+**Example:** `slk personal store tables list`, `slk personal store tables list kind:data`, `slk personal store tables list --full --json`
 
-### `slack store recover`
+### `slk store recover`
 
 check every page and search index of the store, say what is damaged, what it means and the commands that recover it; changes nothing
 
-#### `slack store recover run`
+#### `slk store recover run`
 
 copy every readable row into a new file with the sqlite3 program, rebuild the search indexes, mentions and vector index, check it, and put it in place of the store; the damaged file is kept beside it. Refuses while a WireCat timer or process has the store
 
 **Changes something on this computer only.**
 
 ```sh
-slack store recover run
+slk store recover run
 ```
 
-**Example:** `slack personal store recover run`
+**Example:** `slk personal store recover run`
 
-## `slack conversations`
+## `slk conversations`
 
 the conversations inside a chat, found in the stored messages by replies, mentions and who wrote next
 
-### `slack conversations list`
+### `slk conversations list`
 
 a chat's conversations, the newest first: when, how many messages, how many people
 
 ```sh
-slack conversations list <chat> [query] [options]
+slk conversations list <chat> [query] [options]
 ```
 
 | Argument | | What it is |
@@ -2483,16 +2483,16 @@ slack conversations list <chat> [query] [options]
 |---|---|
 | `--limit <n>` | how many. |
 
-**Returns:** conversation — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 1 more; every field: slack commands info conversations list
+**Returns:** conversation — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 1 more; every field: slk commands info conversations list
 
-**Example:** `slack personal conversations list "Book club"`
+**Example:** `slk personal conversations list "Book club"`
 
-### `slack conversations show`
+### `slk conversations show`
 
 one conversation's messages, oldest first — by its id, or the one a message is in
 
 ```sh
-slack conversations show <conversation> [message]
+slk conversations show <conversation> [message]
 ```
 
 | Argument | | What it is |
@@ -2500,16 +2500,16 @@ slack conversations show <conversation> [message]
 | `conversation` | required | a conversation id from `conversations list`; or a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…), with a message. |
 | `message` | optional | a message id in that chat: show the conversation it is in. |
 
-**Returns:** conversation details — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 40 more; every field: slack commands info conversations show
+**Returns:** conversation details — id, chat, first_message, started_at, ended_at, messages_count, senders_count, built_at, and 40 more; every field: slk commands info conversations show
 
-**Example:** `slack personal conversations show "Book club" 101`
+**Example:** `slk personal conversations show "Book club" 101`
 
-### `slack conversations related`
+### `slk conversations related`
 
 the conversations nearest in meaning to the one a message is in, in every built chat, best first — from the vectors `conversations embed` stored; runs no model
 
 ```sh
-slack conversations related <chat> <message> [options]
+slk conversations related <chat> <message> [options]
 ```
 
 | Argument | | What it is |
@@ -2525,16 +2525,16 @@ slack conversations related <chat> <message> [options]
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 
-**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in, and 3 more; every field: slack commands info conversations related
+**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in, and 3 more; every field: slk commands info conversations related
 
-**Example:** `slack personal conversations related "Book club" 101`
+**Example:** `slk personal conversations related "Book club" 101`
 
-### `slack conversations status`
+### `slk conversations status`
 
 how fresh each built chat's conversations and vectors are: messages the build has not seen, chunks with a current, stale or missing vector
 
 ```sh
-slack conversations status [options]
+slk conversations status [options]
 ```
 
 | Option | What it does |
@@ -2545,20 +2545,20 @@ slack conversations status [options]
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 
-**Returns:** conversation readiness — chat, model, state, graph, pending, vectors; every field: slack commands info conversations status
+**Returns:** conversation readiness — chat, model, state, graph, pending, vectors; every field: slk commands info conversations status
 
-**Example:** `slack personal conversations status`
+**Example:** `slk personal conversations status`
 
-### `slack conversations batches`
+### `slk conversations batches`
 
 windows of a chat for your own AI agent to link: which earlier message each one answers
 
-#### `slack conversations batches status`
+#### `slk conversations batches status`
 
 how many messages still wait for an answer, in how many batches, and how much text
 
 ```sh
-slack conversations batches status [options]
+slk conversations batches status [options]
 ```
 
 | Option | What it does |
@@ -2566,16 +2566,16 @@ slack conversations batches status [options]
 | `--chat <chat>` | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
 
-**Returns:** conversation batch status — chat, messages, characters, batches, tokens_estimate; every field: slack commands info conversations batches status
+**Returns:** conversation batch status — chat, messages, characters, batches, tokens_estimate; every field: slk commands info conversations batches status
 
-**Example:** `slack personal conversations batches status --chat "Book club"`
+**Example:** `slk personal conversations batches status --chat "Book club"`
 
-#### `slack conversations batches show`
+#### `slk conversations batches show`
 
 the next window to answer, with the messages before it; message text goes to stdout only
 
 ```sh
-slack conversations batches show [options]
+slk conversations batches show [options]
 ```
 
 | Option | What it does |
@@ -2583,22 +2583,22 @@ slack conversations batches show [options]
 | `--chat <chat>` | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `--size <n>` | messages to answer per batch, 10–200; 50 by default. |
 
-**Returns:** conversation batch — batch, chat, messages, remaining; every field: slack commands info conversations batches show
+**Returns:** conversation batch — batch, chat, messages, remaining; every field: slk commands info conversations batches show
 
-**Example:** `slack personal conversations batches show --chat "Book club"`
+**Example:** `slk personal conversations batches show --chat "Book club"`
 
-### `slack conversations links`
+### `slk conversations links`
 
 message links and the conversations derived from them
 
-#### `slack conversations links rebuild`
+#### `slk conversations links rebuild`
 
 find a chat's conversations in what the store holds, replacing the last build; without --chat, every chat that changed since its build and every group never built; never asks the messenger
 
 **Sends text to an outside service.**
 
 ```sh
-slack conversations links rebuild [options]
+slk conversations links rebuild [options]
 ```
 
 | Option | What it does |
@@ -2613,36 +2613,36 @@ slack conversations links rebuild [options]
 | `--max-tokens <n>` | analysis input/output reservation cap per run; default 100000. |
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 
-**Returns:** conversation build — chat, messages, links, conversations, built_at, rules_version, model, model_available, and 10 more; every field: slack commands info conversations links rebuild
+**Returns:** conversation build — chat, messages, links, conversations, built_at, rules_version, model, model_available, and 10 more; every field: slk commands info conversations links rebuild
 
-**Example:** `slack personal conversations links rebuild --chat "Book club"`
+**Example:** `slk personal conversations links rebuild --chat "Book club"`
 
-#### `slack conversations links add`
+#### `slk conversations links add`
 
 store your agent's answer to a batch, read as JSON from stdin: { "model", "answers": [{ "message", "parent", "confidence" }] }; all or nothing
 
 **Changes something on this computer only.**
 
 ```sh
-slack conversations links add [options]
+slk conversations links add [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--batch <id>` | the batch id `conversations batches show` printed. |
 
-**Returns:** conversation change — chat, stored, cleared; every field: slack commands info conversations links add
+**Returns:** conversation change — chat, stored, cleared; every field: slk commands info conversations links add
 
-**Example:** `slack personal conversations links add --batch "$batch"`
+**Example:** `slk personal conversations links add --batch "$batch"`
 
-#### `slack conversations links clear`
+#### `slk conversations links clear`
 
 drop your agent's answers for a chat, or only one model's; messages are never touched
 
 **Changes something on this computer only.**
 
 ```sh
-slack conversations links clear [options]
+slk conversations links clear [options]
 ```
 
 | Option | What it does |
@@ -2650,20 +2650,20 @@ slack conversations links clear [options]
 | `--chat <chat>` | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `--answer-model <model>` | only the stored answers this model gave. |
 
-**Returns:** conversation change — chat, stored, cleared; every field: slack commands info conversations links clear
+**Returns:** conversation change — chat, stored, cleared; every field: slk commands info conversations links clear
 
-**Example:** `slack personal conversations links clear --chat "Book club"`
+**Example:** `slk personal conversations links clear --chat "Book club"`
 
-### `slack conversations embeddings`
+### `slk conversations embeddings`
 
 stored conversation vectors
 
-#### `slack conversations embeddings status`
+#### `slk conversations embeddings status`
 
 how many chunks of a chat have a vector of the model, how many are left, and what is left costs
 
 ```sh
-slack conversations embeddings status [options]
+slk conversations embeddings status [options]
 ```
 
 | Option | What it does |
@@ -2674,18 +2674,18 @@ slack conversations embeddings status [options]
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 
-**Returns:** conversation embedding status — chat, model, chunks, embedded, left, estimate_seconds, tokens_at_most, price_at_most; every field: slack commands info conversations embeddings status
+**Returns:** conversation embedding status — chat, model, chunks, embedded, left, estimate_seconds, tokens_at_most, price_at_most; every field: slk commands info conversations embeddings status
 
-**Example:** `slack personal conversations embeddings status --chat "Book club"`
+**Example:** `slk personal conversations embeddings status --chat "Book club"`
 
-#### `slack conversations embeddings clear`
+#### `slk conversations embeddings clear`
 
 drop a chat's conversation and message vectors, or only one model's; messages and conversations are never touched
 
 **Changes something on this computer only.**
 
 ```sh
-slack conversations embeddings clear [options]
+slk conversations embeddings clear [options]
 ```
 
 | Option | What it does |
@@ -2696,18 +2696,18 @@ slack conversations embeddings clear [options]
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 
-**Returns:** conversation change — chat, stored, cleared; every field: slack commands info conversations embeddings clear
+**Returns:** conversation change — chat, stored, cleared; every field: slk commands info conversations embeddings clear
 
-**Example:** `slack personal conversations embeddings clear --chat "Book club"`
+**Example:** `slk personal conversations embeddings clear --chat "Book club"`
 
-### `slack conversations rebuild`
+### `slk conversations rebuild`
 
 build, then embed with the model on this machine, the chats that changed since their build and the group chats never built — or only --chat; with the default model, also each message on its own, which `search messages --discover` reads; bounded per run, so run it again for the rest; never asks the messenger, downloads no model and sends no text anywhere
 
 **Changes something on this computer only.**
 
 ```sh
-slack conversations rebuild [options]
+slk conversations rebuild [options]
 ```
 
 | Option | What it does |
@@ -2716,38 +2716,38 @@ slack conversations rebuild [options]
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
 
-**Returns:** conversation preparation — model, model_available, built, embedded, left, messages; every field: slack commands info conversations rebuild
+**Returns:** conversation preparation — model, model_available, built, embedded, left, messages; every field: slk commands info conversations rebuild
 
-**Example:** `slack personal conversations rebuild --max-chats 5`
+**Example:** `slk personal conversations rebuild --max-chats 5`
 
-### `slack conversations consents`
+### `slk conversations consents`
 
 remembered analysis permissions for this account's chats and provider endpoints
 
-#### `slack conversations consents list`
+#### `slk conversations consents list`
 
 which chats and provider endpoints you allowed to analyse, and when
 
 ```sh
-slack conversations consents list [query]
+slk conversations consents list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** analysis consent — chat, provider, at; every field: slack commands info conversations consents list
+**Returns:** analysis consent — chat, provider, at; every field: slk commands info conversations consents list
 
-**Example:** `slack personal conversations consents list`
+**Example:** `slk personal conversations consents list`
 
-#### `slack conversations consents remove`
+#### `slk conversations consents remove`
 
 forget analysis permissions so the next analysis asks again
 
 **Changes something on this computer only.**
 
 ```sh
-slack conversations consents remove [options]
+slk conversations consents remove [options]
 ```
 
 | Option | What it does |
@@ -2755,18 +2755,18 @@ slack conversations consents remove [options]
 | `--chat <chat>` | revoke only this chat's consents; defaults to every chat. |
 | `--consent-provider <identity>` | exact provider identity from consents list; defaults to every provider. |
 
-**Returns:** analysis consent revocation — revoked; every field: slack commands info conversations consents remove
+**Returns:** analysis consent revocation — revoked; every field: slk commands info conversations consents remove
 
-**Example:** `slack personal conversations consents remove --chat "Book club"`
+**Example:** `slk personal conversations consents remove --chat "Book club"`
 
-### `slack conversations embed`
+### `slk conversations embed`
 
 compute a vector for each chunk of a chat's conversations for search by meaning — on this machine, or with --embedding-provider through a service and your key; resumes where it stopped; without --chat, every built chat with chunks left, on this machine only
 
 **Sends text to an outside service.**
 
 ```sh
-slack conversations embed [options]
+slk conversations embed [options]
 ```
 
 | Option | What it does |
@@ -2783,22 +2783,22 @@ slack conversations embed [options]
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given, and no limit with --chat. |
 
-**Returns:** conversation embedding — chat, model, embedded, skipped, model_available, built, left, messages; every field: slack commands info conversations embed
+**Returns:** conversation embedding — chat, model, embedded, skipped, model_available, built, left, messages; every field: slk commands info conversations embed
 
-**Example:** `slack personal conversations embed --chat "Book club"`
+**Example:** `slk personal conversations embed --chat "Book club"`
 
-## `slack attachments`
+## `slk attachments`
 
 the files of stored messages: their text in the local store, where search finds it
 
-### `slack attachments extract`
+### `slk attachments extract`
 
 read the text of downloaded files — text, PDF/DOCX text layers, ODT/ODS/XLSX/PPTX/EPUB — into the local store, where search finds them
 
 **Changes something on this computer only.**
 
 ```sh
-slack attachments extract [options]
+slk attachments extract [options]
 ```
 
 | Option | What it does |
@@ -2812,16 +2812,16 @@ slack attachments extract [options]
 | `--ocr` | explicitly call models.ocr for bulk image and scanned-PDF text extraction. |
 | `--concurrency <n>` | remote: requests at once (default: 4). |
 
-**Returns:** attachment extraction — extracted, failed, needs_agent, complete, unchanged, not_downloaded, unsupported, engines_missing, and 15 more; every field: slack commands info attachments extract
+**Returns:** attachment extraction — extracted, failed, needs_agent, complete, unchanged, not_downloaded, unsupported, engines_missing, and 15 more; every field: slk commands info attachments extract
 
-**Example:** `slack personal attachments extract --chat "Book club" --limit 10`
+**Example:** `slk personal attachments extract --chat "Book club" --limit 10`
 
-### `slack attachments list`
+### `slk attachments list`
 
 files of stored messages, newest first: where each was saved and whether its text is held — never the text
 
 ```sh
-slack attachments list [query] [options]
+slk attachments list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -2834,16 +2834,16 @@ slack attachments list [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** attachment — kind, message, position, url, name, title, mime, size, and 8 more; every field: slack commands info attachments list
+**Returns:** attachment — kind, message, position, url, name, title, mime, size, and 8 more; every field: slk commands info attachments list
 
-**Example:** `slack personal attachments list --limit 10`
+**Example:** `slk personal attachments list --limit 10`
 
-### `slack attachments show`
+### `slk attachments show`
 
 read a bounded chunk of one retained attachment; JSON includes base64 bytes
 
 ```sh
-slack attachments show <chat> [message] [options]
+slk attachments show <chat> [message] [options]
 ```
 
 | Argument | | What it is |
@@ -2859,18 +2859,18 @@ slack attachments show <chat> [message] [options]
 | `--chunk-bytes <n>` | bytes to return, 1–1048576 (default524288). |
 | `--expected-fingerprint <hash>` | require the whole file SHA-256 from the preceding chunk. |
 
-**Returns:** attachment bytes — ref, attachment, name, mime_type, total_bytes, sha256, offset_bytes, read_bytes, and 4 more; every field: slack commands info attachments show
+**Returns:** attachment bytes — ref, attachment, name, mime_type, total_bytes, sha256, offset_bytes, read_bytes, and 4 more; every field: slk commands info attachments show
 
-**Example:** `slack personal attachments show "Book club" 101 --attachment 1`
+**Example:** `slk personal attachments show "Book club" 101 --attachment 1`
 
-### `slack attachments update`
+### `slk attachments update`
 
 keep the text an agent read from a file — a scan, a photo — so search finds it; nothing is sent
 
 **Changes something on this computer only.**
 
 ```sh
-slack attachments update <chat> [message] [options]
+slk attachments update <chat> [message] [options]
 ```
 
 | Argument | | What it is |
@@ -2883,18 +2883,18 @@ slack attachments update <chat> [message] [options]
 | `--attachment <n>` | which file of the message, from 1; needed when it has more than one. |
 | `--text-file <path>` | read the text from this file; - or none reads stdin. |
 
-**Returns:** attachment text change — ref, attachment, origin, chars, replaced, extractor, text; every field: slack commands info attachments update
+**Returns:** attachment text change — ref, attachment, origin, chars, replaced, extractor, text; every field: slk commands info attachments update
 
-**Example:** `slack personal attachments update "Book club" 101 --text-file ./transcript.txt`
+**Example:** `slk personal attachments update "Book club" 101 --text-file ./transcript.txt`
 
-### `slack attachments download`
+### `slk attachments download`
 
 archive media from selected chats; verify and keep existing copies
 
 **Changes something on this computer only.**
 
 ```sh
-slack attachments download <dir> [options]
+slk attachments download <dir> [options]
 ```
 
 | Argument | | What it is |
@@ -2907,38 +2907,38 @@ slack attachments download <dir> [options]
 | `--since-time <time>` | include messages from this time: ISO 8601, a date, today, yesterday, or 2h, 7d ago. |
 | `--pause <duration>` | pause between history pages. Default: `1s`. |
 
-**Returns:** media archive — directory, chats, saved, existing, complete; every field: slack commands info attachments download
+**Returns:** media archive — directory, chats, saved, existing, complete; every field: slk commands info attachments download
 
-**Example:** `slack personal attachments download ./media-archive`
+**Example:** `slk personal attachments download ./media-archive`
 
-### `slack attachments check`
+### `slk attachments check`
 
 rehash all archived files without connecting to the messenger
 
 ```sh
-slack attachments check <dir>
+slk attachments check <dir>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `dir` | required | archive directory. |
 
-**Returns:** media archive check — valid, checked, files; every field: slack commands info attachments check
+**Returns:** media archive check — valid, checked, files; every field: slk commands info attachments check
 
-**Example:** `slack personal attachments check ./media-archive`
+**Example:** `slk personal attachments check ./media-archive`
 
-### `slack attachments jobs`
+### `slk attachments jobs`
 
 daily media archive timers for this profile
 
-#### `slack attachments jobs install`
+#### `slk attachments jobs install`
 
 install a Linux daily archive timer for this directory; starts nothing
 
 **Changes something on this computer only.**
 
 ```sh
-slack attachments jobs install <dir> [options]
+slk attachments jobs install <dir> [options]
 ```
 
 | Argument | | What it is |
@@ -2952,88 +2952,88 @@ slack attachments jobs install <dir> [options]
 | `--chat <chat>` | only this chat; repeat for more; a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). Default: ``. |
 | `--since-time <time>` | include messages from this time: ISO 8601, a date, today, yesterday, or 2h, 7d ago; fixed when installed. |
 
-**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slack commands info attachments jobs install
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slk commands info attachments jobs install
 
-**Example:** `slack personal attachments jobs install ./media-archive`
+**Example:** `slk personal attachments jobs install ./media-archive`
 
-#### `slack attachments jobs start`
+#### `slk attachments jobs start`
 
 enable the installed archive timer at login and start its daily schedule
 
 **Changes something on this computer only.**
 
 ```sh
-slack attachments jobs start <dir>
+slk attachments jobs start <dir>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slack commands info attachments jobs start
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slk commands info attachments jobs start
 
-**Example:** `slack personal attachments jobs start ./media-archive`
+**Example:** `slk personal attachments jobs start ./media-archive`
 
-#### `slack attachments jobs stop`
+#### `slk attachments jobs stop`
 
 disable the archive timer; a download already running finishes
 
 **Changes something on this computer only.**
 
 ```sh
-slack attachments jobs stop <dir>
+slk attachments jobs stop <dir>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slack commands info attachments jobs stop
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slk commands info attachments jobs stop
 
-**Example:** `slack personal attachments jobs stop ./media-archive`
+**Example:** `slk personal attachments jobs stop ./media-archive`
 
-#### `slack attachments jobs status`
+#### `slk attachments jobs status`
 
 show whether this directory's archive timer is installed and active
 
 ```sh
-slack attachments jobs status <dir>
+slk attachments jobs status <dir>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slack commands info attachments jobs status
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slk commands info attachments jobs status
 
-**Example:** `slack personal attachments jobs status ./media-archive`
+**Example:** `slk personal attachments jobs status ./media-archive`
 
-#### `slack attachments jobs uninstall`
+#### `slk attachments jobs uninstall`
 
 remove this directory's stopped archive timer; keep archived files
 
 **Changes something on this computer only.**
 
 ```sh
-slack attachments jobs uninstall <dir>
+slk attachments jobs uninstall <dir>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `dir` | required | archive directory, used with the same profile as install. |
 
-**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slack commands info attachments jobs uninstall
+**Returns:** media archive timer — name, installed, service_path, timer_path, active, action; every field: slk commands info attachments jobs uninstall
 
-**Example:** `slack personal attachments jobs uninstall ./media-archive`
+**Example:** `slk personal attachments jobs uninstall ./media-archive`
 
-### `slack attachments move`
+### `slk attachments move`
 
 move older images into another verified archive; remember their new locations
 
 **Changes something on this computer only.**
 
 ```sh
-slack attachments move <dir> <archive-dir> [options]
+slk attachments move <dir> <archive-dir> [options]
 ```
 
 | Argument | | What it is |
@@ -3046,22 +3046,22 @@ slack attachments move <dir> <archive-dir> [options]
 | `--before-time <time>` | move images whose message date is before this time: ISO 8601, a date (its start), today, or 7d ago. |
 | `--dry-run` | show counts and bytes without moving files or creating the destination. |
 
-**Returns:** media archive move — directory, archive_directory, before_time, selected, selected_bytes, moved, moved_bytes, already_archived, and 3 more; every field: slack commands info attachments move
+**Returns:** media archive move — directory, archive_directory, before_time, selected, selected_bytes, moved, moved_bytes, already_archived, and 3 more; every field: slk commands info attachments move
 
-**Example:** `slack personal attachments move ./media-archive ./older-images --before-time 2026-10-01T00:00:00Z --dry-run`
+**Example:** `slk personal attachments move ./media-archive ./older-images --before-time 2026-10-01T00:00:00Z --dry-run`
 
-## `slack tags`
+## `slk tags`
 
 your own labels on chats, people, messages and tasks, kept in the local store and never sent; tag: in a search finds them
 
-### `slack tags rebuild`
+### `slk tags rebuild`
 
 derive local group/channel tags from cached metadata using keyword rules
 
 **Changes something on this computer only.**
 
 ```sh
-slack tags rebuild [options]
+slk tags rebuild [options]
 ```
 
 | Option | What it does |
@@ -3071,18 +3071,18 @@ slack tags rebuild [options]
 | `--sync-first` | read current descriptions from the messenger before classifying. |
 | `--dry-run` | preview cached classification without changing the store. |
 
-**Returns:** automatic tags — items, has_more, dry_run; every field: slack commands info tags rebuild
+**Returns:** automatic tags — items, has_more, dry_run; every field: slk commands info tags rebuild
 
-**Example:** `slack personal tags rebuild --chat "Book club" --dry-run`
+**Example:** `slk personal tags rebuild --chat "Book club" --dry-run`
 
-### `slack tags add`
+### `slk tags add`
 
 put tags on one chat, person, message or task
 
 **Changes something on this computer only.**
 
 ```sh
-slack tags add <tag> [options]
+slk tags add <tag> [options]
 ```
 
 | Argument | | What it is |
@@ -3096,18 +3096,18 @@ slack tags add <tag> [options]
 | `--message <message>` | the message to tag: its id in --chat, or a msg: locator alone. |
 | `--task <id>` | the task to tag: its id or key, as tasks list shows it. |
 
-**Returns:** tag change — target, unchanged, added, removed; every field: slack commands info tags add
+**Returns:** tag change — target, unchanged, added, removed; every field: slk commands info tags add
 
-**Example:** `slack personal tags add reading --chat "Book club"`
+**Example:** `slk personal tags add reading --chat "Book club"`
 
-### `slack tags remove`
+### `slk tags remove`
 
 take tags off one chat, person, message or task
 
 **Changes something on this computer only.**
 
 ```sh
-slack tags remove <tag> [options]
+slk tags remove <tag> [options]
 ```
 
 | Argument | | What it is |
@@ -3122,36 +3122,36 @@ slack tags remove <tag> [options]
 | `--task <id>` | the task to untag: its id or key, as tasks list shows it. |
 | `--claim <claim>` | remove only this ownership claim: manual or auto. |
 
-**Returns:** tag change — target, unchanged, added, removed; every field: slack commands info tags remove
+**Returns:** tag change — target, unchanged, added, removed; every field: slk commands info tags remove
 
-**Example:** `slack personal tags remove reading --chat "Book club"`
+**Example:** `slk personal tags remove reading --chat "Book club"`
 
-### `slack tags list`
+### `slk tags list`
 
 what is tagged: this account's chats, messages and tasks, and the people of its messenger
 
 ```sh
-slack tags list [query]
+slk tags list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** tagging — tag, type, target, name, sources, created_at; every field: slack commands info tags list
+**Returns:** tagging — tag, type, target, name, sources, created_at; every field: slk commands info tags list
 
-**Example:** `slack personal tags list`, `slack personal tags list tag:reading`
+**Example:** `slk personal tags list`, `slk personal tags list tag:reading`
 
-## `slack mentions`
+## `slk mentions`
 
 phones, e-mail, links, documents, names and addresses in stored messages
 
-### `slack mentions list`
+### `slk mentions list`
 
 this account's mentions matching the query, newest first; --new for those found since the last review
 
 ```sh
-slack mentions list [query] [options]
+slk mentions list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3164,16 +3164,16 @@ slack mentions list [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--new` | undecided mentions found since the last --new run that showed them all; the first run shows every one. |
 
-**Returns:** mention — id, kind, value, domain, confidence, status, field, author, and 5 more; every field: slack commands info mentions list
+**Returns:** mention — id, kind, value, domain, confidence, status, field, author, and 5 more; every field: slk commands info mentions list
 
-**Example:** `slack personal mentions list kind:phone`, `slack personal mentions list domain:google.com`, `slack personal mentions list --new`
+**Example:** `slk personal mentions list kind:phone`, `slk personal mentions list domain:google.com`, `slk personal mentions list --new`
 
-### `slack mentions domains`
+### `slk mentions domains`
 
 the sites this account's links point to, most linked first, with chats and first and last time
 
 ```sh
-slack mentions domains [query] [options]
+slk mentions domains [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3185,16 +3185,16 @@ slack mentions domains [query] [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 
-**Returns:** mention domain — domain, links, chats, first_at, last_at; every field: slack commands info mentions domains
+**Returns:** mention domain — domain, links, chats, first_at, last_at; every field: slk commands info mentions domains
 
-**Example:** `slack personal mentions domains`, `slack personal mentions domains status:found`
+**Example:** `slk personal mentions domains`, `slk personal mentions domains status:found`
 
-### `slack mentions places`
+### `slk mentions places`
 
 confirmed addresses, in every account, most mentioned first; `mentions confirm <id>` adds one
 
 ```sh
-slack mentions places [options]
+slk mentions places [options]
 ```
 
 | Option | What it does |
@@ -3202,34 +3202,34 @@ slack mentions places [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 
-**Returns:** place — id, address, mentions; every field: slack commands info mentions places
+**Returns:** place — id, address, mentions; every field: slk commands info mentions places
 
-**Example:** `slack personal mentions places`
+**Example:** `slk personal mentions places`
 
-### `slack mentions show`
+### `slk mentions show`
 
 one mention, the text around it, and how many other places hold its value
 
 ```sh
-slack mentions show <id>
+slk mentions show <id>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `id` | required | the mention's id, from mentions list. |
 
-**Returns:** mention details — id, kind, value, domain, confidence, status, field, author, and 9 more; every field: slack commands info mentions show
+**Returns:** mention details — id, kind, value, domain, confidence, status, field, author, and 9 more; every field: slk commands info mentions show
 
-**Example:** `slack personal mentions show 12`
+**Example:** `slk personal mentions show 12`
 
-### `slack mentions confirm`
+### `slk mentions confirm`
 
 say what a mention is: a phone's owner everywhere it is written, the stored document, who a name means, an address as a place
 
 **Changes something on this computer only.**
 
 ```sh
-slack mentions confirm <id> [person] [options]
+slk mentions confirm <id> [person] [options]
 ```
 
 | Argument | | What it is |
@@ -3242,18 +3242,18 @@ slack mentions confirm <id> [person] [options]
 | `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** mention decision — kind, value, status, target, mentions, proposal; every field: slack commands info mentions confirm
+**Returns:** mention decision — kind, value, status, target, mentions, proposal; every field: slk commands info mentions confirm
 
-**Example:** `slack personal mentions confirm 12 person:7`, `slack personal mentions confirm 15`, `slack personal mentions confirm 31 person:7 --all-in-chat`
+**Example:** `slk personal mentions confirm 12 person:7`, `slk personal mentions confirm 15`, `slk personal mentions confirm 31 person:7 --all-in-chat`
 
-### `slack mentions reject`
+### `slk mentions reject`
 
 not a real mention: dismiss its value everywhere and on later syncs; a name only where it is
 
 **Changes something on this computer only.**
 
 ```sh
-slack mentions reject <id> [options]
+slk mentions reject <id> [options]
 ```
 
 | Argument | | What it is |
@@ -3265,56 +3265,56 @@ slack mentions reject <id> [options]
 | `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** mention decision — kind, value, status, target, mentions, proposal; every field: slack commands info mentions reject
+**Returns:** mention decision — kind, value, status, target, mentions, proposal; every field: slk commands info mentions reject
 
-**Example:** `slack personal mentions reject 12`
+**Example:** `slk personal mentions reject 12`
 
-### `slack mentions rebuild`
+### `slk mentions rebuild`
 
 find the mentions of every stored message again; decisions are kept
 
 **Changes something on this computer only.**
 
 ```sh
-slack mentions rebuild [kind]
+slk mentions rebuild [kind]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `kind` | optional | only this kind: person-name after people were added or renamed. One of: `phone`, `email`, `url`, `document`, `person-name`, `place`. |
 
-**Returns:** mention rebuild — messages, attachments, documents, notes, emails, mentions; every field: slack commands info mentions rebuild
+**Returns:** mention rebuild — messages, attachments, documents, notes, emails, mentions; every field: slk commands info mentions rebuild
 
-**Example:** `slack personal mentions rebuild`, `slack personal mentions rebuild person-name`
+**Example:** `slk personal mentions rebuild`, `slk personal mentions rebuild person-name`
 
-## `slack metadata`
+## `slk metadata`
 
 cached group/channel descriptions for local automatic tags
 
-### `slack metadata show`
+### `slk metadata show`
 
 a stored chat's cached description, as automatic tags read it
 
 ```sh
-slack metadata show [options]
+slk metadata show [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--chat <chat>` | a stored chat. |
 
-**Returns:** chat metadata — chat_id, metadata; every field: slack commands info metadata show
+**Returns:** chat metadata — chat_id, metadata; every field: slk commands info metadata show
 
-**Example:** `slack personal metadata show --chat 7`
+**Example:** `slk personal metadata show --chat 7`
 
-### `slack metadata sync`
+### `slk metadata sync`
 
 fetch group and channel descriptions again and cache them
 
 **Changes something on this computer only.**
 
 ```sh
-slack metadata sync [options]
+slk metadata sync [options]
 ```
 
 | Option | What it does |
@@ -3323,24 +3323,24 @@ slack metadata sync [options]
 | `--only-missing` | only chats with no metadata yet; without --chat, every stored group/channel. |
 | `--limit <n>` | process at most 1–500 chats; the configured limit if not given. |
 
-**Returns:** chat metadata refresh — chats, has_more; every field: slack commands info metadata sync
+**Returns:** chat metadata refresh — chats, has_more; every field: slk commands info metadata sync
 
-**Example:** `slack personal metadata sync --chat 7 --chat 8`, `slack personal metadata sync --only-missing --limit 20`
+**Example:** `slk personal metadata sync --chat 7 --chat 8`, `slk personal metadata sync --only-missing --limit 20`
 
-## `slack stats`
+## `slk stats`
 
 statistics about messages, chats and their authors
 
-### `slack stats messages`
+### `slk stats messages`
 
 message statistics from the local store
 
-#### `slack stats messages show`
+#### `slk stats messages show`
 
 how many stored messages match, by chat, sender, day or hour — the local store only; optionally fetches new messages with --sync-first
 
 ```sh
-slack stats messages show [query] [options]
+slk stats messages show [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3361,20 +3361,20 @@ slack stats messages show [query] [options]
 | `--exact` | bare words and quotes match their exact form only, as exact:word does; text: still matches every form. |
 | `--saved <name\|id>` | count what a saved search or an earlier run matches; options typed here replace its own. |
 
-**Returns:** message counts — by, total, rows; every field: slack commands info stats messages show
+**Returns:** message counts — by, total, rows; every field: slk commands info stats messages show
 
-**Example:** `slack personal stats messages show --chat "Book club" --by day`
+**Example:** `slk personal stats messages show --chat "Book club" --by day`
 
-#### `slack stats messages counters`
+#### `slk stats messages counters`
 
 per-counter observations and bounded remote refresh
 
-#### `slack stats messages counters show`
+#### `slk stats messages counters show`
 
 show saved counter values and their observation freshness
 
 ```sh
-slack stats messages counters show [query] [options]
+slk stats messages counters show [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3392,18 +3392,18 @@ slack stats messages counters show [query] [options]
 | `--limit <n>` | messages, 1–100; the configured limit if not given. |
 | `--max-age <duration>` | maximum fresh observation age; 24h by default. |
 
-**Returns:** counters — cutoff, max_age_ms, selection, rows; every field: slack commands info stats messages counters show
+**Returns:** counters — cutoff, max_age_ms, selection, rows; every field: slk commands info stats messages counters show
 
-**Example:** `slack personal stats messages counters show --chat "Book club" --limit 10`
+**Example:** `slk personal stats messages counters show --chat "Book club" --limit 10`
 
-#### `slack stats messages counters sync`
+#### `slk stats messages counters sync`
 
 read authoritative counters for bounded messages and update their local observations
 
 **Changes something on this computer only.**
 
 ```sh
-slack stats messages counters sync [query] [options]
+slk stats messages counters sync [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3423,16 +3423,16 @@ slack stats messages counters sync [query] [options]
 | `--sync-time <duration>` | remote refresh budget; 30s by default, maximum 5m. |
 | `--dry-run` | preview exact stored targets and counter capabilities without connecting. |
 
-**Returns:** counter refresh — dry_run, targets, counters, supported, unsupported, max_messages, time_ms, results, and 2 more; every field: slack commands info stats messages counters sync
+**Returns:** counter refresh — dry_run, targets, counters, supported, unsupported, max_messages, time_ms, results, and 2 more; every field: slk commands info stats messages counters sync
 
-**Example:** `slack personal stats messages counters sync --chat "Book club" --dry-run`
+**Example:** `slk personal stats messages counters sync --chat "Book club" --dry-run`
 
-#### `slack stats messages unanswered`
+#### `slk stats messages unanswered`
 
 oldest detected questions without an observed qualifying explicit reply
 
 ```sh
-slack stats messages unanswered [query] [options]
+slk stats messages unanswered [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3447,16 +3447,16 @@ slack stats messages unanswered [query] [options]
 | `--limit <n>` | report rows, 1–100; the configured limit if not given. |
 | `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
-**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: slack commands info stats messages unanswered
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: slk commands info stats messages unanswered
 
-**Example:** `slack personal stats messages unanswered chat:"Project room"`
+**Example:** `slk personal stats messages unanswered chat:"Project room"`
 
-#### `slack stats messages discussion`
+#### `slk stats messages discussion`
 
 viewed posts with little recorded discussion
 
 ```sh
-slack stats messages discussion [query] [options]
+slk stats messages discussion [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3470,16 +3470,16 @@ slack stats messages discussion [query] [options]
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--limit <n>` | report rows, 1–100; the configured limit if not given. |
 
-**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: slack commands info stats messages discussion
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: slk commands info stats messages discussion
 
-**Example:** `slack personal stats messages discussion chat:"Book club"`
+**Example:** `slk personal stats messages discussion chat:"Book club"`
 
-#### `slack stats messages responses`
+#### `slk stats messages responses`
 
 how long the owner took to answer (--who me), or the other side took to answer the owner (--who others), in one-to-one chats — the local store only. Several messages in a row followed by one answer count as one reply, timed from the first unanswered message; the day of a row is the day of the reply
 
 ```sh
-slack stats messages responses [query] [options]
+slk stats messages responses [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3493,16 +3493,16 @@ slack stats messages responses [query] [options]
 | `--timezone <zone>` | the IANA timezone for calendar days and date: bounds. |
 | `--source <accounts>` | every account of this messenger held in the store; personal, bots or all. |
 
-**Returns:** response times — who, replies, median_ms, p90_ms, mean_ms, buckets, rows; every field: slack commands info stats messages responses
+**Returns:** response times — who, replies, median_ms, p90_ms, mean_ms, buckets, rows; every field: slk commands info stats messages responses
 
-**Example:** `slack personal stats messages responses --who me --by day --timezone Europe/Madrid -- date>=30d`
+**Example:** `slk personal stats messages responses --who me --by day --timezone Europe/Madrid -- date>=30d`
 
-#### `slack stats messages waiting`
+#### `slk stats messages waiting`
 
 how many chats wait on the owner — the local store only: a one-to-one chat whose newest message is a question, or a group whose newest message mentions the owner or replies to them. Muted or archived one-to-one chats are left out, as inbox leaves them out; date: bounds the newest message's time
 
 ```sh
-slack stats messages waiting [query] [options]
+slk stats messages waiting [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3514,16 +3514,16 @@ slack stats messages waiting [query] [options]
 | `--timezone <zone>` | the IANA timezone for date: bounds. |
 | `--source <accounts>` | every account of this messenger held in the store; personal, bots or all. |
 
-**Returns:** waiting chats — chats, messages, oldest_at, by_kind; every field: slack commands info stats messages waiting
+**Returns:** waiting chats — chats, messages, oldest_at, by_kind; every field: slk commands info stats messages waiting
 
-**Example:** `slack personal stats messages waiting kind:private`
+**Example:** `slk personal stats messages waiting kind:private`
 
-#### `slack stats messages top`
+#### `slk stats messages top`
 
 rank stored messages by a measure or explainable score; counters are snapshots with per-field observation freshness
 
 ```sh
-slack stats messages top [query] [options]
+slk stats messages top [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3544,16 +3544,16 @@ slack stats messages top [query] [options]
 | `--limit <n>` | ranked rows, 1–100. |
 | `--saved <name\|id>` | run a saved query or ranking run; typed options replace stored options. |
 
-**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: slack commands info stats messages top
+**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: slk commands info stats messages top
 
-**Example:** `slack personal stats messages top chat:"Book club" --limit 10`
+**Example:** `slk personal stats messages top chat:"Book club" --limit 10`
 
-#### `slack stats messages evidence`
+#### `slk stats messages evidence`
 
 bounded messages, answer pairs or retention members from an exact drilldown selection
 
 ```sh
-slack stats messages evidence <message> [options]
+slk stats messages evidence <message> [options]
 ```
 
 | Argument | | What it is |
@@ -3567,20 +3567,20 @@ slack stats messages evidence <message> [options]
 | `--limit <n>` | evidence rows, 1–100; the configured limit if not given. |
 | `--cursor <cursor>` | continue the same component and stored-evidence fingerprint. |
 
-**Returns:** evidence — message, contribution, related, counters, person_ref, joined_at, cohort, checkpoints, and 2 more; every field: slack commands info stats messages evidence
+**Returns:** evidence — message, contribution, related, counters, person_ref, joined_at, cohort, checkpoints, and 2 more; every field: slk commands info stats messages evidence
 
-**Example:** `slack personal stats messages evidence "$message" --selection "$selection" --component reactions`
+**Example:** `slk personal stats messages evidence "$message" --selection "$selection" --component reactions`
 
-### `slack stats contacts`
+### `slk stats contacts`
 
 statistics about human authors
 
-#### `slack stats contacts responses`
+#### `slk stats contacts responses`
 
 counts and median/p90 latency for selected human answering identities
 
 ```sh
-slack stats contacts responses [query] [options]
+slk stats contacts responses [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3595,16 +3595,16 @@ slack stats contacts responses [query] [options]
 | `--limit <n>` | report rows, 1–100; the configured limit if not given. |
 | `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
-**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: slack commands info stats contacts responses
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: slk commands info stats contacts responses
 
-**Example:** `slack personal stats contacts responses chat:"Project room"`
+**Example:** `slk personal stats contacts responses chat:"Project room"`
 
-#### `slack stats contacts top`
+#### `slk stats contacts top`
 
 rank the human authors of stored messages by a measure or explainable score; counters are snapshots with per-field observation freshness
 
 ```sh
-slack stats contacts top [query] [options]
+slk stats contacts top [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3625,16 +3625,16 @@ slack stats contacts top [query] [options]
 | `--limit <n>` | ranked rows, 1–100. |
 | `--saved <name\|id>` | run a saved query or ranking run; typed options replace stored options. |
 
-**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: slack commands info stats contacts top
+**Returns:** ranking — target, measure, order, preset, weights, min_messages, message_kind, total, and 7 more; every field: slk commands info stats contacts top
 
-**Example:** `slack personal stats contacts top chat:"Book club" --limit 10`
+**Example:** `slk personal stats contacts top chat:"Book club" --limit 10`
 
-#### `slack stats contacts evidence`
+#### `slk stats contacts evidence`
 
 bounded messages, answer pairs or retention members from an exact drilldown selection
 
 ```sh
-slack stats contacts evidence <person> [options]
+slk stats contacts evidence <person> [options]
 ```
 
 | Argument | | What it is |
@@ -3648,20 +3648,20 @@ slack stats contacts evidence <person> [options]
 | `--limit <n>` | evidence rows, 1–100; the configured limit if not given. |
 | `--cursor <cursor>` | continue the same component and stored-evidence fingerprint. |
 
-**Returns:** evidence — message, contribution, related, counters, person_ref, joined_at, cohort, checkpoints, and 2 more; every field: slack commands info stats contacts evidence
+**Returns:** evidence — message, contribution, related, counters, person_ref, joined_at, cohort, checkpoints, and 2 more; every field: slk commands info stats contacts evidence
 
-**Example:** `slack personal stats contacts evidence 101 --selection "$selection" --component messages`
+**Example:** `slk personal stats contacts evidence 101 --selection "$selection" --component messages`
 
-### `slack stats chats`
+### `slk stats chats`
 
 statistics about one chat
 
-#### `slack stats chats show`
+#### `slk stats chats show`
 
 a group's or channel's numbers for a period: messages, active members, replies, reactions, questions answered, joins and leaves — counted from the local store; joins and leaves are asked of the messenger
 
 ```sh
-slack stats chats show <chat> [options]
+slk stats chats show <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -3674,16 +3674,16 @@ slack stats chats show <chat> [options]
 | `--by <group>` | also one row per calendar day or week (weeks start on Monday). |
 | `--timezone <zone>` | the IANA timezone for calendar days. |
 
-**Returns:** chat stats — chat, since, until, complete, completeness, messages, senders, replies, and 10 more; every field: slack commands info stats chats show
+**Returns:** chat stats — chat, since, until, complete, completeness, messages, senders, replies, and 10 more; every field: slk commands info stats chats show
 
-**Example:** `slack personal stats chats show "Book club"`
+**Example:** `slk personal stats chats show "Book club"`
 
-#### `slack stats chats newcomers`
+#### `slk stats chats newcomers`
 
 known-join members and their help within a join window
 
 ```sh
-slack stats chats newcomers <chat> [options]
+slk stats chats newcomers <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -3700,16 +3700,16 @@ slack stats chats newcomers <chat> [options]
 | `--limit <n>` | report rows, 1–100; the configured limit if not given. |
 | `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
-**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: slack commands info stats chats newcomers
+**Returns:** admin report — report, cutoff, total, summary, quality, rows; every field: slk commands info stats chats newcomers
 
-**Example:** `slack personal stats chats newcomers "Book club"`
+**Example:** `slk personal stats chats newcomers "Book club"`
 
-#### `slack stats chats retention`
+#### `slk stats chats retention`
 
 joining cohorts and observed checkpoint membership from saved roster observations
 
 ```sh
-slack stats chats retention <chat> [options]
+slk stats chats retention <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -3726,20 +3726,20 @@ slack stats chats retention <chat> [options]
 | `--timezone <zone>` | IANA timezone for joining cohorts. |
 | `--limit <n>` | cohorts and member evidence, 1–100. |
 
-**Returns:** retention — chat_ref, cutoff, since, until, checkpoints_ms, within_ms, by, timezone, and 5 more; every field: slack commands info stats chats retention
+**Returns:** retention — chat_ref, cutoff, since, until, checkpoints_ms, within_ms, by, timezone, and 5 more; every field: slk commands info stats chats retention
 
-**Example:** `slack personal stats chats retention "Book club"`
+**Example:** `slk personal stats chats retention "Book club"`
 
-### `slack stats tasks`
+### `slk stats tasks`
 
 task statistics
 
-#### `slack stats tasks show`
+#### `slk stats tasks show`
 
 tasks per chat, meeting or project: open now, and opened and closed in the period (created: in the query), with the median time to close and the mean age of the open ones
 
 ```sh
-slack stats tasks show [query] [options]
+slk stats tasks show [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3752,20 +3752,20 @@ slack stats tasks show [query] [options]
 | `--type <type>` | only this type: question, request, mention or promise. |
 | `--timezone <zone>` | the IANA timezone for calendar days in the period, such as created>=today. |
 
-**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 26 more; every field: slack commands info stats tasks show
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 26 more; every field: slk commands info stats tasks show
 
-**Next usually:** `slack tasks show <task>`, `slack tasks related <task>`, `slack tasks update <task>`
+**Next usually:** `slk tasks show <task>`, `slk tasks related <task>`, `slk tasks update <task>`
 
-**Example:** `slack personal stats tasks show -- chat:"Project room"`
+**Example:** `slk personal stats tasks show -- chat:"Project room"`
 
-### `slack stats charts`
+### `slk stats charts`
 
 a chart's data from a chat's statistics, and optionally a dark SVG or PNG image
 
 **Changes something on this computer only.**
 
 ```sh
-slack stats charts <chat> [options]
+slk stats charts <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -3780,20 +3780,20 @@ slack stats charts <chat> [options]
 | `--timezone <zone>` | the IANA timezone for calendar days. |
 | `--output <file>` | write a dark image to a new .svg or .png file. |
 
-**Returns:** chart — version, kind, title, x, series, unit, timezone, partial, and 2 more; every field: slack commands info stats charts
+**Returns:** chart — version, kind, title, x, series, unit, timezone, partial, and 2 more; every field: slk commands info stats charts
 
-**Example:** `slack personal stats charts "Book club" --output ./activity.svg`
+**Example:** `slk personal stats charts "Book club" --output ./activity.svg`
 
-## `slack tasks`
+## `slk tasks`
 
 what waits on you — unanswered questions, mentions, requests, promises — kept in the local store; review and serve add them
 
-### `slack tasks list`
+### `slk tasks list`
 
 tasks, oldest first, with their message or note source
 
 ```sh
-slack tasks list [query] [options]
+slk tasks list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3804,20 +3804,20 @@ slack tasks list [query] [options]
 |---|---|
 | `--limit <n>` | how many. |
 
-**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 26 more; every field: slack commands info tasks list
+**Returns:** task — ref, id, title, kind, state, created_at, key, description, and 26 more; every field: slk commands info tasks list
 
-**Next usually:** `slack tasks show <task>`, `slack tasks related <task>`, `slack tasks update <task>`
+**Next usually:** `slk tasks show <task>`, `slk tasks related <task>`, `slk tasks update <task>`
 
-**Example:** `slack personal tasks list --limit 10`
+**Example:** `slk personal tasks list --limit 10`
 
-### `slack tasks add`
+### `slk tasks add`
 
 add a task for a stored message or note — a promise, a request
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks add <message> [options]
+slk tasks add <message> [options]
 ```
 
 | Argument | | What it is |
@@ -3837,18 +3837,18 @@ slack tasks add <message> [options]
 | `--remind-time <time>` | when to look at it again: an ISO 8601 time, a date (its start), today, or 2h, 3d from now; none clears it. |
 | `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
 
-**Returns:** task created — id, source, source_kind, account, group, kind, state, origin, and 16 more; every field: slack commands info tasks add
+**Returns:** task created — id, source, source_kind, account, group, kind, state, origin, and 16 more; every field: slk commands info tasks add
 
-**Example:** `slack personal tasks add note:101 --type promise --category documents --title "Review draft"`
+**Example:** `slk personal tasks add note:101 --type promise --category documents --title "Review draft"`
 
-### `slack tasks update`
+### `slk tasks update`
 
 update a task's text, schedule, category, assignees, priority or parent; nothing reaches the messenger
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks update <task> [options]
+slk tasks update <task> [options]
 ```
 
 | Argument | | What it is |
@@ -3866,18 +3866,18 @@ slack tasks update <task> [options]
 | `--remind-time <time>` | when to look at it again: an ISO 8601 time, a date (its start), today, or 2h, 3d from now; none clears it. |
 | `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slack commands info tasks update
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slk commands info tasks update
 
-**Example:** `slack personal tasks update DOC-12 --title "Review draft"`
+**Example:** `slk personal tasks update DOC-12 --title "Review draft"`
 
-### `slack tasks link`
+### `slk tasks link`
 
 link a task to messages, chats, people or URLs — or to another task: task:<id>
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks link <task> [targets] [options]
+slk tasks link <task> [targets] [options]
 ```
 
 | Argument | | What it is |
@@ -3890,32 +3890,32 @@ slack tasks link <task> [targets] [options]
 | `--chat <chat>` | a chat it concerns, repeatable; a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 | `--kind <kind>` | related-to (default), evidence — it shows the task is real — or created-from; for task:<id>, related-to, blocked-by, follow-up-of, duplicate-of or discovered-from. |
 
-**Returns:** task links — id, ref, key, project, project_key, project_name, created_by, title, and 28 more; every field: slack commands info tasks link
+**Returns:** task links — id, ref, key, project, project_key, project_name, created_by, title, and 28 more; every field: slk commands info tasks link
 
-**Example:** `slack personal tasks link DOC-12 https://example.com/draft`
+**Example:** `slk personal tasks link DOC-12 https://example.com/draft`
 
-### `slack tasks show`
+### `slk tasks show`
 
 one task: its plan and everything linked to it
 
 ```sh
-slack tasks show <task>
+slk tasks show <task>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `task` | required | the task's id or key, as tasks list shows it. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slack commands info tasks show
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slk commands info tasks show
 
-**Example:** `slack personal tasks show DOC-12`
+**Example:** `slk personal tasks show DOC-12`
 
-### `slack tasks related`
+### `slk tasks related`
 
 tasks that may be the same job as this one, best first, each with a band — likely, maybe, different — and the reasons; merges nothing
 
 ```sh
-slack tasks related <task> [options]
+slk tasks related <task> [options]
 ```
 
 | Argument | | What it is |
@@ -3926,20 +3926,20 @@ slack tasks related <task> [options]
 |---|---|
 | `--limit <n>` | how many, at most 40 (default 10). |
 
-**Returns:** task similar — ref, key, title, status, created_at, found_by, score, band, and 3 more; every field: slack commands info tasks related
+**Returns:** task similar — ref, key, title, status, created_at, found_by, score, band, and 3 more; every field: slk commands info tasks related
 
-**Example:** `slack personal tasks related PR-12`
+**Example:** `slk personal tasks related PR-12`
 
-### `slack tasks duplicates`
+### `slk tasks duplicates`
 
 pairs of tasks that may be one job
 
-#### `slack tasks duplicates list`
+#### `slk tasks duplicates list`
 
 pairs of tasks a rule opened that may be one job, newest first, with score and reasons: merge, reject or defer each; decision:unsure lists the ones deferred to the owner
 
 ```sh
-slack tasks duplicates list [query] [options]
+slk tasks duplicates list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -3950,18 +3950,18 @@ slack tasks duplicates list [query] [options]
 |---|---|
 | `--limit <n>` | how many. |
 
-**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: slack commands info tasks duplicates list
+**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: slk commands info tasks duplicates list
 
-**Example:** `slack personal tasks duplicates list --limit 10`, `slack personal tasks duplicates list decision:unsure`
+**Example:** `slk personal tasks duplicates list --limit 10`, `slk personal tasks duplicates list decision:unsure`
 
-#### `slack tasks duplicates reject`
+#### `slk tasks duplicates reject`
 
 two tasks are not the same job: the pair leaves the list and is never offered again
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks duplicates reject <task> <other-task>
+slk tasks duplicates reject <task> <other-task>
 ```
 
 | Argument | | What it is |
@@ -3969,18 +3969,18 @@ slack tasks duplicates reject <task> <other-task>
 | `task` | required | the task listed as the duplicate, by its id or key. |
 | `other-task` | required | the task it was paired with. |
 
-**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: slack commands info tasks duplicates reject
+**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: slk commands info tasks duplicates reject
 
-**Example:** `slack personal tasks duplicates reject PR-14 PR-12`
+**Example:** `slk personal tasks duplicates reject PR-14 PR-12`
 
-#### `slack tasks duplicates defer`
+#### `slk tasks duplicates defer`
 
 the fields and the text cannot tell: leave the pair to the owner, who lists it with decision:unsure
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks duplicates defer <task> <other-task>
+slk tasks duplicates defer <task> <other-task>
 ```
 
 | Argument | | What it is |
@@ -3988,18 +3988,18 @@ slack tasks duplicates defer <task> <other-task>
 | `task` | required | the task listed as the duplicate, by its id or key. |
 | `other-task` | required | the task it was paired with. |
 
-**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: slack commands info tasks duplicates defer
+**Returns:** task pair — task, source, other, score, band, levels, reasons, decision, and 2 more; every field: slk commands info tasks duplicates defer
 
-**Example:** `slack personal tasks duplicates defer PR-14 PR-12`
+**Example:** `slk personal tasks duplicates defer PR-14 PR-12`
 
-### `slack tasks merge`
+### `slk tasks merge`
 
 one job seen twice: link every message of the duplicate to the task and close the duplicate dismissed, duplicate-of the task; nothing is deleted, and tasks unmerge undoes it
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks merge <task> [options]
+slk tasks merge <task> [options]
 ```
 
 | Argument | | What it is |
@@ -4010,34 +4010,34 @@ slack tasks merge <task> [options]
 |---|---|
 | `--into <id>` | the task that stays, by its id or key. |
 
-**Returns:** task merge — pair, linked, review, task; every field: slack commands info tasks merge
+**Returns:** task merge — pair, linked, review, task; every field: slk commands info tasks merge
 
-**Example:** `slack personal tasks merge PR-14 --into PR-12`
+**Example:** `slk personal tasks merge PR-14 --into PR-12`
 
-### `slack tasks unmerge`
+### `slk tasks unmerge`
 
 undo a merge: reopen the task and remove its duplicate-of relation; messages the merge linked stay linked
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks unmerge <task>
+slk tasks unmerge <task>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `task` | required | the merged task, by its id or key. |
 
-**Returns:** task unmerge — pair, task; every field: slack commands info tasks unmerge
+**Returns:** task unmerge — pair, task; every field: slk commands info tasks unmerge
 
-**Example:** `slack personal tasks unmerge PR-14`
+**Example:** `slk personal tasks unmerge PR-14`
 
-### `slack tasks agenda`
+### `slk tasks agenda`
 
 what needs a look today, from the local store and without message text: tasks overdue, due or to check, chats where you owe an answer, chats where you wait for one, open tasks someone else does
 
 ```sh
-slack tasks agenda [query] [options]
+slk tasks agenda [query] [options]
 ```
 
 | Argument | | What it is |
@@ -4052,30 +4052,30 @@ slack tasks agenda [query] [options]
 | `--within <duration>` | leave out chats silent longer than this: they ended (default 30d). |
 | `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
 
-**Returns:** agenda — at, account, stored_at, stale, tasks, owed, waiting, unsynced, and 2 more; every field: slack commands info tasks agenda
+**Returns:** agenda — at, account, stored_at, stale, tasks, owed, waiting, unsynced, and 2 more; every field: slk commands info tasks agenda
 
-**Example:** `slack personal tasks agenda`
+**Example:** `slk personal tasks agenda`
 
-### `slack tasks categories`
+### `slk tasks categories`
 
 the categories a task takes, with what each means and the words a rule picks it by
 
 ```sh
-slack tasks categories
+slk tasks categories
 ```
 
-**Returns:** task categories — categories, unlisted, file; every field: slack commands info tasks categories
+**Returns:** task categories — categories, unlisted, file; every field: slk commands info tasks categories
 
-**Example:** `slack personal tasks categories`
+**Example:** `slk personal tasks categories`
 
-### `slack tasks scan`
+### `slk tasks scan`
 
 the task rules over a chat's newest stored messages: in a one-to-one chat a question you did not answer, in a group only a question in reply to you and a mention of you, open a task, and your answer closes one; a channel opens none — for a chat the first sync left alone (config task_first_pass_per_chat). Lists what would open and changes nothing unless --yes; with --yes the duplicate check runs as on a sync. Reads only the local store
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks scan <chat> [options]
+slk tasks scan <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -4087,32 +4087,32 @@ slack tasks scan <chat> [options]
 | `--last <n>` | read the newest n stored messages of each chat (default 50, at most 1000). |
 | `--yes` | open and close the tasks it lists; otherwise only list them. |
 
-**Returns:** task scan — chat, messages, added, closed, review, tasks, held, held_chats; every field: slack commands info tasks scan
+**Returns:** task scan — chat, messages, added, closed, review, tasks, held, held_chats; every field: slk commands info tasks scan
 
-**Example:** `slack personal tasks scan <chat>`, `slack personal tasks scan <chat> --last 300 --yes`
+**Example:** `slk personal tasks scan <chat>`, `slk personal tasks scan <chat> --last 300 --yes`
 
-### `slack tasks status`
+### `slk tasks status`
 
 every chat that can hold your tasks — not a channel or Saved Messages — with the point its messages were read for tasks through, who read them, how many stored messages wait after it, and how many arrived late inside the stretch already read (history fetched afterwards). Its own point: reading a chat, marking it read, inbox --new and review --new never move it; tasks acknowledge does. Reads only the local store
 
 ```sh
-slack tasks status [options]
+slk tasks status [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many chats. |
 
-**Returns:** task analysis — chat, title, kind, newest_at, mark, waiting, late, untrusted; every field: slack commands info tasks status
+**Returns:** task analysis — chat, title, kind, newest_at, mark, waiting, late, untrusted; every field: slk commands info tasks status
 
-**Example:** `slack personal tasks status`
+**Example:** `slk personal tasks status`
 
-### `slack tasks review`
+### `slk tasks review`
 
 the stored messages after the chat's task point, oldest first, and the chat's open tasks, so one read can open new tasks and update or close the old ones. A chat never read starts 14 days back. Moves nothing: when done, tasks acknowledge <chat> <through> records it. Reads only the local store; messages sync or backfill fetch what it lacks
 
 ```sh
-slack tasks review <chat> [options]
+slk tasks review <chat> [options]
 ```
 
 | Argument | | What it is |
@@ -4124,18 +4124,18 @@ slack tasks review <chat> [options]
 | `--limit <n>` | how many messages (default 100, 1000 with --since-time; at most 1000). |
 | `--since-time <time>` | read again from this ISO 8601 time, or 30d ago, whatever the point says; what the point already passed only updates and closes tasks, unless tasks add is given --open-new. |
 
-**Returns:** task review — chat, from, mark, late, has_more, through, messages, open_tasks, and 1 more; every field: slack commands info tasks review
+**Returns:** task review — chat, from, mark, late, has_more, through, messages, open_tasks, and 1 more; every field: slk commands info tasks review
 
-**Example:** `slack personal tasks review <chat>`, `slack personal tasks review <chat> --since-time 30d`
+**Example:** `slk personal tasks review <chat>`, `slk personal tasks review <chat> --since-time 30d`
 
-### `slack tasks acknowledge`
+### `slk tasks acknowledge`
 
 moves the chat's task point to this message once its tasks are opened, updated or closed; it never moves back. With --since-time, the read started there: a read again from the start of the stretch clears what arrived late inside it
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks acknowledge <chat> <message> [options]
+slk tasks acknowledge <chat> <message> [options]
 ```
 
 | Argument | | What it is |
@@ -4147,18 +4147,18 @@ slack tasks acknowledge <chat> <message> [options]
 |---|---|
 | `--since-time <time>` | where the read started, when tasks review was given --since-time. |
 
-**Returns:** task analysis mark — chat, from, through, through_id, by, checked_at, checked_through, at, and 1 more; every field: slack commands info tasks acknowledge
+**Returns:** task analysis mark — chat, from, through, through_id, by, checked_at, checked_through, at, and 1 more; every field: slk commands info tasks acknowledge
 
-**Example:** `slack personal tasks acknowledge <chat> <message>`
+**Example:** `slk personal tasks acknowledge <chat> <message>`
 
-### `slack tasks claim`
+### `slk tasks claim`
 
 take an open task so no other agent works it at once; the claim lapses by itself
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks claim <task> [options]
+slk tasks claim <task> [options]
 ```
 
 | Argument | | What it is |
@@ -4170,18 +4170,18 @@ slack tasks claim <task> [options]
 | `--lease <duration>` | how long the claim lasts: 30m, 2h (default 30m); claiming again extends it. |
 | `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slack commands info tasks claim
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slk commands info tasks claim
 
-**Example:** `slack personal tasks claim PR-12 --lease 2h`
+**Example:** `slk personal tasks claim PR-12 --lease 2h`
 
-### `slack tasks release`
+### `slk tasks release`
 
 give back a task you claimed, before the claim lapses; the owner may release any
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks release <task> [options]
+slk tasks release <task> [options]
 ```
 
 | Argument | | What it is |
@@ -4192,18 +4192,18 @@ slack tasks release <task> [options]
 |---|---|
 | `--holder <name>` | who you are for claims: a session id or a chat id; default WIRECAT_HOLDER, else Claude Code's session, else the agent's name. |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slack commands info tasks release
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slk commands info tasks release
 
-**Example:** `slack personal tasks release PR-12`
+**Example:** `slk personal tasks release PR-12`
 
-### `slack tasks close`
+### `slk tasks close`
 
 close a task: done, or dismissed when it needs no answer. An agent (AI_AGENT or CLAUDECODE set) states its --certainty; below config task_agent_close_min, or with task_agent_close off, the task stays open and the close waits on the owner, who confirms it with tasks close or refuses it with tasks reject. A closed task stays closed, unless tasks unmerge reopens a merged one
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks close <task> [options]
+slk tasks close <task> [options]
 ```
 
 | Argument | | What it is |
@@ -4217,18 +4217,18 @@ slack tasks close <task> [options]
 | `--certainty <n>` | an agent's: how sure it is, 0 to 1, that the task needs nothing more. |
 | `--as-owner` | close it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** task closed — id, source, source_kind, account, group, kind, state, origin, and 13 more; every field: slack commands info tasks close
+**Returns:** task closed — id, source, source_kind, account, group, kind, state, origin, and 13 more; every field: slk commands info tasks close
 
-**Example:** `slack personal tasks close Q-15 --as done --certainty 0.9 --reason answered-in-chat`, `slack personal tasks close Q-15`
+**Example:** `slk personal tasks close Q-15 --as done --certainty 0.9 --reason answered-in-chat`, `slk personal tasks close Q-15`
 
-### `slack tasks reject`
+### `slk tasks reject`
 
 refuse the close an agent suggested: the task stays open and leaves close:suggested; the agent may close it again
 
 **Changes something on this computer only.**
 
 ```sh
-slack tasks reject <task> [options]
+slk tasks reject <task> [options]
 ```
 
 | Argument | | What it is |
@@ -4239,20 +4239,20 @@ slack tasks reject <task> [options]
 |---|---|
 | `--as-owner` | refuse it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slack commands info tasks reject
+**Returns:** task card — id, ref, key, project, project_key, project_name, created_by, title, and 26 more; every field: slk commands info tasks reject
 
-**Example:** `slack personal tasks reject Q-15`
+**Example:** `slk personal tasks reject Q-15`
 
-## `slack search`
+## `slk search`
 
 find things by text: one resource when you know it (messages, notes), or search all across messages and notes; for mail, the separate memo CLI: memo search mail
 
-### `slack search all`
+### `slk search all`
 
 search messenger messages and notes in the local store, calendar events when the store holds a calendar, and meeting transcripts, chat and summaries when it holds a meeting account — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
 
 ```sh
-slack search all <query> [options]
+slk search all <query> [options]
 ```
 
 | Argument | | What it is |
@@ -4268,16 +4268,16 @@ slack search all <query> [options]
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: slack commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: slk commands info search all
 
-**Example:** `slack personal search all draft`
+**Example:** `slk personal search all draft`
 
-### `slack search messages`
+### `slk search messages`
 
 search messenger messages in the local store — what was read, fetched or kept by serve; optionally fetches new messages with --sync-first; --discover searches the archive only
 
 ```sh
-slack search messages [query] [options]
+slk search messages [query] [options]
 ```
 
 | Argument | | What it is |
@@ -4305,18 +4305,18 @@ slack search messages [query] [options]
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 | `--saved <name\|id>` | run a saved search or an earlier run; options typed here replace its own. |
 
-**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 9 more; every field: slack commands info search messages
+**Returns:** message hit — ref, timestamp, sender_name, sender_is_me, chat_title, excerpt, matched_in, score, and 9 more; every field: slk commands info search messages
 
-**Next usually:** `slack messages transcribe <chat> <message>`, `slack messages links <chat> <message>`, `slack conversations related <chat> <message>`
+**Next usually:** `slk messages transcribe <chat> <message>`, `slk messages links <chat> <message>`, `slk conversations related <chat> <message>`
 
-**Example:** `slack personal search messages draft --limit 10`
+**Example:** `slk personal search messages draft --limit 10`
 
-### `slack search notes`
+### `slk search notes`
 
 search the notes — written in memo, or imported from a notes folder — by words and, with the local text model, by meaning; each hit says which found it and what it links to
 
 ```sh
-slack search notes <query> [options]
+slk search notes <query> [options]
 ```
 
 | Argument | | What it is |
@@ -4332,18 +4332,18 @@ slack search notes <query> [options]
 | `--exact` | words as written only; meaning is not searched. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 6 more; every field: slack commands info search notes
+**Returns:** note hit — ref, source, folder_id, path, title, updated_at, kind, provider, and 6 more; every field: slk commands info search notes
 
-**Example:** `slack personal search notes draft --limit 10`
+**Example:** `slk personal search notes draft --limit 10`
 
-### `slack search conversations`
+### `slk search conversations`
 
 the conversations nearest to a query in meaning and in words, best first, in one chat or every one — meaning after `conversations embed`; runs on this machine
 
 **Reads from an outside service.**
 
 ```sh
-slack search conversations <query> [options]
+slk search conversations <query> [options]
 ```
 
 | Argument | | What it is |
@@ -4370,16 +4370,16 @@ slack search conversations <query> [options]
 | `--limit <n>` | how many. |
 | `--catch-up` | first build and embed, on this machine, the chats in scope that changed or were never built — within --max-chats and --max-chunks. |
 
-**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in, and 3 more; every field: slack commands info search conversations
+**Returns:** conversation hit — summary, chunk, score, by, stale, source, locator, matched_in, and 3 more; every field: slk commands info search conversations
 
-**Example:** `slack personal search conversations "Reviewing the project draft"`
+**Example:** `slk personal search conversations "Reviewing the project draft"`
 
-### `slack search runs`
+### `slk search runs`
 
 search recorded diagnostic metadata and events; literal words and field:value terms joined by AND; no message contents
 
 ```sh
-slack search runs [query] [options]
+slk search runs [query] [options]
 ```
 
 | Argument | | What it is |
@@ -4391,22 +4391,22 @@ slack search runs [query] [options]
 | `--limit <n>` | matches per page, at most 100. |
 | `--page <n>` | result page. |
 
-**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 21 more; every field: slack commands info search runs
+**Returns:** run hit — run_id, command, started_at, status, cli_version, events, events_truncated, profile, and 21 more; every field: slk commands info search runs
 
-**Example:** `slack personal search runs timeout status:failed --limit 10`
+**Example:** `slk personal search runs timeout status:failed --limit 10`
 
-## `slack searches`
+## `slk searches`
 
 saved searches and the history of search messages and stats messages show, kept in the local store; --saved runs one
 
-### `slack searches create`
+### `slk searches create`
 
 save a search under a name without running it; search messages --saved <name> runs it
 
 **Changes something on this computer only.**
 
 ```sh
-slack searches create <name> [query] [options]
+slk searches create <name> [query] [options]
 ```
 
 | Argument | | What it is |
@@ -4427,48 +4427,48 @@ slack searches create <name> [query] [options]
 | `--selection <json>` | save the resolved parent ranking query and options from a drilldown. |
 | `--replace` | overwrite a saved search of the same name. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slack commands info searches create
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slk commands info searches create
 
-**Example:** `slack personal searches create project-drafts draft --chat "Project room"`
+**Example:** `slk personal searches create project-drafts draft --chat "Project room"`
 
-### `slack searches show`
+### `slk searches show`
 
 one saved search or earlier run: its query, options and how often it ran
 
 ```sh
-slack searches show <name|id>
+slk searches show <name|id>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `name\|id` | required | a saved search's name, or the id of any row of searches history. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slack commands info searches show
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slk commands info searches show
 
-**Example:** `slack personal searches show project-drafts`
+**Example:** `slk personal searches show project-drafts`
 
-### `slack searches list`
+### `slk searches list`
 
 the saved searches, by name
 
 ```sh
-slack searches list [query]
+slk searches list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slack commands info searches list
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slk commands info searches list
 
-**Example:** `slack personal searches list`
+**Example:** `slk personal searches list`
 
-### `slack searches history`
+### `slk searches history`
 
 the searches and counts that ran, newest first — saved ones included; never their results
 
 ```sh
-slack searches history [options]
+slk searches history [options]
 ```
 
 | Option | What it does |
@@ -4477,138 +4477,138 @@ slack searches history [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slack commands info searches history
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slk commands info searches history
 
-**Example:** `slack personal searches history --limit 10`
+**Example:** `slk personal searches history --limit 10`
 
-### `slack searches delete`
+### `slk searches delete`
 
 delete a saved search, or one run from the history
 
 **Changes something on this computer only.**
 
 ```sh
-slack searches delete <name|id>
+slk searches delete <name|id>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `name\|id` | required | a saved search's name, or the id of any row of searches history. |
 
-**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slack commands info searches delete
+**Returns:** saved search — id, name, command, params, language, version, fields_version, created_at, and 2 more; every field: slk commands info searches delete
 
-**Example:** `slack personal searches delete project-drafts`
+**Example:** `slk personal searches delete project-drafts`
 
-### `slack searches clear`
+### `slk searches clear`
 
 empty the history; saved searches stay
 
 **Changes something on this computer only.**
 
 ```sh
-slack searches clear
+slk searches clear
 ```
 
-**Returns:** search history clear — cleared; every field: slack commands info searches clear
+**Returns:** search history clear — cleared; every field: slk commands info searches clear
 
-**Example:** `slack personal searches clear`
+**Example:** `slk personal searches clear`
 
-## `slack flood`
+## `slk flood`
 
 the waits Slack asked this profile to keep, and a hold on its writes
 
-### `slack flood clear`
+### `slk flood clear`
 
 forget them, lift the hold and the profile's pace, once Slack no longer limits the account; changes nothing there
 
 **Changes something on this computer only.**
 
 ```sh
-slack flood clear
+slk flood clear
 ```
 
-**Example:** `slack personal flood clear`
+**Example:** `slk personal flood clear`
 
-## `slack recipients`
+## `slk recipients`
 
 the chats this profile may send to, when the list is on
 
-### `slack recipients list`
+### `slk recipients list`
 
 the chats on the list; empty and off until the first add
 
 ```sh
-slack recipients list [query]
+slk recipients list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** recipient — id, title, added_at, partner_id; every field: slack commands info recipients list
+**Returns:** recipient — id, title, added_at, partner_id; every field: slk commands info recipients list
 
-**Example:** `slack personal recipients list`
+**Example:** `slk personal recipients list`
 
-### `slack recipients add`
+### `slk recipients add`
 
 allow sending to this chat; the first add turns the list on
 
 **Changes something on this computer only.**
 
 ```sh
-slack recipients add <chat>
+slk recipients add <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | a chat: #channel name, a person's name for a DM, or its Slack id (C…, D…, G…). |
 
-**Returns:** recipient change added — id, title, added; every field: slack commands info recipients add
+**Returns:** recipient change added — id, title, added; every field: slk commands info recipients add
 
-**Example:** `slack personal recipients add "Book club"`
+**Example:** `slk personal recipients add "Book club"`
 
-### `slack recipients remove`
+### `slk recipients remove`
 
 stop allowing this chat; the list stays on
 
 **Changes something on this computer only.**
 
 ```sh
-slack recipients remove <chat>
+slk recipients remove <chat>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `chat` | required | chat id, or the title as the list shows it. |
 
-**Returns:** recipient change removed — id, title, removed; every field: slack commands info recipients remove
+**Returns:** recipient change removed — id, title, removed; every field: slk commands info recipients remove
 
-**Example:** `slack personal recipients remove "Book club"`
+**Example:** `slk personal recipients remove "Book club"`
 
-### `slack recipients clear`
+### `slk recipients clear`
 
 delete the list, which turns it off: this profile may send to any chat again
 
 **Changes something on this computer only.**
 
 ```sh
-slack recipients clear
+slk recipients clear
 ```
 
-**Returns:** recipient change off — off, was_on; every field: slack commands info recipients clear
+**Returns:** recipient change off — off, was_on; every field: slk commands info recipients clear
 
-**Example:** `slack personal recipients clear`
+**Example:** `slk personal recipients clear`
 
-## `slack sends`
+## `slk sends`
 
 every attempt to send from this profile — never the text
 
-### `slack sends list`
+### `slk sends list`
 
 attempts to send, newest first: sent, refused, failed, or not known
 
 ```sh
-slack sends list [query] [options]
+slk sends list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -4621,54 +4621,54 @@ slack sends list [query] [options]
 | `--page <n>` | which page, starting at 1. |
 | `--all` | every row, no paging. |
 
-**Returns:** send attempt — at, profile, chat_id, outcome, kind, action, people, message_id, and 16 more; every field: slack commands info sends list
+**Returns:** send attempt — at, profile, chat_id, outcome, kind, action, people, message_id, and 16 more; every field: slk commands info sends list
 
-**Example:** `slack personal sends list --limit 10`
+**Example:** `slk personal sends list --limit 10`
 
-## `slack api`
+## `slk api`
 
 the raw Slack API, one command per operation of its OpenAPI document
 
-### `slack api list`
+### `slk api list`
 
 list every Slack API operation this CLI offers, without calling Slack
 
 ```sh
-slack api list [query]
+slk api list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Example:** `slack personal api list`, `slack personal api list effect:destructive --json=command,path`
+**Example:** `slk personal api list`, `slk personal api list effect:destructive --json=command,path`
 
-### `slack api show`
+### `slk api show`
 
 show one operation's parameters and request schema, without calling Slack
 
 ```sh
-slack api show <operation>
+slk api show <operation>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `operation` | required | the operation as api list prints it (quoted), its old name, or its operation id. |
 
-**Example:** `slack personal api show "admin apps-approve" --json`
+**Example:** `slk personal api show "admin apps-approve" --json`
 
-### `slack api admin`
+### `slk api admin`
 
 the admin operations
 
-#### `slack api admin apps-approve`
+#### `slk api admin apps-approve`
 
 admin_apps_approve — write (POST /admin.apps.approve)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin apps-approve [options]
+slk api admin apps-approve [options]
 ```
 
 | Option | What it does |
@@ -4676,14 +4676,14 @@ slack api admin apps-approve [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin apps-approve`
+**Example:** `slk personal api admin apps-approve`
 
-#### `slack api admin apps-approved-list`
+#### `slk api admin apps-approved-list`
 
 admin_apps_approved_list — read (GET /admin.apps.approved.list)
 
 ```sh
-slack api admin apps-approved-list [options]
+slk api admin apps-approved-list [options]
 ```
 
 | Option | What it does |
@@ -4693,14 +4693,14 @@ slack api admin apps-approved-list [options]
 | `--team-id <value>` | team_id. |
 | `--enterprise-id <value>` | enterprise_id. |
 
-**Example:** `slack personal api admin apps-approved-list`
+**Example:** `slk personal api admin apps-approved-list`
 
-#### `slack api admin apps-requests-list`
+#### `slk api admin apps-requests-list`
 
 admin_apps_requests_list — read (GET /admin.apps.requests.list)
 
 ```sh
-slack api admin apps-requests-list [options]
+slk api admin apps-requests-list [options]
 ```
 
 | Option | What it does |
@@ -4709,16 +4709,16 @@ slack api admin apps-requests-list [options]
 | `--cursor <value>` | Set `cursor` to `next_cursor` returned by the previous call to list items in the next page. |
 | `--team-id <value>` | team_id. |
 
-**Example:** `slack personal api admin apps-requests-list`
+**Example:** `slk personal api admin apps-requests-list`
 
-#### `slack api admin apps-restrict`
+#### `slk api admin apps-restrict`
 
 admin_apps_restrict — write (POST /admin.apps.restrict)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin apps-restrict [options]
+slk api admin apps-restrict [options]
 ```
 
 | Option | What it does |
@@ -4726,14 +4726,14 @@ slack api admin apps-restrict [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin apps-restrict`
+**Example:** `slk personal api admin apps-restrict`
 
-#### `slack api admin apps-restricted-list`
+#### `slk api admin apps-restricted-list`
 
 admin_apps_restricted_list — read (GET /admin.apps.restricted.list)
 
 ```sh
-slack api admin apps-restricted-list [options]
+slk api admin apps-restricted-list [options]
 ```
 
 | Option | What it does |
@@ -4743,16 +4743,16 @@ slack api admin apps-restricted-list [options]
 | `--team-id <value>` | team_id. |
 | `--enterprise-id <value>` | enterprise_id. |
 
-**Example:** `slack personal api admin apps-restricted-list`
+**Example:** `slk personal api admin apps-restricted-list`
 
-#### `slack api admin conversations-archive`
+#### `slk api admin conversations-archive`
 
 admin_conversations_archive — destructive (POST /admin.conversations.archive)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-archive [options]
+slk api admin conversations-archive [options]
 ```
 
 | Option | What it does |
@@ -4760,16 +4760,16 @@ slack api admin conversations-archive [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-archive`
+**Example:** `slk personal api admin conversations-archive`
 
-#### `slack api admin conversations-convert-to-private`
+#### `slk api admin conversations-convert-to-private`
 
 admin_conversations_convertToPrivate — write (POST /admin.conversations.convertToPrivate)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-convert-to-private [options]
+slk api admin conversations-convert-to-private [options]
 ```
 
 | Option | What it does |
@@ -4777,16 +4777,16 @@ slack api admin conversations-convert-to-private [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-convert-to-private`
+**Example:** `slk personal api admin conversations-convert-to-private`
 
-#### `slack api admin conversations-create`
+#### `slk api admin conversations-create`
 
 admin_conversations_create — write (POST /admin.conversations.create)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-create [options]
+slk api admin conversations-create [options]
 ```
 
 | Option | What it does |
@@ -4794,16 +4794,16 @@ slack api admin conversations-create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-create`
+**Example:** `slk personal api admin conversations-create`
 
-#### `slack api admin conversations-delete`
+#### `slk api admin conversations-delete`
 
 admin_conversations_delete — destructive (POST /admin.conversations.delete)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-delete [options]
+slk api admin conversations-delete [options]
 ```
 
 | Option | What it does |
@@ -4811,16 +4811,16 @@ slack api admin conversations-delete [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-delete`
+**Example:** `slk personal api admin conversations-delete`
 
-#### `slack api admin conversations-disconnect-shared`
+#### `slk api admin conversations-disconnect-shared`
 
 admin_conversations_disconnectShared — write (POST /admin.conversations.disconnectShared)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-disconnect-shared [options]
+slk api admin conversations-disconnect-shared [options]
 ```
 
 | Option | What it does |
@@ -4828,14 +4828,14 @@ slack api admin conversations-disconnect-shared [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-disconnect-shared`
+**Example:** `slk personal api admin conversations-disconnect-shared`
 
-#### `slack api admin conversations-ekm-list-original-connected-channel-info`
+#### `slk api admin conversations-ekm-list-original-connected-channel-info`
 
 admin_conversations_ekm_listOriginalConnectedChannelInfo — read (GET /admin.conversations.ekm.listOriginalConnectedChannelInfo)
 
 ```sh
-slack api admin conversations-ekm-list-original-connected-channel-info [options]
+slk api admin conversations-ekm-list-original-connected-channel-info [options]
 ```
 
 | Option | What it does |
@@ -4845,28 +4845,28 @@ slack api admin conversations-ekm-list-original-connected-channel-info [options]
 | `--limit <value>` | The maximum number of items to return. Must be between 1 - 1000 both inclusive. |
 | `--cursor <value>` | Set `cursor` to `next_cursor` returned by the previous call to list items in the next page. |
 
-**Example:** `slack personal api admin conversations-ekm-list-original-connected-channel-info`
+**Example:** `slk personal api admin conversations-ekm-list-original-connected-channel-info`
 
-#### `slack api admin conversations-get-conversation-prefs`
+#### `slk api admin conversations-get-conversation-prefs`
 
 admin_conversations_getConversationPrefs — read (GET /admin.conversations.getConversationPrefs)
 
 ```sh
-slack api admin conversations-get-conversation-prefs [options]
+slk api admin conversations-get-conversation-prefs [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--channel-id <value>` | The channel to get preferences for. |
 
-**Example:** `slack personal api admin conversations-get-conversation-prefs --channel-id <value>`
+**Example:** `slk personal api admin conversations-get-conversation-prefs --channel-id <value>`
 
-#### `slack api admin conversations-get-teams`
+#### `slk api admin conversations-get-teams`
 
 admin_conversations_getTeams — read (GET /admin.conversations.getTeams)
 
 ```sh
-slack api admin conversations-get-teams [options]
+slk api admin conversations-get-teams [options]
 ```
 
 | Option | What it does |
@@ -4876,16 +4876,16 @@ slack api admin conversations-get-teams [options]
 | `--limit <value>` | The maximum number of items to return. Must be between 1 - 1000 both inclusive. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api admin conversations-get-teams --channel-id <value>`
+**Example:** `slk personal api admin conversations-get-teams --channel-id <value>`
 
-#### `slack api admin conversations-invite`
+#### `slk api admin conversations-invite`
 
 admin_conversations_invite — write (POST /admin.conversations.invite)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-invite [options]
+slk api admin conversations-invite [options]
 ```
 
 | Option | What it does |
@@ -4893,16 +4893,16 @@ slack api admin conversations-invite [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-invite`
+**Example:** `slk personal api admin conversations-invite`
 
-#### `slack api admin conversations-rename`
+#### `slk api admin conversations-rename`
 
 admin_conversations_rename — write (POST /admin.conversations.rename)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-rename [options]
+slk api admin conversations-rename [options]
 ```
 
 | Option | What it does |
@@ -4910,14 +4910,14 @@ slack api admin conversations-rename [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-rename`
+**Example:** `slk personal api admin conversations-rename`
 
-#### `slack api admin conversations-restrict-access-list-groups`
+#### `slk api admin conversations-restrict-access-list-groups`
 
 admin_conversations_restrictAccess_listGroups — read (GET /admin.conversations.restrictAccess.listGroups)
 
 ```sh
-slack api admin conversations-restrict-access-list-groups [options]
+slk api admin conversations-restrict-access-list-groups [options]
 ```
 
 | Option | What it does |
@@ -4925,14 +4925,14 @@ slack api admin conversations-restrict-access-list-groups [options]
 | `--channel-id <value>` | channel_id. |
 | `--team-id <value>` | The workspace where the channel exists. This argument is required for channels only tied to one workspace, and optional for channels that are shared across an organization. |
 
-**Example:** `slack personal api admin conversations-restrict-access-list-groups --channel-id <value>`
+**Example:** `slk personal api admin conversations-restrict-access-list-groups --channel-id <value>`
 
-#### `slack api admin conversations-search`
+#### `slk api admin conversations-search`
 
 admin_conversations_search — read (GET /admin.conversations.search)
 
 ```sh
-slack api admin conversations-search [options]
+slk api admin conversations-search [options]
 ```
 
 | Option | What it does |
@@ -4946,16 +4946,16 @@ slack api admin conversations-search [options]
 | `--sort-dir <value>` | Sort direction. Possible values are `asc` for ascending order like (1, 2, 3) or (a, b, c), and `desc` for descending order like (3, 2, 1) or (c, b, a). |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api admin conversations-search`
+**Example:** `slk personal api admin conversations-search`
 
-#### `slack api admin conversations-set-conversation-prefs`
+#### `slk api admin conversations-set-conversation-prefs`
 
 admin_conversations_setConversationPrefs — write (POST /admin.conversations.setConversationPrefs)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-set-conversation-prefs [options]
+slk api admin conversations-set-conversation-prefs [options]
 ```
 
 | Option | What it does |
@@ -4963,16 +4963,16 @@ slack api admin conversations-set-conversation-prefs [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-set-conversation-prefs`
+**Example:** `slk personal api admin conversations-set-conversation-prefs`
 
-#### `slack api admin conversations-set-teams`
+#### `slk api admin conversations-set-teams`
 
 admin_conversations_setTeams — write (POST /admin.conversations.setTeams)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-set-teams [options]
+slk api admin conversations-set-teams [options]
 ```
 
 | Option | What it does |
@@ -4980,16 +4980,16 @@ slack api admin conversations-set-teams [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-set-teams`
+**Example:** `slk personal api admin conversations-set-teams`
 
-#### `slack api admin conversations-unarchive`
+#### `slk api admin conversations-unarchive`
 
 admin_conversations_unarchive — write (POST /admin.conversations.unarchive)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin conversations-unarchive [options]
+slk api admin conversations-unarchive [options]
 ```
 
 | Option | What it does |
@@ -4997,14 +4997,14 @@ slack api admin conversations-unarchive [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin conversations-unarchive`
+**Example:** `slk personal api admin conversations-unarchive`
 
-#### `slack api admin emoji-list`
+#### `slk api admin emoji-list`
 
 admin_emoji_list — read (GET /admin.emoji.list)
 
 ```sh
-slack api admin emoji-list [options]
+slk api admin emoji-list [options]
 ```
 
 | Option | What it does |
@@ -5012,16 +5012,16 @@ slack api admin emoji-list [options]
 | `--cursor <value>` | Set `cursor` to `next_cursor` returned by the previous call to list items in the next page. |
 | `--limit <value>` | The maximum number of items to return. Must be between 1 - 1000 both inclusive. |
 
-**Example:** `slack personal api admin emoji-list`
+**Example:** `slk personal api admin emoji-list`
 
-#### `slack api admin invite-requests-approve`
+#### `slk api admin invite-requests-approve`
 
 admin_inviteRequests_approve — write (POST /admin.inviteRequests.approve)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin invite-requests-approve [options]
+slk api admin invite-requests-approve [options]
 ```
 
 | Option | What it does |
@@ -5029,14 +5029,14 @@ slack api admin invite-requests-approve [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin invite-requests-approve`
+**Example:** `slk personal api admin invite-requests-approve`
 
-#### `slack api admin invite-requests-approved-list`
+#### `slk api admin invite-requests-approved-list`
 
 admin_inviteRequests_approved_list — read (GET /admin.inviteRequests.approved.list)
 
 ```sh
-slack api admin invite-requests-approved-list [options]
+slk api admin invite-requests-approved-list [options]
 ```
 
 | Option | What it does |
@@ -5045,14 +5045,14 @@ slack api admin invite-requests-approved-list [options]
 | `--cursor <value>` | Value of the `next_cursor` field sent as part of the previous API response. |
 | `--limit <value>` | The number of results that will be returned by the API on each invocation. Must be between 1 - 1000, both inclusive. |
 
-**Example:** `slack personal api admin invite-requests-approved-list`
+**Example:** `slk personal api admin invite-requests-approved-list`
 
-#### `slack api admin invite-requests-denied-list`
+#### `slk api admin invite-requests-denied-list`
 
 admin_inviteRequests_denied_list — read (GET /admin.inviteRequests.denied.list)
 
 ```sh
-slack api admin invite-requests-denied-list [options]
+slk api admin invite-requests-denied-list [options]
 ```
 
 | Option | What it does |
@@ -5061,16 +5061,16 @@ slack api admin invite-requests-denied-list [options]
 | `--cursor <value>` | Value of the `next_cursor` field sent as part of the previous api response. |
 | `--limit <value>` | The number of results that will be returned by the API on each invocation. Must be between 1 - 1000 both inclusive. |
 
-**Example:** `slack personal api admin invite-requests-denied-list`
+**Example:** `slk personal api admin invite-requests-denied-list`
 
-#### `slack api admin invite-requests-deny`
+#### `slk api admin invite-requests-deny`
 
 admin_inviteRequests_deny — write (POST /admin.inviteRequests.deny)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin invite-requests-deny [options]
+slk api admin invite-requests-deny [options]
 ```
 
 | Option | What it does |
@@ -5078,14 +5078,14 @@ slack api admin invite-requests-deny [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin invite-requests-deny`
+**Example:** `slk personal api admin invite-requests-deny`
 
-#### `slack api admin invite-requests-list`
+#### `slk api admin invite-requests-list`
 
 admin_inviteRequests_list — read (GET /admin.inviteRequests.list)
 
 ```sh
-slack api admin invite-requests-list [options]
+slk api admin invite-requests-list [options]
 ```
 
 | Option | What it does |
@@ -5094,14 +5094,14 @@ slack api admin invite-requests-list [options]
 | `--cursor <value>` | Value of the `next_cursor` field sent as part of the previous API response. |
 | `--limit <value>` | The number of results that will be returned by the API on each invocation. Must be between 1 - 1000, both inclusive. |
 
-**Example:** `slack personal api admin invite-requests-list`
+**Example:** `slk personal api admin invite-requests-list`
 
-#### `slack api admin teams-admins-list`
+#### `slk api admin teams-admins-list`
 
 admin_teams_admins_list — read (GET /admin.teams.admins.list)
 
 ```sh
-slack api admin teams-admins-list [options]
+slk api admin teams-admins-list [options]
 ```
 
 | Option | What it does |
@@ -5110,16 +5110,16 @@ slack api admin teams-admins-list [options]
 | `--cursor <value>` | Set `cursor` to `next_cursor` returned by the previous call to list items in the next page. |
 | `--team-id <value>` | team_id. |
 
-**Example:** `slack personal api admin teams-admins-list --team-id <value>`
+**Example:** `slk personal api admin teams-admins-list --team-id <value>`
 
-#### `slack api admin teams-create`
+#### `slk api admin teams-create`
 
 admin_teams_create — write (POST /admin.teams.create)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin teams-create [options]
+slk api admin teams-create [options]
 ```
 
 | Option | What it does |
@@ -5127,14 +5127,14 @@ slack api admin teams-create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin teams-create`
+**Example:** `slk personal api admin teams-create`
 
-#### `slack api admin teams-list`
+#### `slk api admin teams-list`
 
 admin_teams_list — read (GET /admin.teams.list)
 
 ```sh
-slack api admin teams-list [options]
+slk api admin teams-list [options]
 ```
 
 | Option | What it does |
@@ -5142,14 +5142,14 @@ slack api admin teams-list [options]
 | `--limit <value>` | The maximum number of items to return. Must be between 1 - 100 both inclusive. |
 | `--cursor <value>` | Set `cursor` to `next_cursor` returned by the previous call to list items in the next page. |
 
-**Example:** `slack personal api admin teams-list`
+**Example:** `slk personal api admin teams-list`
 
-#### `slack api admin teams-owners-list`
+#### `slk api admin teams-owners-list`
 
 admin_teams_owners_list — read (GET /admin.teams.owners.list)
 
 ```sh
-slack api admin teams-owners-list [options]
+slk api admin teams-owners-list [options]
 ```
 
 | Option | What it does |
@@ -5158,30 +5158,30 @@ slack api admin teams-owners-list [options]
 | `--limit <value>` | The maximum number of items to return. Must be between 1 - 1000 both inclusive. |
 | `--cursor <value>` | Set `cursor` to `next_cursor` returned by the previous call to list items in the next page. |
 
-**Example:** `slack personal api admin teams-owners-list --team-id <value>`
+**Example:** `slk personal api admin teams-owners-list --team-id <value>`
 
-#### `slack api admin teams-settings-info`
+#### `slk api admin teams-settings-info`
 
 admin_teams_settings_info — read (GET /admin.teams.settings.info)
 
 ```sh
-slack api admin teams-settings-info [options]
+slk api admin teams-settings-info [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--team-id <value>` | team_id. |
 
-**Example:** `slack personal api admin teams-settings-info --team-id <value>`
+**Example:** `slk personal api admin teams-settings-info --team-id <value>`
 
-#### `slack api admin teams-settings-set-description`
+#### `slk api admin teams-settings-set-description`
 
 admin_teams_settings_setDescription — write (POST /admin.teams.settings.setDescription)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin teams-settings-set-description [options]
+slk api admin teams-settings-set-description [options]
 ```
 
 | Option | What it does |
@@ -5189,16 +5189,16 @@ slack api admin teams-settings-set-description [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin teams-settings-set-description`
+**Example:** `slk personal api admin teams-settings-set-description`
 
-#### `slack api admin teams-settings-set-discoverability`
+#### `slk api admin teams-settings-set-discoverability`
 
 admin_teams_settings_setDiscoverability — write (POST /admin.teams.settings.setDiscoverability)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin teams-settings-set-discoverability [options]
+slk api admin teams-settings-set-discoverability [options]
 ```
 
 | Option | What it does |
@@ -5206,16 +5206,16 @@ slack api admin teams-settings-set-discoverability [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin teams-settings-set-discoverability`
+**Example:** `slk personal api admin teams-settings-set-discoverability`
 
-#### `slack api admin teams-settings-set-name`
+#### `slk api admin teams-settings-set-name`
 
 admin_teams_settings_setName — write (POST /admin.teams.settings.setName)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin teams-settings-set-name [options]
+slk api admin teams-settings-set-name [options]
 ```
 
 | Option | What it does |
@@ -5223,16 +5223,16 @@ slack api admin teams-settings-set-name [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin teams-settings-set-name`
+**Example:** `slk personal api admin teams-settings-set-name`
 
-#### `slack api admin usergroups-add-channels`
+#### `slk api admin usergroups-add-channels`
 
 admin_usergroups_addChannels — write (POST /admin.usergroups.addChannels)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin usergroups-add-channels [options]
+slk api admin usergroups-add-channels [options]
 ```
 
 | Option | What it does |
@@ -5240,16 +5240,16 @@ slack api admin usergroups-add-channels [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin usergroups-add-channels`
+**Example:** `slk personal api admin usergroups-add-channels`
 
-#### `slack api admin usergroups-add-teams`
+#### `slk api admin usergroups-add-teams`
 
 admin_usergroups_addTeams — write (POST /admin.usergroups.addTeams)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin usergroups-add-teams [options]
+slk api admin usergroups-add-teams [options]
 ```
 
 | Option | What it does |
@@ -5257,14 +5257,14 @@ slack api admin usergroups-add-teams [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin usergroups-add-teams`
+**Example:** `slk personal api admin usergroups-add-teams`
 
-#### `slack api admin usergroups-list-channels`
+#### `slk api admin usergroups-list-channels`
 
 admin_usergroups_listChannels — read (GET /admin.usergroups.listChannels)
 
 ```sh
-slack api admin usergroups-list-channels [options]
+slk api admin usergroups-list-channels [options]
 ```
 
 | Option | What it does |
@@ -5273,16 +5273,16 @@ slack api admin usergroups-list-channels [options]
 | `--team-id <value>` | ID of the the workspace. |
 | `--include-num-members <value>` | Flag to include or exclude the count of members per channel. |
 
-**Example:** `slack personal api admin usergroups-list-channels --usergroup-id <value>`
+**Example:** `slk personal api admin usergroups-list-channels --usergroup-id <value>`
 
-#### `slack api admin usergroups-remove-channels`
+#### `slk api admin usergroups-remove-channels`
 
 admin_usergroups_removeChannels — destructive (POST /admin.usergroups.removeChannels)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin usergroups-remove-channels [options]
+slk api admin usergroups-remove-channels [options]
 ```
 
 | Option | What it does |
@@ -5290,16 +5290,16 @@ slack api admin usergroups-remove-channels [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin usergroups-remove-channels`
+**Example:** `slk personal api admin usergroups-remove-channels`
 
-#### `slack api admin users-assign`
+#### `slk api admin users-assign`
 
 admin_users_assign — write (POST /admin.users.assign)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-assign [options]
+slk api admin users-assign [options]
 ```
 
 | Option | What it does |
@@ -5307,16 +5307,16 @@ slack api admin users-assign [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-assign`
+**Example:** `slk personal api admin users-assign`
 
-#### `slack api admin users-invite`
+#### `slk api admin users-invite`
 
 admin_users_invite — write (POST /admin.users.invite)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-invite [options]
+slk api admin users-invite [options]
 ```
 
 | Option | What it does |
@@ -5324,14 +5324,14 @@ slack api admin users-invite [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-invite`
+**Example:** `slk personal api admin users-invite`
 
-#### `slack api admin users-list`
+#### `slk api admin users-list`
 
 admin_users_list — read (GET /admin.users.list)
 
 ```sh
-slack api admin users-list [options]
+slk api admin users-list [options]
 ```
 
 | Option | What it does |
@@ -5340,16 +5340,16 @@ slack api admin users-list [options]
 | `--cursor <value>` | Set `cursor` to `next_cursor` returned by the previous call to list items in the next page. |
 | `--limit <value>` | Limit for how many users to be retrieved per page. |
 
-**Example:** `slack personal api admin users-list --team-id <value>`
+**Example:** `slk personal api admin users-list --team-id <value>`
 
-#### `slack api admin users-remove`
+#### `slk api admin users-remove`
 
 admin_users_remove — destructive (POST /admin.users.remove)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-remove [options]
+slk api admin users-remove [options]
 ```
 
 | Option | What it does |
@@ -5357,16 +5357,16 @@ slack api admin users-remove [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-remove`
+**Example:** `slk personal api admin users-remove`
 
-#### `slack api admin users-session-invalidate`
+#### `slk api admin users-session-invalidate`
 
 admin_users_session_invalidate — destructive (POST /admin.users.session.invalidate)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-session-invalidate [options]
+slk api admin users-session-invalidate [options]
 ```
 
 | Option | What it does |
@@ -5374,16 +5374,16 @@ slack api admin users-session-invalidate [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-session-invalidate`
+**Example:** `slk personal api admin users-session-invalidate`
 
-#### `slack api admin users-session-reset`
+#### `slk api admin users-session-reset`
 
 admin_users_session_reset — destructive (POST /admin.users.session.reset)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-session-reset [options]
+slk api admin users-session-reset [options]
 ```
 
 | Option | What it does |
@@ -5391,16 +5391,16 @@ slack api admin users-session-reset [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-session-reset`
+**Example:** `slk personal api admin users-session-reset`
 
-#### `slack api admin users-set-admin`
+#### `slk api admin users-set-admin`
 
 admin_users_setAdmin — write (POST /admin.users.setAdmin)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-set-admin [options]
+slk api admin users-set-admin [options]
 ```
 
 | Option | What it does |
@@ -5408,16 +5408,16 @@ slack api admin users-set-admin [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-set-admin`
+**Example:** `slk personal api admin users-set-admin`
 
-#### `slack api admin users-set-expiration`
+#### `slk api admin users-set-expiration`
 
 admin_users_setExpiration — write (POST /admin.users.setExpiration)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-set-expiration [options]
+slk api admin users-set-expiration [options]
 ```
 
 | Option | What it does |
@@ -5425,16 +5425,16 @@ slack api admin users-set-expiration [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-set-expiration`
+**Example:** `slk personal api admin users-set-expiration`
 
-#### `slack api admin users-set-owner`
+#### `slk api admin users-set-owner`
 
 admin_users_setOwner — write (POST /admin.users.setOwner)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-set-owner [options]
+slk api admin users-set-owner [options]
 ```
 
 | Option | What it does |
@@ -5442,16 +5442,16 @@ slack api admin users-set-owner [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-set-owner`
+**Example:** `slk personal api admin users-set-owner`
 
-#### `slack api admin users-set-regular`
+#### `slk api admin users-set-regular`
 
 admin_users_setRegular — write (POST /admin.users.setRegular)
 
 **Changes something in the service.**
 
 ```sh
-slack api admin users-set-regular [options]
+slk api admin users-set-regular [options]
 ```
 
 | Option | What it does |
@@ -5459,14 +5459,14 @@ slack api admin users-set-regular [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api admin users-set-regular`
+**Example:** `slk personal api admin users-set-regular`
 
-### `slack api api-test`
+### `slk api api-test`
 
 api_test — read (GET /api.test)
 
 ```sh
-slack api api-test [options]
+slk api api-test [options]
 ```
 
 | Option | What it does |
@@ -5474,18 +5474,18 @@ slack api api-test [options]
 | `--error <value>` | Error response to return. |
 | `--foo <value>` | example property to return. |
 
-**Example:** `slack personal api api-test`
+**Example:** `slk personal api api-test`
 
-### `slack api apps`
+### `slk api apps`
 
 the apps operations
 
-#### `slack api apps event-authorizations-list`
+#### `slk api apps event-authorizations-list`
 
 apps_event_authorizations_list — read (GET /apps.event.authorizations.list)
 
 ```sh
-slack api apps event-authorizations-list [options]
+slk api apps event-authorizations-list [options]
 ```
 
 | Option | What it does |
@@ -5494,26 +5494,26 @@ slack api apps event-authorizations-list [options]
 | `--cursor <value>` | cursor. |
 | `--limit <value>` | limit. |
 
-**Example:** `slack personal api apps event-authorizations-list --event-context <value>`
+**Example:** `slk personal api apps event-authorizations-list --event-context <value>`
 
-#### `slack api apps permissions-info`
+#### `slk api apps permissions-info`
 
 apps_permissions_info — read (GET /apps.permissions.info)
 
 ```sh
-slack api apps permissions-info
+slk api apps permissions-info
 ```
 
-**Example:** `slack personal api apps permissions-info`
+**Example:** `slk personal api apps permissions-info`
 
-#### `slack api apps permissions-request`
+#### `slk api apps permissions-request`
 
 apps_permissions_request — write (GET /apps.permissions.request)
 
 **Changes something in the service.**
 
 ```sh
-slack api apps permissions-request [options]
+slk api apps permissions-request [options]
 ```
 
 | Option | What it does |
@@ -5521,14 +5521,14 @@ slack api apps permissions-request [options]
 | `--scopes <value>` | A comma separated list of scopes to request for. |
 | `--trigger-id <value>` | Token used to trigger the permissions API. |
 
-**Example:** `slack personal api apps permissions-request --scopes <value> --trigger-id <value>`
+**Example:** `slk personal api apps permissions-request --scopes <value> --trigger-id <value>`
 
-#### `slack api apps permissions-resources-list`
+#### `slk api apps permissions-resources-list`
 
 apps_permissions_resources_list — read (GET /apps.permissions.resources.list)
 
 ```sh
-slack api apps permissions-resources-list [options]
+slk api apps permissions-resources-list [options]
 ```
 
 | Option | What it does |
@@ -5537,24 +5537,24 @@ slack api apps permissions-resources-list [options]
 | `--limit <value>` | The maximum number of items to return. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api apps permissions-resources-list`
+**Example:** `slk personal api apps permissions-resources-list`
 
-#### `slack api apps permissions-scopes-list`
+#### `slk api apps permissions-scopes-list`
 
 apps_permissions_scopes_list — read (GET /apps.permissions.scopes.list)
 
 ```sh
-slack api apps permissions-scopes-list
+slk api apps permissions-scopes-list
 ```
 
-**Example:** `slack personal api apps permissions-scopes-list`
+**Example:** `slk personal api apps permissions-scopes-list`
 
-#### `slack api apps permissions-users-list`
+#### `slk api apps permissions-users-list`
 
 apps_permissions_users_list — read (GET /apps.permissions.users.list)
 
 ```sh
-slack api apps permissions-users-list [options]
+slk api apps permissions-users-list [options]
 ```
 
 | Option | What it does |
@@ -5562,16 +5562,16 @@ slack api apps permissions-users-list [options]
 | `--cursor <value>` | Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail. |
 | `--limit <value>` | The maximum number of items to return. |
 
-**Example:** `slack personal api apps permissions-users-list`
+**Example:** `slk personal api apps permissions-users-list`
 
-#### `slack api apps permissions-users-request`
+#### `slk api apps permissions-users-request`
 
 apps_permissions_users_request — write (GET /apps.permissions.users.request)
 
 **Changes something in the service.**
 
 ```sh
-slack api apps permissions-users-request [options]
+slk api apps permissions-users-request [options]
 ```
 
 | Option | What it does |
@@ -5580,16 +5580,16 @@ slack api apps permissions-users-request [options]
 | `--trigger-id <value>` | Token used to trigger the request. |
 | `--user <value>` | The user this scope is being requested for. |
 
-**Example:** `slack personal api apps permissions-users-request --scopes <value> --trigger-id <value> --user <value>`
+**Example:** `slk personal api apps permissions-users-request --scopes <value> --trigger-id <value> --user <value>`
 
-#### `slack api apps uninstall`
+#### `slk api apps uninstall`
 
 apps_uninstall — destructive (GET /apps.uninstall)
 
 **Changes something in the service.**
 
 ```sh
-slack api apps uninstall [options]
+slk api apps uninstall [options]
 ```
 
 | Option | What it does |
@@ -5597,64 +5597,64 @@ slack api apps uninstall [options]
 | `--client-id <value>` | Issued when you created your application. |
 | `--client-secret <value>` | Issued when you created your application. |
 
-**Example:** `slack personal api apps uninstall`
+**Example:** `slk personal api apps uninstall`
 
-### `slack api auth`
+### `slk api auth`
 
 the auth operations
 
-#### `slack api auth revoke`
+#### `slk api auth revoke`
 
 auth_revoke — destructive (GET /auth.revoke)
 
 **Changes something in the service.**
 
 ```sh
-slack api auth revoke [options]
+slk api auth revoke [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--test <value>` | Setting this parameter to `1` triggers a _testing mode_ where the specified token will not actually be revoked. |
 
-**Example:** `slack personal api auth revoke`
+**Example:** `slk personal api auth revoke`
 
-#### `slack api auth test`
+#### `slk api auth test`
 
 auth_test — read (GET /auth.test)
 
 ```sh
-slack api auth test
+slk api auth test
 ```
 
-**Example:** `slack personal api auth test`
+**Example:** `slk personal api auth test`
 
-### `slack api bots-info`
+### `slk api bots-info`
 
 bots_info — read (GET /bots.info)
 
 ```sh
-slack api bots-info [options]
+slk api bots-info [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--bot <value>` | Bot user to get info on. |
 
-**Example:** `slack personal api bots-info`
+**Example:** `slk personal api bots-info`
 
-### `slack api calls`
+### `slk api calls`
 
 the calls operations
 
-#### `slack api calls add`
+#### `slk api calls add`
 
 calls_add — write (POST /calls.add)
 
 **Changes something in the service.**
 
 ```sh
-slack api calls add [options]
+slk api calls add [options]
 ```
 
 | Option | What it does |
@@ -5662,16 +5662,16 @@ slack api calls add [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api calls add`
+**Example:** `slk personal api calls add`
 
-#### `slack api calls end`
+#### `slk api calls end`
 
 calls_end — write (POST /calls.end)
 
 **Changes something in the service.**
 
 ```sh
-slack api calls end [options]
+slk api calls end [options]
 ```
 
 | Option | What it does |
@@ -5679,30 +5679,30 @@ slack api calls end [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api calls end`
+**Example:** `slk personal api calls end`
 
-#### `slack api calls info`
+#### `slk api calls info`
 
 calls_info — read (GET /calls.info)
 
 ```sh
-slack api calls info [options]
+slk api calls info [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--id <value>` | `id` of the Call returned by the [`calls.add`](https://api.slack.com/methods/calls.add) method. |
 
-**Example:** `slack personal api calls info --id <value>`
+**Example:** `slk personal api calls info --id <value>`
 
-#### `slack api calls participants-add`
+#### `slk api calls participants-add`
 
 calls_participants_add — write (POST /calls.participants.add)
 
 **Changes something in the service.**
 
 ```sh
-slack api calls participants-add [options]
+slk api calls participants-add [options]
 ```
 
 | Option | What it does |
@@ -5710,16 +5710,16 @@ slack api calls participants-add [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api calls participants-add`
+**Example:** `slk personal api calls participants-add`
 
-#### `slack api calls participants-remove`
+#### `slk api calls participants-remove`
 
 calls_participants_remove — destructive (POST /calls.participants.remove)
 
 **Changes something in the service.**
 
 ```sh
-slack api calls participants-remove [options]
+slk api calls participants-remove [options]
 ```
 
 | Option | What it does |
@@ -5727,16 +5727,16 @@ slack api calls participants-remove [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api calls participants-remove`
+**Example:** `slk personal api calls participants-remove`
 
-#### `slack api calls update`
+#### `slk api calls update`
 
 calls_update — write (POST /calls.update)
 
 **Changes something in the service.**
 
 ```sh
-slack api calls update [options]
+slk api calls update [options]
 ```
 
 | Option | What it does |
@@ -5744,20 +5744,20 @@ slack api calls update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api calls update`
+**Example:** `slk personal api calls update`
 
-### `slack api chat`
+### `slk api chat`
 
 the chat operations
 
-#### `slack api chat delete`
+#### `slk api chat delete`
 
 chat_delete — destructive (POST /chat.delete)
 
 **Changes something in the service.**
 
 ```sh
-slack api chat delete [options]
+slk api chat delete [options]
 ```
 
 | Option | What it does |
@@ -5765,16 +5765,16 @@ slack api chat delete [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api chat delete`
+**Example:** `slk personal api chat delete`
 
-#### `slack api chat delete-scheduled-message`
+#### `slk api chat delete-scheduled-message`
 
 chat_deleteScheduledMessage — destructive (POST /chat.deleteScheduledMessage)
 
 **Changes something in the service.**
 
 ```sh
-slack api chat delete-scheduled-message [options]
+slk api chat delete-scheduled-message [options]
 ```
 
 | Option | What it does |
@@ -5782,14 +5782,14 @@ slack api chat delete-scheduled-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api chat delete-scheduled-message`
+**Example:** `slk personal api chat delete-scheduled-message`
 
-#### `slack api chat get-permalink`
+#### `slk api chat get-permalink`
 
 chat_getPermalink — read (GET /chat.getPermalink)
 
 ```sh
-slack api chat get-permalink [options]
+slk api chat get-permalink [options]
 ```
 
 | Option | What it does |
@@ -5797,16 +5797,16 @@ slack api chat get-permalink [options]
 | `--channel <value>` | The ID of the conversation or channel containing the message. |
 | `--message-ts <value>` | A message's `ts` value, uniquely identifying it within a channel. |
 
-**Example:** `slack personal api chat get-permalink --channel <value> --message-ts <value>`
+**Example:** `slk personal api chat get-permalink --channel <value> --message-ts <value>`
 
-#### `slack api chat me-message`
+#### `slk api chat me-message`
 
 chat_meMessage — write (POST /chat.meMessage)
 
 **Changes something in the service.**
 
 ```sh
-slack api chat me-message [options]
+slk api chat me-message [options]
 ```
 
 | Option | What it does |
@@ -5814,16 +5814,16 @@ slack api chat me-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api chat me-message`
+**Example:** `slk personal api chat me-message`
 
-#### `slack api chat post-ephemeral`
+#### `slk api chat post-ephemeral`
 
 chat_postEphemeral — write (POST /chat.postEphemeral)
 
 **Changes something in the service.**
 
 ```sh
-slack api chat post-ephemeral [options]
+slk api chat post-ephemeral [options]
 ```
 
 | Option | What it does |
@@ -5831,16 +5831,16 @@ slack api chat post-ephemeral [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api chat post-ephemeral`
+**Example:** `slk personal api chat post-ephemeral`
 
-#### `slack api chat post-message`
+#### `slk api chat post-message`
 
 chat_postMessage — write (POST /chat.postMessage)
 
 **Changes something in the service.**
 
 ```sh
-slack api chat post-message [options]
+slk api chat post-message [options]
 ```
 
 | Option | What it does |
@@ -5848,16 +5848,16 @@ slack api chat post-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api chat post-message`
+**Example:** `slk personal api chat post-message`
 
-#### `slack api chat schedule-message`
+#### `slk api chat schedule-message`
 
 chat_scheduleMessage — write (POST /chat.scheduleMessage)
 
 **Changes something in the service.**
 
 ```sh
-slack api chat schedule-message [options]
+slk api chat schedule-message [options]
 ```
 
 | Option | What it does |
@@ -5865,14 +5865,14 @@ slack api chat schedule-message [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api chat schedule-message`
+**Example:** `slk personal api chat schedule-message`
 
-#### `slack api chat scheduled-messages-list`
+#### `slk api chat scheduled-messages-list`
 
 chat_scheduledMessages_list — read (GET /chat.scheduledMessages.list)
 
 ```sh
-slack api chat scheduled-messages-list [options]
+slk api chat scheduled-messages-list [options]
 ```
 
 | Option | What it does |
@@ -5884,16 +5884,16 @@ slack api chat scheduled-messages-list [options]
 | `--cursor <value>` | For pagination purposes, this is the `cursor` value returned from a previous call to `chat.scheduledmessages.list` indicating where you want to start this call from. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api chat scheduled-messages-list`
+**Example:** `slk personal api chat scheduled-messages-list`
 
-#### `slack api chat unfurl`
+#### `slk api chat unfurl`
 
 chat_unfurl — write (POST /chat.unfurl)
 
 **Changes something in the service.**
 
 ```sh
-slack api chat unfurl [options]
+slk api chat unfurl [options]
 ```
 
 | Option | What it does |
@@ -5901,16 +5901,16 @@ slack api chat unfurl [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api chat unfurl`
+**Example:** `slk personal api chat unfurl`
 
-#### `slack api chat update`
+#### `slk api chat update`
 
 chat_update — write (POST /chat.update)
 
 **Changes something in the service.**
 
 ```sh
-slack api chat update [options]
+slk api chat update [options]
 ```
 
 | Option | What it does |
@@ -5918,20 +5918,20 @@ slack api chat update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api chat update`
+**Example:** `slk personal api chat update`
 
-### `slack api conversations`
+### `slk api conversations`
 
 the conversations operations
 
-#### `slack api conversations archive`
+#### `slk api conversations archive`
 
 conversations_archive — destructive (POST /conversations.archive)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations archive [options]
+slk api conversations archive [options]
 ```
 
 | Option | What it does |
@@ -5939,16 +5939,16 @@ slack api conversations archive [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations archive`
+**Example:** `slk personal api conversations archive`
 
-#### `slack api conversations close`
+#### `slk api conversations close`
 
 conversations_close — write (POST /conversations.close)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations close [options]
+slk api conversations close [options]
 ```
 
 | Option | What it does |
@@ -5956,16 +5956,16 @@ slack api conversations close [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations close`
+**Example:** `slk personal api conversations close`
 
-#### `slack api conversations create`
+#### `slk api conversations create`
 
 conversations_create — write (POST /conversations.create)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations create [options]
+slk api conversations create [options]
 ```
 
 | Option | What it does |
@@ -5973,14 +5973,14 @@ slack api conversations create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations create`
+**Example:** `slk personal api conversations create`
 
-#### `slack api conversations history`
+#### `slk api conversations history`
 
 conversations_history — read (GET /conversations.history)
 
 ```sh
-slack api conversations history [options]
+slk api conversations history [options]
 ```
 
 | Option | What it does |
@@ -5993,14 +5993,14 @@ slack api conversations history [options]
 | `--cursor <value>` | Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api conversations history --channel <value>`
+**Example:** `slk personal api conversations history --channel <value>`
 
-#### `slack api conversations info`
+#### `slk api conversations info`
 
 conversations_info — read (GET /conversations.info)
 
 ```sh
-slack api conversations info [options]
+slk api conversations info [options]
 ```
 
 | Option | What it does |
@@ -6009,16 +6009,16 @@ slack api conversations info [options]
 | `--include-locale <value>` | Set this to `true` to receive the locale for this conversation. Defaults to `false`. |
 | `--include-num-members <value>` | Set to `true` to include the member count for the specified conversation. Defaults to `false`. |
 
-**Example:** `slack personal api conversations info --channel <value>`
+**Example:** `slk personal api conversations info --channel <value>`
 
-#### `slack api conversations invite`
+#### `slk api conversations invite`
 
 conversations_invite — write (POST /conversations.invite)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations invite [options]
+slk api conversations invite [options]
 ```
 
 | Option | What it does |
@@ -6026,16 +6026,16 @@ slack api conversations invite [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations invite`
+**Example:** `slk personal api conversations invite`
 
-#### `slack api conversations join`
+#### `slk api conversations join`
 
 conversations_join — write (POST /conversations.join)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations join [options]
+slk api conversations join [options]
 ```
 
 | Option | What it does |
@@ -6043,16 +6043,16 @@ slack api conversations join [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations join`
+**Example:** `slk personal api conversations join`
 
-#### `slack api conversations kick`
+#### `slk api conversations kick`
 
 conversations_kick — destructive (POST /conversations.kick)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations kick [options]
+slk api conversations kick [options]
 ```
 
 | Option | What it does |
@@ -6060,16 +6060,16 @@ slack api conversations kick [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations kick`
+**Example:** `slk personal api conversations kick`
 
-#### `slack api conversations leave`
+#### `slk api conversations leave`
 
 conversations_leave — destructive (POST /conversations.leave)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations leave [options]
+slk api conversations leave [options]
 ```
 
 | Option | What it does |
@@ -6077,14 +6077,14 @@ slack api conversations leave [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations leave`
+**Example:** `slk personal api conversations leave`
 
-#### `slack api conversations list`
+#### `slk api conversations list`
 
 conversations_list — read (GET /conversations.list)
 
 ```sh
-slack api conversations list [options]
+slk api conversations list [options]
 ```
 
 | Option | What it does |
@@ -6095,16 +6095,16 @@ slack api conversations list [options]
 | `--cursor <value>` | Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api conversations list`
+**Example:** `slk personal api conversations list`
 
-#### `slack api conversations mark`
+#### `slk api conversations mark`
 
 conversations_mark — write (POST /conversations.mark)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations mark [options]
+slk api conversations mark [options]
 ```
 
 | Option | What it does |
@@ -6112,14 +6112,14 @@ slack api conversations mark [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations mark`
+**Example:** `slk personal api conversations mark`
 
-#### `slack api conversations members`
+#### `slk api conversations members`
 
 conversations_members — read (GET /conversations.members)
 
 ```sh
-slack api conversations members [options]
+slk api conversations members [options]
 ```
 
 | Option | What it does |
@@ -6129,16 +6129,16 @@ slack api conversations members [options]
 | `--cursor <value>` | Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api conversations members --channel <value>`
+**Example:** `slk personal api conversations members --channel <value>`
 
-#### `slack api conversations open`
+#### `slk api conversations open`
 
 conversations_open — write (POST /conversations.open)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations open [options]
+slk api conversations open [options]
 ```
 
 | Option | What it does |
@@ -6146,16 +6146,16 @@ slack api conversations open [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations open`
+**Example:** `slk personal api conversations open`
 
-#### `slack api conversations rename`
+#### `slk api conversations rename`
 
 conversations_rename — write (POST /conversations.rename)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations rename [options]
+slk api conversations rename [options]
 ```
 
 | Option | What it does |
@@ -6163,14 +6163,14 @@ slack api conversations rename [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations rename`
+**Example:** `slk personal api conversations rename`
 
-#### `slack api conversations replies`
+#### `slk api conversations replies`
 
 conversations_replies — read (GET /conversations.replies)
 
 ```sh
-slack api conversations replies [options]
+slk api conversations replies [options]
 ```
 
 | Option | What it does |
@@ -6184,16 +6184,16 @@ slack api conversations replies [options]
 | `--cursor <value>` | Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api conversations replies --channel <value> --ts <value>`
+**Example:** `slk personal api conversations replies --channel <value> --ts <value>`
 
-#### `slack api conversations set-purpose`
+#### `slk api conversations set-purpose`
 
 conversations_setPurpose — write (POST /conversations.setPurpose)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations set-purpose [options]
+slk api conversations set-purpose [options]
 ```
 
 | Option | What it does |
@@ -6201,16 +6201,16 @@ slack api conversations set-purpose [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations set-purpose`
+**Example:** `slk personal api conversations set-purpose`
 
-#### `slack api conversations set-topic`
+#### `slk api conversations set-topic`
 
 conversations_setTopic — write (POST /conversations.setTopic)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations set-topic [options]
+slk api conversations set-topic [options]
 ```
 
 | Option | What it does |
@@ -6218,16 +6218,16 @@ slack api conversations set-topic [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations set-topic`
+**Example:** `slk personal api conversations set-topic`
 
-#### `slack api conversations unarchive`
+#### `slk api conversations unarchive`
 
 conversations_unarchive — write (POST /conversations.unarchive)
 
 **Changes something in the service.**
 
 ```sh
-slack api conversations unarchive [options]
+slk api conversations unarchive [options]
 ```
 
 | Option | What it does |
@@ -6235,16 +6235,16 @@ slack api conversations unarchive [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api conversations unarchive`
+**Example:** `slk personal api conversations unarchive`
 
-### `slack api dialog-open`
+### `slk api dialog-open`
 
 dialog_open — write (GET /dialog.open)
 
 **Changes something in the service.**
 
 ```sh
-slack api dialog-open [options]
+slk api dialog-open [options]
 ```
 
 | Option | What it does |
@@ -6252,86 +6252,86 @@ slack api dialog-open [options]
 | `--dialog <value>` | The dialog definition. This must be a JSON-encoded string. |
 | `--trigger-id <value>` | Exchange a trigger to post to the user. |
 
-**Example:** `slack personal api dialog-open --dialog <value> --trigger-id <value>`
+**Example:** `slk personal api dialog-open --dialog <value> --trigger-id <value>`
 
-### `slack api dnd`
+### `slk api dnd`
 
 the dnd operations
 
-#### `slack api dnd end-dnd`
+#### `slk api dnd end-dnd`
 
 dnd_endDnd — write (POST /dnd.endDnd)
 
 **Changes something in the service.**
 
 ```sh
-slack api dnd end-dnd
+slk api dnd end-dnd
 ```
 
-**Example:** `slack personal api dnd end-dnd`
+**Example:** `slk personal api dnd end-dnd`
 
-#### `slack api dnd end-snooze`
+#### `slk api dnd end-snooze`
 
 dnd_endSnooze — write (POST /dnd.endSnooze)
 
 **Changes something in the service.**
 
 ```sh
-slack api dnd end-snooze
+slk api dnd end-snooze
 ```
 
-**Example:** `slack personal api dnd end-snooze`
+**Example:** `slk personal api dnd end-snooze`
 
-#### `slack api dnd info`
+#### `slk api dnd info`
 
 dnd_info — read (GET /dnd.info)
 
 ```sh
-slack api dnd info [options]
+slk api dnd info [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--user <value>` | User to fetch status for (defaults to current user). |
 
-**Example:** `slack personal api dnd info`
+**Example:** `slk personal api dnd info`
 
-#### `slack api dnd team-info`
+#### `slk api dnd team-info`
 
 dnd_teamInfo — read (GET /dnd.teamInfo)
 
 ```sh
-slack api dnd team-info [options]
+slk api dnd team-info [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--users <value>` | Comma-separated list of users to fetch Do Not Disturb status for. |
 
-**Example:** `slack personal api dnd team-info`
+**Example:** `slk personal api dnd team-info`
 
-### `slack api emoji-list`
+### `slk api emoji-list`
 
 emoji_list — read (GET /emoji.list)
 
 ```sh
-slack api emoji-list
+slk api emoji-list
 ```
 
-**Example:** `slack personal api emoji-list`
+**Example:** `slk personal api emoji-list`
 
-### `slack api files`
+### `slk api files`
 
 the files operations
 
-#### `slack api files comments-delete`
+#### `slk api files comments-delete`
 
 files_comments_delete — destructive (POST /files.comments.delete)
 
 **Changes something in the service.**
 
 ```sh
-slack api files comments-delete [options]
+slk api files comments-delete [options]
 ```
 
 | Option | What it does |
@@ -6339,16 +6339,16 @@ slack api files comments-delete [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api files comments-delete`
+**Example:** `slk personal api files comments-delete`
 
-#### `slack api files delete`
+#### `slk api files delete`
 
 files_delete — destructive (POST /files.delete)
 
 **Changes something in the service.**
 
 ```sh
-slack api files delete [options]
+slk api files delete [options]
 ```
 
 | Option | What it does |
@@ -6356,14 +6356,14 @@ slack api files delete [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api files delete`
+**Example:** `slk personal api files delete`
 
-#### `slack api files info`
+#### `slk api files info`
 
 files_info — read (GET /files.info)
 
 ```sh
-slack api files info [options]
+slk api files info [options]
 ```
 
 | Option | What it does |
@@ -6375,14 +6375,14 @@ slack api files info [options]
 | `--cursor <value>` | Parameter for pagination. File comments are paginated for a single file. Set `cursor` equal to the `next_cursor` attribute returned by the previous request's `response_metadata`. This parameter is optional, but pagination is mandatory: the default value simply fetches the first "page" of the collection of comments. See [pagination](https://api.slack.com/docs/pagination) for more details. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api files info`
+**Example:** `slk personal api files info`
 
-#### `slack api files list`
+#### `slk api files list`
 
 files_list — read (GET /files.list)
 
 ```sh
-slack api files list [options]
+slk api files list [options]
 ```
 
 | Option | What it does |
@@ -6397,14 +6397,14 @@ slack api files list [options]
 | `--show-files-hidden-by-limit <value>` | Show truncated file info for files hidden due to being too old, and the team who owns the file being over the file limit. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api files list`
+**Example:** `slk personal api files list`
 
-#### `slack api files remote-info`
+#### `slk api files remote-info`
 
 files_remote_info — read (GET /files.remote.info)
 
 ```sh
-slack api files remote-info [options]
+slk api files remote-info [options]
 ```
 
 | Option | What it does |
@@ -6412,14 +6412,14 @@ slack api files remote-info [options]
 | `--file <value>` | Specify a file by providing its ID. |
 | `--external-id <value>` | Creator defined GUID for the file. |
 
-**Example:** `slack personal api files remote-info`
+**Example:** `slk personal api files remote-info`
 
-#### `slack api files remote-list`
+#### `slk api files remote-list`
 
 files_remote_list — read (GET /files.remote.list)
 
 ```sh
-slack api files remote-list [options]
+slk api files remote-list [options]
 ```
 
 | Option | What it does |
@@ -6430,16 +6430,16 @@ slack api files remote-list [options]
 | `--limit <value>` | The maximum number of items to return. |
 | `--cursor <value>` | Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail. |
 
-**Example:** `slack personal api files remote-list`
+**Example:** `slk personal api files remote-list`
 
-#### `slack api files remote-share`
+#### `slk api files remote-share`
 
 files_remote_share — write (GET /files.remote.share)
 
 **Changes something in the service.**
 
 ```sh
-slack api files remote-share [options]
+slk api files remote-share [options]
 ```
 
 | Option | What it does |
@@ -6448,16 +6448,16 @@ slack api files remote-share [options]
 | `--external-id <value>` | The globally unique identifier (GUID) for the file, as set by the app registering the file with Slack.  Either this field or `file` or both are required. |
 | `--channels <value>` | Comma-separated list of channel IDs where the file will be shared. |
 
-**Example:** `slack personal api files remote-share`
+**Example:** `slk personal api files remote-share`
 
-#### `slack api files revoke-public-url`
+#### `slk api files revoke-public-url`
 
 files_revokePublicURL — destructive (POST /files.revokePublicURL)
 
 **Changes something in the service.**
 
 ```sh
-slack api files revoke-public-url [options]
+slk api files revoke-public-url [options]
 ```
 
 | Option | What it does |
@@ -6465,16 +6465,16 @@ slack api files revoke-public-url [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api files revoke-public-url`
+**Example:** `slk personal api files revoke-public-url`
 
-#### `slack api files shared-public-url`
+#### `slk api files shared-public-url`
 
 files_sharedPublicURL — write (POST /files.sharedPublicURL)
 
 **Changes something in the service.**
 
 ```sh
-slack api files shared-public-url [options]
+slk api files shared-public-url [options]
 ```
 
 | Option | What it does |
@@ -6482,14 +6482,14 @@ slack api files shared-public-url [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api files shared-public-url`
+**Example:** `slk personal api files shared-public-url`
 
-### `slack api migration-exchange`
+### `slk api migration-exchange`
 
 migration_exchange — read (GET /migration.exchange)
 
 ```sh
-slack api migration-exchange [options]
+slk api migration-exchange [options]
 ```
 
 | Option | What it does |
@@ -6498,20 +6498,20 @@ slack api migration-exchange [options]
 | `--team-id <value>` | Specify team_id starts with `T` in case of Org Token. |
 | `--to-old <value>` | Specify `true` to convert `W` global user IDs to workspace-specific `U` IDs. Defaults to `false`. |
 
-**Example:** `slack personal api migration-exchange --users <value>`
+**Example:** `slk personal api migration-exchange --users <value>`
 
-### `slack api pins`
+### `slk api pins`
 
 the pins operations
 
-#### `slack api pins add`
+#### `slk api pins add`
 
 pins_add — write (POST /pins.add)
 
 **Changes something in the service.**
 
 ```sh
-slack api pins add [options]
+slk api pins add [options]
 ```
 
 | Option | What it does |
@@ -6519,30 +6519,30 @@ slack api pins add [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api pins add`
+**Example:** `slk personal api pins add`
 
-#### `slack api pins list`
+#### `slk api pins list`
 
 pins_list — read (GET /pins.list)
 
 ```sh
-slack api pins list [options]
+slk api pins list [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--channel <value>` | Channel to get pinned items for. |
 
-**Example:** `slack personal api pins list --channel <value>`
+**Example:** `slk personal api pins list --channel <value>`
 
-#### `slack api pins remove`
+#### `slk api pins remove`
 
 pins_remove — destructive (POST /pins.remove)
 
 **Changes something in the service.**
 
 ```sh
-slack api pins remove [options]
+slk api pins remove [options]
 ```
 
 | Option | What it does |
@@ -6550,20 +6550,20 @@ slack api pins remove [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api pins remove`
+**Example:** `slk personal api pins remove`
 
-### `slack api reactions`
+### `slk api reactions`
 
 the reactions operations
 
-#### `slack api reactions add`
+#### `slk api reactions add`
 
 reactions_add — write (POST /reactions.add)
 
 **Changes something in the service.**
 
 ```sh
-slack api reactions add [options]
+slk api reactions add [options]
 ```
 
 | Option | What it does |
@@ -6571,14 +6571,14 @@ slack api reactions add [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api reactions add`
+**Example:** `slk personal api reactions add`
 
-#### `slack api reactions get`
+#### `slk api reactions get`
 
 reactions_get — read (GET /reactions.get)
 
 ```sh
-slack api reactions get [options]
+slk api reactions get [options]
 ```
 
 | Option | What it does |
@@ -6589,14 +6589,14 @@ slack api reactions get [options]
 | `--full <value>` | If true always return the complete reaction list. |
 | `--timestamp <value>` | Timestamp of the message to get reactions for. |
 
-**Example:** `slack personal api reactions get`
+**Example:** `slk personal api reactions get`
 
-#### `slack api reactions list`
+#### `slk api reactions list`
 
 reactions_list — read (GET /reactions.list)
 
 ```sh
-slack api reactions list [options]
+slk api reactions list [options]
 ```
 
 | Option | What it does |
@@ -6609,16 +6609,16 @@ slack api reactions list [options]
 | `--limit <value>` | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api reactions list`
+**Example:** `slk personal api reactions list`
 
-#### `slack api reactions remove`
+#### `slk api reactions remove`
 
 reactions_remove — destructive (POST /reactions.remove)
 
 **Changes something in the service.**
 
 ```sh
-slack api reactions remove [options]
+slk api reactions remove [options]
 ```
 
 | Option | What it does |
@@ -6626,20 +6626,20 @@ slack api reactions remove [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api reactions remove`
+**Example:** `slk personal api reactions remove`
 
-### `slack api reminders`
+### `slk api reminders`
 
 the reminders operations
 
-#### `slack api reminders add`
+#### `slk api reminders add`
 
 reminders_add — write (POST /reminders.add)
 
 **Changes something in the service.**
 
 ```sh
-slack api reminders add [options]
+slk api reminders add [options]
 ```
 
 | Option | What it does |
@@ -6647,16 +6647,16 @@ slack api reminders add [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api reminders add`
+**Example:** `slk personal api reminders add`
 
-#### `slack api reminders complete`
+#### `slk api reminders complete`
 
 reminders_complete — write (POST /reminders.complete)
 
 **Changes something in the service.**
 
 ```sh
-slack api reminders complete [options]
+slk api reminders complete [options]
 ```
 
 | Option | What it does |
@@ -6664,16 +6664,16 @@ slack api reminders complete [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api reminders complete`
+**Example:** `slk personal api reminders complete`
 
-#### `slack api reminders delete`
+#### `slk api reminders delete`
 
 reminders_delete — destructive (POST /reminders.delete)
 
 **Changes something in the service.**
 
 ```sh
-slack api reminders delete [options]
+slk api reminders delete [options]
 ```
 
 | Option | What it does |
@@ -6681,38 +6681,38 @@ slack api reminders delete [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api reminders delete`
+**Example:** `slk personal api reminders delete`
 
-#### `slack api reminders info`
+#### `slk api reminders info`
 
 reminders_info — read (GET /reminders.info)
 
 ```sh
-slack api reminders info [options]
+slk api reminders info [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--reminder <value>` | The ID of the reminder. |
 
-**Example:** `slack personal api reminders info`
+**Example:** `slk personal api reminders info`
 
-#### `slack api reminders list`
+#### `slk api reminders list`
 
 reminders_list — read (GET /reminders.list)
 
 ```sh
-slack api reminders list
+slk api reminders list
 ```
 
-**Example:** `slack personal api reminders list`
+**Example:** `slk personal api reminders list`
 
-### `slack api search-messages`
+### `slk api search-messages`
 
 search_messages — read (GET /search.messages)
 
 ```sh
-slack api search-messages [options]
+slk api search-messages [options]
 ```
 
 | Option | What it does |
@@ -6724,20 +6724,20 @@ slack api search-messages [options]
 | `--sort <value>` | Return matches sorted by either `score` or `timestamp`. |
 | `--sort-dir <value>` | Change sort direction to ascending (`asc`) or descending (`desc`). |
 
-**Example:** `slack personal api search-messages --query <value>`
+**Example:** `slk personal api search-messages --query <value>`
 
-### `slack api stars`
+### `slk api stars`
 
 the stars operations
 
-#### `slack api stars add`
+#### `slk api stars add`
 
 stars_add — write (POST /stars.add)
 
 **Changes something in the service.**
 
 ```sh
-slack api stars add [options]
+slk api stars add [options]
 ```
 
 | Option | What it does |
@@ -6745,14 +6745,14 @@ slack api stars add [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api stars add`
+**Example:** `slk personal api stars add`
 
-#### `slack api stars list`
+#### `slk api stars list`
 
 stars_list — read (GET /stars.list)
 
 ```sh
-slack api stars list [options]
+slk api stars list [options]
 ```
 
 | Option | What it does |
@@ -6763,16 +6763,16 @@ slack api stars list [options]
 | `--limit <value>` | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api stars list`
+**Example:** `slk personal api stars list`
 
-#### `slack api stars remove`
+#### `slk api stars remove`
 
 stars_remove — destructive (POST /stars.remove)
 
 **Changes something in the service.**
 
 ```sh
-slack api stars remove [options]
+slk api stars remove [options]
 ```
 
 | Option | What it does |
@@ -6780,18 +6780,18 @@ slack api stars remove [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api stars remove`
+**Example:** `slk personal api stars remove`
 
-### `slack api team`
+### `slk api team`
 
 the team operations
 
-#### `slack api team access-logs`
+#### `slk api team access-logs`
 
 team_accessLogs — read (GET /team.accessLogs)
 
 ```sh
-slack api team access-logs [options]
+slk api team access-logs [options]
 ```
 
 | Option | What it does |
@@ -6800,42 +6800,42 @@ slack api team access-logs [options]
 | `--count <value>` | count. |
 | `--page <value>` | page. |
 
-**Example:** `slack personal api team access-logs`
+**Example:** `slk personal api team access-logs`
 
-#### `slack api team billable-info`
+#### `slk api team billable-info`
 
 team_billableInfo — read (GET /team.billableInfo)
 
 ```sh
-slack api team billable-info [options]
+slk api team billable-info [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--user <value>` | A user to retrieve the billable information for. Defaults to all users. |
 
-**Example:** `slack personal api team billable-info`
+**Example:** `slk personal api team billable-info`
 
-#### `slack api team info`
+#### `slk api team info`
 
 team_info — read (GET /team.info)
 
 ```sh
-slack api team info [options]
+slk api team info [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--team <value>` | Team to get info on, if omitted, will return information about the current team. Will only return team that the authenticated token is allowed to see through external shared channels. |
 
-**Example:** `slack personal api team info`
+**Example:** `slk personal api team info`
 
-#### `slack api team integration-logs`
+#### `slk api team integration-logs`
 
 team_integrationLogs — read (GET /team.integrationLogs)
 
 ```sh
-slack api team integration-logs [options]
+slk api team integration-logs [options]
 ```
 
 | Option | What it does |
@@ -6847,34 +6847,34 @@ slack api team integration-logs [options]
 | `--service-id <value>` | Filter logs to this service. Defaults to all logs. |
 | `--user <value>` | Filter logs generated by this user’s actions. Defaults to all logs. |
 
-**Example:** `slack personal api team integration-logs`
+**Example:** `slk personal api team integration-logs`
 
-#### `slack api team profile-get`
+#### `slk api team profile-get`
 
 team_profile_get — read (GET /team.profile.get)
 
 ```sh
-slack api team profile-get [options]
+slk api team profile-get [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--visibility <value>` | Filter by visibility. |
 
-**Example:** `slack personal api team profile-get`
+**Example:** `slk personal api team profile-get`
 
-### `slack api usergroups`
+### `slk api usergroups`
 
 the usergroups operations
 
-#### `slack api usergroups create`
+#### `slk api usergroups create`
 
 usergroups_create — write (POST /usergroups.create)
 
 **Changes something in the service.**
 
 ```sh
-slack api usergroups create [options]
+slk api usergroups create [options]
 ```
 
 | Option | What it does |
@@ -6882,16 +6882,16 @@ slack api usergroups create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api usergroups create`
+**Example:** `slk personal api usergroups create`
 
-#### `slack api usergroups disable`
+#### `slk api usergroups disable`
 
 usergroups_disable — destructive (POST /usergroups.disable)
 
 **Changes something in the service.**
 
 ```sh
-slack api usergroups disable [options]
+slk api usergroups disable [options]
 ```
 
 | Option | What it does |
@@ -6899,16 +6899,16 @@ slack api usergroups disable [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api usergroups disable`
+**Example:** `slk personal api usergroups disable`
 
-#### `slack api usergroups enable`
+#### `slk api usergroups enable`
 
 usergroups_enable — write (POST /usergroups.enable)
 
 **Changes something in the service.**
 
 ```sh
-slack api usergroups enable [options]
+slk api usergroups enable [options]
 ```
 
 | Option | What it does |
@@ -6916,14 +6916,14 @@ slack api usergroups enable [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api usergroups enable`
+**Example:** `slk personal api usergroups enable`
 
-#### `slack api usergroups list`
+#### `slk api usergroups list`
 
 usergroups_list — read (GET /usergroups.list)
 
 ```sh
-slack api usergroups list [options]
+slk api usergroups list [options]
 ```
 
 | Option | What it does |
@@ -6932,16 +6932,16 @@ slack api usergroups list [options]
 | `--include-count <value>` | Include the number of users in each User Group. |
 | `--include-disabled <value>` | Include disabled User Groups. |
 
-**Example:** `slack personal api usergroups list`
+**Example:** `slk personal api usergroups list`
 
-#### `slack api usergroups update`
+#### `slk api usergroups update`
 
 usergroups_update — write (POST /usergroups.update)
 
 **Changes something in the service.**
 
 ```sh
-slack api usergroups update [options]
+slk api usergroups update [options]
 ```
 
 | Option | What it does |
@@ -6949,14 +6949,14 @@ slack api usergroups update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api usergroups update`
+**Example:** `slk personal api usergroups update`
 
-#### `slack api usergroups users-list`
+#### `slk api usergroups users-list`
 
 usergroups_users_list — read (GET /usergroups.users.list)
 
 ```sh
-slack api usergroups users-list [options]
+slk api usergroups users-list [options]
 ```
 
 | Option | What it does |
@@ -6964,16 +6964,16 @@ slack api usergroups users-list [options]
 | `--include-disabled <value>` | Allow results that involve disabled User Groups. |
 | `--usergroup <value>` | The encoded ID of the User Group to update. |
 
-**Example:** `slack personal api usergroups users-list --usergroup <value>`
+**Example:** `slk personal api usergroups users-list --usergroup <value>`
 
-#### `slack api usergroups users-update`
+#### `slk api usergroups users-update`
 
 usergroups_users_update — write (POST /usergroups.users.update)
 
 **Changes something in the service.**
 
 ```sh
-slack api usergroups users-update [options]
+slk api usergroups users-update [options]
 ```
 
 | Option | What it does |
@@ -6981,18 +6981,18 @@ slack api usergroups users-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api usergroups users-update`
+**Example:** `slk personal api usergroups users-update`
 
-### `slack api users`
+### `slk api users`
 
 the users operations
 
-#### `slack api users conversations`
+#### `slk api users conversations`
 
 users_conversations — read (GET /users.conversations)
 
 ```sh
-slack api users conversations [options]
+slk api users conversations [options]
 ```
 
 | Option | What it does |
@@ -7004,38 +7004,38 @@ slack api users conversations [options]
 | `--cursor <value>` | Paginate through collections of data by setting the `cursor` parameter to a `next_cursor` attribute returned by a previous request's `response_metadata`. Default value fetches the first "page" of the collection. See [pagination](https://api.slack.com/docs/pagination) for more detail. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api users conversations`
+**Example:** `slk personal api users conversations`
 
-#### `slack api users get-presence`
+#### `slk api users get-presence`
 
 users_getPresence — read (GET /users.getPresence)
 
 ```sh
-slack api users get-presence [options]
+slk api users get-presence [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--user <value>` | User to get presence info on. Defaults to the authed user. |
 
-**Example:** `slack personal api users get-presence`
+**Example:** `slk personal api users get-presence`
 
-#### `slack api users identity`
+#### `slk api users identity`
 
 users_identity — read (GET /users.identity)
 
 ```sh
-slack api users identity
+slk api users identity
 ```
 
-**Example:** `slack personal api users identity`
+**Example:** `slk personal api users identity`
 
-#### `slack api users info`
+#### `slk api users info`
 
 users_info — read (GET /users.info)
 
 ```sh
-slack api users info [options]
+slk api users info [options]
 ```
 
 | Option | What it does |
@@ -7043,14 +7043,14 @@ slack api users info [options]
 | `--include-locale <value>` | Set this to `true` to receive the locale for this user. Defaults to `false`. |
 | `--user <value>` | User to get info on. |
 
-**Example:** `slack personal api users info`
+**Example:** `slk personal api users info`
 
-#### `slack api users list`
+#### `slk api users list`
 
 users_list — read (GET /users.list)
 
 ```sh
-slack api users list [options]
+slk api users list [options]
 ```
 
 | Option | What it does |
@@ -7060,28 +7060,28 @@ slack api users list [options]
 | `--include-locale <value>` | Set this to `true` to receive the locale for users. Defaults to `false`. |
 | `--all` | read every page, as the API pages it. |
 
-**Example:** `slack personal api users list`
+**Example:** `slk personal api users list`
 
-#### `slack api users lookup-by-email`
+#### `slk api users lookup-by-email`
 
 users_lookupByEmail — read (GET /users.lookupByEmail)
 
 ```sh
-slack api users lookup-by-email [options]
+slk api users lookup-by-email [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--email <value>` | An email address belonging to a user in the workspace. |
 
-**Example:** `slack personal api users lookup-by-email --email <value>`
+**Example:** `slk personal api users lookup-by-email --email <value>`
 
-#### `slack api users profile-get`
+#### `slk api users profile-get`
 
 users_profile_get — read (GET /users.profile.get)
 
 ```sh
-slack api users profile-get [options]
+slk api users profile-get [options]
 ```
 
 | Option | What it does |
@@ -7089,16 +7089,16 @@ slack api users profile-get [options]
 | `--include-labels <value>` | Include labels for each ID in custom profile fields. |
 | `--user <value>` | User to retrieve profile info for. |
 
-**Example:** `slack personal api users profile-get`
+**Example:** `slk personal api users profile-get`
 
-#### `slack api users profile-set`
+#### `slk api users profile-set`
 
 users_profile_set — write (POST /users.profile.set)
 
 **Changes something in the service.**
 
 ```sh
-slack api users profile-set [options]
+slk api users profile-set [options]
 ```
 
 | Option | What it does |
@@ -7106,28 +7106,28 @@ slack api users profile-set [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api users profile-set`
+**Example:** `slk personal api users profile-set`
 
-#### `slack api users set-active`
+#### `slk api users set-active`
 
 users_setActive — write (POST /users.setActive)
 
 **Changes something in the service.**
 
 ```sh
-slack api users set-active
+slk api users set-active
 ```
 
-**Example:** `slack personal api users set-active`
+**Example:** `slk personal api users set-active`
 
-#### `slack api users set-presence`
+#### `slk api users set-presence`
 
 users_setPresence — write (POST /users.setPresence)
 
 **Changes something in the service.**
 
 ```sh
-slack api users set-presence [options]
+slk api users set-presence [options]
 ```
 
 | Option | What it does |
@@ -7135,20 +7135,20 @@ slack api users set-presence [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `slack personal api users set-presence`
+**Example:** `slk personal api users set-presence`
 
-### `slack api views`
+### `slk api views`
 
 the views operations
 
-#### `slack api views open`
+#### `slk api views open`
 
 views_open — write (GET /views.open)
 
 **Changes something in the service.**
 
 ```sh
-slack api views open [options]
+slk api views open [options]
 ```
 
 | Option | What it does |
@@ -7156,16 +7156,16 @@ slack api views open [options]
 | `--trigger-id <value>` | Exchange a trigger to post to the user. |
 | `--view <value>` | A [view payload](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 
-**Example:** `slack personal api views open --trigger-id <value> --view <value>`
+**Example:** `slk personal api views open --trigger-id <value> --view <value>`
 
-#### `slack api views publish`
+#### `slk api views publish`
 
 views_publish — write (GET /views.publish)
 
 **Changes something in the service.**
 
 ```sh
-slack api views publish [options]
+slk api views publish [options]
 ```
 
 | Option | What it does |
@@ -7174,16 +7174,16 @@ slack api views publish [options]
 | `--view <value>` | A [view payload](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 | `--hash <value>` | A string that represents view state to protect against possible race conditions. |
 
-**Example:** `slack personal api views publish --user-id <value> --view <value>`
+**Example:** `slk personal api views publish --user-id <value> --view <value>`
 
-#### `slack api views push`
+#### `slk api views push`
 
 views_push — write (GET /views.push)
 
 **Changes something in the service.**
 
 ```sh
-slack api views push [options]
+slk api views push [options]
 ```
 
 | Option | What it does |
@@ -7191,16 +7191,16 @@ slack api views push [options]
 | `--trigger-id <value>` | Exchange a trigger to post to the user. |
 | `--view <value>` | A [view payload](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 
-**Example:** `slack personal api views push --trigger-id <value> --view <value>`
+**Example:** `slk personal api views push --trigger-id <value> --view <value>`
 
-#### `slack api views update`
+#### `slk api views update`
 
 views_update — write (GET /views.update)
 
 **Changes something in the service.**
 
 ```sh
-slack api views update [options]
+slk api views update [options]
 ```
 
 | Option | What it does |
@@ -7210,20 +7210,20 @@ slack api views update [options]
 | `--view <value>` | A [view object](https://api.slack.com/reference/surfaces/views). This must be a JSON-encoded string. |
 | `--hash <value>` | A string that represents view state to protect against possible race conditions. |
 
-**Example:** `slack personal api views update`
+**Example:** `slk personal api views update`
 
-### `slack api workflows`
+### `slk api workflows`
 
 the workflows operations
 
-#### `slack api workflows step-completed`
+#### `slk api workflows step-completed`
 
 workflows_stepCompleted — write (GET /workflows.stepCompleted)
 
 **Changes something in the service.**
 
 ```sh
-slack api workflows step-completed [options]
+slk api workflows step-completed [options]
 ```
 
 | Option | What it does |
@@ -7231,16 +7231,16 @@ slack api workflows step-completed [options]
 | `--workflow-step-execute-id <value>` | Context identifier that maps to the correct workflow step execution. |
 | `--outputs <value>` | Key-value object of outputs from your step. Keys of this object reflect the configured `key` properties of your [`outputs`](https://api.slack.com/reference/workflows/workflow_step#output) array from your `workflow_step` object. |
 
-**Example:** `slack personal api workflows step-completed --workflow-step-execute-id <value>`
+**Example:** `slk personal api workflows step-completed --workflow-step-execute-id <value>`
 
-#### `slack api workflows step-failed`
+#### `slk api workflows step-failed`
 
 workflows_stepFailed — write (GET /workflows.stepFailed)
 
 **Changes something in the service.**
 
 ```sh
-slack api workflows step-failed [options]
+slk api workflows step-failed [options]
 ```
 
 | Option | What it does |
@@ -7248,16 +7248,16 @@ slack api workflows step-failed [options]
 | `--workflow-step-execute-id <value>` | Context identifier that maps to the correct workflow step execution. |
 | `--error <value>` | A JSON-based object with a `message` property that should contain a human readable error message. |
 
-**Example:** `slack personal api workflows step-failed --workflow-step-execute-id <value> --error <value>`
+**Example:** `slk personal api workflows step-failed --workflow-step-execute-id <value> --error <value>`
 
-#### `slack api workflows update-step`
+#### `slk api workflows update-step`
 
 workflows_updateStep — write (GET /workflows.updateStep)
 
 **Changes something in the service.**
 
 ```sh
-slack api workflows update-step [options]
+slk api workflows update-step [options]
 ```
 
 | Option | What it does |
@@ -7268,44 +7268,44 @@ slack api workflows update-step [options]
 | `--step-name <value>` | An optional field that can be used to override the step name that is shown in the Workflow Builder. |
 | `--step-image-url <value>` | An optional field that can be used to override app image that is shown in the Workflow Builder. |
 
-**Example:** `slack personal api workflows update-step --workflow-step-edit-id <value>`
+**Example:** `slk personal api workflows update-step --workflow-step-edit-id <value>`
 
-## `slack doctor`
+## `slk doctor`
 
 the state this installation is in, without connecting unless --online
 
 ```sh
-slack doctor [options]
+slk doctor [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--online` | also connect once and read the account; sends nothing. |
 
-**Example:** `slack personal doctor`
+**Example:** `slk personal doctor`
 
-### `slack doctor reports`
+### `slk doctor reports`
 
 problem reports
 
-#### `slack doctor reports show`
+#### `slk doctor reports show`
 
 what a problem report holds; writes nothing
 
 ```sh
-slack doctor reports show
+slk doctor reports show
 ```
 
-**Example:** `slack personal doctor reports show`
+**Example:** `slk personal doctor reports show`
 
-#### `slack doctor reports create`
+#### `slk doctor reports create`
 
 write a problem report to a file, and say where to send it
 
 **Changes something on this computer only.**
 
 ```sh
-slack doctor reports create [options]
+slk doctor reports create [options]
 ```
 
 | Option | What it does |
@@ -7313,32 +7313,32 @@ slack doctor reports create [options]
 | `--run <id>` | the run the report is about; the newest failed one if not given. |
 | `--output <file>` | where to write it; a new file in this directory if not given. |
 
-**Example:** `slack personal doctor reports create --output ./problem-report.json`
+**Example:** `slk personal doctor reports create --output ./problem-report.json`
 
-## `slack complete`
+## `slk complete`
 
-shell completion: `slack complete zsh` prints the script to source
+shell completion: `slk complete zsh` prints the script to source
 
 ```sh
-slack complete [words]
+slk complete [words]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `words` | optional | zsh for the shell script, or command words to complete. |
 
-**Example:** `slack complete zsh`
+**Example:** `slk complete zsh`
 
-## `slack skill`
+## `slk skill`
 
 the instructions an agent is given for this tool
 
-### `slack skill show`
+### `slk skill show`
 
-print SKILL.md — `slack skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
+print SKILL.md — `slk skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
 
 ```sh
-slack skill show [name] [options]
+slk skill show [name] [options]
 ```
 
 | Argument | | What it is |
@@ -7349,46 +7349,46 @@ slack skill show [name] [options]
 |---|---|
 | `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
 
-**Example:** `slack skill show`, `slack skill show follow-ups`
+**Example:** `slk skill show`, `slk skill show follow-ups`
 
-### `slack skill install`
+### `slk skill install`
 
 write SKILL.md to \~/.claude/skills/slack-cli/ (Claude Code) and \~/.agents/skills/slack-cli/ (Codex, Gemini CLI, OpenClaw); --for hermes also has Hermes read \~/.agents/skills, which changes Hermes's own settings, so all leaves it out
 
 **Changes something on this computer only.**
 
 ```sh
-slack skill install [options]
+slk skill install [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
 
-**Example:** `slack skill install --for agents`
+**Example:** `slk skill install --for agents`
 
-### `slack skill status`
+### `slk skill status`
 
-for each place `slack skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
+for each place `slk skill install` writes to, and for the copy Hermes reads: the path, the version installed there, and whether it is current, stale, missing or unversioned
 
 ```sh
-slack skill status
+slk skill status
 ```
 
-**Example:** `slack skill status`, `slack skill status --json`
+**Example:** `slk skill status`, `slk skill status --json`
 
-## `slack mcp`
+## `slk mcp`
 
-serve this profile to an agent over MCP and set it up — `claude mcp add slack -- slack <profile> mcp serve`
+serve this profile to an agent over MCP and set it up — `claude mcp add slk -- slk <profile> mcp serve`
 
-### `slack mcp serve`
+### `slk mcp serve`
 
-serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add slack -- slack <profile> mcp serve`; `slack mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
+serve this profile to an agent over MCP, on stdin and stdout — `claude mcp add slk -- slk <profile> mcp serve`; `slk mcp serve --profiles a,b` or `--profiles all` serves those profiles from one server and each tool asks which
 
 **Changes something in the service.**
 
 ```sh
-slack mcp serve [options]
+slk mcp serve [options]
 ```
 
 | Option | What it does |
@@ -7399,36 +7399,36 @@ slack mcp serve [options]
 | `--port <port>` | the local port for --http (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
 
-**Example:** `slack personal mcp serve`, `slack mcp serve --profiles work,personal`, `slack personal mcp serve --http --public-url https://laptop.example.ts.net`
+**Example:** `slk personal mcp serve`, `slk mcp serve --profiles work,personal`, `slk personal mcp serve --http --public-url https://laptop.example.ts.net`
 
-### `slack mcp revoke`
+### `slk mcp revoke`
 
 forget every login `mcp serve --http` gave a browser app, of this profile or of the server `--profiles` names; each app must log in again
 
 **Changes something on this computer only.**
 
 ```sh
-slack mcp revoke [options]
+slk mcp revoke [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
-**Example:** `slack personal mcp revoke`, `slack mcp revoke --profiles all`
+**Example:** `slk personal mcp revoke`, `slk mcp revoke --profiles all`
 
-### `slack mcp server`
+### `slk mcp server`
 
 start, stop and check `mcp serve --http` in the background; status shows the login code for a browser app
 
-#### `slack mcp server start`
+#### `slk mcp server start`
 
 start `mcp serve --http` apart from this shell and answer once it listens, with its login code
 
 **Changes something on this computer only.**
 
 ```sh
-slack mcp server start [options]
+slk mcp server start [options]
 ```
 
 | Option | What it does |
@@ -7438,44 +7438,44 @@ slack mcp server start [options]
 | `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
-**Example:** `slack personal mcp server start --public-url https://laptop.example.ts.net`
+**Example:** `slk personal mcp server start --public-url https://laptop.example.ts.net`
 
-#### `slack mcp server stop`
+#### `slk mcp server stop`
 
 stop `mcp serve --http` — only one that `mcp server start` started
 
 **Changes something on this computer only.**
 
 ```sh
-slack mcp server stop [options]
+slk mcp server stop [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
-**Example:** `slack personal mcp server stop`
+**Example:** `slk personal mcp server stop`
 
-#### `slack mcp server status`
+#### `slk mcp server status`
 
 whether `mcp serve --http` runs, on which port and address, the login code for a new browser app, and the apps logged in
 
 ```sh
-slack mcp server status [options]
+slk mcp server status [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
-**Example:** `slack personal mcp server status --json`
+**Example:** `slk personal mcp server status --json`
 
-### `slack mcp config`
+### `slk mcp config`
 
 print the mcpServers entry for Claude Desktop, Cursor and others, with full paths; writes nothing
 
 ```sh
-slack mcp config [options]
+slk mcp config [options]
 ```
 
 | Option | What it does |
@@ -7483,16 +7483,16 @@ slack mcp config [options]
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.list=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
 
-**Example:** `slack personal mcp config`, `slack mcp config --profiles all`
+**Example:** `slk personal mcp config`, `slk mcp config --profiles all`
 
-### `slack mcp add`
+### `slk mcp add`
 
 add this profile's local MCP server to Codex or Claude Code
 
 **Changes something on this computer only.**
 
 ```sh
-slack mcp add <client> [options]
+slk mcp add <client> [options]
 ```
 
 | Argument | | What it is |
@@ -7504,64 +7504,64 @@ slack mcp add <client> [options]
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.list=deny; it never loosens the profile; repeat for more keys. |
 
-**Example:** `slack personal mcp add codex --allow-writes`
+**Example:** `slk personal mcp add codex --allow-writes`
 
-### `slack mcp check`
+### `slk mcp check`
 
 check this profile's local MCP handshake and tool list
 
 ```sh
-slack mcp check [options]
+slk mcp check [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like messages.list=deny; it never loosens the profile; repeat for more keys. |
 
-**Example:** `slack personal mcp check`
+**Example:** `slk personal mcp check`
 
-## `slack upgrade`
+## `slk upgrade`
 
-upgrade slack with the package manager that installed it; --check only looks
+upgrade slk with the package manager that installed it; --check only looks
 
 **Changes something on this computer only.**
 
 ```sh
-slack upgrade [options]
+slk upgrade [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--check` | say whether a newer version exists, and install nothing. |
 
-**Example:** `slack upgrade --check`
+**Example:** `slk upgrade --check`
 
-## `slack config`
+## `slk config`
 
 the settings in force, and where each one came from
 
-### `slack config show`
+### `slk config show`
 
 the profile, the profiles that exist, and each setting with where it came from
 
 ```sh
-slack config show [options]
+slk config show [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--bot` | the settings a bot command on this profile gets, rather than the personal account's. |
 
-**Example:** `slack personal config show`
+**Example:** `slk personal config show`
 
-### `slack config set`
+### `slk config set`
 
 save a setting to the configuration file
 
 **Changes something on this computer only.**
 
 ```sh
-slack config set <setting> <value> [options]
+slk config set <setting> <value> [options]
 ```
 
 | Argument | | What it is |
@@ -7575,16 +7575,16 @@ slack config set <setting> <value> [options]
 | `--personal` | only for personal accounts — the personal section of the file. |
 | `--bot` | only for bots — the bot section of the file. |
 
-**Example:** `slack personal config set limit 20`
+**Example:** `slk personal config set limit 20`
 
-### `slack config unset`
+### `slk config unset`
 
 remove a setting from the configuration file
 
 **Changes something on this computer only.**
 
 ```sh
-slack config unset <setting> [options]
+slk config unset <setting> [options]
 ```
 
 | Argument | | What it is |
@@ -7597,46 +7597,46 @@ slack config unset <setting> [options]
 | `--personal` | only for personal accounts — the personal section of the file. |
 | `--bot` | only for bots — the bot section of the file. |
 
-**Example:** `slack personal config unset limit`
+**Example:** `slk personal config unset limit`
 
-### `slack config migrate`
+### `slk config migrate`
 
 write each setting the file lacks at its default, keeping yours
 
 **Changes something on this computer only.**
 
 ```sh
-slack config migrate
+slk config migrate
 ```
 
-**Example:** `slack config migrate`
+**Example:** `slk config migrate`
 
-### `slack config repair`
+### `slk config repair`
 
 fix broken JSON syntax in the settings file — comments, a missing or extra comma, unquoted keys, single quotes, missing closing brackets at the end — keeping every value, with a backup beside it; refuses anything with more than one reading and changes nothing then
 
 **Changes something on this computer only.**
 
 ```sh
-slack config repair [options]
+slk config repair [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--dry-run` | say what it would fix, and change nothing. |
 
-**Example:** `slack config repair`, `slack config repair --dry-run`
+**Example:** `slk config repair`, `slk config repair --dry-run`
 
-## `slack runs`
+## `slk runs`
 
 recorded runs — what this tool did, and when
 
-### `slack runs list`
+### `slk runs list`
 
 recorded runs, newest first
 
 ```sh
-slack runs list [query] [options]
+slk runs list [query] [options]
 ```
 
 | Argument | | What it is |
@@ -7648,45 +7648,45 @@ slack runs list [query] [options]
 | `--limit <n>` | how many to show. |
 | `--page <n>` | which page, starting at 1. |
 
-**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: slack commands info runs list
+**Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: slk commands info runs list
 
-**Example:** `slack personal runs list --limit 10`
+**Example:** `slk personal runs list --limit 10`
 
-### `slack runs show`
+### `slk runs show`
 
 one run: what it was, how it ended, and every event it logged
 
 ```sh
-slack runs show <run-id> [options]
+slk runs show <run-id> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `run-id` | required | an id from `slack runs list`. |
+| `run-id` | required | an id from `slk runs list`. |
 
 | Option | What it does |
 |---|---|
 | `--problems` | only failed responses, warnings and crashes. |
 
-**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 22 more; every field: slack commands info runs show
+**Returns:** run details — run_id, command, started_at, status, cli_version, directory, event_count, events, and 22 more; every field: slk commands info runs show
 
-**Example:** `slack personal runs show run-101`
+**Example:** `slk personal runs show run-101`
 
-### `slack runs path`
+### `slk runs path`
 
 the directory holding one run
 
 ```sh
-slack runs path <run-id>
+slk runs path <run-id>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `run-id` | required | an id from `slack runs list`. |
+| `run-id` | required | an id from `slk runs list`. |
 
-**Returns:** run location — path; every field: slack commands info runs path
+**Returns:** run location — path; every field: slk commands info runs path
 
-**Example:** `slack personal runs path run-101`
+**Example:** `slk personal runs path run-101`
 
 ## Exit codes
 

@@ -2,7 +2,7 @@
 
 # Slack API: search
 
-## `slack api search-messages [options]`
+## `slk api search-messages [options]`
 
 - What: search\_messages — read (GET /search.messages)
 - Call: `GET /search.messages`, effect: read

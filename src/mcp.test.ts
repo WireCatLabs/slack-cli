@@ -13,8 +13,8 @@ import { runCli, signedIn } from "./testing/harness.js"
 it("mcp serve offers search, read and write, and runs a command through the CLI", async () => {
   const mcp = await mcpOverStdio((streams) => run(["personal", "mcp", "serve"], { tty: false, ...streams }))
   try {
-    expect((await mcp.tools()).sort()).toEqual(["slack_read", "slack_tools_search", "slack_write"])
-    const doctor = await mcp.call("slack_read", { command: "doctor" })
+    expect((await mcp.tools()).sort()).toEqual(["slk_read", "slk_tools_search", "slk_write"])
+    const doctor = await mcp.call("slk_read", { command: "doctor" })
     expect(doctor.body).toMatchObject({ item: { cli: { version: IDENTITY.version } } })
   } finally {
     expect(await mcp.close()).toBe(0)
@@ -47,7 +47,7 @@ it("mcp serve refuses a --permission that names no command, and a --profiles thi
 it("mcp config prints an entry that serves the named profile, or every profile only when told", async () => {
   const one = await runCli(["personal", "mcp", "config", "--permission", "api.chat.post-message=deny", "--json"])
   const entry = one.json().item as { config: { mcpServers: Record<string, { args: string[] }> } }
-  expect(entry.config.mcpServers["slack-personal"]?.args.slice(-5)).toEqual([
+  expect(entry.config.mcpServers["slk-personal"]?.args.slice(-5)).toEqual([
     "personal",
     "mcp",
     "serve",
@@ -78,7 +78,7 @@ it("a denied command is offered as unavailable and refused before any request (W
   const options: RunOptions & ServiceEnvironment = { tty: false, keyring: signedIn(), fetch: service.fetch }
   const mcp = await mcpOverStdio((streams) => run(["personal", "mcp", "serve"], { ...options, ...streams }))
   try {
-    const found = await mcp.call("slack_tools_search", { query: "auth test" })
+    const found = await mcp.call("slk_tools_search", { query: "auth test" })
     expect(found.body).toMatchObject({
       items: expect.arrayContaining([
         expect.objectContaining({
@@ -87,7 +87,7 @@ it("a denied command is offered as unavailable and refused before any request (W
         }),
       ]),
     })
-    const listed = await mcp.call("slack_read", { command: "api auth test" })
+    const listed = await mcp.call("slk_read", { command: "api auth test" })
     expect(listed.isError).toBe(true)
     expect(JSON.stringify(listed.body)).toContain("permission_error")
     expect(service.calls).toEqual([])
@@ -109,7 +109,7 @@ it("an agent never deletes for everyone: messages delete and the raw api deletes
       ["messages delete", { chat: "C0SYNTH01", message: ["1700000030.000100"] }],
       ["api chat delete", { body: JSON.stringify({ channel: "C0SYNTH01", ts: "1700000030.000100" }) }],
     ] as const) {
-      const refused = await mcp.call("slack_write", { command, arguments: args })
+      const refused = await mcp.call("slk_write", { command, arguments: args })
       expect(refused.isError, command).toBe(true)
       expect(JSON.stringify(refused.body), command).toContain("permission_error")
     }

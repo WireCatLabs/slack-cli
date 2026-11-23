@@ -2,7 +2,7 @@
 
 # Slack API: auth
 
-## `slack api auth revoke [options]`
+## `slk api auth revoke [options]`
 
 - What: auth\_revoke — destructive (GET /auth.revoke)
 - Call: `GET /auth.revoke`, effect: destructive
@@ -12,7 +12,7 @@
 |---|---|---|
 | `--test <value>` | no | Setting this parameter to \`1\` triggers a \_testing mode\_ where the specified token will not actually be revoked. |
 
-## `slack api auth test`
+## `slk api auth test`
 
 - What: auth\_test — read (GET /auth.test)
 - Call: `GET /auth.test`, effect: read

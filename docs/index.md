@@ -1,6 +1,6 @@
 # slack
 
-`slack` is a WireCat command-line tool for the terminal, for scripts and for AI agents.
+`slk` is a WireCat command-line tool for the terminal, for scripts and for AI agents.
 It signs in to your Slack workspace as you, with the user token of a Slack app you make there, and its `api` group
 reaches Slack's Web API, one command per method.
 

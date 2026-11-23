@@ -1,16 +1,16 @@
 # Install
 
-Install `slack` once on each computer where you or an agent use it. You need Node.js 22.16 or a later 22.x, or 24 or later; Node 23 is not supported.
+Install `slk` once on each computer where you or an agent use it. You need Node.js 22.16 or a later 22.x, or 24 or later; Node 23 is not supported.
 
 ```sh
 npm install -g @wirecat/slack-cli
-slack --version
+slk --version
 ```
 
 Check the installation, then pick a profile name for your account, such as `personal`:
 
 ```sh
-slack doctor
+slk doctor
 ```
 
 `doctor` needs no network and opens no keyring. It shows the version, where settings live, the profiles that

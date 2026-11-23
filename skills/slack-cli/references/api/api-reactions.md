@@ -2,7 +2,7 @@
 
 # Slack API: reactions
 
-## `slack api reactions add [options]`
+## `slk api reactions add [options]`
 
 - What: reactions\_add — write (POST /reactions.add)
 - Call: `POST /reactions.add`, effect: write
@@ -14,7 +14,7 @@
 | `--body <json>` | no | the request body as JSON; - reads it from stdin |
 | `--body-file <path>` | no | the request body from a JSON file; - is stdin |
 
-## `slack api reactions get [options]`
+## `slk api reactions get [options]`
 
 - What: reactions\_get — read (GET /reactions.get)
 - Call: `GET /reactions.get`, effect: read
@@ -28,7 +28,7 @@
 | `--full <value>` | no | If true always return the complete reaction list. |
 | `--timestamp <value>` | no | Timestamp of the message to get reactions for. |
 
-## `slack api reactions list [options]`
+## `slk api reactions list [options]`
 
 - What: reactions\_list — read (GET /reactions.list)
 - Call: `GET /reactions.list`, effect: read
@@ -45,7 +45,7 @@
 | `--limit <value>` | no | The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached. |
 | `--all` | no | read every page, as the API pages it |
 
-## `slack api reactions remove [options]`
+## `slk api reactions remove [options]`
 
 - What: reactions\_remove — destructive (POST /reactions.remove)
 - Call: `POST /reactions.remove`, effect: destructive

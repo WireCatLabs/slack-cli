@@ -1,7 +1,7 @@
 [
   {
-    "name": "slack",
-    "members": ["slack", "tg", "max", "memo", "drive", "zm", "wa"],
+    "name": "slk",
+    "members": ["slk", "tg", "max", "memo", "drive", "zm", "wa"],
     "covers": ["commands", "upgrade"],
     "differences": []
   }

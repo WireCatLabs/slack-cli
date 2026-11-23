@@ -2,17 +2,17 @@
 
 # Slack API: dnd
 
-## `slack api dnd end-dnd`
+## `slk api dnd end-dnd`
 
 - What: dnd\_endDnd — write (POST /dnd.endDnd)
 - Call: `POST /dnd.endDnd`, effect: write
 
-## `slack api dnd end-snooze`
+## `slk api dnd end-snooze`
 
 - What: dnd\_endSnooze — write (POST /dnd.endSnooze)
 - Call: `POST /dnd.endSnooze`, effect: write
 
-## `slack api dnd info [options]`
+## `slk api dnd info [options]`
 
 - What: dnd\_info — read (GET /dnd.info)
 - Call: `GET /dnd.info`, effect: read
@@ -21,7 +21,7 @@
 |---|---|---|
 | `--user <value>` | no | User to fetch status for (defaults to current user) |
 
-## `slack api dnd team-info [options]`
+## `slk api dnd team-info [options]`
 
 - What: dnd\_teamInfo — read (GET /dnd.teamInfo)
 - Call: `GET /dnd.teamInfo`, effect: read

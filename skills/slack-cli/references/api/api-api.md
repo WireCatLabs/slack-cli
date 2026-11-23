@@ -2,7 +2,7 @@
 
 # Slack API: api
 
-## `slack api api-test [options]`
+## `slk api api-test [options]`
 
 - What: api\_test — read (GET /api.test)
 - Call: `GET /api.test`, effect: read
