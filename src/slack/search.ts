@@ -76,7 +76,10 @@ const threadOf = (one: Match) => {
 export const serverSearch = ({ slack, conversationOf, learn, messageOf, chatOf }: ServerSearchOptions) => {
   const inOf = (one: Conversation) => (one.is_im && one.user ? `in:<@${one.user}>` : `in:${one.name ?? one.id}`)
 
-  return async (query: ServerQuery, { limit }: { limit: number }): Promise<Page<MessageHit> & { chats: Chat[] }> => {
+  return async (
+    query: ServerQuery,
+    { limit, signal }: { limit: number; signal?: AbortSignal },
+  ): Promise<Page<MessageHit> & { chats: Chat[] }> => {
     if (limit <= 0) return { items: [], hasMore: false, chats: [] }
     const chat = query.chat === undefined ? undefined : await conversationOf(query.chat)
     const words = [
@@ -103,6 +106,7 @@ export const serverSearch = ({ slack, conversationOf, learn, messageOf, chatOf }
         "search.messages",
         { query: words, count: COUNT_MOST, page, sort: "timestamp", sort_dir: "desc" },
         searchAnswer,
+        { signal },
       )
       for (const one of answer.messages.matches) if (kept(one)) found.push(one)
       more = page < (answer.messages.paging?.pages ?? page)
