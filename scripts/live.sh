@@ -48,6 +48,15 @@ field() { node -e 'const at = process.argv[1].split("."); let v = JSON.parse(req
 "${cli[@]}" live chats show "$channel" --json | field item.id >/dev/null
 "${cli[@]}" live messages list "$channel" --limit 5 --json | field items.length >/dev/null
 
+# What Slack's docs leave open for inbox: whether conversations.info names a channel's read point and count.
+channel_id=$("${cli[@]}" live chats show "$channel" --json | field item.id)
+"${cli[@]}" live api conversations info --channel "$channel_id" --json | node -e '
+  const answer = JSON.parse(require("fs").readFileSync(0, "utf8"))
+  const one = answer.item?.channel ?? answer.channel ?? {}
+  const has = (key) => (key in one ? "yes" : "no")
+  console.log(`probe: conversations.info of a channel has last_read ${has("last_read")}, unread_count ${has("unread_count")}`)'
+"${cli[@]}" live inbox --json >/dev/null
+
 "${cli[@]}" live search messages the --backend server --json >"$work/search.json" 2>"$work/search.err"
 if grep -q "server search incomplete" "$work/search.err"; then
   echo "live check failed: Slack's search refused (is search:read granted?)" >&2
@@ -79,5 +88,5 @@ done
 root_id="" reply_id=""
 
 "${cli[@]}" live session end --json >/dev/null
-echo "live check passed: describe, sign-in, api conversations list, doctor --online, chats show, messages list," \
+echo "live check passed: describe, sign-in, api conversations list, doctor --online, chats show, messages list, inbox," \
   "server search, send, thread reply, reaction, edit, sync, delete, sign-out"

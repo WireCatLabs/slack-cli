@@ -1,6 +1,6 @@
 import { CliError, isCliError } from "@wirecat/cli-base"
 import { type FetchLike, hostFetch } from "@wirecat/cli-base/http"
-import type { ChatCard, Message, Page, PersonCard, WindowedMessage } from "@wirecat/cli-core"
+import type { Chat, ChatCard, Message, Page, PersonCard, WindowedMessage } from "@wirecat/cli-core"
 import type { After, MessengerAdapter, RemoteFile } from "@wirecat/cli-core/cli"
 import { DESKTOP, SERVICE } from "../identity.js"
 import type { SlackArgs, SlackClient } from "./client.js"
@@ -42,6 +42,9 @@ import { slackWrites } from "./writes.js"
 
 /** Slack's own cap on `conversations.history` (https://docs.slack.dev/reference/methods/conversations.history/). */
 export const HISTORY_MOST = 999
+
+/** DMs and group DMs `inbox` counts: one conversations.info each, at the profile's pace. */
+export const INBOX_INFO_MOST = 40
 
 /** What Slack recommends per page of a cursor list (https://docs.slack.dev/apis/web-api/pagination/). */
 const PAGE = 200
@@ -411,6 +414,18 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     },
     logout: async () => {},
     close: async () => {},
+    // Slack lists no unread counts; conversations.info gives them for DMs only
+    // (https://docs.slack.dev/reference/methods/conversations.info/), one call each, so inbox asks a bounded few.
+    unreadChats: async () => {
+      const direct = (await listed()).filter((one) => one.is_im || one.is_mpim)
+      const asked = direct.slice(0, INBOX_INFO_MOST)
+      const items: Chat[] = []
+      for (const one of asked) {
+        const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
+        items.push(chatOf({ ...one, ...channel }, names))
+      }
+      return { items, hasMore: direct.length > asked.length }
+    },
     chats: async ({ limit, offset }) => {
       const all = (await listed()).map((one) => chatOf(one, names))
       const end = limit === undefined ? all.length : offset + limit
