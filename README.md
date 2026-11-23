@@ -49,8 +49,10 @@ your workspace uses keeps Slack's full limits for reading history; one shared ou
    It asks only for the user scopes the commands use: reading channels, direct messages, people, files, reactions
    and pins, searching, and sending as you. To do it by hand: **Create New App** → **From a manifest** at
    [api.slack.com/apps](https://api.slack.com/apps), and paste the file.
-2. Choose **Install to Workspace** and allow it. An admin may have to approve the app first.
-3. On **OAuth & Permissions**, copy the **User OAuth Token**. It starts with `xoxp-`.
+2. In the app's menu on the left, open **OAuth & Permissions**, choose **Install to Workspace** and allow it. An
+   admin may have to approve the app first.
+3. Back on **OAuth & Permissions**, under **OAuth Tokens**, copy the **User OAuth Token**. It starts with `xoxp-`.
+   The Client ID, Client Secret, Signing Secret and Verification Token on **Basic Information** are not it.
 4. Run `slk personal session start` and paste the token at the hidden prompt. slk checks it with Slack
    (`auth.test`) and keeps it in the system keyring. A bot token (`xoxb-`) is refused, because it cannot read as you.
 

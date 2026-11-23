@@ -14,7 +14,7 @@ export const sessionCommand = () =>
     app: IDENTITY,
     service: SERVICE,
     resolveSettings: configuration.resolveSettings,
-    token: "user token",
+    token: "User OAuth Token (xoxp-…)",
     about:
       "Paste the User OAuth Token (xoxp-…) of your own Slack app, made from docs/slack-app-manifest.json; " +
       "a bot token is refused",

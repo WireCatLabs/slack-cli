@@ -53,11 +53,11 @@ slk commands info [path]
 
 ## `slk session`
 
-keep this profile's Slack user token in the OS keyring
+keep this profile's Slack User OAuth Token (xoxp-…) in the OS keyring
 
 ### `slk session start`
 
-sign this profile in: the Slack user token is asked hidden or read from stdin, never taken as an argument, checked with Slack, and only then kept in the keyring, or in a private file. Paste the User OAuth Token (xoxp-…) of your own Slack app, made from docs/slack-app-manifest.json; a bot token is refused
+sign this profile in: the Slack User OAuth Token (xoxp-…) is asked hidden or read from stdin, never taken as an argument, checked with Slack, and only then kept in the keyring, or in a private file. Paste the User OAuth Token (xoxp-…) of your own Slack app, made from docs/slack-app-manifest.json; a bot token is refused
 
 **Changes something on this computer only.**
 
@@ -1625,6 +1625,32 @@ slk models add <id> [options]
 **Next usually:** `slk models download <model>`, `slk models set <model>`
 
 **Example:** `slk personal models add e5-base --payload '{"repository":"Xenova/multilingual-e5-base","onnx":"onnx/model_quantized.onnx","dims":768,"pooling":"mean","prefix":{"query":"query: ","passage":"passage: "}}'`
+
+## `slk inbox`
+
+other people's unread messages in every chat; --new for what arrived since the last check
+
+```sh
+slk inbox [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | from when: date>2h, date>2026-10-01; the saved point stays put. |
+
+| Option | What it does |
+|---|---|
+| `--new` | what arrived since the last check, each message once — for scheduled runs. |
+| `--limit <n>` | at most this many per chat, the newest. |
+| `--all` | muted and archived chats too — left out unless they mention you or reply to you. |
+| `--transcribe` | turn voice messages not heard yet into text — by the messenger where it can, else by a model on this machine; can take minutes. |
+| `--model <model>` | which downloaded speech model hears them, with --transcribe; `models list` shows them. |
+
+**Returns:** message summary — ref, chat_id, timestamp, sender_name, sender_is_me, outgoing, text, attachments, and 4 more; every field: slk commands info inbox
+
+**Next usually:** `slk messages transcribe <chat> <message>`, `slk messages links <chat> <message>`, `slk conversations related <chat> <message>`
+
+**Example:** `slk personal inbox --limit 10`
 
 ## `slk review`
 
