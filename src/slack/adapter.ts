@@ -417,14 +417,31 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     // Slack lists no unread counts; conversations.info gives them for DMs only
     // (https://docs.slack.dev/reference/methods/conversations.info/), one call each, so inbox asks a bounded few.
     unreadChats: async () => {
-      const direct = (await listed()).filter((one) => one.is_im || one.is_mpim)
+      const all = await listed()
+      // DMs first: the docs promise their counts; a group DM's is not stated, and it still gives a last message time.
+      const direct = [...all.filter((one) => one.is_im), ...all.filter((one) => one.is_mpim)]
       const asked = direct.slice(0, INBOX_INFO_MOST)
       const items: Chat[] = []
+      let stopped = false
       for (const one of asked) {
-        const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
-        items.push(chatOf({ ...one, ...channel }, names))
+        try {
+          const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
+          items.push(chatOf({ ...one, ...channel }, names))
+        } catch (error) {
+          // What was counted still answers; the rest is named below rather than lost.
+          if (items.length === 0) throw error
+          stopped = true
+          break
+        }
       }
-      return { items, hasMore: direct.length > asked.length }
+      const channels = all.length - direct.length
+      const left = [
+        ...(channels > 0 ? [`${channels} channels are not counted: Slack gives unread counts for DMs only`] : []),
+        ...(stopped || direct.length > asked.length
+          ? [`counted ${items.length} of ${direct.length} DMs and group DMs; the rest may hold unread messages`]
+          : []),
+      ]
+      return { items, hasMore: items.length < direct.length, ...(left.length ? { left } : {}) }
     },
     chats: async ({ limit, offset }) => {
       const all = (await listed()).map((one) => chatOf(one, names))

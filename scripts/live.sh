@@ -45,17 +45,27 @@ node -e '
 field() { node -e 'const at = process.argv[1].split("."); let v = JSON.parse(require("fs").readFileSync(0, "utf8"))
   for (const k of at) v = v?.[k]; if (v === undefined || v === null) throw new Error(`no ${process.argv[1]}`); console.log(v)' "$1"; }
 
-"${cli[@]}" live chats show "$channel" --json | field item.id >/dev/null
+channel_id=$("${cli[@]}" live chats show "$channel" --json | field item.id)
 "${cli[@]}" live messages list "$channel" --limit 5 --json | field items.length >/dev/null
 
-# What Slack's docs leave open for inbox: whether conversations.info names a channel's read point and count.
-channel_id=$("${cli[@]}" live chats show "$channel" --json | field item.id)
-"${cli[@]}" live api conversations info --channel "$channel_id" --json | node -e '
+# What Slack's docs leave open for inbox: whether conversations.info gives a group DM's unread count, and a
+# channel's read point. Printed for the record; the check does not fail on them.
+probe() { node -e '
   const answer = JSON.parse(require("fs").readFileSync(0, "utf8"))
-  const one = answer.item?.channel ?? answer.channel ?? {}
+  const one = answer.item?.channel
+  if (!one) throw new Error("api conversations info answered without item.channel")
   const has = (key) => (key in one ? "yes" : "no")
-  console.log(`probe: conversations.info of a channel has last_read ${has("last_read")}, unread_count ${has("unread_count")}`)'
-"${cli[@]}" live inbox --json >/dev/null
+  console.log(`probe: conversations.info of ${process.argv[1]} has last_read ${has("last_read")}, unread_count ${has("unread_count")}`)' "$1"; }
+"${cli[@]}" live api conversations info --channel "$channel_id" --json | probe "a channel"
+group_dm=$("${cli[@]}" live api conversations list --types mpim --limit 1 --json | node -e '
+  const answer = JSON.parse(require("fs").readFileSync(0, "utf8"))
+  console.log(answer.item?.channels?.[0]?.id ?? "")')
+if [ -n "$group_dm" ]; then
+  "${cli[@]}" live api conversations info --channel "$group_dm" --json | probe "a group DM"
+else
+  echo "probe: no group DM to ask"
+fi
+"${cli[@]}" live inbox --json | field items >/dev/null
 
 "${cli[@]}" live search messages the --backend server --json >"$work/search.json" 2>"$work/search.err"
 if grep -q "server search incomplete" "$work/search.err"; then
