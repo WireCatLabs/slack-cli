@@ -23,15 +23,11 @@ export const API = {
 
 const apiPermissions = serviceApiPermissions(API)
 
-// cli-core asks for every key an api operation names unless the CLI's defaults say otherwise; a messenger key
-// (`messages.list`, `chats.leave`) keeps the level its own command has, so `api conversations history` is no stricter than `messages list` (WC-PERM-6).
+// cli-core asks for every key an api operation names; a read of what people wrote is checked as `messages.list` and is
+// no stricter than `messages list` (WC-PERM-4). A write keeps the ask: the api group has no recipient list or pace.
 export const permissions = commandPermissions({
   ...apiPermissions,
-  defaults: Object.fromEntries(
-    Object.entries(apiPermissions.defaults).map(([key, level]) =>
-      key.startsWith("api.") || key.startsWith("slack.") ? [key, level] : [key, levelFor({}, key).level],
-    ),
-  ),
+  defaults: { ...apiPermissions.defaults, "messages.list": levelFor({}, "messages.list").level },
 })
 
 /** How many days back `messages sync` looks for threads with new replies (plan.md, "Sync and threads"). */

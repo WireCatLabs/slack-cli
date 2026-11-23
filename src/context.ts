@@ -74,14 +74,15 @@ export const tokenFromEnvironment = (command: Command) => {
  * `SLACK_TOKEN` skips `session start`, so it is refused here as there.
  */
 export const tokenOf = (command: Command): string => {
-  const { profile, tokens, env } = contextOf(command)
+  const { profile, tokens, env, settings } = contextOf(command)
   refuseOffline(command, SERVICE)
   try {
     return refuseOtherTokens(tokens.need(profile))
   } catch (error) {
-    // A keyring that cannot be read hides whether a profile `session start` never saw is a typo; as not signed in,
-    // cli-core names the profiles here (WC-ACCT-3).
-    if (isCliError(error) && error.code === "configuration_error" && !recalledAccount(IDENTITY, PROVIDER, profile, env))
+    // A keyring that cannot be read hides whether a profile this computer has never seen is a typo; as not signed in,
+    // cli-core names the profiles here (WC-ACCT-3). A known profile keeps the keyring's own error.
+    const unseen = !settings.profilesHere.includes(profile) && !recalledAccount(IDENTITY, PROVIDER, profile, env)
+    if (isCliError(error) && error.code === "configuration_error" && unseen)
       throw new CliError(
         "authentication_error",
         `profile ${profile} is not signed in — run \`${IDENTITY.command} ${profile} session start\``,

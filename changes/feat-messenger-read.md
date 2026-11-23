@@ -20,6 +20,6 @@
   `chat.not-joined`, with Slack's code in `details.slack_error`.
 - **The `api` group answers by the messenger's keys.** A deny on `messages` stops `api conversations history`,
   `replies`, the searches, files, pins, stars and reactions lists too, and those keep `messages list`'s level instead
-  of asking. A refusal Slack sends with HTTP 200 is the run's error. An agent never runs an `api` delete, and its
+  of asking; an `api` write still asks. A refusal Slack sends with HTTP 200 is the run's error. An agent never runs an `api` delete, and its
   `messages delete` is refused as a permission. A profile never signed in is named as unknown with the profiles here,
   even when the keyring cannot be read.

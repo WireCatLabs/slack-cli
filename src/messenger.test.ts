@@ -312,6 +312,22 @@ describe("messages sync", () => {
     expect(repliesCalls(service)).toBe(1)
   })
 
+  it("**reads a thread whole when a later sync first reaches its old root**, after one that stopped early", async () => {
+    const root = daysAgo(40)
+    const answer = daysAgo(39)
+    const world = busyChannel(root, 3)
+    thread(world, root, { ts: answer, user: BORIS, text: "Old answer" })
+    const service = slackOf(world)
+    const run = (...more: string[]) =>
+      runCli(["personal", "messages", "sync", "general", "--page-size", "2", "--pause", "1ms", ...more, "--json"], {
+        service,
+      })
+    expect((await run("--limit", "3")).code).toBe(0)
+    expect(byId(await stored(service), root)).toBeUndefined()
+    expect((await run()).code).toBe(0)
+    expect(byId(await stored(service), answer)).toMatchObject({ text: "Old answer", thread_id: root })
+  })
+
   it("**reads the replies of the roots it pages through**, older threads included", async () => {
     const world = workspace()
     const service = slackOf(world)
@@ -503,4 +519,13 @@ it("**names the profiles here for a profile never signed in**, though the keyrin
     keyring: brokenKeyring(),
   })
   expect(ran.json()).toMatchObject({ error: { code: "not_found", message: expect.stringContaining("nosuch") } })
+})
+
+it("**keeps the keyring's own error for a profile this computer knows**", async () => {
+  rememberAccount(IDENTITY, "personal", "T0SYNTH01:U0SYNTH01", process.env)
+  const ran = await runCli(["personal", "messages", "list", "general", "--json"], {
+    service: slackOf(),
+    keyring: brokenKeyring(),
+  })
+  expect(ran.json()).toMatchObject({ error: { code: "configuration_error" } })
 })

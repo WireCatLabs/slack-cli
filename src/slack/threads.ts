@@ -25,10 +25,11 @@ const SKEW_MS = 60_000
 /**
  * Thread replies, which `conversations.history` leaves out (https://docs.slack.dev/messaging/retrieving-messages/),
  * for cli-core's `threadReplies`. The roots are those the history pages of this run showed, and those sent within the
- * window; after a first read, only roots whose `latest_reply` is after `since` are read, from `since` on.
+ * window. After a first read, a root is read from `since` on when its `latest_reply` is after it; a root from a page
+ * older than the newest is read whole, since a sync reaches such a page only where it held nothing before.
  */
 export const threadReplies = ({ slack, windowDays, now, mapped, between }: ThreadRepliesOptions) => {
-  const paged = new Map<string, Map<string, WireMessage>>()
+  const paged = new Map<string, Map<string, { root: WireMessage; whole: boolean }>>()
 
   const repliesOf = async (chatId: string, root: WireMessage, after: string | undefined) => {
     const wires: WireMessage[] = []
@@ -48,20 +49,24 @@ export const threadReplies = ({ slack, windowDays, now, mapped, between }: Threa
   }
 
   return {
-    seen: (chatId: string, wires: readonly WireMessage[]) => {
-      const roots = paged.get(chatId) ?? new Map<string, WireMessage>()
-      for (const one of wires) if (isRoot(one)) roots.set(one.ts, one)
+    seen: (chatId: string, wires: readonly WireMessage[], { whole }: { whole: boolean }) => {
+      const roots = paged.get(chatId) ?? new Map<string, { root: WireMessage; whole: boolean }>()
+      for (const root of wires)
+        if (isRoot(root)) roots.set(root.ts, { root, whole: whole || roots.get(root.ts)?.whole === true })
       paged.set(chatId, roots)
     },
     read: async (chatId: string, { since }: { since?: number }): Promise<Message[]> => {
       const after = since === undefined ? undefined : tsOf(since - SKEW_MS)
       const roots = new Map(paged.get(chatId))
       paged.delete(chatId)
-      for (const one of await between(chatId, tsOf(now() - windowDays * DAY))) if (isRoot(one)) roots.set(one.ts, one)
+      for (const root of await between(chatId, tsOf(now() - windowDays * DAY)))
+        if (isRoot(root) && !roots.has(root.ts)) roots.set(root.ts, { root, whole: false })
       const wires: WireMessage[] = []
-      for (const root of roots.values())
-        if (after === undefined || (root.latest_reply !== undefined && later(root.latest_reply, after)))
+      for (const { root, whole } of roots.values()) {
+        if (after === undefined || whole) append(wires, await repliesOf(chatId, root, undefined))
+        else if (root.latest_reply !== undefined && later(root.latest_reply, after))
           append(wires, await repliesOf(chatId, root, after))
+      }
       return (await mapped(chatId, wires)).sort(byTs)
     },
   }

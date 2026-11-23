@@ -222,8 +222,13 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return { wires: [], hasMore: false }
   }
 
-  const page = async (chatId: string, wires: readonly WireMessage[], hasMore: boolean): Promise<Page<Message>> => {
-    threads.seen(chatId, wires)
+  const page = async (
+    chatId: string,
+    wires: readonly WireMessage[],
+    hasMore: boolean,
+    older = false,
+  ): Promise<Page<Message>> => {
+    threads.seen(chatId, wires, { whole: older })
     return { items: (await mapped(chatId, wires)).sort(byTs), hasMore }
   }
 
@@ -377,7 +382,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       const chatId = await idOf(chat)
       const latest = before === undefined ? undefined : isTs(before) ? before : tsOf(Date.parse(before))
       const { wires, hasMore } = await newestFirst(chatId, limit, latest ? { latest } : {})
-      return page(chatId, wires, hasMore)
+      return page(chatId, wires, hasMore, latest !== undefined)
     },
     threadReplies: async (chatId, window) => threads.read(chatId, window),
     historyAfter: async (chat, { limit, after }) => {
@@ -389,7 +394,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     historyBefore: async (chat, { limit, time }) => {
       const chatId = await idOf(chat)
       const { wires, hasMore } = await newestFirst(chatId, limit, { latest: tsOf(time) })
-      return page(chatId, wires, hasMore)
+      return page(chatId, wires, hasMore, true)
     },
     around: async (chat, messageId, window): Promise<WindowedMessage[]> => {
       const chatId = await idOf(chat)

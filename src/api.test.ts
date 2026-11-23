@@ -226,3 +226,13 @@ it.each(["conversations_history", "conversations_replies", "search_messages"])(
     expect(service.calls).toEqual([])
   },
 )
+
+it("a write through api still asks: it has no recipient list or pace of its own", async () => {
+  const service = fake()
+  const ran = await runCli(
+    ["personal", "api", "chat", "post-message", "--body", '{"channel":"C0SYNTH01","text":"hi"}', "--json"],
+    { service },
+  )
+  expect(ran.json()).toMatchObject({ error: { code: "confirmation_required" } })
+  expect(service.calls).toEqual([])
+})
