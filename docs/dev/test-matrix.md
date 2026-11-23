@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**382 ✅ · 929 ⛔ · 0 ❌** — 404 commands, 907 options.
+**384 ✅ · 931 ⛔ · 0 ❌** — 404 commands, 911 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -638,7 +638,9 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `search all` | `--page` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search all` | `--exact` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search all` | `--timezone` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `search messages` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
+| `search all` | `--backend` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
+| `search all` | `--server-time` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
+| `search messages` |  | ✅ |  |
 | `search messages` | `--sync-first` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--max-chats` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--sync-time` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -648,6 +650,8 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `search messages` | `--thread-messages` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--thread-bytes` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--thread-within` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
+| `search messages` | `--backend` | ✅ |  |
+| `search messages` | `--server-time` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--source` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `search messages` | `--page` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
