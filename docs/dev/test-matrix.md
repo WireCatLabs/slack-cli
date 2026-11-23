@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**385 ✅ · 931 ⛔ · 5 ❌** — 405 commands, 916 options.
+**385 ✅ · 936 ⛔ · 0 ❌** — 405 commands, 916 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -237,11 +237,11 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `models add` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
 | `models add` | `--payload` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/models-command.test.ts |
 | `inbox` |  | ✅ |  |
-| `inbox` | `--new` | ❌ |  |
-| `inbox` | `--limit` | ❌ |  |
-| `inbox` | `--all` | ❌ |  |
-| `inbox` | `--transcribe` | ❌ |  |
-| `inbox` | `--model` | ❌ |  |
+| `inbox` | `--new` | ⛔ | cli-core's shared inbox, mounted unchanged; tested in cli-core src/cli/messenger/inbox.test.ts. slk's own part, unreadChats, is tested in src/slack/inbox.test.ts |
+| `inbox` | `--limit` | ⛔ | cli-core's shared inbox, mounted unchanged; tested in cli-core src/cli/messenger/inbox.test.ts. slk's own part, unreadChats, is tested in src/slack/inbox.test.ts |
+| `inbox` | `--all` | ⛔ | cli-core's shared inbox, mounted unchanged; tested in cli-core src/cli/messenger/inbox.test.ts. slk's own part, unreadChats, is tested in src/slack/inbox.test.ts |
+| `inbox` | `--transcribe` | ⛔ | cli-core's shared inbox, mounted unchanged; tested in cli-core src/cli/messenger/inbox.test.ts. slk's own part, unreadChats, is tested in src/slack/inbox.test.ts |
+| `inbox` | `--model` | ⛔ | cli-core's shared inbox, mounted unchanged; tested in cli-core src/cli/messenger/inbox.test.ts. slk's own part, unreadChats, is tested in src/slack/inbox.test.ts |
 | `review` |  | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
 | `review` | `--unanswered` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
 | `review` | `--all` | ⛔ | cli-core's shared review over the local store, mounted unchanged; tested in cli-core src/cli/messenger/review.test.ts |
