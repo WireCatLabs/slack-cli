@@ -132,7 +132,7 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - env:
           GH_TOKEN: ${{ github.token }}
-        run: pnpm exec cli-dev repo-check --cli slack
+        run: pnpm exec cli-dev repo-check --cli slk
 
   version:
     if: github.event_name == 'pull_request'

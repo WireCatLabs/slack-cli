@@ -28,7 +28,7 @@
 - **`slk <profile> messages send --reply-to <ts> --also-to-channel`** shows a thread reply in the channel too,
   as Slack's "Also send to #channel".
 
-### Changed
+### Changed — may break callers
 
 - **The command is `slk`, with `wcat-slk` beside it**, not `slack`: Slack's own developer CLI installs as `slack`.
   The MCP tools are `slk_read`, `slk_write` and `slk_tools_search`.
