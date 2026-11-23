@@ -11,7 +11,7 @@ export const en = {
     "Open the app's **OAuth & Permissions** page and copy the **User OAuth Token**. It starts with `xoxp-`.",
   "token.label": "User OAuth Token",
   "token.hint": "Kept in your system keyring or, without one, in a file only you can read.",
-  "token.bot": "A bot token (`xoxb-`) is refused: slack reads as you, not as a bot.",
+  "token.bot": "A bot token (`xoxb-`) is refused: slk reads as you, not as a bot.",
   "check.title": "Checking the token",
   "check.body": "slack asks Slack whose the token is. It keeps the token only if Slack answers.",
   "failed.title": "The check did not pass",

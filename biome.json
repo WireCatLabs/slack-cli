@@ -39,6 +39,61 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/slack/**", "!**/*.test.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "../commands/*",
+                      "../setup/*",
+                      "../program.js",
+                      "../messenger.js",
+                      "../context.js",
+                      "@wirecat/cli-core/store",
+                      "@wirecat/cli-core/store/*"
+                    ],
+                    "message": "src/slack/ maps Slack onto cli-core's messenger port; the commands, setup, program and composition root are above it, and the store is cli-core's"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/commands/**", "src/setup/**", "!**/*.test.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "../slack/adapter.js",
+                      "../slack/map.js",
+                      "../slack/threads.js",
+                      "../slack/search.js",
+                      "../slack/writes.js",
+                      "../slack/mrkdwn.js"
+                    ],
+                    "message": "a command reaches Slack through the client and tokens only; the adapter's mapping is cli-core's port, wired in src/messenger.ts"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }
