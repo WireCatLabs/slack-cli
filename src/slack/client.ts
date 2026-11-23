@@ -98,7 +98,7 @@ export const slackFailure = (code: string, writes: boolean, needed?: string): Cl
     return new CliError(
       "permission_error",
       `${SERVICE} refused: the app lacks the scope ${needed ?? "this method needs"}; add it to the app and reinstall`,
-      { ...details, ...(needed ? { needed } : {}) },
+      { ...details, reason: "oauth.scope-missing", ...(needed ? { needed } : {}) },
     )
   if (PERMISSION.has(code)) return new CliError("permission_error", `${SERVICE} refused the call (${code})`, details)
   if (code === "ratelimited")

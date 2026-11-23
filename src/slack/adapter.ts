@@ -206,22 +206,49 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     }
   }
 
+  /** The messages of `[oldest, latest)` shown in a list, newest first, or `undefined` once more than `most`. */
+  const shownBetween = async (chatId: string, oldest: string, latest: string | undefined, most: number) => {
+    const shown: WireMessage[] = []
+    for (let cursor: string | undefined; ; ) {
+      const answer = await historyCall(chatId, { oldest, latest, limit: HISTORY_MOST, cursor })
+      append(shown, answer.messages.filter(isShown))
+      if (shown.length > most) return undefined
+      cursor = nextCursor(answer)
+      if (!answer.has_more || !cursor) return shown
+    }
+  }
+
   /**
    * Slack reads back from `latest`, never forward from `oldest`, so the oldest messages after a point are found in a
-   * window after it that widens until it holds enough of them or reaches now.
+   * window after it that widens until it holds enough of them or reaches now. A window too full to read whole is
+   * halved back towards the last one that held too few, so a busy chat costs a few pages, not every message since.
    */
   const forward = async (chatId: string, after: string, limit: number) => {
     const from = Number(after) * 1000
+    const most = limit + HISTORY_MOST
+    let few = 0
+    let full: number | undefined
     for (const span of [DAY / 24, DAY, 7 * DAY, 30 * DAY, 365 * DAY, Number.POSITIVE_INFINITY]) {
-      const end = from + span
-      const open = end >= now()
-      const found = (await between(chatId, after, open ? undefined : tsOf(end))).filter(isShown)
-      if (found.length >= limit || open) {
-        const oldest = found.toReversed().slice(0, limit)
-        return { wires: oldest, hasMore: found.length > limit || !open }
+      const open = from + span >= now()
+      const found = await shownBetween(chatId, after, open ? undefined : tsOf(from + span), most)
+      if (found === undefined) {
+        full = Math.min(span, now() - from)
+        break
       }
+      if (found.length >= limit || open)
+        return { wires: found.toReversed().slice(0, limit), hasMore: found.length > limit || !open }
+      few = span
     }
-    return { wires: [], hasMore: false }
+    // Slack's ts has microseconds: a millisecond is the narrowest window worth asking.
+    while (full !== undefined && full - few > 1) {
+      const span = few + Math.floor((full - few) / 2)
+      const found = await shownBetween(chatId, after, tsOf(from + span), most)
+      if (found === undefined) full = span
+      else if (found.length < limit) few = span
+      else return { wires: found.toReversed().slice(0, limit), hasMore: true }
+    }
+    const last = (await shownBetween(chatId, after, tsOf(from + (full ?? 0)), Number.POSITIVE_INFINITY)) ?? []
+    return { wires: last.toReversed().slice(0, limit), hasMore: true }
   }
 
   const page = async (
