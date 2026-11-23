@@ -37,13 +37,21 @@ export interface SlackSettings {
   threadWindowDays: number
 }
 
+const threadWindowDays = v.optional(
+  v.pipe(v.number("has to be a number of days"), v.integer(), v.minValue(1), v.maxValue(365)),
+)
+
 export const configuration: Configuration = settingsFor<SlackSettings>(IDENTITY, {
   permissions,
-  personal: {
-    thread_window_days: v.optional(
-      v.pipe(v.number("has to be a number of days"), v.integer(), v.minValue(1), v.maxValue(365)),
-    ),
-  },
+  personal: { thread_window_days: threadWindowDays },
+  defaults: { thread_window_days: threadWindowDays },
+  settings: [
+    {
+      key: "thread_window_days",
+      default: THREAD_WINDOW_DAYS,
+      description: "how many days back messages sync looks for threads with new replies",
+    },
+  ],
   resolve: ({ fromLayers }) => {
     const days = fromLayers("thread_window_days", THREAD_WINDOW_DAYS)
     return { values: { threadWindowDays: days.value }, sources: { thread_window_days: days.from } }
