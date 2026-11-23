@@ -23,3 +23,7 @@
   of asking; an `api` write still asks. A refusal Slack sends with HTTP 200 is the run's error. An agent never runs an `api` delete, and its
   `messages delete` is refused as a permission. A profile never signed in is named as unknown with the profiles here,
   even when the keyring cannot be read.
+- **`reactions add` takes the emoji itself** (`👍`, `👍🏽`) as well as Slack's name for it (`thumbsup`,
+  `thumbsup::skin-tone-4`).
+- **`slack <profile> messages send --reply-to <ts> --also-to-channel`** shows a thread reply in the channel too,
+  as Slack's "Also send to #channel".

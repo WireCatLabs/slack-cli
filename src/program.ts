@@ -98,6 +98,33 @@ const slackMessages = () => {
           { sent: false },
         )
     })
+  const send = messages.commands.find((one) => one.name() === "send")
+  if (send)
+    overrideSharedContract(send, "Slack can show a thread reply in the channel too (reply_broadcast)", (command) =>
+      command
+        .option(
+          "--also-to-channel",
+          'with --reply-to or --topic: show the reply in the channel too, as Slack\'s "Also send to #channel"',
+        )
+        .hook("preAction", (action) => {
+          const { alsoToChannel, replyTo, topic, file, photo } = action.opts()
+          if (alsoToChannel !== true) return
+          if (replyTo === undefined && topic === undefined)
+            throw new CliError(
+              "validation_error",
+              "--also-to-channel shows a thread reply; add --reply-to or --topic",
+              {
+                sent: false,
+              },
+            )
+          if ([file, photo].some((given) => (Array.isArray(given) ? given.length > 0 : given !== undefined)))
+            throw new CliError(
+              "validation_error",
+              `${SERVICE} shows only a text reply in the channel too; leave out --file`,
+              { sent: false },
+            )
+        }),
+    )
   return messages
 }
 

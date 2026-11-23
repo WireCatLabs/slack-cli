@@ -118,14 +118,17 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   - `delete` is for everyone only: Slack has no delete for one person, so a delete without `--for-everyone` is
     refused before the confirmation question, never widened.
   - `react` adds; Slack keeps several reactions per person, so an emoji does not replace the owner's other ones. An
-    emoji is Slack's name for it (`thumbsup`, `:eyes:`, `thumbsup::skin-tone-2`); a Unicode emoji is refused.
+    emoji is Slack's name for it (`thumbsup`, `:eyes:`, `thumbsup::skin-tone-2`) or the emoji itself (`👍🏽`), named
+    by `src/generated/emoji.ts`, which `scripts/emoji.ts` builds from iamcal/emoji-data, the set Slack's names come from.
   - `pin --notify` changes nothing: Slack shows a pin in the channel either way.
   - `chat.update` takes no `mrkdwn` switch, so a plain edit with `*x*` may show bold where a plain send would not.
     `files.completeUploadExternal`'s `initial_comment` has none either: a file's caption is escaped like plain text,
     and `*x*` in it may show bold.
-- **Not offered by cli-core's send:** `reply_broadcast` (a thread reply also shown in the channel) has no field in
-  `SendOptions`, so a reply stays in its thread. `--silent`, `--at-time`, `--send-as`, buttons, spoilers and voice
-  messages are refused by name.
+- **`messages send --also-to-channel`** is slack-cli's own option on cli-core's send (no other messenger has it, and
+  `SendOptions` has no field): the adapter reads it from the command and sends `reply_broadcast` with a thread reply.
+  Without `--reply-to` or `--topic`, or with a file, it is refused; Slack's file upload takes no such switch.
+- **Not offered by cli-core's send:** `--silent`, `--at-time`, `--send-as`, buttons, spoilers and voice messages are
+  refused by name.
 - **Not verified on a live workspace:** whether Slack keeps a sent text exactly as sent, which the repeat matches on;
   and how long a file's message takes to show. `messages link` asks for the remembered account before connecting, so
   on `SLACK_TOKEN` alone it works only after one other command has saved the account.

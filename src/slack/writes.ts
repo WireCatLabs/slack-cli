@@ -51,6 +51,8 @@ export interface SlackWritesOptions {
   /** Called after a join, a leave or a new DM, so the next list reads the conversations again. */
   forget: () => void
   now?: () => number
+  /** `messages send --also-to-channel`: a thread reply shown in the channel too (`reply_broadcast`). */
+  alsoToChannel?: boolean
 }
 
 /** How far before a send id's time a repeat looks: Slack's clock and this computer's may differ a little. */
@@ -279,6 +281,7 @@ export const slackWrites = (options: SlackWritesOptions) => {
           channel: chatId,
           text: body,
           thread_ts: thread,
+          ...(thread && options.alsoToChannel ? { reply_broadcast: true } : {}),
           // Plain text stays plain: `*` and `_` typed are not marks unless --md asked for them.
           mrkdwn: sending.formatting !== undefined,
           ...(sending.noPreview ? { unfurl_links: false, unfurl_media: false } : {}),
@@ -321,11 +324,13 @@ export const slackWrites = (options: SlackWritesOptions) => {
     /** An emoji adds the owner's reaction by Slack's name for it; `null` takes off the owner's reactions. */
     react: async (chatId: string, messageId: string, emoji: string | null) => {
       if (emoji !== null) {
-        const name = emoji.trim().replace(/^:|:$/g, "")
+        const typed = emoji.trim()
+        const { EMOJI_NAMES } = await import("../generated/emoji.js")
+        const name = EMOJI_NAMES[typed] ?? typed.replace(/^:|:$/g, "")
         if (!/^[a-z0-9_+'-]+(::skin-tone-[2-6])?$/.test(name))
           throw new CliError(
             "validation_error",
-            "give the emoji's Slack name, such as thumbsup, :eyes: or thumbsup::skin-tone-2, not the emoji itself",
+            "Slack has no name for this emoji; give its Slack name, such as thumbsup, :eyes: or thumbsup::skin-tone-2",
           )
         await idempotent("reactions.add", { channel: chatId, timestamp: messageId, name })
         return

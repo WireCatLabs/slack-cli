@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**380 ✅ · 930 ⛔ · 0 ❌** — 404 commands, 906 options.
+**382 ✅ · 929 ⛔ · 0 ❌** — 404 commands, 907 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -172,6 +172,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages send` | `--as-file` | ✅ |  |
 | `messages send` | `--voice` | ✅ |  |
 | `messages send` | `--allow-any-file` | ⛔ | cli-core's guard on files from credential and app folders, the same in every messenger CLI; tested in cli-core's send tests, and slack's own file sends run in src/writes.test.ts |
+| `messages send` | `--also-to-channel` | ✅ |  |
 | `messages show` |  | ✅ |  |
 | `messages context` |  | ✅ |  |
 | `messages context` | `--thread` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
@@ -208,7 +209,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `messages links` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `messages sync` |  | ✅ |  |
 | `messages sync` | `--all` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
-| `messages sync` | `--limit` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
+| `messages sync` | `--limit` | ✅ |  |
 | `messages sync` | `--page-size` | ✅ |  |
 | `messages sync` | `--pause` | ✅ |  |
 | `messages sync` | `--since-time` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |

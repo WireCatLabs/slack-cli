@@ -1478,6 +1478,7 @@ slack messages send <chat> [text] [options]
 | `--as-file` | send each --file as a file to download, a video included. |
 | `--voice <file>` | send an Ogg Opus file as a voice message, alone, with no text. |
 | `--allow-any-file` | send a file even from credential folders or this CLI's own folders. |
+| `--also-to-channel` | with --reply-to or --topic: show the reply in the channel too, as Slack's "Also send to #channel". |
 
 **Returns:** message write — operation_id, message, messages, scheduled_for; every field: slack commands info messages send
 

@@ -118,6 +118,27 @@ describe("messages send", () => {
     expect(unknown.json()).toMatchObject({ error: { code: "not_found" } })
   })
 
+  it("**--also-to-channel shows a thread reply in the channel too**, and asks for a thread", async () => {
+    const service = slackOf()
+    const sent = await slackCli(
+      service,
+      "messages",
+      "send",
+      "general",
+      "Done",
+      "--reply-to",
+      ts(31),
+      "--also-to-channel",
+    )
+    expect(sent.code, sent.err).toBe(0)
+    expect(service.writes[0]?.args).toMatchObject({ thread_ts: ts(30), reply_broadcast: "true" })
+    await slackCli(service, "messages", "send", "general", "Quiet", "--reply-to", ts(31))
+    expect(service.writes[1]?.args).not.toHaveProperty("reply_broadcast")
+    const alone = await slackCli(service, "messages", "send", "general", "Where?", "--also-to-channel")
+    expect(alone.json()).toMatchObject({ error: { code: "validation_error" } })
+    expect(service.writes).toHaveLength(2)
+  })
+
   it("**--no-preview turns Slack's link and media previews off**", async () => {
     const service = slackOf()
     await slackCli(service, "messages", "send", "general", "https://example.com", "--no-preview")
@@ -325,9 +346,16 @@ describe("changing a message", () => {
       { method: "reactions.add", args: { channel: GENERAL, timestamp: ts(10), name: "thumbsup::skin-tone-2" } },
       { method: "reactions.remove", args: { channel: GENERAL, timestamp: ts(40), name: "eyes" } },
     ])
-    const unicode = await slackCli(service, "reactions", "add", "general", ts(10), "👍")
-    expect(errorOf(unicode).code).toBe("validation_error")
-    expect(unicode.err).toContain("thumbsup")
+    const unknown = await slackCli(service, "reactions", "add", "general", ts(10), "no such emoji")
+    expect(errorOf(unknown).code).toBe("validation_error")
+    expect(unknown.err).toContain("thumbsup")
+  })
+
+  it("**adds a reaction typed as the emoji itself** by Slack's name for it, a skin tone included", async () => {
+    const service = slackOf()
+    for (const emoji of ["👍", "👍🏽", "❤️"])
+      expect((await slackCli(service, "reactions", "add", "general", ts(10), emoji)).code).toBe(0)
+    expect(service.writes.map((one) => one.args.name)).toEqual(["+1", "+1::skin-tone-4", "heart"])
   })
 
   it("**pins, unpins and links a message**; a repeat of either finds it done", async () => {

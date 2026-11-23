@@ -200,6 +200,7 @@ export const SLACK: Messenger = {
         (base.settings as typeof base.settings & Partial<SlackSettings>).threadWindowDays ?? THREAD_WINDOW_DAYS,
       fetch,
       signal,
+      alsoToChannel: command.opts<{ alsoToChannel?: boolean }>().alsoToChannel === true,
     })
   },
 }

@@ -54,6 +54,7 @@ export interface SlackAdapterOptions {
   fetch?: FetchLike | undefined
   signal?: AbortSignal | undefined
   now?: () => number
+  alsoToChannel?: boolean
 }
 
 /** How many unknown people are asked by users.info one by one before the directory is read instead. */
@@ -332,6 +333,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     self: me.user,
     names,
     ...(options.now ? { now: options.now } : {}),
+    ...(options.alsoToChannel ? { alsoToChannel: true } : {}),
     oneMessage,
     mapped,
     conversationOf,
