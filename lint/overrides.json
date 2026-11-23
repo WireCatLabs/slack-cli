@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "rule": "undeclared-host",
+    "target": "api.slack.com",
+    "reason": "A link printed for the owner to open in a browser: Slack's Create New App page with the manifest filled in (src/slack/app-manifest.ts). slk never sends a request there, and hostFetch would refuse one.",
+    "owner": "@WireCatLabs",
+    "review_after": "2027-05-23"
+  }
+]

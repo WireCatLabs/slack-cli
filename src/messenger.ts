@@ -9,13 +9,13 @@ import {
   rememberAccount,
 } from "@wirecat/cli-core/cli"
 import type { Command } from "commander"
-import { whoAmI } from "./commands/session.js"
 import { configuration, type SlackSettings, THREAD_WINDOW_DAYS } from "./config.js"
 import { PACE, type ServiceEnvironment, slackFor, tokenFromEnvironment, tokenOf } from "./context.js"
 import { IDENTITY, PROVIDER, SERVICE, SKILL } from "./identity.js"
 import { HISTORY_MOST, slackAdapter } from "./slack/adapter.js"
 import type { SlackClient } from "./slack/client.js"
 import { selfOf } from "./slack/map.js"
+import { whoAmI } from "./slack/tokens.js"
 
 export { PROVIDER }
 
@@ -65,6 +65,8 @@ export const SLACK: Messenger = {
       ? "signed-in"
       : "signed-out",
   history: "server",
+  // search.messages searches every conversation the person can see, with `in:` for one of them.
+  serverSearch: true,
   // A message id is `ts`, seconds with microseconds: not a whole number, so held stretches are keyed by time. Slack
   // recommends 200 a page and takes at most 999 (https://docs.slack.dev/reference/methods/conversations.history/).
   fetching: { page: 200, maxPageSize: HISTORY_MOST, pause: "1s", maxPages: 10, orderBy: "time" },

@@ -6,6 +6,7 @@ import { Command } from "commander"
 import { expect, it } from "vitest"
 import { IDENTITY } from "./identity.js"
 import { definition, run } from "./program.js"
+import { runCli } from "./testing/harness.js"
 
 const ran = async (argv: string[]) => {
   const out: string[] = []
@@ -254,4 +255,10 @@ it("a deny in the profile stops a read command before its action runs", async ()
   } finally {
     rmSync(join(dir, "config.json"))
   }
+})
+
+it("config show names thread_window_days with its default, so the owner finds it without the docs", async () => {
+  const ran = await runCli(["config", "show", "--json"])
+  const settings = (ran.json().item as { settings: { setting: string }[] }).settings
+  expect(settings.find((one) => one.setting === "thread_window_days")).toMatchObject({ default: 14, from: "default" })
 })

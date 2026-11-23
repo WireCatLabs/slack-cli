@@ -39,6 +39,62 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/slack/**", "!**/*.test.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "../commands/*",
+                      "../setup/*",
+                      "../program.js",
+                      "../messenger.js",
+                      "../context.js",
+                      "@wirecat/cli-core/store",
+                      "@wirecat/cli-core/store/*"
+                    ],
+                    "message": "src/slack/ maps Slack onto cli-core's messenger port; the commands, setup, program and composition root are above it, and the store is cli-core's"
+                  },
+                  {
+                    "group": ["@modelcontextprotocol/**"],
+                    "message": "cli-core's appMcpCommand serves MCP; commands and services do not know the protocol"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/commands/**", "src/setup/**", "!**/*.test.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["../slack/*", "!../slack/client.js", "!../slack/tokens.js", "!../slack/app-manifest.js"],
+                    "message": "a command reaches Slack through the client, the tokens and the app manifest only; the adapter's mapping is cli-core's port, wired in src/messenger.ts"
+                  },
+                  {
+                    "group": ["@modelcontextprotocol/**"],
+                    "message": "cli-core's appMcpCommand serves MCP; commands and services do not know the protocol"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }

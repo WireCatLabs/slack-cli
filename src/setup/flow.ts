@@ -1,10 +1,10 @@
 import { CliError } from "@wirecat/cli-base"
 import { defineSetup, refuseOffline, type SetupCheck } from "@wirecat/cli-core/cli"
-import { whoAmI } from "../commands/session.js"
 import { configuration } from "../config.js"
 import { slackFor } from "../context.js"
 import { IDENTITY, SERVICE } from "../identity.js"
-import { refuseOtherTokens } from "../slack/tokens.js"
+import { APP_LINK } from "../slack/app-manifest.js"
+import { refuseOtherTokens, whoAmI } from "../slack/tokens.js"
 import { en } from "./texts.js"
 
 /** The same proof `session start` runs: the token is a user token, and `auth.test` says whose it is. */
@@ -28,6 +28,8 @@ export const slackSetup = defineSetup({
       blocks: [
         { type: "text", text: "app.intro" },
         { type: "text", text: "app.steps" },
+        { type: "link", href: APP_LINK, text: "app.link" },
+        { type: "text", text: "app.by-hand" },
         { type: "note", role: "tip", text: "app.admin" },
       ],
       next: "token",
