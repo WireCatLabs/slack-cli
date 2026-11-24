@@ -187,12 +187,13 @@ export const SLACK: Messenger = {
       .catch(() => base.renderer.warn("could not record slack in the local store; other tools' search may skip it"))
     const slack = slackFor(command, token, options.events)
     const account = await accountOf(command, slack, profile, base.env)
+    const slackSettings = base.settings as typeof base.settings & Partial<SlackSettings>
     return slackAdapter({
       slack,
       token,
       self: selfOf(account),
-      threadWindowDays:
-        (base.settings as typeof base.settings & Partial<SlackSettings>).threadWindowDays ?? THREAD_WINDOW_DAYS,
+      threadWindowDays: slackSettings.threadWindowDays ?? THREAD_WINDOW_DAYS,
+      inbox: { channels: slackSettings.inboxChannels ?? [], allChannels: slackSettings.inboxAllChannels === true },
       fetch,
       signal,
       alsoToChannel: command.opts<{ alsoToChannel?: boolean }>().alsoToChannel === true,

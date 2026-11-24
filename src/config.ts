@@ -35,15 +35,25 @@ export const THREAD_WINDOW_DAYS = 14
 
 export interface SlackSettings {
   threadWindowDays: number
+  inboxChannels: string[]
+  inboxAllChannels: boolean
 }
 
 const threadWindowDays = v.optional(
   v.pipe(v.number("has to be a number of days"), v.integer(), v.minValue(1), v.maxValue(365)),
 )
 
+const inboxChannels = v.optional(v.string("has to be channel names or ids, comma-separated: #general, #dev"))
+const inboxAllChannels = v.optional(v.boolean("has to be true or false"))
+
 export const configuration: Configuration = settingsFor<SlackSettings>(IDENTITY, {
   permissions,
-  personal: { thread_window_days: threadWindowDays },
+  personal: {
+    thread_window_days: threadWindowDays,
+    inbox_channels: inboxChannels,
+    inbox_all_channels: inboxAllChannels,
+  },
+  // The channels are a workspace's, so they are set per profile only.
   defaults: { thread_window_days: threadWindowDays },
   settings: [
     {
@@ -51,9 +61,37 @@ export const configuration: Configuration = settingsFor<SlackSettings>(IDENTITY,
       default: THREAD_WINDOW_DAYS,
       description: "how many days back messages sync looks for threads with new replies",
     },
+    {
+      key: "inbox_channels",
+      default: "",
+      description:
+        "the channels inbox counts every unread message of, comma-separated names or ids (#general, #dev); DMs are " +
+        "always counted",
+    },
+    {
+      key: "inbox_all_channels",
+      default: false,
+      description: "inbox counts every channel you are in, two calls each, so it may stop before the last ones",
+    },
   ],
   resolve: ({ fromLayers }) => {
     const days = fromLayers("thread_window_days", THREAD_WINDOW_DAYS)
-    return { values: { threadWindowDays: days.value }, sources: { thread_window_days: days.from } }
+    const channels = fromLayers("inbox_channels", "")
+    const allChannels = fromLayers("inbox_all_channels", false)
+    return {
+      values: {
+        threadWindowDays: days.value,
+        inboxChannels: channels.value
+          .split(",")
+          .map((one) => one.trim())
+          .filter(Boolean),
+        inboxAllChannels: allChannels.value,
+      },
+      sources: {
+        thread_window_days: days.from,
+        inbox_channels: channels.from,
+        inbox_all_channels: allChannels.from,
+      },
+    }
   },
 })
