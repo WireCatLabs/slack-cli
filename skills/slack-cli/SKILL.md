@@ -94,7 +94,7 @@ for the owner**; ask which, unless the task says. The examples use `personal`.
 ## Commands and output
 
 `slk commands messages --json` describes a group, `slk commands messages list --json` one command (arguments,
-options, exit codes); `slack help messages list` is shorter. `effects.remote: "write"` marks a write. A command Slack
+options, exit codes); `slk help messages list` is shorter. `effects.remote: "write"` marks a write. A command Slack
 has no way to do is hidden; one this version does not do yet answers exit `2`. Use `--json --no-input`; with `--json`
 stdout is one JSON value (lists `{items, page, meta}`, one thing `{item, meta}`), and everything else goes to stderr.
 
