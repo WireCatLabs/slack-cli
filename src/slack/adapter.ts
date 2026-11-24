@@ -46,6 +46,12 @@ export const HISTORY_MOST = 999
 /** DMs and group DMs `inbox` counts: one conversations.info each, at the profile's pace. */
 export const INBOX_INFO_MOST = 40
 
+/**
+ * How long `inbox` asks DMs one by one. A command ends after 30 s and an agent's MCP call after about 60 (cli-core
+ * DEFAULT_COMMAND_MS), and at 20 calls a minute 40 DMs take two minutes, so it stops in time and says what it skipped.
+ */
+export const INBOX_ASK_MS = 20_000
+
 /** What Slack recommends per page of a cursor list (https://docs.slack.dev/apis/web-api/pagination/). */
 const PAGE = 200
 
@@ -423,7 +429,12 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       const asked = direct.slice(0, INBOX_INFO_MOST)
       const items: Chat[] = []
       let stopped = false
+      const until = now() + INBOX_ASK_MS
       for (const one of asked) {
+        if (items.length > 0 && now() >= until) {
+          stopped = true
+          break
+        }
         try {
           const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
           items.push(chatOf({ ...one, ...channel }, names))

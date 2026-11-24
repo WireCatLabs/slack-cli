@@ -37,7 +37,7 @@ node -e '
   const list = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
   if (list.item?.ok !== true || !Array.isArray(list.item.channels))
     throw new Error(`no channels: ${JSON.stringify(list).slice(0, 200)}`)' "$work/list.json"
-"${cli[@]}" doctor --online --json >"$work/doctor.json"
+"${cli[@]}" live doctor --online --json >"$work/doctor.json"
 node -e '
   const doctor = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
   if (doctor.item?.online?.ok !== true) throw new Error("doctor --online: auth.test failed")' "$work/doctor.json"
