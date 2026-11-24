@@ -29,7 +29,7 @@ export const DESKTOP = {
   tagline: "Read and search your Slack channels, DMs and threads",
   signIn: {
     gives: "Lets your agent read and write your Slack workspace as you.",
-    asks: "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from the manifest slack gives.",
+    asks: "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from the manifest slk gives.",
   },
 } satisfies ManifestIdentity
 
