@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs"
 import { memoryKeyring } from "@wirecat/cli-base"
-import { ProfileTokenStore, setupProblems } from "@wirecat/cli-core/cli"
+import { ProfileTokenStore, plainSetupText, setupProblems } from "@wirecat/cli-core/cli"
 import { describe, expect, it } from "vitest"
 import { configuration } from "../config.js"
 import { IDENTITY } from "../identity.js"
@@ -40,7 +40,7 @@ describe("the setup flow", () => {
     for (const link of [APP_LINK, APPS_LINK, "https://slack.com/signin"]) expect(TOKEN_GUIDE).toContain(link)
     for (const where of ["OAuth & Permissions", "Install to Workspace", "User OAuth Token", "administrator"])
       expect(TOKEN_GUIDE).toContain(where)
-    expect(TOKEN_GUIDE).not.toMatch(/\*\*|`|\]\(/)
+    expect(plainSetupText(TOKEN_GUIDE)).not.toMatch(/\*\*|`|\]\(|^#/m)
     expect(JSON.stringify(slackSetup.document)).not.toMatch(/\bslack <profile>/)
   })
 
