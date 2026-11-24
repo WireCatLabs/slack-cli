@@ -5399,7 +5399,7 @@
     ],
     "signIn": {
       "gives": "Lets your agent read and write your Slack workspace as you.",
-      "asks": "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from the manifest slack gives.",
+      "asks": "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from the manifest slk gives.",
       "setupFrom": "0.0.0"
     },
     "skill": {
