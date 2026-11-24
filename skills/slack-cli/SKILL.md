@@ -1,21 +1,21 @@
 ---
 name: slack-cli
 description: >-
-  Read and search the owner's Slack workspace through slack: channels, DMs, group DMs and threads, people and files,
+  Read and search the owner's Slack workspace through slk: channels, DMs, group DMs and threads, people and files,
   and call any Slack Web API method as the owner. Use when a question could be answered from the owner's Slack (what
   someone said, decided or shared, a file, who asked what in a thread), when asked to find a Slack channel, person or
   thread, read or summarise a conversation, or sign in to Slack.
 metadata:
   openclaw:
     requires:
-      bins: [slack]
+      bins: [slk]
     install:
       - kind: node
         package: "@wirecat/slack-cli"
-        bins: [slack]
+        bins: [slk]
 ---
 
-# slack — the owner's Slack workspace from the command line
+# slk — the owner's Slack workspace from the command line
 
 `slk` reads Slack as the owner, with the User OAuth Token (`xoxp-`) of a Slack app the owner made in the workspace.
 Everything it reads, the owner can read in Slack. It sees only the conversations the owner is in. Reading marks
@@ -109,7 +109,7 @@ The owner signs in once per profile, with a token only the owner should handle:
 
 - `slk personal setup` asks for the token step by step; `slk personal session start` reads it hidden or from
   stdin. Never ask the owner to paste a token into the chat, never put it in an argument, a file or a log.
-- A bot token (`xoxb-`) and a rotating token (`xoxe.`) are refused: slack reads as the owner and cannot renew a token
+- A bot token (`xoxb-`) and a rotating token (`xoxe.`) are refused: slk reads as the owner and cannot renew a token
   that expires in 12 hours. The app's manifest is `docs/slack-app-manifest.json` in the repository.
 - `slk personal session status --check --json` says whether the token still works; `slk doctor --json` what is set
   up on this computer. Exit `4` means sign in again; do not retry the command.
