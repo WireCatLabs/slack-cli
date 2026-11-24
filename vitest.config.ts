@@ -6,7 +6,8 @@ export default defineConfig({
   test: {
     include: ["src/**/*.test.ts", "scripts/**/*.test.ts"],
     maxWorkers: 4,
-    testTimeout: 15_000,
+    // Tests that start the CLI took over 15 s under coverage on a loaded machine (bin/release, 2026-11-24).
+    testTimeout: 30_000,
     setupFiles: ["@wirecat/cli-base/testing/setup", "src/testing/sandbox.ts"],
     globalSetup: ["src/testing/argv-log.ts"],
     coverage: {
