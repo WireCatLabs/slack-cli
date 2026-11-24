@@ -2,7 +2,8 @@ import { expect, it } from "vitest"
 import { FAKE_TOKEN, fakeSlack } from "../testing/fake-slack.js"
 import { runCli } from "../testing/harness.js"
 import { ANNA, DM, ME, remembered, ts, workspace } from "../testing/workspace.js"
-import { INBOX_INFO_MOST } from "./adapter.js"
+import { INBOX_ASK_MS, INBOX_INFO_MOST, slackAdapter } from "./adapter.js"
+import { slackClient } from "./client.js"
 
 interface Answer {
   items: { ref: string }[]
@@ -65,4 +66,22 @@ it("keeps what it counted when Slack refuses a later DM", async () => {
   const answer = await inbox(service)
   expect(answer.items.map((one) => one.ref.split("/").pop())).toEqual([ts(5)])
   expect(answer.meta?.truncated).toBe(true)
+})
+
+it("stops asking when its time is spent, within a command's 30 s, and says how many it counted", async () => {
+  const world = workspace()
+  for (let at = 0; at < 10; at++)
+    world.channels.push({ id: `D0SLOW${String(at).padStart(3, "0")}`, kind: "im", user: ANNA, members: [ME, ANNA] })
+  const service = fakeSlack({}, FAKE_TOKEN, world)
+  const adapter = slackAdapter({
+    slack: slackClient({ token: FAKE_TOKEN, fetch: service.fetch }),
+    token: FAKE_TOKEN,
+    self: { team: "T0SYNTH01", user: ME },
+    threadWindowDays: 14,
+    fetch: service.fetch,
+    now: () => infos(service).length * (INBOX_ASK_MS / 4),
+  })
+  const answer = await adapter.unreadChats?.()
+  expect(infos(service)).toHaveLength(4)
+  expect(answer?.left).toContainEqual(expect.stringMatching(/^counted 4 of \d+ DMs/))
 })
