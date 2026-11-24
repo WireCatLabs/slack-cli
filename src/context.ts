@@ -22,10 +22,11 @@ export interface ServiceEnvironment extends BaseEnvironment {
 }
 
 // Slack limits each method per workspace by tier (https://docs.slack.dev/apis/web-api/rate-limits/). The paging reads
-// mix Tier 2 (conversations.list, users.list, reactions.list: 20 a minute) and Tier 3 (conversations.history, 50);
-// cli-core's Pacer keeps one pace per profile, so it is the lowest, Tier 2. A 429 holds every process of the profile
-// for its Retry-After.
+// mix Tier 2 (users.list, reactions.list, search.messages: 20 a minute) and Tier 3 (conversations.history, .info,
+// .replies, users.conversations: 50). cli-core's Pacer keeps one pace per file, so the profile has two: Tier 2 for
+// every method, and Tier 3 for those in TIER_3. A 429 holds every process of the profile on that pace.
 export const PACE = { perMinute: 20, burst: 10 }
+export const TIER_3_PACE = { perMinute: 50, burst: 10 }
 
 /**
  * Settings, keyring and the run come from cli-core's `baseContext` and nowhere else: a command that resolves settings
@@ -48,19 +49,26 @@ export const contextOf = (command: Command) => {
 }
 
 /** The profile's pace: Slack's Tier 2, or `requests_per_minute` when set; 0 turns it off for tests. */
-export const pacerFor = (command: Command) => {
+export const pacerFor = (command: Command, rate = PACE, suffix = "") => {
   const { env, profile, settings } = contextOf(command)
   const { requestsPerMinute } = settings
   return new Pacer(
-    pacePathFor(IDENTITY, profile, env),
-    requestsPerMinute === undefined ? PACE : { ...PACE, perMinute: requestsPerMinute },
+    `${pacePathFor(IDENTITY, profile, env)}${suffix}`,
+    requestsPerMinute === undefined ? rate : { ...rate, perMinute: requestsPerMinute },
   )
 }
 
 /** Slack for one run, with the token it was given and the profile's pace; each call lands in the run's `events`. */
 export const slackFor = (command: Command, token: string, events?: EventSink) => {
   const { environment } = contextOf(command)
-  return slackClient({ token, events, signal: environment.signal, fetch: environment.fetch, pacer: pacerFor(command) })
+  return slackClient({
+    token,
+    events,
+    signal: environment.signal,
+    fetch: environment.fetch,
+    pacer: pacerFor(command),
+    tier3Pacer: pacerFor(command, TIER_3_PACE, ".tier3"),
+  })
 }
 
 /** Whether the profile's token comes from SLACK_TOKEN, which never went through `session start`. */

@@ -47,10 +47,11 @@ export const HISTORY_MOST = 999
 export const INBOX_INFO_MOST = 40
 
 /**
- * How long `inbox` asks DMs one by one. A command ends after 30 s and an agent's MCP call after about 60 (cli-core
- * DEFAULT_COMMAND_MS), and at 20 calls a minute 40 DMs take two minutes, so it stops in time and says what it skipped.
+ * How long `inbox` asks chats one by one. A command ends after 30 s and an agent's MCP call after about 60 (cli-core
+ * DEFAULT_COMMAND_MS); cli-core then reads each unread DM's history, so this leaves it half the time. At Tier 3's 50
+ * calls a minute, after a burst of 10, that is about 20 calls: 15 DMs and a few channels.
  */
-export const INBOX_ASK_MS = 20_000
+export const INBOX_ASK_MS = 15_000
 
 /** What Slack recommends per page of a cursor list (https://docs.slack.dev/apis/web-api/pagination/). */
 const PAGE = 200
@@ -65,7 +66,12 @@ export interface SlackAdapterOptions {
   signal?: AbortSignal | undefined
   now?: () => number
   alsoToChannel?: boolean
+  /** The channels `inbox` counts, as the owner named them (`inbox_channels`), or every channel (`inbox_all_channels`). */
+  inbox?: { channels: readonly string[]; allChannels: boolean }
 }
+
+/** How many of a channel's unread messages `inbox` counts; more shows as this many. */
+const UNREAD_MOST = 100
 
 /** How many unknown people are asked by users.info one by one before the directory is read instead. */
 const FEW = 3
@@ -373,6 +379,64 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return thread?.messages.find((one) => one.ts === id)
   }
 
+  const directUnread = async (one: Conversation) => {
+    const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
+    return chatOf({ ...one, ...channel }, names)
+  }
+
+  /** Each channel's history after last_read as inbox read it, so cli-core's history call for it sends nothing. */
+  const unreadPages = new Map<string, WireMessage[]>()
+
+  // The owner by id, with or without a name after it, and @here, @channel, @everyone, as Slack writes them
+  // (https://docs.slack.dev/messaging/formatting-message-text/#mentioning-users). A user group's mention is not
+  // counted: whether the owner is in the group costs another call.
+  const mentionsMe = (wire: WireMessage) =>
+    new RegExp(`<@${me.user}(\\|[^>]*)?>|<!(here|channel|everyone)(\\|[^>]*)?>`).test(wire.text ?? "")
+
+  /**
+   * Other people's messages after last_read: Slack gives a channel no count, so the history after it is counted. A
+   * channel the owner does not follow counts from its newest message down to the newest one that mentions them, so
+   * that one is among what inbox shows.
+   */
+  const channelUnread = async (one: Conversation, followed: boolean) => {
+    const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
+    const page = await historyCall(one.id, { oldest: channel.last_read ?? "0", limit: UNREAD_MOST })
+    unreadPages.set(
+      one.id,
+      page.messages.filter((wire) => !isService(wire)),
+    )
+    const shown = page.messages.filter(isShown)
+    const theirs = shown.filter((wire) => wire.user !== me.user)
+    const mentions = theirs.filter(mentionsMe).length
+    const newestMention = shown.findIndex((wire) => wire.user !== me.user && mentionsMe(wire))
+    const count = followed ? theirs.length : newestMention + 1
+    const [latest] = shown
+    const chat = chatOf({ ...one, ...channel, unread_count_display: count, ...(latest ? { latest } : {}) }, names)
+    return { ...chat, unreadMentions: mentions }
+  }
+
+  /** The channels inbox counts; a name that is none of the owner's channels is refused with the names it could be. */
+  const followedChannels = (channels: readonly Conversation[]) => {
+    if (options.inbox?.allChannels) return [...channels]
+    const found = new Map<string, Conversation>()
+    for (const typed of options.inbox?.channels ?? []) {
+      const name = typed.trim().replace(/^#/, "").toLowerCase()
+      const one = channels.find((each) => each.id === typed.trim() || each.name?.toLowerCase() === name)
+      if (one) {
+        found.set(one.id, one)
+        continue
+      }
+      const choices = channels.flatMap((each) => (each.name ? [`#${each.name}`] : [])).sort()
+      const shown = choices.length > 30 ? [...choices.slice(0, 30), `and ${choices.length - 30} more`] : choices
+      throw new CliError(
+        "validation_error",
+        `inbox_channels names ${typed}, which is none of your channels; yours: ${shown.join(", ")}`,
+        { param: "inbox_channels" },
+      )
+    }
+    return [...found.values()]
+  }
+
   const writes = slackWrites({
     slack,
     self: me.user,
@@ -420,39 +484,60 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     },
     logout: async () => {},
     close: async () => {},
-    // Slack lists no unread counts; conversations.info gives them for DMs only
-    // (https://docs.slack.dev/reference/methods/conversations.info/), one call each, so inbox asks a bounded few.
+    // Slack lists no unread counts. conversations.info gives a DM's count and every chat's last_read
+    // (https://docs.slack.dev/reference/methods/conversations.info/), so inbox asks one call per DM and two per channel
+    // the owner follows, at the profile's pace, for a bounded time.
     unreadChats: async () => {
       const all = await listed()
       // DMs first: the docs promise their counts; a group DM's is not stated, and it still gives a last message time.
-      const direct = [...all.filter((one) => one.is_im), ...all.filter((one) => one.is_mpim)]
-      const asked = direct.slice(0, INBOX_INFO_MOST)
+      const direct = [...all.filter((one) => one.is_im), ...all.filter((one) => one.is_mpim)].slice(0, INBOX_INFO_MOST)
+      const channels = all.filter((one) => !one.is_im && !one.is_mpim && one.is_archived !== true)
+      const followed = followedChannels(channels)
+      // The rest of the channels count only when a message after last_read mentions the owner: Slack's search does not
+      // find a mention (`<@U…>` matched nothing in a live run), so each is read, in the time left.
+      const others = channels.filter((one) => !followed.includes(one))
+      const asked = [...direct, ...followed, ...others]
       const items: Chat[] = []
-      let stopped = false
+      let done = 0
+      let refused: string | undefined
+      let late = false
       const until = now() + INBOX_ASK_MS
       for (const one of asked) {
-        if (items.length > 0 && now() >= until) {
-          stopped = true
+        if (done > 0 && now() >= until) {
+          late = true
           break
         }
         try {
-          const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
-          items.push(chatOf({ ...one, ...channel }, names))
+          const other = others.includes(one)
+          const chat = one.is_im || one.is_mpim ? await directUnread(one) : await channelUnread(one, !other)
+          if (!other || (chat.unreadMentions ?? 0) > 0) items.push(chat)
+          done++
         } catch (error) {
           // What was counted still answers; the rest is named below rather than lost.
-          if (items.length === 0) throw error
-          stopped = true
+          if (done === 0) throw error
+          refused = isCliError(error) ? error.code : "an error"
           break
         }
       }
-      const channels = all.length - direct.length
+      const why = refused ? `Slack refused a call (${refused})` : late ? "time ran out" : undefined
+      const allDirect = all.filter((one) => one.is_im || one.is_mpim).length
+      const counted = Math.min(done, direct.length + followed.length)
+      const searched = Math.max(0, done - direct.length - followed.length)
       const left = [
-        ...(channels > 0 ? [`${channels} channels are not counted: Slack gives unread counts for DMs only`] : []),
-        ...(stopped || direct.length > asked.length
-          ? [`counted ${items.length} of ${direct.length} DMs and group DMs; the rest may hold unread messages`]
+        ...(counted < allDirect + followed.length
+          ? [
+              `${why ? `${why}: ` : ""}counted ${counted} of ${allDirect + followed.length} DMs, group DMs and ` +
+                "followed channels; the rest may hold unread messages",
+            ]
+          : []),
+        ...(searched < others.length
+          ? [
+              `${why ? `${why}: ` : ""}looked for mentions of you in ${searched} of ${others.length} other channels ` +
+                "(thread replies are not read); name the ones to follow in inbox_channels, or set inbox_all_channels",
+            ]
           : []),
       ]
-      return { items, hasMore: items.length < direct.length, ...(left.length ? { left } : {}) }
+      return { items, hasMore: left.length > 0, ...(left.length ? { left } : {}) }
     },
     chats: async ({ limit, offset }) => {
       const all = (await listed()).map((one) => chatOf(one, names))
@@ -461,6 +546,8 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     },
     history: async (chat, { limit, before }) => {
       const chatId = await idOf(chat)
+      const held = before === undefined ? unreadPages.get(chatId) : undefined
+      if (held && held.length >= limit) return page(chatId, held.slice(0, limit), true, false)
       const latest = before === undefined ? undefined : isTs(before) ? before : tsOf(Date.parse(before))
       const { wires, hasMore } = await newestFirst(chatId, limit, latest ? { latest } : {})
       return page(chatId, wires, hasMore, latest !== undefined)

@@ -148,3 +148,24 @@ it("no answer: a read is a network error, a stopped read is cancelled, a write i
   stop.abort()
   await expect(call(false, stop.signal)).rejects.toMatchObject({ code: "cancelled" })
 })
+
+it("paces the Tier 3 reads apart from the rest, so inbox's info and history calls go at Slack's 50 a minute", async () => {
+  const turns: string[] = []
+  const paced = (name: string) => ({
+    reserve: async () => {
+      turns.push(name)
+      return Date.now()
+    },
+    holdFor: async () => {},
+  })
+  const slack = fakeSlack()
+  const client = slackClient({
+    token: FAKE_TOKEN,
+    fetch: slack.fetch,
+    pacer: paced("tier2"),
+    tier3Pacer: paced("tier3"),
+  })
+  await client("auth.test", {}, anything)
+  await client("users.conversations", {}, anything)
+  expect(turns).toEqual(["tier2", "tier3"])
+})

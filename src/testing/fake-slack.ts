@@ -37,6 +37,8 @@ export interface FakeChannel {
   members: string[]
   is_ext_shared?: boolean
   unread?: number
+  /** Where the owner read up to; conversations.info gives it for every kind of chat, as a live run showed. */
+  lastRead?: string
   archived?: boolean
 }
 
@@ -230,6 +232,7 @@ const conversationOf = (one: FakeChannel, all: readonly FakeMessage[], info: boo
     ...(one.name ? { name: one.name } : {}),
     ...(one.user ? { user: one.user } : {}),
     ...(info && one.kind === "im" ? { unread_count: one.unread ?? 0, unread_count_display: one.unread ?? 0 } : {}),
+    ...(info ? { last_read: one.lastRead ?? "0000000000.000000" } : {}),
     ...(info && newest ? { latest: { type: "message", ts: newest.ts, text: newest.text ?? "" } } : {}),
     ...(counted ? { num_members: one.members.length } : {}),
   }

@@ -21,12 +21,25 @@ export interface SlackClientOptions {
   fetch?: FetchLike | undefined
   /** cli-core's per-profile `Pacer`: every process of the profile waits its turn, and a 429 holds them all. */
   pacer?: PacerLike | undefined
+  /** The profile's second pace, for the Tier 3 methods in `TIER_3`; `pacer` paces them when it is not given. */
+  tier3Pacer?: PacerLike | undefined
   /** The run's sink, so each call lands in the run record under its method name (WC-LIFE-15). */
   events?: EventSink | undefined
   signal?: AbortSignal | undefined
   /** A test's clock; the pace's waits and a 429's Retry-After sleep for real otherwise. */
   sleep?: SleepLike | undefined
 }
+
+/**
+ * The reads Slack allows 50 or more a minute (Tier 3, https://docs.slack.dev/apis/web-api/rate-limits/; each method's
+ * page names its tier). Every other method keeps the Tier 2 pace of 20.
+ */
+export const TIER_3 = new Set([
+  "conversations.history",
+  "conversations.replies",
+  "conversations.info",
+  "users.conversations",
+])
 
 export type SlackArgs = Readonly<Record<string, string | number | boolean | undefined>>
 
@@ -165,10 +178,11 @@ const formOf = (args: SlackArgs) =>
  * nothing else is sent twice.
  */
 export const slackClient = (options: SlackClientOptions) => {
-  const send = retrying(hostFetch({ hosts: DESKTOP.hosts, ...(options.fetch ? { fetch: options.fetch } : {}) }), {
-    ...(options.pacer ? { pacer: options.pacer } : {}),
-    ...(options.sleep ? { sleep: options.sleep } : {}),
-  })
+  const reach = hostFetch({ hosts: DESKTOP.hosts, ...(options.fetch ? { fetch: options.fetch } : {}) })
+  const pacedBy = (pacer: PacerLike | undefined) =>
+    retrying(reach, { ...(pacer ? { pacer } : {}), ...(options.sleep ? { sleep: options.sleep } : {}) })
+  const send = pacedBy(options.pacer)
+  const sendTier3 = options.tier3Pacer ? pacedBy(options.tier3Pacer) : send
 
   const call = async <T>(
     method: string,
@@ -190,7 +204,7 @@ export const slackClient = (options: SlackClientOptions) => {
     }
     let response: Response
     try {
-      response = await send(new URL(method, SLACK_API), {
+      response = await (TIER_3.has(method) ? sendTier3 : send)(new URL(method, SLACK_API), {
         method: "POST",
         headers: {
           authorization: `Bearer ${options.token}`,
