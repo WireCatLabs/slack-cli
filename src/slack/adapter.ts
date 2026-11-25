@@ -388,15 +388,15 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
   /** Each channel's history after last_read as inbox read it, so cli-core's history call for it sends nothing. */
   const unreadPages = new Map<string, WireMessage[]>()
 
-  // The groups the owner is in, asked once a run and only when a message names a group. A refusal (no scope, a plan
-  // without user groups) counts no group mention, and inbox says so.
+  // The groups the owner is in, asked once a run and only when a message names a group. A failure (an app made before
+  // usergroups:read was in the manifest, a plan without user groups) counts no group mention, and inbox says why.
   let groups: Promise<Set<string>> | undefined
   let groupsRefused: string | undefined
   const myGroups = () =>
     (groups ??= slack("usergroups.list", { include_users: true }, userGroupsAnswer).then(
       ({ usergroups }) => new Set(usergroups.filter((one) => one.users?.includes(me.user ?? "")).map((one) => one.id)),
       (error: unknown) => {
-        groupsRefused = isCliError(error) ? error.code : "an error"
+        groupsRefused = isCliError(error) ? error.message : "Slack could not be asked"
         return new Set<string>()
       },
     ))
@@ -553,9 +553,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
                 "(thread replies are not read); name the ones to follow in inbox_channels, or set inbox_all_channels",
             ]
           : []),
-        ...(groupsRefused
-          ? [`Slack refused usergroups.list (${groupsRefused}): a mention of a user group you are in was not counted`]
-          : []),
+        ...(groupsRefused ? [`a mention of a user group you are in was not counted: ${groupsRefused}`] : []),
       ]
       return { items, hasMore: left.length > 0, ...(left.length ? { left } : {}) }
     },

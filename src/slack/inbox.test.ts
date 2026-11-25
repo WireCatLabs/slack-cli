@@ -1,7 +1,7 @@
 import { rmSync } from "node:fs"
 import { join } from "node:path"
 import { afterEach, expect, it } from "vitest"
-import { FAKE_TOKEN, fakeSlack } from "../testing/fake-slack.js"
+import { FAKE_TOKEN, type FakeMessage, fakeSlack } from "../testing/fake-slack.js"
 import { runCli } from "../testing/harness.js"
 import { ANNA, DM, GENERAL, ME, remembered, SHARED, ts, VERA, workspace } from "../testing/workspace.js"
 import { INBOX_ASK_MS, INBOX_INFO_MOST, slackAdapter } from "./adapter.js"
@@ -253,9 +253,17 @@ it("says Slack refused a call when a later chat fails, and keeps what it counted
   expect(answer?.left).toContainEqual(expect.stringMatching(/^Slack refused a call \(/))
 })
 
-const groupMention = (world: ReturnType<typeof workspace>, members: string[]) => {
-  world.userGroups = [{ id: "S0GROUP01", handle: "devs", users: members }]
-  world.messages[SHARED]?.push({ ts: ts(8), user: VERA, text: "<!subteam^S0GROUP01|@devs> please look" })
+const groupMention = (
+  world: ReturnType<typeof workspace>,
+  members: string[],
+  { disabled = false, alsoIn }: { disabled?: boolean; alsoIn?: string } = {},
+) => {
+  world.userGroups = [{ id: "S0GROUP01", handle: "devs", users: members, disabled }]
+  const add = (id: string, message: FakeMessage) => {
+    world.messages[id] = [...(world.messages[id] ?? []), message]
+  }
+  add(SHARED, { ts: ts(8), user: VERA, text: "<!subteam^S0GROUP01> please look" })
+  if (alsoIn) add(alsoIn, { ts: ts(60), user: ANNA, text: "<!subteam^S0GROUP01|@devs> and here" })
   return world
 }
 
@@ -263,21 +271,29 @@ const groupAsks = (service: ReturnType<typeof fakeSlack>) =>
   service.calls.filter((one) => one.method === "usergroups.list")
 
 it("counts a mention of a user group you are in, asking for the groups once", async () => {
-  const { adapter, service } = adapterOf(groupMention(workspace(), [VERA, ME]))
-  const shared = (await adapter.unreadChats?.())?.items.find((one) => one.id === SHARED)
-  expect(shared?.unreadMentions).toBe(1)
+  const world = groupMention(workspace(), [VERA, ME], { alsoIn: GENERAL })
+  readFrom(world, GENERAL, ts(50))
+  const { adapter, service } = adapterOf(world)
+  const items = (await adapter.unreadChats?.())?.items ?? []
+  expect(items.find((one) => one.id === SHARED)?.unreadMentions).toBe(1)
+  expect(items.find((one) => one.id === GENERAL)?.unreadMentions).toBe(1)
   expect(groupAsks(service)).toHaveLength(1)
 })
 
-it("leaves out a mention of a group you are not in, and asks for no groups when no message names one", async () => {
+it("leaves out a mention of a group you are not in, or one that is disabled", async () => {
   const outside = adapterOf(groupMention(workspace(), [VERA]))
   expect((await outside.adapter.unreadChats?.())?.items.map((one) => one.id)).not.toContain(SHARED)
+  const disabled = adapterOf(groupMention(workspace(), [ME], { disabled: true }))
+  expect((await disabled.adapter.unreadChats?.())?.items.map((one) => one.id)).not.toContain(SHARED)
+})
+
+it("asks for no groups when no message names one", async () => {
   const plain = adapterOf(workspace())
   await plain.adapter.unreadChats?.()
   expect(groupAsks(plain.service)).toEqual([])
 })
 
-it("says a group mention was not counted when Slack refuses the groups", async () => {
+it("says a group mention was not counted, and what to add, when the app lacks usergroups:read", async () => {
   const world = groupMention(workspace(), [ME])
   world.scopes = [
     "users:read",
@@ -285,5 +301,8 @@ it("says a group mention was not counted when Slack refuses the groups", async (
   ]
   const answer = await adapterOf(world).adapter.unreadChats?.()
   expect(answer?.items.map((one) => one.id)).not.toContain(SHARED)
-  expect(answer?.left).toContainEqual(expect.stringMatching(/^Slack refused usergroups\.list \(permission_error\)/))
+  expect(answer?.hasMore).toBe(true)
+  expect(answer?.left).toContainEqual(
+    expect.stringMatching(/^a mention of a user group you are in was not counted: .*usergroups:read/),
+  )
 })

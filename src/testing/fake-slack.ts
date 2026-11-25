@@ -65,7 +65,7 @@ export interface FakeWorkspace {
   /** File bytes by their `url_private`, answered on files.slack.com with the Bearer header only. */
   files?: Record<string, string>
   /** User groups, each with the people in it. */
-  userGroups?: { id: string; handle: string; users: string[] }[]
+  userGroups?: { id: string; handle: string; users: string[]; disabled?: boolean }[]
   /** The token's user scopes; every one Slack's reads need when unset. */
   scopes?: string[]
 }
@@ -493,10 +493,14 @@ export const fakeSlack = (
     if (method === "usergroups.list") {
       if (!scopes().includes("usergroups:read"))
         return refuse("usergroups.list without usergroups:read", "missing_scope", { needed: "usergroups:read" })
-      const usergroups = (workspace.userGroups ?? []).map(({ users, ...group }) => ({
-        ...group,
-        ...(args.include_users === "true" ? { users } : {}),
-      }))
+      // Disabled groups only when asked for (https://docs.slack.dev/reference/methods/usergroups.list/).
+      const usergroups = (workspace.userGroups ?? [])
+        .filter((one) => !one.disabled || args.include_disabled === "true")
+        .map(({ users, disabled, ...group }) => ({
+          ...group,
+          ...(disabled ? { date_delete: 1 } : {}),
+          ...(args.include_users === "true" ? { users } : {}),
+        }))
       return Response.json({ ok: true, usergroups })
     }
     if (method === "search.messages") return search(args)
