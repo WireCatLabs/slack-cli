@@ -416,7 +416,10 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
    */
   const channelUnread = async (one: Conversation, followed: boolean) => {
     const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
-    const page = await historyCall(one.id, { oldest: channel.last_read ?? "0", limit: UNREAD_MOST })
+    // A channel never read answers last_read "0000000000.000000", which history refuses as oldest (invalid_ts_oldest,
+    // a live run 2026-11-25): then the whole page counts.
+    const read = Number(channel.last_read ?? 0) > 0 ? { oldest: channel.last_read } : {}
+    const page = await historyCall(one.id, { ...read, limit: UNREAD_MOST })
     unreadPages.set(
       one.id,
       page.messages.filter((wire) => !isService(wire)),
@@ -530,6 +533,12 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
           if (!other || (chat.unreadMentions ?? 0) > 0) items.push(chat)
           done++
         } catch (error) {
+          // users.conversations lists the DM with Slackbot, and conversations.info answers channel_not_found for it
+          // (a live run, 2026-11-25): a chat Slack cannot show holds nothing to read.
+          if (isCliError(error) && error.code === "not_found") {
+            done++
+            continue
+          }
           // What was counted still answers; the rest is named below rather than lost.
           if (done === 0) throw error
           refused = isCliError(error) ? error.code : "an error"

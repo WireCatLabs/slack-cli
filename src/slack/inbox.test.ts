@@ -306,3 +306,26 @@ it("says a group mention was not counted, and what to add, when the app lacks us
     expect.stringMatching(/^a mention of a user group you are in was not counted: .*usergroups:read/),
   )
 })
+
+it("skips a chat Slack lists but cannot show, as it does the DM with Slackbot, and counts the rest", async () => {
+  const world = workspace()
+  world.channels.unshift({ id: "D0SLKBOT1", kind: "im", user: "USLACKBOT", members: [ME, "USLACKBOT"] })
+  const listed = adapterOf(world)
+  const skipping = slackAdapter({
+    slack: slackClient({
+      token: FAKE_TOKEN,
+      fetch: async (input, init) => {
+        if (String(input).endsWith("conversations.info") && String(init?.body ?? "").includes("D0SLKBOT1"))
+          return new Response(JSON.stringify({ ok: false, error: "channel_not_found" }), { status: 200 })
+        return listed.service.fetch(input, init)
+      },
+    }),
+    token: FAKE_TOKEN,
+    self: { team: "T0SYNTH01", user: ME },
+    threadWindowDays: 14,
+    fetch: listed.service.fetch,
+  })
+  const answer = await skipping.unreadChats?.()
+  expect(answer?.items.map((one) => one.id)).toContain(DM)
+  expect(answer?.left ?? []).not.toContainEqual(expect.stringMatching(/refused/))
+})

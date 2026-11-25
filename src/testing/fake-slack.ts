@@ -544,6 +544,8 @@ export const fakeSlack = (
     if (!scopes().includes(scope)) return refuse(`${method} without ${scope}`, "missing_scope", { needed: scope })
     const inside = window(args)
     if (method === "conversations.history") {
+      // The zero last_read conversations.info gives a never-read channel is refused back (a live run, 2026-11-25).
+      if (/^0+\.0+$/.test(args.oldest ?? "")) return refuse(`oldest ${args.oldest}`, "invalid_ts_oldest")
       const top = all
         .filter((one) => (!isReply(one) || one.subtype === "thread_broadcast") && inside(one.ts))
         .sort((one, other) => num(other.ts) - num(one.ts))
