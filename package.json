@@ -1,6 +1,6 @@
 {
   "name": "@wirecat/slack-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Your Slack workspace from the command line, for you and your AI agents",
   "license": "Apache-2.0",
   "author": "Viacheslav Ptsarev",
