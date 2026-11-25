@@ -64,6 +64,8 @@ export interface FakeWorkspace {
   messages: Record<string, FakeMessage[]>
   /** File bytes by their `url_private`, answered on files.slack.com with the Bearer header only. */
   files?: Record<string, string>
+  /** User groups, each with the people in it. */
+  userGroups?: { id: string; handle: string; users: string[]; disabled?: boolean }[]
   /** The token's user scopes; every one Slack's reads need when unset. */
   scopes?: string[]
 }
@@ -93,6 +95,7 @@ const METHODS: Record<string, { takes: readonly string[]; needs?: readonly strin
   },
   "users.info": { takes: ["user", "include_locale"], needs: ["user"] },
   "users.list": { takes: ["cursor", "include_locale", "limit", "team_id"] },
+  "usergroups.list": { takes: ["include_count", "include_disabled", "include_users", "team_id"] },
   "conversations.list": { takes: ["cursor", "exclude_archived", "limit", "team_id", "types"] },
   "chat.postMessage": {
     takes: [
@@ -153,6 +156,7 @@ const ALL_SCOPES = [
   ...Object.values(WRITE_NEEDS),
   "users:read",
   "search:read",
+  "usergroups:read",
 ]
 
 const num = (ts: string) => Number(ts)
@@ -486,6 +490,19 @@ export const fakeSlack = (
         response_metadata: page.response_metadata,
       })
     }
+    if (method === "usergroups.list") {
+      if (!scopes().includes("usergroups:read"))
+        return refuse("usergroups.list without usergroups:read", "missing_scope", { needed: "usergroups:read" })
+      // Disabled groups only when asked for (https://docs.slack.dev/reference/methods/usergroups.list/).
+      const usergroups = (workspace.userGroups ?? [])
+        .filter((one) => !one.disabled || args.include_disabled === "true")
+        .map(({ users, disabled, ...group }) => ({
+          ...group,
+          ...(disabled ? { date_delete: 1 } : {}),
+          ...(args.include_users === "true" ? { users } : {}),
+        }))
+      return Response.json({ ok: true, usergroups })
+    }
     if (method === "search.messages") return search(args)
     if (method === "files.getUploadURLExternal") {
       if (!scopes().includes("files:write"))
@@ -527,6 +544,8 @@ export const fakeSlack = (
     if (!scopes().includes(scope)) return refuse(`${method} without ${scope}`, "missing_scope", { needed: scope })
     const inside = window(args)
     if (method === "conversations.history") {
+      // The zero last_read conversations.info gives a never-read channel is refused back (a live run, 2026-11-25).
+      if (/^0+\.0+$/.test(args.oldest ?? "")) return refuse(`oldest ${args.oldest}`, "invalid_ts_oldest")
       const top = all
         .filter((one) => (!isReply(one) || one.subtype === "thread_broadcast") && inside(one.ts))
         .sort((one, other) => num(other.ts) - num(one.ts))

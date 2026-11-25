@@ -1,9 +1,9 @@
 import { rmSync } from "node:fs"
 import { join } from "node:path"
 import { afterEach, expect, it } from "vitest"
-import { FAKE_TOKEN, fakeSlack } from "../testing/fake-slack.js"
+import { FAKE_TOKEN, type FakeMessage, fakeSlack } from "../testing/fake-slack.js"
 import { runCli } from "../testing/harness.js"
-import { ANNA, DM, GENERAL, ME, remembered, SHARED, ts, workspace } from "../testing/workspace.js"
+import { ANNA, DM, GENERAL, ME, remembered, SHARED, ts, VERA, workspace } from "../testing/workspace.js"
 import { INBOX_ASK_MS, INBOX_INFO_MOST, slackAdapter } from "./adapter.js"
 import { slackClient } from "./client.js"
 
@@ -251,4 +251,81 @@ it("says Slack refused a call when a later chat fails, and keeps what it counted
   const answer = await failing.unreadChats?.()
   expect(answer?.items.length).toBeGreaterThan(0)
   expect(answer?.left).toContainEqual(expect.stringMatching(/^Slack refused a call \(/))
+})
+
+const groupMention = (
+  world: ReturnType<typeof workspace>,
+  members: string[],
+  { disabled = false, alsoIn }: { disabled?: boolean; alsoIn?: string } = {},
+) => {
+  world.userGroups = [{ id: "S0GROUP01", handle: "devs", users: members, disabled }]
+  const add = (id: string, message: FakeMessage) => {
+    world.messages[id] = [...(world.messages[id] ?? []), message]
+  }
+  add(SHARED, { ts: ts(8), user: VERA, text: "<!subteam^S0GROUP01> please look" })
+  if (alsoIn) add(alsoIn, { ts: ts(60), user: ANNA, text: "<!subteam^S0GROUP01|@devs> and here" })
+  return world
+}
+
+const groupAsks = (service: ReturnType<typeof fakeSlack>) =>
+  service.calls.filter((one) => one.method === "usergroups.list")
+
+it("counts a mention of a user group you are in, asking for the groups once", async () => {
+  const world = groupMention(workspace(), [VERA, ME], { alsoIn: GENERAL })
+  readFrom(world, GENERAL, ts(50))
+  const { adapter, service } = adapterOf(world)
+  const items = (await adapter.unreadChats?.())?.items ?? []
+  expect(items.find((one) => one.id === SHARED)?.unreadMentions).toBe(1)
+  expect(items.find((one) => one.id === GENERAL)?.unreadMentions).toBe(1)
+  expect(groupAsks(service)).toHaveLength(1)
+})
+
+it("leaves out a mention of a group you are not in, or one that is disabled", async () => {
+  const outside = adapterOf(groupMention(workspace(), [VERA]))
+  expect((await outside.adapter.unreadChats?.())?.items.map((one) => one.id)).not.toContain(SHARED)
+  const disabled = adapterOf(groupMention(workspace(), [ME], { disabled: true }))
+  expect((await disabled.adapter.unreadChats?.())?.items.map((one) => one.id)).not.toContain(SHARED)
+})
+
+it("asks for no groups when no message names one", async () => {
+  const plain = adapterOf(workspace())
+  await plain.adapter.unreadChats?.()
+  expect(groupAsks(plain.service)).toEqual([])
+})
+
+it("says a group mention was not counted, and what to add, when the app lacks usergroups:read", async () => {
+  const world = groupMention(workspace(), [ME])
+  world.scopes = [
+    "users:read",
+    ...["channels", "groups", "im", "mpim"].flatMap((kind) => [`${kind}:read`, `${kind}:history`]),
+  ]
+  const answer = await adapterOf(world).adapter.unreadChats?.()
+  expect(answer?.items.map((one) => one.id)).not.toContain(SHARED)
+  expect(answer?.hasMore).toBe(true)
+  expect(answer?.left).toContainEqual(
+    expect.stringMatching(/^a mention of a user group you are in was not counted: .*usergroups:read/),
+  )
+})
+
+it("skips a chat Slack lists but cannot show, as it does the DM with Slackbot, and counts the rest", async () => {
+  const world = workspace()
+  world.channels.unshift({ id: "D0SLKBOT1", kind: "im", user: "USLACKBOT", members: [ME, "USLACKBOT"] })
+  const listed = adapterOf(world)
+  const skipping = slackAdapter({
+    slack: slackClient({
+      token: FAKE_TOKEN,
+      fetch: async (input, init) => {
+        if (String(input).endsWith("conversations.info") && String(init?.body ?? "").includes("D0SLKBOT1"))
+          return new Response(JSON.stringify({ ok: false, error: "channel_not_found" }), { status: 200 })
+        return listed.service.fetch(input, init)
+      },
+    }),
+    token: FAKE_TOKEN,
+    self: { team: "T0SYNTH01", user: ME },
+    threadWindowDays: 14,
+    fetch: listed.service.fetch,
+  })
+  const answer = await skipping.unreadChats?.()
+  expect(answer?.items.map((one) => one.id)).toContain(DM)
+  expect(answer?.left ?? []).not.toContainEqual(expect.stringMatching(/refused/))
 })

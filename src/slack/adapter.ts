@@ -33,6 +33,7 @@ import {
   USER_ID,
   type User,
   userAnswer,
+  userGroupsAnswer,
   usersAnswer,
   type WireMessage,
 } from "./map.js"
@@ -387,11 +388,26 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
   /** Each channel's history after last_read as inbox read it, so cli-core's history call for it sends nothing. */
   const unreadPages = new Map<string, WireMessage[]>()
 
-  // The owner by id, with or without a name after it, and @here, @channel, @everyone, as Slack writes them
-  // (https://docs.slack.dev/messaging/formatting-message-text/#mentioning-users). A user group's mention is not
-  // counted: whether the owner is in the group costs another call.
-  const mentionsMe = (wire: WireMessage) =>
-    new RegExp(`<@${me.user}(\\|[^>]*)?>|<!(here|channel|everyone)(\\|[^>]*)?>`).test(wire.text ?? "")
+  // The groups the owner is in, asked once a run and only when a message names a group. A failure (an app made before
+  // usergroups:read was in the manifest, a plan without user groups) counts no group mention, and inbox says why.
+  let groups: Promise<Set<string>> | undefined
+  let groupsRefused: string | undefined
+  const myGroups = () =>
+    (groups ??= slack("usergroups.list", { include_users: true }, userGroupsAnswer).then(
+      ({ usergroups }) => new Set(usergroups.filter((one) => one.users?.includes(me.user ?? "")).map((one) => one.id)),
+      (error: unknown) => {
+        groupsRefused = isCliError(error) ? error.message : "Slack could not be asked"
+        return new Set<string>()
+      },
+    ))
+
+  // The owner by id, with or without a name after it, @here, @channel, @everyone, and a group the owner is in, as
+  // Slack writes them (https://docs.slack.dev/messaging/formatting-message-text/#mentioning-users).
+  const mentionsMe = (wire: WireMessage, mine: ReadonlySet<string>) => {
+    const text = wire.text ?? ""
+    if (new RegExp(`<@${me.user}(\\|[^>]*)?>|<!(here|channel|everyone)(\\|[^>]*)?>`).test(text)) return true
+    return [...text.matchAll(/<!subteam\^([A-Z0-9]+)(\|[^>]*)?>/g)].some((found) => mine.has(found[1] ?? ""))
+  }
 
   /**
    * Other people's messages after last_read: Slack gives a channel no count, so the history after it is counted. A
@@ -400,15 +416,19 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
    */
   const channelUnread = async (one: Conversation, followed: boolean) => {
     const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
-    const page = await historyCall(one.id, { oldest: channel.last_read ?? "0", limit: UNREAD_MOST })
+    // A channel never read answers last_read "0000000000.000000", which history refuses as oldest (invalid_ts_oldest,
+    // a live run 2026-11-25): then the whole page counts.
+    const read = Number(channel.last_read ?? 0) > 0 ? { oldest: channel.last_read } : {}
+    const page = await historyCall(one.id, { ...read, limit: UNREAD_MOST })
     unreadPages.set(
       one.id,
       page.messages.filter((wire) => !isService(wire)),
     )
     const shown = page.messages.filter(isShown)
     const theirs = shown.filter((wire) => wire.user !== me.user)
-    const mentions = theirs.filter(mentionsMe).length
-    const newestMention = shown.findIndex((wire) => wire.user !== me.user && mentionsMe(wire))
+    const mine = theirs.some((wire) => wire.text?.includes("<!subteam^")) ? await myGroups() : new Set<string>()
+    const mentions = theirs.filter((wire) => mentionsMe(wire, mine)).length
+    const newestMention = shown.findIndex((wire) => wire.user !== me.user && mentionsMe(wire, mine))
     const count = followed ? theirs.length : newestMention + 1
     const [latest] = shown
     const chat = chatOf({ ...one, ...channel, unread_count_display: count, ...(latest ? { latest } : {}) }, names)
@@ -513,6 +533,12 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
           if (!other || (chat.unreadMentions ?? 0) > 0) items.push(chat)
           done++
         } catch (error) {
+          // users.conversations lists the DM with Slackbot, and conversations.info answers channel_not_found for it
+          // (a live run, 2026-11-25): a chat Slack cannot show holds nothing to read.
+          if (isCliError(error) && error.code === "not_found") {
+            done++
+            continue
+          }
           // What was counted still answers; the rest is named below rather than lost.
           if (done === 0) throw error
           refused = isCliError(error) ? error.code : "an error"
@@ -536,6 +562,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
                 "(thread replies are not read); name the ones to follow in inbox_channels, or set inbox_all_channels",
             ]
           : []),
+        ...(groupsRefused ? [`a mention of a user group you are in was not counted: ${groupsRefused}`] : []),
       ]
       return { items, hasMore: left.length > 0, ...(left.length ? { left } : {}) }
     },
