@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**385 ✅ · 936 ⛔ · 0 ❌** — 405 commands, 916 options.
+**385 ✅ · 937 ⛔ · 0 ❌** — 405 commands, 917 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -289,6 +289,7 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `store info` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
 | `store check` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
 | `store migrate` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
+| `store migrate` | `--no-backup` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
 | `store rebuild` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
 | `store backup` |  | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
 | `store backup` | `--encrypt` | ⛔ | cli-core's shared group over the local store, mounted unchanged; tested in cli-core src/cli/messenger/store-maintenance.test.ts, gaps.test.ts and store-mode.test.ts |
