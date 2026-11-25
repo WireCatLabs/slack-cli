@@ -157,6 +157,9 @@ const message = v.looseObject({
   reply_count: v.optional(v.number()),
   reply_users_count: v.optional(v.number()),
   latest_reply: v.optional(v.string()),
+  // A thread root the owner follows, and where they read it to: a user token gets both (a live run, 2026-11-25).
+  subscribed: v.optional(v.boolean()),
+  last_read: v.optional(v.string()),
   edited: v.optional(v.looseObject({ ts: v.string(), user: v.optional(v.string()) })),
   reactions: v.optional(v.array(v.looseObject({ name: v.string(), users: v.array(v.string()), count: v.number() }))),
   files: v.optional(v.array(file)),
