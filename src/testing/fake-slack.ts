@@ -64,6 +64,8 @@ export interface FakeWorkspace {
   messages: Record<string, FakeMessage[]>
   /** File bytes by their `url_private`, answered on files.slack.com with the Bearer header only. */
   files?: Record<string, string>
+  /** User groups, each with the people in it. */
+  userGroups?: { id: string; handle: string; users: string[] }[]
   /** The token's user scopes; every one Slack's reads need when unset. */
   scopes?: string[]
 }
@@ -93,6 +95,7 @@ const METHODS: Record<string, { takes: readonly string[]; needs?: readonly strin
   },
   "users.info": { takes: ["user", "include_locale"], needs: ["user"] },
   "users.list": { takes: ["cursor", "include_locale", "limit", "team_id"] },
+  "usergroups.list": { takes: ["include_count", "include_disabled", "include_users", "team_id"] },
   "conversations.list": { takes: ["cursor", "exclude_archived", "limit", "team_id", "types"] },
   "chat.postMessage": {
     takes: [
@@ -153,6 +156,7 @@ const ALL_SCOPES = [
   ...Object.values(WRITE_NEEDS),
   "users:read",
   "search:read",
+  "usergroups:read",
 ]
 
 const num = (ts: string) => Number(ts)
@@ -485,6 +489,15 @@ export const fakeSlack = (
         channels: page.shown.map((one) => conversationOf(one, messagesOf(one.id), false, false)),
         response_metadata: page.response_metadata,
       })
+    }
+    if (method === "usergroups.list") {
+      if (!scopes().includes("usergroups:read"))
+        return refuse("usergroups.list without usergroups:read", "missing_scope", { needed: "usergroups:read" })
+      const usergroups = (workspace.userGroups ?? []).map(({ users, ...group }) => ({
+        ...group,
+        ...(args.include_users === "true" ? { users } : {}),
+      }))
+      return Response.json({ ok: true, usergroups })
     }
     if (method === "search.messages") return search(args)
     if (method === "files.getUploadURLExternal") {

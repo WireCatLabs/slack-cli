@@ -87,6 +87,12 @@ export const conversationsAnswer = v.looseObject({
 
 export const conversationAnswer = v.looseObject({ ok: v.literal(true), channel: conversation })
 
+/** usergroups.list with include_users (https://docs.slack.dev/reference/methods/usergroups.list/). */
+export const userGroupsAnswer = v.looseObject({
+  ok: v.literal(true),
+  usergroups: v.array(v.looseObject({ id: v.string(), users: v.optional(v.array(v.string())) })),
+})
+
 /** A user object (https://docs.slack.dev/reference/objects/user-object/). */
 const user = v.looseObject({
   id: v.string(),

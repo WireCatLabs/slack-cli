@@ -33,6 +33,7 @@ import {
   USER_ID,
   type User,
   userAnswer,
+  userGroupsAnswer,
   usersAnswer,
   type WireMessage,
 } from "./map.js"
@@ -387,11 +388,26 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
   /** Each channel's history after last_read as inbox read it, so cli-core's history call for it sends nothing. */
   const unreadPages = new Map<string, WireMessage[]>()
 
-  // The owner by id, with or without a name after it, and @here, @channel, @everyone, as Slack writes them
-  // (https://docs.slack.dev/messaging/formatting-message-text/#mentioning-users). A user group's mention is not
-  // counted: whether the owner is in the group costs another call.
-  const mentionsMe = (wire: WireMessage) =>
-    new RegExp(`<@${me.user}(\\|[^>]*)?>|<!(here|channel|everyone)(\\|[^>]*)?>`).test(wire.text ?? "")
+  // The groups the owner is in, asked once a run and only when a message names a group. A refusal (no scope, a plan
+  // without user groups) counts no group mention, and inbox says so.
+  let groups: Promise<Set<string>> | undefined
+  let groupsRefused: string | undefined
+  const myGroups = () =>
+    (groups ??= slack("usergroups.list", { include_users: true }, userGroupsAnswer).then(
+      ({ usergroups }) => new Set(usergroups.filter((one) => one.users?.includes(me.user ?? "")).map((one) => one.id)),
+      (error: unknown) => {
+        groupsRefused = isCliError(error) ? error.code : "an error"
+        return new Set<string>()
+      },
+    ))
+
+  // The owner by id, with or without a name after it, @here, @channel, @everyone, and a group the owner is in, as
+  // Slack writes them (https://docs.slack.dev/messaging/formatting-message-text/#mentioning-users).
+  const mentionsMe = (wire: WireMessage, mine: ReadonlySet<string>) => {
+    const text = wire.text ?? ""
+    if (new RegExp(`<@${me.user}(\\|[^>]*)?>|<!(here|channel|everyone)(\\|[^>]*)?>`).test(text)) return true
+    return [...text.matchAll(/<!subteam\^([A-Z0-9]+)(\|[^>]*)?>/g)].some((found) => mine.has(found[1] ?? ""))
+  }
 
   /**
    * Other people's messages after last_read: Slack gives a channel no count, so the history after it is counted. A
@@ -407,8 +423,9 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     )
     const shown = page.messages.filter(isShown)
     const theirs = shown.filter((wire) => wire.user !== me.user)
-    const mentions = theirs.filter(mentionsMe).length
-    const newestMention = shown.findIndex((wire) => wire.user !== me.user && mentionsMe(wire))
+    const mine = theirs.some((wire) => wire.text?.includes("<!subteam^")) ? await myGroups() : new Set<string>()
+    const mentions = theirs.filter((wire) => mentionsMe(wire, mine)).length
+    const newestMention = shown.findIndex((wire) => wire.user !== me.user && mentionsMe(wire, mine))
     const count = followed ? theirs.length : newestMention + 1
     const [latest] = shown
     const chat = chatOf({ ...one, ...channel, unread_count_display: count, ...(latest ? { latest } : {}) }, names)
@@ -535,6 +552,9 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
               `${why ? `${why}: ` : ""}looked for mentions of you in ${searched} of ${others.length} other channels ` +
                 "(thread replies are not read); name the ones to follow in inbox_channels, or set inbox_all_channels",
             ]
+          : []),
+        ...(groupsRefused
+          ? [`Slack refused usergroups.list (${groupsRefused}): a mention of a user group you are in was not counted`]
           : []),
       ]
       return { items, hasMore: left.length > 0, ...(left.length ? { left } : {}) }

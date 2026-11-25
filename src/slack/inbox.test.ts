@@ -3,7 +3,7 @@ import { join } from "node:path"
 import { afterEach, expect, it } from "vitest"
 import { FAKE_TOKEN, fakeSlack } from "../testing/fake-slack.js"
 import { runCli } from "../testing/harness.js"
-import { ANNA, DM, GENERAL, ME, remembered, SHARED, ts, workspace } from "../testing/workspace.js"
+import { ANNA, DM, GENERAL, ME, remembered, SHARED, ts, VERA, workspace } from "../testing/workspace.js"
 import { INBOX_ASK_MS, INBOX_INFO_MOST, slackAdapter } from "./adapter.js"
 import { slackClient } from "./client.js"
 
@@ -251,4 +251,39 @@ it("says Slack refused a call when a later chat fails, and keeps what it counted
   const answer = await failing.unreadChats?.()
   expect(answer?.items.length).toBeGreaterThan(0)
   expect(answer?.left).toContainEqual(expect.stringMatching(/^Slack refused a call \(/))
+})
+
+const groupMention = (world: ReturnType<typeof workspace>, members: string[]) => {
+  world.userGroups = [{ id: "S0GROUP01", handle: "devs", users: members }]
+  world.messages[SHARED]?.push({ ts: ts(8), user: VERA, text: "<!subteam^S0GROUP01|@devs> please look" })
+  return world
+}
+
+const groupAsks = (service: ReturnType<typeof fakeSlack>) =>
+  service.calls.filter((one) => one.method === "usergroups.list")
+
+it("counts a mention of a user group you are in, asking for the groups once", async () => {
+  const { adapter, service } = adapterOf(groupMention(workspace(), [VERA, ME]))
+  const shared = (await adapter.unreadChats?.())?.items.find((one) => one.id === SHARED)
+  expect(shared?.unreadMentions).toBe(1)
+  expect(groupAsks(service)).toHaveLength(1)
+})
+
+it("leaves out a mention of a group you are not in, and asks for no groups when no message names one", async () => {
+  const outside = adapterOf(groupMention(workspace(), [VERA]))
+  expect((await outside.adapter.unreadChats?.())?.items.map((one) => one.id)).not.toContain(SHARED)
+  const plain = adapterOf(workspace())
+  await plain.adapter.unreadChats?.()
+  expect(groupAsks(plain.service)).toEqual([])
+})
+
+it("says a group mention was not counted when Slack refuses the groups", async () => {
+  const world = groupMention(workspace(), [ME])
+  world.scopes = [
+    "users:read",
+    ...["channels", "groups", "im", "mpim"].flatMap((kind) => [`${kind}:read`, `${kind}:history`]),
+  ]
+  const answer = await adapterOf(world).adapter.unreadChats?.()
+  expect(answer?.items.map((one) => one.id)).not.toContain(SHARED)
+  expect(answer?.left).toContainEqual(expect.stringMatching(/^Slack refused usergroups\.list \(permission_error\)/))
 })
