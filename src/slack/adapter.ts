@@ -416,12 +416,14 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     wire.last_read !== undefined &&
     later(wire.latest_reply, wire.last_read)
 
-  /** The replies after `last_read` in a thread the owner follows: conversations.history leaves replies out. */
-  const unreadReplies = async (chatId: string, root: WireMessage) => {
-    const read = root.last_read ?? root.ts
-    const { messages } = await repliesCall(chatId, root.ts, { oldest: read, limit: UNREAD_MOST })
-    return messages.filter((wire) => wire.ts !== root.ts && later(wire.ts, read))
+  /** The replies after `read` in a thread the owner follows: conversations.history leaves replies out. */
+  const unreadReplies = async (chatId: string, root: string, read: string) => {
+    const { messages } = await repliesCall(chatId, root, { oldest: read, limit: UNREAD_MOST })
+    return messages.filter((wire) => wire.ts !== root && later(wire.ts, read))
   }
+
+  /** Threads with new replies that inbox had no time left to read, this run. */
+  let threadsLeft = 0
 
   /**
    * Other people's messages after last_read, and the replies after it in the threads the owner follows: Slack gives a
@@ -430,7 +432,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
    * owner does not follow counts from its newest message down to the newest one meant for them, so that one is among
    * what inbox shows.
    */
-  const channelUnread = async (one: Conversation, followed: boolean) => {
+  const channelUnread = async (one: Conversation, followed: boolean, until: number) => {
     const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
     // A channel never read answers last_read "0000000000.000000", which history refuses as oldest (invalid_ts_oldest,
     // a live run 2026-11-25): then the whole page counts.
@@ -438,10 +440,20 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     const windowStart = tsOf(now() - options.threadWindowDays * DAY)
     const oldest = read === undefined ? undefined : later(read, windowStart) ? windowStart : read
     const page = await historyCall(one.id, { ...(oldest ? { oldest } : {}), limit: UNREAD_MOST })
+    const unread = page.messages.filter((wire) => read === undefined || later(wire.ts, read))
+    const listed = new Set(unread.map((wire) => wire.ts))
     const replies: WireMessage[] = []
-    for (const root of page.messages.filter(unreadThread)) append(replies, await unreadReplies(one.id, root))
-    const fresh = [...page.messages.filter((wire) => read === undefined || later(wire.ts, read)), ...replies].sort(
-      (first, second) => byTs({ id: second.ts }, { id: first.ts }),
+    for (const root of page.messages.filter((wire) => unreadThread(wire) && later(wire.ts, windowStart))) {
+      if (now() >= until) {
+        threadsLeft++
+        continue
+      }
+      append(replies, await unreadReplies(one.id, root.ts, root.last_read ?? root.ts))
+    }
+    const replied = new Set(replies.map((wire) => wire.ts))
+    // A reply also sent to the channel (thread_broadcast) is in the history too.
+    const fresh = [...unread, ...replies.filter((wire) => !listed.has(wire.ts))].sort((first, second) =>
+      byTs({ id: second.ts }, { id: first.ts }),
     )
     unreadPages.set(
       one.id,
@@ -450,7 +462,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     const shown = fresh.filter(isShown)
     const theirs = shown.filter((wire) => wire.user !== me.user)
     const mine = theirs.some((wire) => wire.text?.includes("<!subteam^")) ? await myGroups() : new Set<string>()
-    const forMe = (wire: WireMessage) => replies.includes(wire) || mentionsMe(wire, mine)
+    const forMe = (wire: WireMessage) => replied.has(wire.ts) || mentionsMe(wire, mine)
     const mentions = theirs.filter(forMe).length
     const newestForMe = shown.findIndex((wire) => wire.user !== me.user && forMe(wire))
     const count = followed ? theirs.length : newestForMe + 1
@@ -546,6 +558,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       let refused: string | undefined
       let late = false
       const until = now() + INBOX_ASK_MS
+      threadsLeft = 0
       for (const one of asked) {
         if (done > 0 && now() >= until) {
           late = true
@@ -553,7 +566,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
         }
         try {
           const other = others.includes(one)
-          const chat = one.is_im || one.is_mpim ? await directUnread(one) : await channelUnread(one, !other)
+          const chat = one.is_im || one.is_mpim ? await directUnread(one) : await channelUnread(one, !other, until)
           if (!other || (chat.unreadMentions ?? 0) > 0) items.push(chat)
           done++
         } catch (error) {
@@ -586,6 +599,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
                 `${others.length} other channels; name the ones to follow in inbox_channels, or set inbox_all_channels`,
             ]
           : []),
+        ...(threadsLeft > 0 ? [`time ran out: new replies in ${threadsLeft} of your threads were not read`] : []),
         ...(groupsRefused ? [`a mention of a user group you are in was not counted: ${groupsRefused}`] : []),
       ]
       return { items, hasMore: left.length > 0, ...(left.length ? { left } : {}) }
@@ -598,6 +612,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     history: async (chat, { limit, before }) => {
       const chatId = await idOf(chat)
       const held = before === undefined ? unreadPages.get(chatId) : undefined
+      unreadPages.delete(chatId)
       if (held && held.length >= limit) return page(chatId, held.slice(0, limit), true, false)
       const latest = before === undefined ? undefined : isTs(before) ? before : tsOf(Date.parse(before))
       const { wires, hasMore } = await newestFirst(chatId, limit, latest ? { latest } : {})
