@@ -3,7 +3,7 @@ import { join } from "node:path"
 import { afterEach, expect, it } from "vitest"
 import { FAKE_TOKEN, type FakeMessage, fakeSlack } from "../testing/fake-slack.js"
 import { runCli } from "../testing/harness.js"
-import { ANNA, DM, GENERAL, ME, remembered, SHARED, ts, VERA, workspace } from "../testing/workspace.js"
+import { ANNA, BORIS, DM, GENERAL, ME, remembered, SHARED, ts, VERA, workspace } from "../testing/workspace.js"
 import { INBOX_ASK_MS, INBOX_INFO_MOST, slackAdapter } from "./adapter.js"
 import { slackClient } from "./client.js"
 
@@ -227,7 +227,9 @@ it("says time ran out and how many other channels it looked at for mentions", as
   const ran = adapterOf(workspace(), undefined, () => (service ? infos(service).length : 0) * (INBOX_ASK_MS / 3))
   service = ran.service
   const answer = await ran.adapter.unreadChats?.()
-  expect(answer?.left).toContainEqual(expect.stringMatching(/^time ran out: looked for mentions of you in 1 of 2 /))
+  expect(answer?.left).toContainEqual(
+    expect.stringMatching(/^time ran out: looked for mentions of you and replies in your threads in 1 of 2 /),
+  )
 })
 
 it("says Slack refused a call when a later chat fails, and keeps what it counted", async () => {
@@ -328,4 +330,78 @@ it("skips a chat Slack lists but cannot show, as it does the DM with Slackbot, a
   const answer = await skipping.unreadChats?.()
   expect(answer?.items.map((one) => one.id)).toContain(DM)
   expect(answer?.left ?? []).not.toContainEqual(expect.stringMatching(/refused/))
+})
+
+const HOUR_AFTER = () => (1_700_000_000 + 3600) * 1000
+
+/** In #general: a thread the owner started and read to its first reply, one they never joined; both answered later. */
+const threadsIn = (world: ReturnType<typeof workspace>) => {
+  world.messages[GENERAL] = [
+    ...(world.messages[GENERAL] ?? []),
+    { ts: ts(42), user: ME, text: "Who takes the release?", subscribed: true, last_read: ts(43) },
+    { ts: ts(43), user: ANNA, text: "Me, tomorrow", thread_ts: ts(42) },
+    { ts: ts(46), user: BORIS, text: "I can help", thread_ts: ts(42) },
+    { ts: ts(44), user: ANNA, text: "Lunch?", subscribed: false },
+    { ts: ts(47), user: BORIS, text: "Yes", thread_ts: ts(44) },
+  ]
+  readFrom(world, GENERAL, ts(50))
+  return world
+}
+
+const repliesAsked = (service: ReturnType<typeof fakeSlack>) =>
+  service.calls.filter((one) => one.method === "conversations.replies").map((one) => one.args)
+
+it("counts a new reply in a thread you follow, after the channel was read, and shows it", async () => {
+  const { adapter, service } = adapterOf(
+    threadsIn(workspace()),
+    { channels: ["general"], allChannels: false },
+    HOUR_AFTER,
+  )
+  const general = (await adapter.unreadChats?.())?.items.find((one) => one.id === GENERAL)
+  expect(general).toMatchObject({ unreadCount: 1, unreadMentions: 1 })
+  expect(repliesAsked(service)).toEqual([expect.objectContaining({ ts: ts(42), oldest: ts(43) })])
+  const [reply] = (await adapter.history?.(GENERAL, { limit: 1 }))?.items ?? []
+  expect(reply).toMatchObject({ id: ts(46), threadRootId: ts(42) })
+})
+
+it("lists a channel you do not follow for a reply in your thread", async () => {
+  const { adapter } = adapterOf(threadsIn(workspace()), undefined, HOUR_AFTER)
+  const items = (await adapter.unreadChats?.())?.items ?? []
+  expect(items.find((one) => one.id === GENERAL)?.unreadMentions).toBe(1)
+})
+
+it("counts once a reply also sent to the channel", async () => {
+  const world = threadsIn(workspace())
+  world.messages[GENERAL]?.push({
+    ts: ts(48),
+    user: ANNA,
+    text: "Done",
+    thread_ts: ts(42),
+    subtype: "thread_broadcast",
+  })
+  readFrom(world, GENERAL, ts(47))
+  const { adapter } = adapterOf(world, { channels: ["general"], allChannels: false }, HOUR_AFTER)
+  const general = (await adapter.unreadChats?.())?.items.find((one) => one.id === GENERAL)
+  expect(general).toMatchObject({ unreadCount: 3, unreadMentions: 2 })
+  const ids = ((await adapter.history?.(GENERAL, { limit: 3 }))?.items ?? []).map((one) => one.id)
+  expect(ids).toEqual([ts(46), ts(48), ts(50)])
+})
+
+it("asks no thread older than the window, even in a channel never read", async () => {
+  const world = threadsIn(workspace())
+  readFrom(world, GENERAL, "0000000000.000000")
+  const { service, adapter } = adapterOf(world, undefined, () => (1_700_000_000 + 30 * 86_400) * 1000)
+  await adapter.unreadChats?.()
+  expect(repliesAsked(service)).toEqual([])
+})
+
+it("names the threads it had no time to read", async () => {
+  let clock = HOUR_AFTER()
+  const { adapter, service } = adapterOf(threadsIn(workspace()), { channels: ["general"], allChannels: false }, () => {
+    clock += INBOX_ASK_MS / 3
+    return clock
+  })
+  const answer = await adapter.unreadChats?.()
+  expect(repliesAsked(service)).toEqual([])
+  expect(answer?.left).toContainEqual("time ran out: new replies in 1 of your threads were not read")
 })

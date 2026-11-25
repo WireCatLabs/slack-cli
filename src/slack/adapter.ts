@@ -38,7 +38,7 @@ import {
   type WireMessage,
 } from "./map.js"
 import { serverSearch } from "./search.js"
-import { append, threadReplies } from "./threads.js"
+import { append, later, threadReplies } from "./threads.js"
 import { slackWrites } from "./writes.js"
 
 /** Slack's own cap on `conversations.history` (https://docs.slack.dev/reference/methods/conversations.history/). */
@@ -409,27 +409,63 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return [...text.matchAll(/<!subteam\^([A-Z0-9]+)(\|[^>]*)?>/g)].some((found) => mine.has(found[1] ?? ""))
   }
 
+  /** A thread root with replies after where the owner read it to. */
+  const unreadThread = (wire: WireMessage) =>
+    wire.subscribed === true &&
+    wire.latest_reply !== undefined &&
+    wire.last_read !== undefined &&
+    later(wire.latest_reply, wire.last_read)
+
+  /** The replies after `read` in a thread the owner follows: conversations.history leaves replies out. */
+  const unreadReplies = async (chatId: string, root: string, read: string) => {
+    const { messages } = await repliesCall(chatId, root, { oldest: read, limit: UNREAD_MOST })
+    return messages.filter((wire) => wire.ts !== root && later(wire.ts, read))
+  }
+
+  /** Threads with new replies that inbox had no time left to read, this run. */
+  let threadsLeft = 0
+
   /**
-   * Other people's messages after last_read: Slack gives a channel no count, so the history after it is counted. A
-   * channel the owner does not follow counts from its newest message down to the newest one that mentions them, so
-   * that one is among what inbox shows.
+   * Other people's messages after last_read, and the replies after it in the threads the owner follows: Slack gives a
+   * channel no count, so they are counted. A reply moves no channel's last_read, and each thread root carries its own
+   * (a live run, 2026-11-25), so the history reaches back over the thread window to find the roots. A channel the
+   * owner does not follow counts from its newest message down to the newest one meant for them, so that one is among
+   * what inbox shows.
    */
-  const channelUnread = async (one: Conversation, followed: boolean) => {
+  const channelUnread = async (one: Conversation, followed: boolean, until: number) => {
     const { channel } = await slack("conversations.info", { channel: one.id }, conversationAnswer)
     // A channel never read answers last_read "0000000000.000000", which history refuses as oldest (invalid_ts_oldest,
     // a live run 2026-11-25): then the whole page counts.
-    const read = Number(channel.last_read ?? 0) > 0 ? { oldest: channel.last_read } : {}
-    const page = await historyCall(one.id, { ...read, limit: UNREAD_MOST })
+    const read = Number(channel.last_read ?? 0) > 0 ? channel.last_read : undefined
+    const windowStart = tsOf(now() - options.threadWindowDays * DAY)
+    const oldest = read === undefined ? undefined : later(read, windowStart) ? windowStart : read
+    const page = await historyCall(one.id, { ...(oldest ? { oldest } : {}), limit: UNREAD_MOST })
+    const unread = page.messages.filter((wire) => read === undefined || later(wire.ts, read))
+    const listed = new Set(unread.map((wire) => wire.ts))
+    const replies: WireMessage[] = []
+    for (const root of page.messages.filter((wire) => unreadThread(wire) && later(wire.ts, windowStart))) {
+      if (now() >= until) {
+        threadsLeft++
+        continue
+      }
+      append(replies, await unreadReplies(one.id, root.ts, root.last_read ?? root.ts))
+    }
+    const replied = new Set(replies.map((wire) => wire.ts))
+    // A reply also sent to the channel (thread_broadcast) is in the history too.
+    const fresh = [...unread, ...replies.filter((wire) => !listed.has(wire.ts))].sort((first, second) =>
+      byTs({ id: second.ts }, { id: first.ts }),
+    )
     unreadPages.set(
       one.id,
-      page.messages.filter((wire) => !isService(wire)),
+      fresh.filter((wire) => !isService(wire)),
     )
-    const shown = page.messages.filter(isShown)
+    const shown = fresh.filter(isShown)
     const theirs = shown.filter((wire) => wire.user !== me.user)
     const mine = theirs.some((wire) => wire.text?.includes("<!subteam^")) ? await myGroups() : new Set<string>()
-    const mentions = theirs.filter((wire) => mentionsMe(wire, mine)).length
-    const newestMention = shown.findIndex((wire) => wire.user !== me.user && mentionsMe(wire, mine))
-    const count = followed ? theirs.length : newestMention + 1
+    const forMe = (wire: WireMessage) => replied.has(wire.ts) || mentionsMe(wire, mine)
+    const mentions = theirs.filter(forMe).length
+    const newestForMe = shown.findIndex((wire) => wire.user !== me.user && forMe(wire))
+    const count = followed ? theirs.length : newestForMe + 1
     const [latest] = shown
     const chat = chatOf({ ...one, ...channel, unread_count_display: count, ...(latest ? { latest } : {}) }, names)
     return { ...chat, unreadMentions: mentions }
@@ -522,6 +558,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       let refused: string | undefined
       let late = false
       const until = now() + INBOX_ASK_MS
+      threadsLeft = 0
       for (const one of asked) {
         if (done > 0 && now() >= until) {
           late = true
@@ -529,7 +566,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
         }
         try {
           const other = others.includes(one)
-          const chat = one.is_im || one.is_mpim ? await directUnread(one) : await channelUnread(one, !other)
+          const chat = one.is_im || one.is_mpim ? await directUnread(one) : await channelUnread(one, !other, until)
           if (!other || (chat.unreadMentions ?? 0) > 0) items.push(chat)
           done++
         } catch (error) {
@@ -558,10 +595,11 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
           : []),
         ...(searched < others.length
           ? [
-              `${why ? `${why}: ` : ""}looked for mentions of you in ${searched} of ${others.length} other channels ` +
-                "(thread replies are not read); name the ones to follow in inbox_channels, or set inbox_all_channels",
+              `${why ? `${why}: ` : ""}looked for mentions of you and replies in your threads in ${searched} of ` +
+                `${others.length} other channels; name the ones to follow in inbox_channels, or set inbox_all_channels`,
             ]
           : []),
+        ...(threadsLeft > 0 ? [`time ran out: new replies in ${threadsLeft} of your threads were not read`] : []),
         ...(groupsRefused ? [`a mention of a user group you are in was not counted: ${groupsRefused}`] : []),
       ]
       return { items, hasMore: left.length > 0, ...(left.length ? { left } : {}) }
@@ -574,6 +612,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     history: async (chat, { limit, before }) => {
       const chatId = await idOf(chat)
       const held = before === undefined ? unreadPages.get(chatId) : undefined
+      unreadPages.delete(chatId)
       if (held && held.length >= limit) return page(chatId, held.slice(0, limit), true, false)
       const latest = before === undefined ? undefined : isTs(before) ? before : tsOf(Date.parse(before))
       const { wires, hasMore } = await newestFirst(chatId, limit, latest ? { latest } : {})

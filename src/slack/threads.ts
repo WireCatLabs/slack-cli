@@ -15,7 +15,7 @@ export const append = <T>(into: T[], more: readonly T[]) => {
   for (const one of more) into.push(one)
 }
 
-const later = (one: string, other: string) => byTs({ id: one }, { id: other }) > 0
+export const later = (one: string, other: string) => byTs({ id: one }, { id: other }) > 0
 
 const isRoot = (wire: WireMessage) => (wire.reply_count ?? 0) > 0 && wire.thread_ts === wire.ts
 
