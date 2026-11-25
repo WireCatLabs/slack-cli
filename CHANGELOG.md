@@ -2,6 +2,23 @@
 
 Notable changes to `@wirecat/slack-cli`. One section per version, newest first.
 
+## 0.3.0 — 25.11.2026
+
+### Added
+
+- **`inbox` shows new replies in the threads you follow.** Slack counts a thread you started, replied to or were
+  mentioned in as followed, and keeps where you read it to. A channel's unread messages now include the replies after
+  that point, each with `threadRootId`, and they count as meant for you, so a channel you do not follow shows too.
+  Threads started within `thread_window_days` (14 by default), among the channel's newest 100 messages, are looked
+  at; thread replies in DMs are not read yet. When time runs out, `missing` says how many threads were not read.
+
+### Changed — may break callers
+
+- **Built on cli-core 1.0.0 and cli-base 1.0.0.** The generated API files read their types from
+  `@wirecat/cli-base/codegen/runtime`. Store version 73 comes with cli-core 1.0: once a 1.0 tool opens the store, a 0.x
+  tool refuses it, so upgrade every WireCat CLI together. `store migrate` refuses to run without a rollback copy;
+  `--no-backup` migrates anyway.
+
 ## 0.2.0 — 25.11.2026
 
 ### Added
