@@ -63,13 +63,13 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   (`orderBy: "time"`). Service subtypes are chat events, never messages. Slack gives no deletion signal in
   `conversations.history`, so a message is never marked deleted.
 - **Threads:** read with `messages list <chat> topic:<root ts>`, through cli-core's topic read. Slack has no list of
-  threads, so the topic commands stay hidden. `messages sync` saves replies through cli-core's `threadReplies`
-  after a chat's history: the roots the run's history pages showed and those up to `thread_window_days` (14) old.
-  After the first read only roots whose `latest_reply` is newer than the last read are asked, from a minute before
-  it, since the last read is this machine's time and `ts` is Slack's; a root from a page older than the newest is
-  read whole, as a sync reaches such a page only where it held nothing. Each sync reads the window's history once
-  more to find its roots, and cli-core no longer skips a chat that looks current, since a reply moves neither. A new reply to a root older than the window is
-  not saved; a larger `thread_window_days` reaches it.
+  threads, so the topic commands stay hidden. `messages sync` saves replies through cli-core's `ThreadRefresh`
+  after a chat's history, and cli-core picks the threads. The adapter only names the roots on a history page (a
+  message whose `thread_ts` is its own `ts`, with `reply_count`), the recent roots (those up to `thread_window_days`
+  (14) old, found by reading the window's history once more) and one root's replies after a time. Each root carries
+  `latest_reply` as its `lastReplyAt`. Since a reply moves neither the chat's newest message nor its last, cli-core no
+  longer skips a chat that looks current. A new reply to a root older than the window is not saved; a larger
+  `thread_window_days` reaches it.
 - **No `deny` block in `contracts/plan.json`**, as in whatsapp-cli, tg-cli and max-cli: cli-core's `chats moderate
   --dry-run` judges a group, so it reaches Slack, and signed out it cannot name its key.
 - **Commands mounted as whatsapp-cli mounts them:** reactions, the store-only reads (store, conversations,

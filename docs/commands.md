@@ -161,22 +161,6 @@ slk setup run <action> [options]
 
 the logged-in account
 
-### `slk account list`
-
-every account profile on this computer, and the account each is logged in as; a name that is only a bot is left out (`bot list` has it), one that is a bot too says `bot: true`; asks the messenger nothing
-
-```sh
-slk account list [query]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
-
-**Returns:** account profile — profile, current, account, name, signed_in, bot; every field: slk commands info account list
-
-**Example:** `slk personal account list`
-
 ### `slk account show`
 
 who this profile is logged in as, with the phone number

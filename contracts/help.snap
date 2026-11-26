@@ -22,7 +22,7 @@ Works with:
   linear                  Linear issues and projects, searchable with your other WireCat data
 
 Start here:   slk personal setup  (any profile name works)
-              slk account list    your profiles and their logged-in accounts
+              slk session list    your profiles and their logged-in accounts
 Next:         slk commands        every command, by section
               slk help options    output, offline, timeouts, dry run
 For agents:   slk skill show      rules and the discovery loop

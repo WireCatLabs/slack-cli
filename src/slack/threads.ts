@@ -1,8 +1,9 @@
 import type { Message } from "@wirecat/cli-core"
+import type { ThreadRefresh, ThreadRoot } from "@wirecat/cli-core/cli"
 import type { SlackClient } from "./client.js"
-import { byTs, DAY, historyAnswer, nextCursor, tsOf, type WireMessage } from "./map.js"
+import { byTs, DAY, historyAnswer, nextCursor, timeOf, tsOf, type WireMessage } from "./map.js"
 
-export interface ThreadRepliesOptions {
+export interface ThreadRefreshOptions {
   slack: SlackClient
   windowDays: number
   now: () => number
@@ -19,55 +20,41 @@ export const later = (one: string, other: string) => byTs({ id: one }, { id: oth
 
 const isRoot = (wire: WireMessage) => (wire.reply_count ?? 0) > 0 && wire.thread_ts === wire.ts
 
-/** `since` is this machine's clock and `ts` is Slack's; the overlap keeps a reply sent while they disagree. */
-const SKEW_MS = 60_000
+const rootOf = (id: string, latest: unknown): ThreadRoot => ({
+  id,
+  ...(typeof latest === "string" ? { lastReplyAt: timeOf(latest) } : {}),
+})
 
 /**
  * Thread replies, which `conversations.history` leaves out (https://docs.slack.dev/messaging/retrieving-messages/),
- * for cli-core's `threadReplies`. The roots are those the history pages of this run showed, and those sent within the
- * window. After a first read, a root is read from `since` on when its `latest_reply` is after it; a root from a page
- * older than the newest is read whole, since a sync reaches such a page only where it held nothing before.
+ * for cli-core's `ThreadRefresh`, which picks the threads. Slack has no list of threads: the recent roots are those sent
+ * within the window, found by reading its history once more.
  */
-export const threadReplies = ({ slack, windowDays, now, mapped, between }: ThreadRepliesOptions) => {
-  const paged = new Map<string, Map<string, { root: WireMessage; whole: boolean }>>()
-
-  const repliesOf = async (chatId: string, root: WireMessage, after: string | undefined) => {
+export const threadRefresh = ({ slack, windowDays, now, mapped, between }: ThreadRefreshOptions): ThreadRefresh => ({
+  threadRootsIn: async (_chatId, messages) =>
+    messages
+      .filter((one) => Number(one.providerMetadata?.reply_count ?? 0) > 0 && one.threadId === one.id)
+      .map((one) => rootOf(one.id, one.providerMetadata?.latest_reply)),
+  recentThreadRoots: async (chatId) =>
+    (await between(chatId, tsOf(now() - windowDays * DAY)))
+      .filter(isRoot)
+      .map((one) => rootOf(one.ts, one.latest_reply)),
+  rootReplies: async (chatId, rootId, { after }) => {
+    const from = after === undefined ? undefined : tsOf(after)
     const wires: WireMessage[] = []
     for (let cursor: string | undefined; ; ) {
       const answer = await slack(
         "conversations.replies",
-        { channel: chatId, ts: root.ts, oldest: after ?? root.ts, limit: 200, cursor },
+        { channel: chatId, ts: rootId, oldest: from ?? rootId, limit: 200, cursor },
         historyAnswer,
       )
       append(
         wires,
-        answer.messages.filter((one) => one.ts !== root.ts && (after === undefined || later(one.ts, after))),
+        answer.messages.filter((one) => one.ts !== rootId && (from === undefined || later(one.ts, from))),
       )
       cursor = nextCursor(answer)
-      if (!answer.has_more || !cursor) return wires
+      if (!answer.has_more || !cursor) break
     }
-  }
-
-  return {
-    seen: (chatId: string, wires: readonly WireMessage[], { whole }: { whole: boolean }) => {
-      const roots = paged.get(chatId) ?? new Map<string, { root: WireMessage; whole: boolean }>()
-      for (const root of wires)
-        if (isRoot(root)) roots.set(root.ts, { root, whole: whole || roots.get(root.ts)?.whole === true })
-      paged.set(chatId, roots)
-    },
-    /** One thread's replies at a time, so cli-core saves each as it comes and a stopped sync keeps them (WC-LIFE-12). */
-    read: async function* (chatId: string, { since }: { since?: number }): AsyncGenerator<Message[]> {
-      const after = since === undefined ? undefined : tsOf(since - SKEW_MS)
-      const roots = new Map(paged.get(chatId))
-      paged.delete(chatId)
-      for (const root of await between(chatId, tsOf(now() - windowDays * DAY)))
-        if (isRoot(root) && !roots.has(root.ts)) roots.set(root.ts, { root, whole: false })
-      for (const { root, whole } of roots.values()) {
-        const moved = root.latest_reply !== undefined && after !== undefined && later(root.latest_reply, after)
-        if (after !== undefined && !whole && !moved) continue
-        const wires = await repliesOf(chatId, root, after === undefined || whole ? undefined : after)
-        if (wires.length > 0) yield (await mapped(chatId, wires)).sort(byTs)
-      }
-    },
-  }
-}
+    return (await mapped(chatId, wires)).sort(byTs)
+  },
+})

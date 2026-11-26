@@ -1,6 +1,4 @@
 {
-  "session status": "read",
-  "session list": "read",
   "api admin apps-approve": "write",
   "api admin apps-approved-list": "read",
   "api admin apps-requests-list": "read",
