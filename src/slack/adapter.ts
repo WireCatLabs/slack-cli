@@ -194,7 +194,8 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
 
   /**
    * Newest first, as Slack answers, service messages left out; pages on by cursor while they leave it short. A
-   * tombstone stays, since a sync finds a deleted root's replies through it; `mapped` leaves it out of the page.
+   * tombstone stays, since a sync finds a deleted root's replies through it (`threadRootsIn`); `mapped` leaves it out
+   * of the page.
    */
   const newestFirst = async (chatId: string, limit: number, args: SlackArgs) => {
     const kept: WireMessage[] = []
@@ -267,10 +268,10 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return { wires: last.toReversed().slice(0, limit), hasMore: true }
   }
 
-  const page = async (chatId: string, wires: readonly WireMessage[], hasMore: boolean): Promise<Page<Message>> => ({
-    items: (await mapped(chatId, wires)).sort(byTs),
-    hasMore,
-  })
+  const page = async (chatId: string, wires: readonly WireMessage[], hasMore: boolean): Promise<Page<Message>> => {
+    threads.paged(chatId, wires)
+    return { items: (await mapped(chatId, wires)).sort(byTs), hasMore }
+  }
 
   const searchMessages = serverSearch({
     slack,
@@ -613,7 +614,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       const { wires, hasMore } = await newestFirst(chatId, limit, latest ? { latest } : {})
       return page(chatId, wires, hasMore)
     },
-    ...threads,
+    ...threads.refresh,
     searchMessages,
     historyAfter: async (chat, { limit, after }) => {
       const chatId = await idOf(chat)

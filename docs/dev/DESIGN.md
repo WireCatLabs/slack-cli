@@ -67,9 +67,10 @@ Set the messenger's `speechModels` to `parakeet-v3`.
   after a chat's history, and cli-core picks the threads. The adapter only names the roots on a history page (a
   message whose `thread_ts` is its own `ts`, with `reply_count`), the recent roots (those up to `thread_window_days`
   (14) old, found by reading the window's history once more) and one root's replies after a time. Each root carries
-  `latest_reply` as its `lastReplyAt`. Since a reply moves neither the chat's newest message nor its last, cli-core no
-  longer skips a chat that looks current. A new reply to a root older than the window is not saved; a larger
-  `thread_window_days` reaches it.
+  `latest_reply` as its `lastReplyAt`. A deleted root with replies is a `tombstone` on the page, never a message, so
+  the adapter names it from that page itself. Since a reply moves neither the chat's newest message nor its last,
+  cli-core no longer skips a chat that looks current. A new reply to a root older than the window is not saved; a
+  larger `thread_window_days` reaches it.
 - **No `deny` block in `contracts/plan.json`**, as in whatsapp-cli, tg-cli and max-cli: cli-core's `chats moderate
   --dry-run` judges a group, so it reaches Slack, and signed out it cannot name its key.
 - **Commands mounted as whatsapp-cli mounts them:** reactions, the store-only reads (store, conversations,
