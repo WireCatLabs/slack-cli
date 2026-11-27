@@ -121,19 +121,6 @@
     {
       "path": [
         "account",
-        "list"
-      ],
-      "summary": "profiles on this computer and their signed-in accounts",
-      "effects": {
-        "remote": "read",
-        "local": "read"
-      },
-      "permission": "account.list",
-      "entity": "account_profile"
-    },
-    {
-      "path": [
-        "account",
         "show"
       ],
       "summary": "who this profile is logged in as, with the phone number",
@@ -4960,15 +4947,6 @@
     }
   ],
   "entities": {
-    "account_profile": {
-      "fields": [
-        "profile",
-        "current",
-        "account",
-        "name",
-        "signed_in"
-      ]
-    },
     "chat": {
       "fields": [
         "id",
@@ -5155,6 +5133,8 @@
         "label",
         "list",
         "is",
+        "type",
+        "reach",
         "chat",
         "date",
         "source",
@@ -5198,6 +5178,8 @@
         "label",
         "list",
         "is",
+        "type",
+        "reach",
         "chat",
         "date",
         "source",
@@ -5359,7 +5341,7 @@
     "tagline": "Read and search your Slack channels, DMs and threads",
     "profiles": {
       "args": [
-        "account",
+        "session",
         "list",
         "--no-record",
         "--json"

@@ -14,5 +14,47 @@
     "reason": "slk takes --order <recent|name> as tg, wa and max do; memo alone takes <recent|start>. The fix is memo's or the vocabulary's, not slk's.",
     "review_after": "2027-01-23",
     "expected": "slk: <recent|name>, max: <recent|name>, memo: <recent|start>, tg: <recent|name>, wa: <recent|name>"
+  },
+  {
+    "group": "slk",
+    "rule": "same-entity-schema",
+    "target": "entity task",
+    "reason": "cli-core 2.0.0 names an agent author \"agent\" where 1.x said \"bot\" (cli-core #3374). slk is on 2.0 first, the others on npm are still on 1.x until their 2.0 bump the same day.",
+    "review_after": "2026-11-30"
+  },
+  {
+    "group": "slk",
+    "rule": "same-entity-schema",
+    "target": "entity task_card",
+    "reason": "cli-core 2.0.0 names an agent author \"agent\" where 1.x said \"bot\" (cli-core #3374). slk is on 2.0 first, the others on npm are still on 1.x until their 2.0 bump the same day.",
+    "review_after": "2026-11-30"
+  },
+  {
+    "group": "slk",
+    "rule": "same-entity-schema",
+    "target": "entity task_created",
+    "reason": "cli-core 2.0.0 names an agent author \"agent\" where 1.x said \"bot\" (cli-core #3374). slk is on 2.0 first, the others on npm are still on 1.x until their 2.0 bump the same day.",
+    "review_after": "2026-11-30"
+  },
+  {
+    "group": "slk",
+    "rule": "same-entity-schema",
+    "target": "entity task_links",
+    "reason": "cli-core 2.0.0 names an agent author \"agent\" where 1.x said \"bot\" (cli-core #3374). slk is on 2.0 first, the others on npm are still on 1.x until their 2.0 bump the same day.",
+    "review_after": "2026-11-30"
+  },
+  {
+    "group": "slk",
+    "rule": "same-entity-schema",
+    "target": "entity task_merge",
+    "reason": "cli-core 2.0.0 names an agent author \"agent\" where 1.x said \"bot\" (cli-core #3374). slk is on 2.0 first, the others on npm are still on 1.x until their 2.0 bump the same day.",
+    "review_after": "2026-11-30"
+  },
+  {
+    "group": "slk",
+    "rule": "same-entity-schema",
+    "target": "entity task_unmerge",
+    "reason": "cli-core 2.0.0 names an agent author \"agent\" where 1.x said \"bot\" (cli-core #3374). slk is on 2.0 first, the others on npm are still on 1.x until their 2.0 bump the same day.",
+    "review_after": "2026-11-30"
   }
 ]

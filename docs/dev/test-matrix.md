@@ -7,7 +7,7 @@ ran it · ⛔ not tested offline, with the reason and where it is checked instea
 Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 [TESTING.md](TESTING.md) for how, and for the states and failures that cut across commands.
 
-**385 ✅ · 937 ⛔ · 0 ❌** — 405 commands, 917 options.
+**385 ✅ · 936 ⛔ · 0 ❌** — 404 commands, 917 options.
 
 | Command | Option | | Note |
 |---|---|---|---|
@@ -25,7 +25,6 @@ Measured from the test run (`coverage/argv.jsonl`), not searched for — see
 | `setup apply` | `--dry-run` | ⛔ | cli-core's setupCommand checks the answers without saving; tested in cli-core |
 | `setup run` |  | ✅ |  |
 | `setup run` | `--answer-stdin` | ✅ |  |
-| `account list` |  | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `account show` |  | ✅ |  |
 | `account show` | `--hide-phone` | ⛔ | cli-core's shared messenger command or option, mounted unchanged and tested in cli-core; slack adds nothing to it beyond the adapter reads src/messenger.test.ts drives |
 | `account update` |  | ⛔ | Slack has a method for it (users.profile.set, conversations.invite, conversations.kick, conversations.create, conversations.rename and setPurpose), and this version does not call it yet: SLACK.lacks refuses it before connecting; cli-core's lacks test holds each refusal, and src/run-scope.test.ts lists them |

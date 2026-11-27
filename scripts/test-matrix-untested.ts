@@ -111,7 +111,6 @@ const NOT_SENT_ROWS: string[][] = [
 ]
 
 const SHARED_ROWS: string[][] = [
-  ["account list"],
   ["account show", "--hide-phone"],
   ["account remove"],
   ["account remove", "--keep-data"],

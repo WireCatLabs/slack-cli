@@ -144,7 +144,6 @@ const SKIP: Record<string, string> = {
   setup: "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
   "setup run": "asks for the token on a terminal; src/setup/flow.test.ts runs its check",
   "setup apply": "src/setup/flow.test.ts runs its check",
-  "account list": "reads the remembered accounts, sends nothing",
   "account update": UNREAD,
   "account sessions list": UNREAD,
   "account sessions end": UNREAD,

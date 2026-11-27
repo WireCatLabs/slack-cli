@@ -38,7 +38,7 @@ import {
   type WireMessage,
 } from "./map.js"
 import { serverSearch } from "./search.js"
-import { append, later, threadReplies } from "./threads.js"
+import { append, later, threadRefresh } from "./threads.js"
 import { slackWrites } from "./writes.js"
 
 /** Slack's own cap on `conversations.history` (https://docs.slack.dev/reference/methods/conversations.history/). */
@@ -194,7 +194,8 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
 
   /**
    * Newest first, as Slack answers, service messages left out; pages on by cursor while they leave it short. A
-   * tombstone stays, since a sync finds a deleted root's replies through it; `mapped` leaves it out of the page.
+   * tombstone stays, since a sync finds a deleted root's replies through it (`threadRootsIn`); `mapped` leaves it out
+   * of the page.
    */
   const newestFirst = async (chatId: string, limit: number, args: SlackArgs) => {
     const kept: WireMessage[] = []
@@ -267,13 +268,8 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     return { wires: last.toReversed().slice(0, limit), hasMore: true }
   }
 
-  const page = async (
-    chatId: string,
-    wires: readonly WireMessage[],
-    hasMore: boolean,
-    older = false,
-  ): Promise<Page<Message>> => {
-    threads.seen(chatId, wires, { whole: older })
+  const page = async (chatId: string, wires: readonly WireMessage[], hasMore: boolean): Promise<Page<Message>> => {
+    threads.paged(chatId, wires)
     return { items: (await mapped(chatId, wires)).sort(byTs), hasMore }
   }
 
@@ -285,7 +281,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     messageOf: (chatId, wire) => messageOf(chatId, wire, me, names),
   })
 
-  const threads = threadReplies({
+  const threads = threadRefresh({
     slack,
     windowDays: options.threadWindowDays,
     now,
@@ -613,12 +609,12 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
       const chatId = await idOf(chat)
       const held = before === undefined ? unreadPages.get(chatId) : undefined
       unreadPages.delete(chatId)
-      if (held && held.length >= limit) return page(chatId, held.slice(0, limit), true, false)
+      if (held && held.length >= limit) return page(chatId, held.slice(0, limit), true)
       const latest = before === undefined ? undefined : isTs(before) ? before : tsOf(Date.parse(before))
       const { wires, hasMore } = await newestFirst(chatId, limit, latest ? { latest } : {})
-      return page(chatId, wires, hasMore, latest !== undefined)
+      return page(chatId, wires, hasMore)
     },
-    threadReplies: (chatId, window) => threads.read(chatId, window),
+    ...threads.refresh,
     searchMessages,
     historyAfter: async (chat, { limit, after }) => {
       const chatId = await idOf(chat)
@@ -629,7 +625,7 @@ export const slackAdapter = (options: SlackAdapterOptions): MessengerAdapter => 
     historyBefore: async (chat, { limit, time }) => {
       const chatId = await idOf(chat)
       const { wires, hasMore } = await newestFirst(chatId, limit, { latest: tsOf(time) })
-      return page(chatId, wires, hasMore, true)
+      return page(chatId, wires, hasMore)
     },
     around: async (chat, messageId, window): Promise<WindowedMessage[]> => {
       const chatId = await idOf(chat)

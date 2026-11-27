@@ -448,6 +448,20 @@ describe("odd messages", () => {
     expect(items(events)).toEqual([])
   })
 
+  it("**reads the replies of a deleted root older than the thread window**, named only by its page", async () => {
+    const [root, answer] = [daysAgo(30), daysAgo(29)]
+    const world = channelWith([
+      { ts: root, user: "USLACKBOT", subtype: "tombstone", text: "This message was deleted." },
+      { ts: answer, user: BORIS, text: "Its answer", thread_ts: root },
+      { ts: daysAgo(1), user: BORIS, text: "Something else" },
+    ])
+    const service = slackOf(world)
+    await runCli(["personal", "messages", "sync", "general", "--pause", "1ms", "--json"], { service })
+    const held = await stored(service)
+    expect(byId(held, root)).toBeUndefined()
+    expect(byId(held, answer)).toMatchObject({ text: "Its answer", thread_id: root })
+  })
+
   it("**keeps a deleted thread root out, and its replies in**: a tombstone never overwrites the stored root", async () => {
     const [root, answer, later] = [daysAgo(3), daysAgo(2), daysAgo(0)]
     const world = channelWith([
