@@ -1,31 +1,24 @@
 # Security
 
-What WireCat CLIs share — the keyring, permissions, MCP and what never reaches a log — is on the
-[shared security page](https://wirecat.dev/en/docs/security). This page keeps only what is particular to `slk`.
+Your Slack token stays on your computer, and `slk` sends it only to Slack. What every WireCat tool shares, such as
+the keyring, permissions, MCP and what never reaches a log, is on the
+[shared security page](https://wirecat.dev/en/docs/security).
 
 `slk` keeps its settings in `config.json` and its state in the folders `slk doctor` shows.
-It reaches only `slack.com`. `session start` keeps the Slack user token in the OS
-keyring, or in a private file where no keyring works; the token goes only into the request's Authorization header,
-never into an address, an answer, a run record or the send journal.
+It reaches only `slack.com` and `files.slack.com`. `session start` keeps the Slack user token in the system
+keyring, or in a private file where no keyring works. The token goes only into the request's Authorization header,
+never into an address, an answer, a run record or the send journal, the file in the state folder that lists each
+message sent in your name, so no more than `sends_per_hour` (30 by default) go out in an hour.
 
 `slk personal mcp serve --http` listens on `127.0.0.1` only, for browser apps that reach it through your own
 tunnel. Each app logs in with a one-time code, and the server keeps a hash of each login it gives, in the state
 folder, readable by you only. `slk personal mcp revoke` forgets every one of them.
 
-A run record keeps the command line as you typed it, so `slk runs show` tells you what was run. A secret is still
-stored as `[redacted]`: an option named like a token or password, a password in a link, a long opaque string. A
-phone number is replaced by `[redacted]` inside the word you typed, message text included: one written with its "+" and
-country code, or 11 to 15 digits in a row, so a long id of that length is hidden as well. To keep none of the words
-you type, run `slk personal config set record_input false`.
-
-A secret is also found by what it looks like, in a run record and in a kept error message: a token in a known
-format (GitHub, OpenAI, Slack, AWS, Stripe, npm and the like), a `Bearer` credential, a random-looking string of 20 or
-more characters, and a random-looking run of 20 or more lower-case hex characters, such as a hex key or a full commit
-hash. The value after a secret name is hidden too, whether it follows `=`, `:` or a space: `password=`, `API_TOKEN=`,
-`password hunter2`, `pin 1234`. Some secrets look like ordinary words and stay: a value of letters only after a
-secret name and a space (`pin this message` stays), a hex key in upper case, a short commit hash or a UUID, a short
-password typed without a secret name before it, and a secret inside a link or a file path unless it is in a known
-format or after a secret name.
+A run record keeps the command line as you typed it, so `slk runs show` tells you what was run. Secrets and phone
+numbers in it are stored as `[redacted]`, found by their name (`password=`, `API_TOKEN=`) or by their look (a known
+token format, a `Bearer` credential, a long random string). A secret that looks like an ordinary word stays, such as
+a short password typed with no name before it. To keep none of the words you type, run
+`slk personal config set record_input false`.
 
 `config.json` is saved readable by you only (`0600`), and its folder is created for you only (`0700`). A file or
 folder made by an older version may be open to other users of the computer: `slk doctor` lists each under
