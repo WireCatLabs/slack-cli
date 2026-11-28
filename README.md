@@ -81,10 +81,12 @@ slk skill install
 until you review its permissions and pass `--allow-writes`. `slk personal mcp config` prints the setup for
 any other MCP client.
 
-Over MCP nobody is there to answer `ask`, so the agent runs the API's writes and deletes without asking. Each
-one is kept as a run in `slk personal runs list`. To stop that, make the profile read-only with
-`slk personal config set permissions.api readonly`, or refuse one operation with
-`slk personal config set permissions.api.<operation> deny`. `slk api list` names the operations.
+Over MCP nobody is there to answer `ask`, so the agent sends, edits and reacts without asking. It is never allowed
+to delete a message. Each write is kept as a run in `slk personal runs list`. To stop sending, run
+`slk personal config set permissions.messages.send deny`. To stop the API's writes, make the group read-only with
+`slk personal config set permissions.api readonly`, or refuse one operation, as in
+`slk personal config set permissions.api.reminders.add deny`. `slk api list` names the operations, and
+[settings](docs/configuration.md#permissions) lists the keys and their defaults.
 
 ## What it can do
 
