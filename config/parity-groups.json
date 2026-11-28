@@ -1,7 +1,7 @@
 [
   {
     "name": "slk",
-    "members": ["slk", "tg", "max", "memo", "drive", "zm", "wa"],
+    "members": ["slk", "tg", "max", "wcat", "drive", "zm", "wa"],
     "covers": ["commands", "upgrade"],
     "differences": []
   }
