@@ -2,18 +2,18 @@
   {
     "group": "slk",
     "rule": "same-flag-meaning",
-    "target": "max+memo+slk+tg+wa --deep",
-    "reason": "slk takes --deep <n> as tg, wa and max do; memo alone takes it as a switch. The fix is memo's or the vocabulary's, not slk's.",
+    "target": "max+slk+tg+wa+wcat --deep",
+    "reason": "slk takes --deep <n> as tg, wa and max do; wcat alone takes it as a switch. The fix is wcat's or the vocabulary's, not slk's.",
     "review_after": "2027-01-23",
-    "expected": "slk: <n>, max: <n>, memo: switch, tg: <n>, wa: <n>"
+    "expected": "slk: <n>, max: <n>, tg: <n>, wa: <n>, wcat: switch"
   },
   {
     "group": "slk",
     "rule": "same-flag-meaning",
-    "target": "max+memo+slk+tg+wa --order",
-    "reason": "slk takes --order <recent|name> as tg, wa and max do; memo alone takes <recent|start>. The fix is memo's or the vocabulary's, not slk's.",
+    "target": "max+slk+tg+wa+wcat --order",
+    "reason": "slk takes --order <recent|name> as tg, wa and max do; wcat alone takes <recent|start>. The fix is wcat's or the vocabulary's, not slk's.",
     "review_after": "2027-01-23",
-    "expected": "slk: <recent|name>, max: <recent|name>, memo: <recent|start>, tg: <recent|name>, wa: <recent|name>"
+    "expected": "slk: <recent|name>, max: <recent|name>, tg: <recent|name>, wa: <recent|name>, wcat: <recent|start>"
   },
   {
     "group": "slk",
