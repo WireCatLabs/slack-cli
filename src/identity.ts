@@ -30,7 +30,11 @@ export const DESKTOP = {
   signIn: {
     gives: "Lets your agent read and write your Slack workspace as you.",
     asks: "The User OAuth Token (xoxp-) of a Slack app you make in your workspace from the manifest slk gives.",
+    methods: [
+      { id: "token", label: "User OAuth Token", words: ["{profile}", "session", "start", "--json"], stdin: true },
+    ],
   },
+  mcpPort: 8755,
 } satisfies ManifestIdentity
 
 export const SKILL = new URL("../skills/slack-cli/SKILL.md", import.meta.url)
